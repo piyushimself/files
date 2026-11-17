@@ -206,7 +206,7 @@ def write_wrapper(slug_name,title,app_rel,mature,category_name):
     return dest.relative_to(SITE).as_posix()
 def main():
     for p in (SITE,APPS,COLLECTIONS,DATA): p.mkdir(parents=True,exist_ok=True)
-    items=[]; withheld=[]; issues=[]; seen=set()
+    items=[]; withheld=[]; issues=[]; seen=set(); seen_content={}
     source_files=sorted(p for p in ROOT.iterdir() if p.is_file() and p.suffix.lower() in {".html",".pdf",".docx",".txt",".pine"})
     for p in source_files:
         raw=p.read_bytes()
@@ -227,11 +227,16 @@ def main():
             withheld.append({"file":p.name,"reason":"sensitive-data scan: "+", ".join(hits)})
             continue
         if ext==".html":
+            digest=hashlib.sha256(raw).hexdigest()
+            if digest in seen_content:
+                withheld.append({"file":p.name,"reason":"duplicate HTML source; identical to "+seen_content[digest]})
+                continue
+            seen_content[digest]=p.name
             source=raw.decode("utf-8",errors="replace")
             name=slug(p.name)
             if name in seen: name += "-"+hashlib.sha1(p.name.encode()).hexdigest()[:6]
             seen.add(name)
-            mature=bool(MATURE.search(p.name) or re.search(r"(?i)adult|18\+|mature",source[:12000]))
+            mature=bool(MATURE.search(p.name) or MATURE.search(source[:12000]))
             interactive=bool(re.search(r"<script\b|<(?:button|input|select|textarea|canvas)\b|\son(?:click|change|submit)\s*=",source,re.I))
             title=title_from_html(source,p.name)
             if interactive:
