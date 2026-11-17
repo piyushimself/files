@@ -74,7 +74,7 @@ def category(name):
     if any(x in n for x in ("poetry","poem","kavit","fiction","literature","book","reading_list","asian_books")): return "Reading & Literature"
     if any(x in n for x in ("art","watercolour","collage","bob_ross","masters_of_art")): return "Art"
     if any(x in n for x in ("curriculum","course","development","prompt","thinker","inspiration","meditation","memento")): return "Learning"
-    return "Other"
+    return "Cross-disciplinary"
 def searchable_text(raw):
     raw=re.sub(r"(?is)<(script|style|noscript|svg)\b.*?</\1>"," ",raw)
     raw=re.sub(r"(?s)<[^>]+>"," ",raw)
