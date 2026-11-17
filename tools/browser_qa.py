@@ -81,7 +81,7 @@ def main():
                 title=item.get("title") or item.get("href","untitled")
                 page_slug=Path(item.get("href","")).parent.name or slug(title)
                 qa_name=f"{title} [{page_slug}]"
-                page=ctx.new_page(); watch(page,qa_name+"-"+name)
+                page=ctx.new_page(); page.set_default_timeout(8000); watch(page,qa_name+"-"+name)
                 try:
                     r=page.goto(BASE+item.get("href",""),wait_until="domcontentloaded",timeout=30000)
                     if not r or r.status>=400: issue(qa_name,"http",r.status if r else "no response")
@@ -98,16 +98,23 @@ def main():
                     page.screenshot(path=str(OUT/top_fn),full_page=False); screenshots.append(top_fn)
                     frame_el=page.locator("iframe").first
                     if frame_el.count():
+                        frame_src=""
+                        frame_stage="read iframe source"
                         try:
+                            frame_src=frame_el.get_attribute("src",timeout=3000) or ""
                             # Force lazy frames to load, then inspect the actual child frame.
-                            frame_el.evaluate("(f)=>{f.loading='eager'}")
+                            frame_stage="force iframe loading"
+                            frame_el.evaluate("(f)=>{f.loading='eager'}",timeout=3000)
+                            frame_stage="resolve iframe content frame"
                             frame_handle=frame_el.element_handle()
                             frame=frame_handle.content_frame() if frame_handle else None
                             if not frame:
                                 issue(qa_name,"missing-app-frame","iframe element has no child browsing context")
                                 continue
                             try:
-                                frame.locator("body").wait_for(state="attached",timeout=15000)
+                                frame_stage="wait for iframe body"
+                                frame.locator("body").wait_for(state="attached",timeout=10000)
+                                frame_stage="wait for rendered iframe content"
                                 frame.wait_for_function("""() => {
                                   const b=document.body;
                                   if(!b) return false;
@@ -125,12 +132,15 @@ def main():
                                 except Exception as probe_error:
                                     issue(qa_name,"iframe-load",f"child frame was not inspectable; src={frame_el.get_attribute('src')}; {probe_error}")
                                     continue
+                            frame_stage="read iframe title"
                             page.wait_for_timeout(250)
                             frame_title=frame_el.evaluate("(f)=>f.contentDocument?.title||''")
                             if not frame_title.strip(): issue(qa_name,"iframe-title","embedded app title missing")
                             stats["iframes_loaded"]+=1
+                            frame_stage="check iframe responsive overflow"
                             overflow(frame,qa_name+"-iframe-"+name)
                             if item.get("mature") and frame:
+                                frame_stage="synchronize mature-content gate"
                                 app_gate=frame.locator("#rr-app-age-gate")
                                 if app_gate.count()==0 or not app_gate.is_visible():
                                     issue(qa_name,"direct-app-age-gate","mature iframe did not show its own 18+ gate")
@@ -150,6 +160,7 @@ def main():
                                 except Exception as e:
                                     issue(qa_name,"iframe-screenshot",e)
                                 screenshots.append(app_fn)
+                                frame_stage="inspect iframe body content"
                                 body_text=frame.locator("body").evaluate("(b)=>(b.textContent||'').trim().slice(0,2000)",timeout=10000)
                                 visible_controls=frame.locator("body :is(input,textarea,select,button,[role=button],canvas)").count()
                                 content_nodes=frame.locator("body > *:not(style):not(script):not(link)").count()
@@ -157,6 +168,7 @@ def main():
                                     issue(qa_name,"empty-app-content",f"embedded app body has only {len(body_text)} visible characters and no controls")
                                 if content_nodes==0:
                                     issue(qa_name,"empty-app-dom","embedded app body has no rendered content elements")
+                                frame_stage="check iframe data grids and accessibility"
                                 for grid_selector in ("#grid","#cardsGrid","#mangaGrid","#filmGrid","#cardGrid","#collectionGrid"):
                                     grid=frame.locator(grid_selector)
                                     if grid.count() and grid.locator(":scope > *").count()==0:
@@ -191,6 +203,7 @@ def main():
                                     direct_ctx.close()
                                 else: issue(qa_name,"direct-app-url","mature iframe source missing")
                             if name=="desktop":
+                                frame_stage="exercise representative app controls"
                                 # Safe, reversible app controls are exercised after any mature gate is confirmed.
                                 sh=frame_el.evaluate_handle("""f=>f.contentDocument?.querySelector('input[type=search],input[placeholder*="search" i]')""")
                                 se=sh.as_element()
@@ -251,7 +264,7 @@ def main():
                                     if not cs: issue(qa_name,"scale-sync","no scale value on iframe")
                                     else: stats["scale_sync_tested"]+=1
                         except PlaywrightTimeout as timeout_error:
-                            issue(qa_name,"iframe-inspection-timeout",f"src={frame_el.get_attribute('src')}; {timeout_error}")
+                            issue(qa_name,"iframe-inspection-timeout",f"stage={frame_stage}; src={frame_src}; {timeout_error}")
                     else:
                         n=len(page.locator("main").inner_text()) if page.locator("main").count() else 0
                         if n<80: issue(qa_name,"editorial-content",f"only {n} characters in main")
