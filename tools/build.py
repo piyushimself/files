@@ -86,9 +86,9 @@ def title_from_html(raw, filename):
         if t: return t
     # When an interactive source omits <title>, use its visible H1 before falling
     # back to a filename-derived label. This prevents raw filenames becoming titles.
-    h=re.search(r"<h1\\b[^>]*>(.*?)</h1>",raw,re.I|re.S)
+    h=re.search(r"<h1\b[^>]*>(.*?)</h1>",raw,re.I|re.S)
     if h:
-        t=re.sub(r"<[^>]+>"," ",h.group(1))
+        t=html.unescape(re.sub(r"\s+"," ",h.group(1))).strip()
         t=html.unescape(re.sub(r"\\s+"," ",t)).strip()
         if t: return t
     return Path(filename).stem.replace("_"," ").replace("-"," ").strip().title()
@@ -142,16 +142,16 @@ def enhance_app(path, category_name):
     text=re.sub(r'<link[^>]+(?:fonts\.googleapis\.com|fonts\.gstatic\.com)[^>]*>', '', text, flags=re.I)
     text=re.sub(r'@import\s+url\([\'"]?https?://fonts\.googleapis\.com[^)]*\)\s*;?', '', text, flags=re.I)
     additions='<link rel="stylesheet" href="../assets/unified-app.css"><script src="../assets/unified-app.js" defer></script>'
-    body_match=re.search(r"<body([^>]*)>",text,re.I)
-    if body_match and "data-rr-category" not in body_match.group(1):
-        replacement='<body'+body_match.group(1)+' data-rr-category="'+html.escape(category_name,quote=True)+'">'
+    h=re.search(r"<h1\b[^>]*>(.*?)</h1>",raw,re.I|re.S)
+        t=html.unescape(re.sub(r"\s+"," ",h.group(1))).strip()
+        t=html.unescape(re.sub(r"\s+"," ",h.group(1))).strip()
         text=text[:body_match.start()]+replacement+text[body_match.end():]
     if "</head>" in text.lower():
-        match=re.search(r"</head\s*>",text,re.I)
+    h=re.search(r"<h1\b[^>]*>(.*?)</h1>",raw,re.I|re.S)
         if match and "unified-app.css" not in text:
             text=text[:match.start()]+additions+text[match.start():]
     else:
-        match=re.search(r"<html[^>]*>",text,re.I)
+    h=re.search(r"<h1\b[^>]*>(.*?)</h1>",raw,re.I|re.S)
         if match:
             text=text[:match.end()]+"<head>"+additions+"</head>"+text[match.end():]
         else:
