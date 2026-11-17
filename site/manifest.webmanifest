@@ -1,1 +1,17 @@
-{"name":"The Reading Room","short_name":"Reading Room","start_url":"./","scope":"./","display":"standalone","background_color":"#f4f6f8","theme_color":"#f4f6f8","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]}
+{
+  "name": "The Reading Room",
+  "short_name": "Reading Room",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#e8eef7",
+  "theme_color": "#e8eef7",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
