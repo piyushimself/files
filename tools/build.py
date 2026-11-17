@@ -13,7 +13,7 @@ COLLECTIONS=SITE/"collections"
 DATA=SITE/"data"
 REPORT=ROOT/"PUBLISHING-REVIEW.md"
 EXCLUDE={".git",".github","site","tools","__pycache__"}
-MATURE=re.compile(r"(18\+|18-plus|adult[-_ ](?:manga|manhwa|comics?|romance)|taboo|sensual|transgressive|dark[-_ ]ink|manhwa300)",re.I)
+MATURE=re.compile(r"(18\\+|18-plus|adult[-_ ](?:manga|manhwa|comics?|romance|film|video)|taboo|sensual|transgressive|dark[-_ ]ink|manhwa300|hentai|ecchi|nsfw|porn(?:ography)?|erotic|sexually explicit|explicit sexual content)",re.I)
 SECRET_PATTERNS=[
  ("private key",re.compile(rb"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----")),
  ("AWS access key",re.compile(rb"\bAKIA[0-9A-Z]{16}\b")),
@@ -213,7 +213,7 @@ def write_article(slug_name,title,source,mature,category_name):
     robots='<meta name="robots" content="noindex,nofollow">' if mature else '<meta name="robots" content="index,follow">'
     gate=""
     if mature:
-        gate="""<section id="age-gate" class="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-title"><div><p class="kicker">Mature collection</p><h2 id="age-title">Adults only</h2><p>This collection may contain mature themes and is intended for readers aged 18 or over.</p><button id="age-confirm" type="button">I am 18 or older — continue</button><a href="../../index.html">Return to the library</a></div></section><script>try{if(localStorage.getItem('rr-age-confirmed')==='yes')document.getElementById('age-gate').hidden=true}catch(e){}document.getElementById('age-confirm').addEventListener('click',()=>{try{localStorage.setItem('rr-age-confirmed','yes')}catch(e){}document.getElementById('age-gate').hidden=true})</script>"""
+        gate="""<section id="age-gate" class="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-title"><div><p class="kicker">Mature collection</p><h2 id="age-title">Adults only</h2><p>This collection may contain mature themes and is intended for readers aged 18 or over.</p><button id="age-confirm" type="button">I am 18 or older — continue</button><a href="../../index.html">Return to the library</a></div></section><script>try{if(localStorage.getItem('rr-age-confirmed')==='yes')document.getElementById('age-gate').hidden=true}catch(e){}document.getElementById('age-confirm').addEventListener('click',()=>{try{localStorage.setItem('rr-age-confirmed','yes')}catch(e){}document.getElementById('age-gate').hidden=true;document.querySelector('iframe.app-frame')?.contentWindow.postMessage({type:'rr-age-confirmed'},'*')})</script>"""
     toc_html="<nav class='article-toc' aria-label='On this page'><h2>On this page</h2><ol>"+toc+"</ol></nav>" if headings else ""
     dest=COLLECTIONS/slug_name/"index.html"; dest.parent.mkdir(parents=True,exist_ok=True)
     doc="<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>"+robots+"<title>"+html.escape(title)+" — The Reading Room</title><link rel='stylesheet' href='../../assets/reading-room.css'><link rel='stylesheet' href='../../assets/article.css'><link rel='stylesheet' href='../../assets/collection-shell.css'></head><body data-current='collections/"+slug_name+"/index.html' data-category='"+html.escape(category_name,quote=True)+"'>"+shell_header(title)+"<div class='rr-reading-meta'>Reading time · "+str(minutes)+" min</div><main class='article-layout'><article class='reading-article'><p class='kicker'>From the collection</p><h1>"+html.escape(title)+"</h1><div class='article-find'><label for='article-find-input'>Find in this page</label><input id='article-find-input' type='search' placeholder='Find a word or phrase'><button id='article-find-prev' type='button'>Previous</button><button id='article-find-next' type='button'>Next</button><span id='article-find-count' aria-live='polite'></span></div><div class='article-content'>"+body_html+"</div></article>"+toc_html+"</main>"+gate+"<script src=\"../../assets/article-search.js\" defer></script><script src=\"../../assets/collection-shell.js\" defer></script><footer class='site-footer'><a href='../../index.html'>THE READING ROOM</a><p>A personal atlas of stories, images, ideas and useful knowledge.</p><p>Last updated: "+date.today().isoformat()+"</p></footer></body></html>"
@@ -230,13 +230,18 @@ def write_wrapper(slug_name,title,app_rel,mature,category_name):
     return dest.relative_to(SITE).as_posix()
 def main():
     for p in (SITE,APPS,COLLECTIONS,DATA): p.mkdir(parents=True,exist_ok=True)
-    items=[]; withheld=[]; issues=[]; seen=set(); seen_content={}
-    source_files=sorted(p for p in ROOT.iterdir() if p.is_file() and p.suffix.lower() in {".html",".pdf",".docx",".txt",".pine"})
+    items=[]; withheld=[]; issues=[]; seen=set(); seen_content={}; seen_doc_content={}
+    source_files=sorted(p for p in ROOT.iterdir() if p.is_file() and p.name!="requirements-build.txt" and p.suffix.lower() in {".html",".pdf",".docx",".txt",".pine"})
     for p in source_files:
         raw=p.read_bytes()
         ext=p.suffix.lower()
         extracted=""
         if ext in {".pdf",".docx"}:
+            digest=hashlib.sha256(raw).hexdigest()
+            if digest in seen_doc_content:
+                withheld.append({"file":p.name,"reason":"exact duplicate document; identical to "+seen_doc_content[digest]+"; review the original once"})
+                continue
+            seen_doc_content[digest]=p.name
             try:
                 extracted=extract_document_text(p,raw)
                 if not extracted.strip():
@@ -273,7 +278,7 @@ def main():
             name=slug(p.name)
             if name in seen: name += "-"+hashlib.sha1(p.name.encode()).hexdigest()[:6]
             seen.add(name)
-            mature=bool(MATURE.search(p.name) or MATURE.search(source[:12000]))
+            mature=bool(MATURE.search(p.name) or MATURE.search(source))
             interactive=bool(re.search(r"<script\b|<(?:button|input|select|textarea|canvas)\b|\son(?:click|change|submit)\s*=",source,re.I))
             title=title_from_html(source,p.name)
             if interactive:
@@ -289,6 +294,7 @@ def main():
                     except UnicodeDecodeError:
                         withheld.append({"file":p.name,"reason":"mature HTML could not be safely tagged noindex"}); app_dest.unlink(missing_ok=True); continue
                 enhance_app(app_dest,category(p.name))
+                if mature: inject_app_age_gate(app_dest)
                 href=write_wrapper(name,title,app_name,mature,category(p.name))
                 kind="Interactive HTML"
                 search_text=searchable_text(source)
@@ -309,7 +315,10 @@ def main():
     (DATA/"catalog.json").write_text(json.dumps({"generated":date.today().isoformat(),"items":items},ensure_ascii=False,indent=2),encoding="utf-8")
     report=["# Publishing review","",f"Build date: {date.today().isoformat()}","",f"Published interactive HTML collections: **{len(items)}**","",f"Withheld source files: **{len(withheld)}**",""]
     for x in withheld: report.append(f"- **{x['file']}** — {x['reason']}")
-    report += ["","## Notes","- Withheld filenames are reported without reproducing matched values or document contents.","- PDF/DOCX and text/code files require human review before allowlisting.","- Original root-level source files are never modified.",""]
+    report += ["","## Notes","- Withheld filenames are reported without reproducing matched values or document contents.","- PDF/DOCX and text/code files require human review before allowlisting.
+- Exact duplicate documents are identified; review each unique source once.
+- Build dependency files are excluded from content review.
+- Mature HTML content is scanned across the complete source; both wrapper and direct app URLs show an 18+ self-declaration gate. This is not identity or age verification.","- Original root-level source files are never modified.",""]
     REPORT.write_text("\n".join(report),encoding="utf-8")
     report_html="<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><meta name='robots' content='noindex,nofollow'><title>Publishing review — The Reading Room</title><link rel='stylesheet' href='assets/reading-room.css'></head><body><main class='intro'><p class='kicker'>Internal publishing record</p><h1>Content review<br><em>and exclusions.</em></h1><p class='intro-copy'>Build date: "+date.today().isoformat()+"</p><p>Published interactive HTML collections: <strong>"+str(len(items))+"</strong></p><p>Withheld source files: <strong>"+str(len(withheld))+"</strong></p><ul>"+''.join("<li><strong>"+html.escape(x['file'])+"</strong> — "+html.escape(x['reason'])+"</li>" for x in withheld)+"</ul><p>Matched sensitive values are never included in this report. Original source files remain unchanged.</p><a href='./'>Return to the library</a></main></body></html>"
     (SITE/"review-report.html").write_text(report_html,encoding="utf-8")
