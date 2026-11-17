@@ -36,7 +36,7 @@ def slug(s):
     out=re.sub(r"[^a-z0-9]+","-",Path(s).stem.lower()).strip("-")
     return out or hashlib.sha1(s.encode()).hexdigest()[:10]
 def category(name):
-    # Explicit, reviewable filename mapping first; broad keyword rules are only a fallback.
+    # Explicit exceptions keep subject assignment deterministic; keyword fallbacks are conservative.
     n=Path(name).name.lower()
     explicit={
       "global_kids_books_complete_guide.pdf":"Family",
@@ -53,15 +53,25 @@ def category(name):
       "blackout_poetry_tutorial.html":"Reading & Literature",
       "life-fiction-curriculum.html":"Reading & Literature",
       "asian_books_curriculum.pdf":"Reading & Literature",
+      "free_art_resource_library.docx":"Art",
+      "watercolour_tasks (1).html":"Art",
+      "bob_ross_complete_guide.html":"Art",
+      "free-art-resources.html":"Art",
+      "political-comics-list.html":"Manga & Comics",
+      "anime-manga-values-curriculum.html":"Learning",
+      "human-development-curriculum.html":"Learning",
+      "living-curriculum-2026.html":"Learning",
+      "memento-mori-course.pdf":"Learning",
+      "sen-mood-movies.html":"Cinema",
     }
     if n in explicit: return explicit[n]
     if any(x in n for x in ("generator","diary","tracker","typewriter","journal")): return "Interactive tools"
-    if any(x in n for x in ("cybersecurity","security","crypto_trend","\.pine","ath - pine")): return "Security"
+    if any(x in n for x in ("cybersecurity","security","crypto_trend","ath - pine")): return "Security"
     if any(x in n for x in ("kid","child","three_year","world_stories","reading_guide","global_kids")): return "Family"
     if any(x in n for x in ("manga","manhwa","anime","comic")): return "Manga & Comics"
     if any(x in n for x in ("film","cinema","movie")): return "Cinema"
     if any(x in n for x in ("poetry","poem","kavit","fiction","literature","book","reading_list","asian_books")): return "Reading & Literature"
-    if any(x in n for x in ("art","watercolour","collage","bob_ross")): return "Art"
+    if any(x in n for x in ("art","watercolour","collage","bob_ross","masters_of_art")): return "Art"
     if any(x in n for x in ("curriculum","course","development","prompt","thinker","inspiration","meditation","memento")): return "Learning"
     return "Other"
 def searchable_text(raw):
