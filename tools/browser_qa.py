@@ -88,8 +88,6 @@ def main():
                         if page.locator("#age-gate").count()==0 or not page.locator("#age-gate").is_visible(): issue(title,"age-gate","18+ gate missing or hidden")
                         if "noindex" not in (page.locator('meta[name="robots"]').get_attribute("content") or ""): issue(title,"robots","mature page not noindex")
                     overflow(page,title+"-"+name)
-                    fn=f"{slug(title)}-{name}.png"
-                    page.screenshot(path=str(OUT/fn),full_page=False); screenshots.append(fn)
                     frame_el=page.locator("iframe").first
                     if frame_el.count():
                         try:
@@ -99,6 +97,34 @@ def main():
                             stats["iframes_loaded"]+=1
                             frame=page.frames[-1] if len(page.frames)>1 else None
                             if frame: overflow(frame,title+"-iframe-"+name)
+                            fn=f"{slug(title)}-{name}.png"
+                            page.screenshot(path=str(OUT/fn),full_page=False); screenshots.append(fn)
+                            if item.get("mature") and name=="desktop" and frame:
+                                app_gate=frame.locator("#rr-app-age-gate")
+                                if app_gate.count()==0 or not app_gate.is_visible():
+                                    issue(title,"direct-app-age-gate","mature iframe did not show its own 18+ gate")
+                                else:
+                                    page.locator("#age-confirm").click()
+                                    page.wait_for_timeout(150)
+                                    if app_gate.is_visible(): issue(title,"age-gate-sync","wrapper confirmation did not dismiss iframe gate")
+                                    else: stats["mature_iframe_sync_tested"]+=1
+                                src=frame_el.get_attribute("src")
+                                if src:
+                                    direct=ctx.new_page(); watch(direct,title+"-direct-app")
+                                    direct_url=urljoin(page.url,src)
+                                    dr=direct.goto(direct_url,wait_until="domcontentloaded",timeout=30000)
+                                    if not dr or dr.status>=400: issue(title,"direct-app-http",dr.status if dr else "no response")
+                                    direct.wait_for_timeout(180)
+                                    dg=direct.locator("#rr-app-age-gate")
+                                    if dg.count()==0 or not dg.is_visible(): issue(title,"direct-app-age-gate","direct app URL bypasses the 18+ gate")
+                                    if "noindex" not in (direct.locator('meta[name="robots"]').get_attribute("content") or ""): issue(title,"direct-app-robots","direct mature app missing noindex")
+                                    if dg.count() and dg.is_visible():
+                                        direct.locator("#rr-app-age-confirm").click()
+                                        direct.wait_for_timeout(80)
+                                        if dg.is_visible(): issue(title,"direct-app-confirm","direct app age confirmation did not dismiss gate")
+                                        else: stats["direct_mature_apps_tested"]+=1
+                                    direct.close()
+                                else: issue(title,"direct-app-url","mature iframe source missing")
                             if name=="desktop" and not item.get("mature"):
                                 # Search fields, select filters and tabs are safe, reversible test targets.
                                 sh=frame_el.evaluate_handle("""f=>f.contentDocument?.querySelector('input[type=search],input[placeholder*="search" i]')""")
@@ -166,6 +192,8 @@ def main():
                     else:
                         n=len(page.locator("main").inner_text()) if page.locator("main").count() else 0
                         if n<80: issue(title,"editorial-content",f"only {n} characters in main")
+                        fn=f"{slug(title)}-{name}.png"
+                        page.screenshot(path=str(OUT/fn),full_page=False); screenshots.append(fn)
                 except Exception as e: issue(title,"navigation-or-test",e)
                 finally: page.close()
             if name=="desktop": stats["desktop_pages"]+=len(items)
