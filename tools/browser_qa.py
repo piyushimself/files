@@ -107,17 +107,23 @@ def main():
                                 issue(qa_name,"missing-app-frame","iframe element has no child browsing context")
                                 continue
                             try:
-                                frame.wait_for_load_state("domcontentloaded",timeout=30000)
-                            except PlaywrightTimeout:
-                                # Some large legacy apps render their DOM before Playwright observes
-                                # the navigation event. Accept only a real, populated child document.
+                                frame.locator("body").wait_for(state="attached",timeout=15000)
+                                frame.wait_for_function("""() => {
+                                  const b=document.body;
+                                  if(!b) return false;
+                                  const g=document.querySelector("#grid,#cardsGrid,#mangaGrid,#filmGrid,#cardGrid,#collectionGrid");
+                                  const controls=b.querySelectorAll("input,select,textarea,button,canvas").length;
+                                  if(g) return g.children.length>0 || controls>0;
+                                  return (b.textContent||"").trim().length>=30 || controls>0;
+                                }""",timeout=20000)
+                            except PlaywrightTimeout as wait_error:
                                 try:
-                                    frame.locator("body").wait_for(state="attached",timeout=5000)
-                                    probe=frame.locator("body").evaluate("(b)=>({text:(b.innerText||'').trim().length,controls:b.querySelectorAll('input,select,textarea,button,canvas').length,children:b.children.length})",timeout=5000)
+                                    probe=frame.locator("body").evaluate("(b)=>({text:(b.textContent||'').trim().length,controls:b.querySelectorAll('input,select,textarea,button,canvas').length,children:b.children.length})",timeout=5000)
                                     if frame.url=="about:blank" or (probe["text"]<30 and probe["controls"]==0):
-                                        raise RuntimeError("child frame remained blank after navigation timeout")
-                                except Exception as wait_error:
-                                    issue(qa_name,"iframe-load",f"child frame did not become usable; src={frame_el.get_attribute('src')}; {wait_error}")
+                                        issue(qa_name,"iframe-load",f"child frame remained blank; src={frame_el.get_attribute('src')}; {wait_error}")
+                                        continue
+                                except Exception as probe_error:
+                                    issue(qa_name,"iframe-load",f"child frame was not inspectable; src={frame_el.get_attribute('src')}; {probe_error}")
                                     continue
                             page.wait_for_timeout(250)
                             frame_title=frame_el.evaluate("(f)=>f.contentDocument?.title||''")
