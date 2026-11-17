@@ -13,7 +13,7 @@ COLLECTIONS=SITE/"collections"
 DATA=SITE/"data"
 REPORT=ROOT/"PUBLISHING-REVIEW.md"
 EXCLUDE={".git",".github","site","tools","__pycache__"}
-MATURE=re.compile(r"(18\+|18-plus|adult[-_ ](?:manga|manhwa|comics?|romance|film|video)|taboo|sensual|transgressive|dark[-_ ]ink|manhwa300|hentai|ecchi|nsfw|porn(?:ography)?|erotic|sexually explicit|explicit sexual content)",re.I)
+MATURE=re.compile(r"(?:18\+|18-plus|adult[-_ ](?:manga|manhwa|comics?|romance)|taboo|transgressive|dark[-_ ]ink|manhwa300|top500[-_ ]adult|forbidden[-_ ]pages|sensual[-_ ]mood|hentai|ecchi|nsfw|porn(?:ography)?|erotic|sexually explicit|explicit sexual content)",re.I)
 SECRET_PATTERNS=[
  ("private key",re.compile(rb"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----")),
  ("AWS access key",re.compile(rb"\bAKIA[0-9A-Z]{16}\b")),
@@ -305,9 +305,10 @@ def main():
             name=slug(p.name)
             if name in seen: name += "-"+hashlib.sha1(p.name.encode()).hexdigest()[:6]
             seen.add(name)
-            mature=bool(MATURE.search(p.name) or MATURE.search(source))
-            interactive=bool(re.search(r"<script\b|<(?:button|input|select|textarea|canvas)\b|\son(?:click|change|submit)\s*=",source,re.I))
             title=title_from_html(source,p.name)
+            # Classify from the collection identity, never incidental words in a large dataset.
+            mature=bool(MATURE.search(p.name) or MATURE.search(title))
+            interactive=bool(re.search(r"<script\b|<(?:button|input|select|textarea|canvas)\b|\son(?:click|change|submit)\s*=",source,re.I))
             if interactive:
                 app_name=name+".html"
                 app_dest=APPS/app_name
