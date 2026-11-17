@@ -61,3 +61,56 @@ body .hero-title{font-size:clamp(1.9rem,4vw,2.8rem)!important;line-height:1.18!i
  body .header-meta,body .hd-stats,body .hero-stats{gap:.75rem!important}
  body .manga-grid,body .card-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))!important}
 }
+
+
+/* Semantic token bridge: map legacy app palettes to the shared Reading Room theme. */
+:root{
+  --bg:var(--rr-canvas);--bg2:var(--rr-surface);--bg3:var(--rr-raised);--bg4:var(--rr-raised);--bg5:var(--rr-raised);
+  --surface:var(--rr-surface);--surface2:var(--rr-raised);--surface3:var(--rr-raised);
+  --card:var(--rr-surface);--card-bg:var(--rr-surface);--card-h:var(--rr-raised);
+  --s0:var(--rr-canvas);--s1:var(--rr-surface);--s2:var(--rr-raised);--s3:var(--rr-raised);
+  --text:var(--rr-ink);--text1:var(--rr-ink);--text2:var(--rr-muted);--text3:var(--rr-muted);--text4:var(--rr-muted);
+  --t1:var(--rr-ink);--t2:var(--rr-ink);--t3:var(--rr-muted);--t4:var(--rr-muted);
+  --ink:var(--rr-ink);--muted:var(--rr-muted);--dim:var(--rr-muted);
+  --border:var(--rr-line);--border2:var(--rr-line);--border3:var(--rr-line);
+  --line:var(--rr-line);--b1:var(--rr-line);--b2:var(--rr-line);--b3:var(--rr-line);
+  --accent:var(--rr-accent);--accent2:var(--rr-accent);--blue:var(--rr-accent);
+  --gold:var(--rr-accent);--gold2:var(--rr-accent);--gold3:var(--rr-accent);
+  --gold-lt:var(--rr-accent);--gold-dim:var(--rr-raised);
+  --sans:var(--rr-font);--f-sans:var(--rr-font);
+}
+
+/* Mobile repairs for legacy fixed-width toolbars, tables and paper canvases. */
+@media(max-width:700px){
+  html,body{max-width:100%!important;overflow-x:clip!important}
+  body :is(.nav-top,.hdr-in,.hdr,.toolbar,.controls,.filter-bar,.filters,.filter-row,.sort-row,.watch-actions,.progress-wrap,.arc-filters,.vtabs,.hdr-r){
+    box-sizing:border-box;max-width:100%!important;min-width:0!important;flex-wrap:wrap!important
+  }
+  body :is(.nav-top,.hdr-in,.hdr){height:auto!important;min-height:52px;padding:8px 12px!important;gap:8px!important}
+  body :is(.nav-search,#sw,.sbox){flex:1 1 100%!important;width:100%!important;max-width:100%!important;min-width:0!important}
+  body :is(.nav-count,.hdr-stats){margin-left:0!important}
+  body .hdr-r{flex:1 1 100%!important;margin-left:0!important}
+  body .vtabs{flex:1 1 100%!important;width:100%!important;margin-left:0!important;flex-wrap:wrap!important}
+  body .watch-actions{width:100%!important;margin-left:0!important;flex-wrap:wrap!important}
+  body .watch-action-btn{flex:1 1 30%!important;min-width:0!important;white-space:normal!important}
+  body .tabs-wrap{max-width:100%!important;overflow-x:auto!important}
+  body #tabs{width:max-content!important;max-width:none!important;min-width:max-content!important}
+  body .progress-wrap{display:flex!important;width:calc(100% - 2rem)!important;max-width:100%!important;flex-wrap:wrap!important;gap:8px!important;padding:10px 14px!important}
+  body .progress-bar-outer{flex:1 1 120px!important;width:auto!important;min-width:0!important}
+  body .progress-count{min-width:0!important}
+  body .wash{display:none!important}
+  body .arc-filters{padding:0 12px 20px!important;width:100%!important}
+  body .filter-inp{width:100%!important;max-width:100%!important;min-width:0!important}
+  body .filter-sel{flex:1 1 120px!important;min-width:0!important;max-width:100%!important}
+  body .arc-table{max-width:100%!important;width:100%!important;padding:0 12px!important;margin-bottom:36px!important;overflow-x:auto!important}
+  body .arc-table table{width:100%!important;min-width:0!important;table-layout:fixed!important}
+  body .arc-table th,body .arc-table td{padding:8px 6px!important;overflow-wrap:anywhere!important;word-break:normal!important}
+  body .arc-table .arc-name-cell{width:28%!important}
+  body .arc-table .arc-steps-cell{width:auto!important}
+  body .arc-table td:last-child{width:42px!important;text-align:right!important}
+  body .page{width:100%!important;max-width:100%!important;min-width:0!important;min-height:0!important;margin:0 auto!important;padding:1rem!important}
+  body #editor{width:100%!important;max-width:100%!important;min-width:0!important;min-height:65vh!important}
+  body :is(input,select,textarea,button){max-width:100%;min-width:0}
+  body table{max-width:100%}
+  body pre{max-width:100%;overflow-x:auto}
+}
