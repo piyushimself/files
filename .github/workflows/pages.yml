@@ -40,6 +40,17 @@ jobs:
           python tools/build.py
       - name: Validate generated app scripts
         run: python tools/validate_site.py
+      - name: Extract redacted source documents for review
+        continue-on-error: true
+        run: python tools/document_review_extract.py
+      - name: Upload temporary redacted document review material
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reading-room-document-review-redacted
+          path: document-review-redacted/
+          if-no-files-found: warn
+          retention-days: 1
       - name: Install Chromium test runner
         run: |
           python -m pip install playwright==1.56.0
