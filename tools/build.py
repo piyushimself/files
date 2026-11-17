@@ -225,6 +225,7 @@ def enhance_app(path, category_name):
         qwen_css="""<style id="rr-qwen-contrast">
 header h1{background-image:linear-gradient(90deg,#9f3344,#176e70)!important;-webkit-text-fill-color:transparent!important;color:var(--rr-ink)!important}
 header p,.status-bar,.rank,.meta,.excerpt,.modal .subtitle,.empty{color:var(--rr-muted)!important}
+.status-bar{width:100%!important;gap:1rem!important}
 .chip{background:var(--rr-raised)!important;color:var(--rr-ink)!important;border-color:var(--rr-line)!important}
 .chip.active{background:var(--rr-accent)!important;color:#fff!important;border-color:var(--rr-accent)!important}
 .tag{background:var(--rr-raised)!important;color:var(--rr-accent)!important;border-color:var(--rr-line)!important}
