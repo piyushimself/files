@@ -182,8 +182,9 @@ def enhance_app(path, category_name):
     if body_match and "data-rr-category" not in body_match.group(1):
         replacement='<body'+body_match.group(1)+' data-rr-category="'+html.escape(category_name,quote=True)+'">'
         text=text[:body_match.start()]+replacement+text[body_match.end():]
-        head_open=re.search(r"""<head\b[^>]*>""",text,re.I)
-    head_close=re.search(r"</head\s*>",text,re.I)
+    # Resolve head boundaries independently of whether body metadata was already present.
+    head_open=re.search(r"<head\\b[^>]*>",text,re.I)
+    head_close=re.search(r"</head\\s*>",text,re.I)
     if head_close:
         if not head_open:
             # Repair a stray closing head by creating a matching opening tag.
