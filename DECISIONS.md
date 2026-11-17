@@ -29,3 +29,10 @@
 - The Pages workflow runs on both `site-build` and `main`, so merging the final PR to `main` will trigger the production build.
 
 - 2026-11-17 publication configuration: GitHub Pages source was corrected from branch publishing (`main` root) to GitHub Actions so the generated `site/` artifact is deployed by the repository workflow.
+
+## 2026-11-17 — Unified navigation, theme, and typography pass
+- Add a shared shell to every generated editorial and interactive collection page.
+- Shell features: home navigation, searchable all-collections menu, previous/next collection links, remembered light/dark mode, and adjustable text size.
+- Add a local theme layer to generated interactive app copies; synchronize theme and text size with the parent page. Original source HTML at repository root remains unchanged.
+- Keep all visual assets local; no CDN, remote fonts, or third-party scripts are introduced.
+- Validate the generated site through the main GitHub Actions build/deploy workflow before considering this pass complete.
