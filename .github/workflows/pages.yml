@@ -2,7 +2,7 @@ name: Build and deploy Reading Room
 
 on:
   push:
-    branches: [site-build]
+    branches: [main, site-build]
   workflow_dispatch:
 
 permissions:
