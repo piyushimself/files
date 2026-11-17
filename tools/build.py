@@ -35,6 +35,10 @@ def category(name):
     if any(x in n for x in ("curriculum","course","development","prompt","thinker","inspiration")): return "Learning"
     if any(x in n for x in ("book","reading","poem","kavit","fiction","literature")): return "Reading & Literature"
     return "Other"
+def searchable_text(raw):
+    raw=re.sub(r"(?is)<(script|style|noscript|svg)\\b.*?</\\1>"," ",raw)
+    raw=re.sub(r"(?s)<[^>]+>"," ",raw)
+    return html.unescape(re.sub(r"\\s+"," ",raw)).strip()[:250000]
 def title_from_html(raw, filename):
     m=re.search(r"<title[^>]*>(.*?)</title>",raw,re.I|re.S)
     if m:
@@ -135,7 +139,7 @@ def main():
                     withheld.append({"file":p.name,"reason":"mature HTML could not be safely tagged noindex"}); app_dest.unlink(missing_ok=True); continue
             title=title_from_html(source,p.name)
             href=write_wrapper(name,title,app_name,mature)
-            items.append({"title":title,"description":"Open the preserved original interactive collection.","category":category(p.name),"kind":"Interactive HTML","href":href,"mature":mature})
+            items.append({"title":title,"description":"Open the preserved original interactive collection.","category":category(p.name),"kind":"Interactive HTML","href":href,"mature":mature,"searchText":searchable_text(source)})
         elif ext in {".pdf",".docx"}:
             # Rights and personal-data review cannot be inferred from a filename. No document is published
             # until its exact source path is approved in a human-reviewed policy manifest.
