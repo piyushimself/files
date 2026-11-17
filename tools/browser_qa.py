@@ -15,7 +15,7 @@ apps=sorted((SITE/"apps").glob("*.html"))
 wrappers=sorted((SITE/"collections").glob("*/index.html"))
 viewports=[("desktop",1440,1000),("mobile",390,844)]
 issues=[]; screenshots=[]
-stats={"catalog_items":len(items),"apps":len(apps),"wrappers":len(wrappers),"desktop_pages":0,"mobile_pages":0,"iframes_loaded":0,"search_controls_tested":0,"select_controls_tested":0,"tabs_tested":0,"shell_controls_tested":0}
+stats={"catalog_items":len(items),"apps":len(apps),"wrappers":len(wrappers),"desktop_pages":0,"mobile_pages":0,"iframes_loaded":0,"search_controls_tested":0,"select_controls_tested":0,"filter_controls_tested":0,"tabs_tested":0,"shell_controls_tested":0}
 def issue(page,kind,detail): issues.append({"page":page,"kind":kind,"detail":str(detail)[:400]})
 def watch(page,label):
     page.on("pageerror",lambda e:issue(label,"pageerror",e))
@@ -23,8 +23,16 @@ def watch(page,label):
 def slug(s): return re.sub(r"[^a-z0-9-]+","-",s.lower()).strip("-")[:65] or "collection"
 def overflow(target,label):
     try:
-        x=target.evaluate("() => ({w:document.documentElement.clientWidth,s:Math.max(document.documentElement.scrollWidth,document.body?.scrollWidth||0)})")
-        if x["s"]>x["w"]+4: issue(label,"horizontal-overflow",str(x))
+        x=target.evaluate("""() => {
+          const w=document.documentElement.clientWidth;
+          const s=Math.max(document.documentElement.scrollWidth,document.body?.scrollWidth||0);
+          const nodes=[...document.querySelectorAll("body *")].map(el=>{
+            const r=el.getBoundingClientRect(),cs=getComputedStyle(el);
+            return {tag:el.tagName.toLowerCase(),id:el.id||"",cls:typeof el.className==="string"?el.className.slice(0,100):"",width:Math.round(r.width),left:Math.round(r.left),right:Math.round(r.right),scroll:el.scrollWidth,client:el.clientWidth,min:cs.minWidth,whiteSpace:cs.whiteSpace,overflowX:cs.overflowX,display:cs.display};
+          }).filter(n=>n.width>0&&(n.right>w+4||n.scroll>n.client+4)).sort((a,b)=>b.right-a.right).slice(0,12);
+          return {w,s,nodes};
+        }""")
+        if x["s"]>x["w"]+4: issue(label,"horizontal-overflow",json.dumps(x))
     except Exception as e: issue(label,"layout-check",e)
 def main():
     if (len(items),len(wrappers),len(apps))!=(34,34,32):
@@ -96,16 +104,34 @@ def main():
                                 if te:
                                     try: te.click(timeout=1200); stats["tabs_tested"]+=1
                                     except Exception as e: issue(title,"tab-control",e)
-                                qh=frame_el.evaluate_handle("f=>f.contentDocument&&[...f.contentDocument.querySelectorAll('select')].find(s=>s.options.length>1)")
-                                qe=qh.as_element()
-                                if qe:
-                                    try:
-                                        old=qe.input_value(); vals=qe.locator("option").evaluate_all("(os)=>os.map(o=>o.value).filter(v=>v!=='')")
-                                        if vals:
-                                            qe.select_option(vals[0])
-                                            if old in vals: qe.select_option(old)
-                                            stats["select_controls_tested"]+=1
-                                    except Exception as e: issue(title,"select-control",e)
+                                # Use Playwright Locators for native selects; ElementHandle has no locator() method.
+                                if frame:
+                                    selects=frame.locator("select")
+                                    for si in range(min(selects.count(),4)):
+                                        sel=selects.nth(si)
+                                        try:
+                                            options=sel.locator("option").evaluate_all("(os)=>os.map(o=>({v:o.value,d:o.disabled}))")
+                                            old=sel.input_value()
+                                            candidates=[o["v"] for o in options if not o["d"] and o["v"]!=old]
+                                            if candidates:
+                                                sel.select_option(candidates[0])
+                                                if old is not None: sel.select_option(old)
+                                                stats["select_controls_tested"]+=1
+                                                break
+                                        except Exception as e: issue(title,"select-control",e)
+                                # Exercise one reversible filter/view chip when present.
+                                if frame:
+                                    candidates=frame.locator("button,[role=button],[role=tab],.filter-btn,.filter-button,.filter-chip,.fb,.tab-btn,.nav-tab")
+                                    safe=re.compile(r"^(all|any|unwatched|watched|essential(?:\s+\d+)?|blog(?:\s+films?)?(?:\s+\d+)?|films?(?:\s+\d+)?|anime(?:\s+\d+)?|manga(?:\s+\d+)?|books?(?:\s+\d+)?|nature|emotion(?:\s*&\s*mood)?|light(?:\s*&\s*atmosphere)?|urban(?:\s*&\s*travel)?|still life|abstract|completed|grid|list|default|standard)(?:\s+✓)?$",re.I)
+                                    for bi in range(min(candidates.count(),80)):
+                                        btn=candidates.nth(bi)
+                                        try:
+                                            label=btn.inner_text(timeout=300).strip()
+                                            if label and safe.match(label) and btn.is_visible() and btn.is_enabled():
+                                                btn.click(timeout=1200)
+                                                stats["filter_controls_tested"]+=1
+                                                break
+                                        except Exception: pass
                                 toggle=page.locator("#rr-theme-toggle")
                                 if toggle.count():
                                     toggle.click(); page.wait_for_timeout(80)
