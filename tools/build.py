@@ -229,7 +229,7 @@ def inject_app_age_gate(path):
             tag=tag[:-1]+' content="noindex,nofollow">'
         text=text[:robots.start()]+tag+text[robots.end():]
     else:
-        head_open=re.search(r"<head\\b[^>]*>",text,re.I)
+        head_open=re.search(r"""<head\b[^>]*>""",text,re.I)
         if head_open:
             meta='<meta name="robots" content="noindex,nofollow">'
             text=text[:head_open.end()]+meta+text[head_open.end():]
