@@ -145,10 +145,10 @@ def enhance_app(path, category_name):
     # Repair a malformed legacy style terminator in the generated copy only.
     # Qwen's source has one opening <style> and a typo "</ thead>" immediately
     # before <body>; browsers then treat the entire app as CSS and render blank.
-    style_opens=len(re.findall(r"<style\\b",text,re.I))
-    style_closes=len(re.findall(r"</style\\s*>",text,re.I))
+    style_opens=len(re.findall(r"<style\b",text,re.I))
+    style_closes=len(re.findall(r"</style\s*>",text,re.I))
     if style_opens==style_closes+1:
-        malformed=re.search(r"</\\s*thead\\s*>\\s*(?=<body\\b)",text,re.I)
+        malformed=re.search(r"</\s*thead\s*>\s*(?=<body\b),text,re.I)
         if malformed:
             text=text[:malformed.start()]+"</style>"+text[malformed.end():]
     # Remove remote font dependencies; the reader controls typography locally.
