@@ -122,6 +122,8 @@ def main():
                                     scale.click(); page.wait_for_timeout(80)
                                     cs=frame_el.evaluate("(f)=>f.contentDocument?.documentElement?.style.getPropertyValue('--rr-scale')")
                                     if not cs: issue(title,"scale-sync","no scale value on iframe")
+                        except PlaywrightTimeout:
+                            issue(title,"iframe-load","iframe did not finish loading")
                     else:
                         n=len(page.locator("main").inner_text()) if page.locator("main").count() else 0
                         if n<80: issue(title,"editorial-content",f"only {n} characters in main")
