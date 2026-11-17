@@ -125,8 +125,9 @@ def main():
                                     page.screenshot(path=str(OUT/app_fn),full_page=False)
                                 screenshots.append(app_fn)
                                 body_text=frame.locator("body").inner_text(timeout=3000).strip()
-                                if len(body_text)<100:
-                                    issue(qa_name,"empty-app-content",f"embedded app body has only {len(body_text)} visible characters")
+                                visible_controls=frame.locator("body :is(input,textarea,select,button,[role=button],canvas)").count()
+                                if len(body_text)<100 and visible_controls==0:
+                                    issue(qa_name,"empty-app-content",f"embedded app body has only {len(body_text)} visible characters and no controls")
                             else:
                                 issue(qa_name,"missing-app-frame","iframe frame was not available")
                             if item.get("mature") and name=="desktop" and frame:
