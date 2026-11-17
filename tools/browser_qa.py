@@ -3,6 +3,7 @@
 from __future__ import annotations
 import json, os, re
 from pathlib import Path
+from urllib.parse import urljoin
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -15,7 +16,7 @@ apps=sorted((SITE/"apps").glob("*.html"))
 wrappers=sorted((SITE/"collections").glob("*/index.html"))
 viewports=[("desktop",1440,1000),("mobile",390,844)]
 issues=[]; screenshots=[]
-stats={"catalog_items":len(items),"apps":len(apps),"wrappers":len(wrappers),"desktop_pages":0,"mobile_pages":0,"iframes_loaded":0,"search_controls_tested":0,"select_controls_tested":0,"filter_controls_tested":0,"tabs_tested":0,"shell_controls_tested":0}
+stats={"catalog_items":len(items),"apps":len(apps),"wrappers":len(wrappers),"desktop_pages":0,"mobile_pages":0,"iframes_loaded":0,"search_controls_tested":0,"select_controls_tested":0,"filter_controls_tested":0,"tabs_tested":0,"shell_controls_tested":0,"direct_mature_apps_tested":0,"mature_iframe_sync_tested":0,"theme_sync_tested":0,"font_sync_tested":0,"scale_sync_tested":0}
 def issue(page,kind,detail): issues.append({"page":page,"kind":kind,"detail":str(detail)[:2000]})
 def watch(page,label):
     page.on("pageerror",lambda e:issue(label,"pageerror",e))
@@ -44,6 +45,7 @@ def main():
         browser=p.chromium.launch(headless=True)
         for name,width,height in viewports:
             ctx=browser.new_context(viewport={"width":width,"height":height},service_workers="block")
+            ctx.add_init_script("try{localStorage.removeItem('rr-age-confirmed');localStorage.setItem('rr-theme','light')}catch(e){}")
             home=ctx.new_page(); watch(home,"home-"+name)
             response=home.goto(BASE,wait_until="domcontentloaded",timeout=30000)
             if not response or response.status>=400: issue("home","http",response.status if response else "no response")
@@ -63,6 +65,9 @@ def main():
                 initial=home.locator("html").get_attribute("data-theme")
                 home.locator("#theme-toggle").click()
                 if home.locator("html").get_attribute("data-theme")==initial: issue("home","theme","toggle did not change theme")
+                else: stats["theme_sync_tested"]+=1
+                home.wait_for_timeout(150)
+                home.screenshot(path=str(OUT/"home-desktop-dark.png"),full_page=False); screenshots.append("home-desktop-dark.png")
                 home.locator("#font-select").select_option("serif")
                 if home.locator("html").get_attribute("data-rr-font")!="serif": issue("home","font","serif selection not applied")
                 home.locator("#text-larger").click()
@@ -83,6 +88,8 @@ def main():
                         if page.locator("#age-gate").count()==0 or not page.locator("#age-gate").is_visible(): issue(title,"age-gate","18+ gate missing or hidden")
                         if "noindex" not in (page.locator('meta[name="robots"]').get_attribute("content") or ""): issue(title,"robots","mature page not noindex")
                     overflow(page,title+"-"+name)
+                    fn=f"{slug(title)}-{name}.png"
+                    page.screenshot(path=str(OUT/fn),full_page=False); screenshots.append(fn)
                     frame_el=page.locator("iframe").first
                     if frame_el.count():
                         try:
@@ -138,23 +145,27 @@ def main():
                                     pt=page.locator("html").get_attribute("data-theme")
                                     ct=frame_el.evaluate("(f)=>f.contentDocument?.documentElement?.dataset.theme")
                                     if ct and ct!=pt: issue(title,"theme-sync",f"parent={pt}, iframe={ct}")
+                                    else: stats["theme_sync_tested"]+=1
+                                    page.wait_for_timeout(150)
+                                    dark_fn=f"{slug(title)}-dark-desktop.png"
+                                    page.screenshot(path=str(OUT/dark_fn),full_page=False); screenshots.append(dark_fn)
                                 font=page.locator("#rr-font-family")
                                 if font.count():
                                     font.select_option("serif"); page.wait_for_timeout(80)
                                     cf=frame_el.evaluate("(f)=>f.contentDocument?.documentElement?.dataset.rrFont")
                                     if cf and cf!="serif": issue(title,"font-sync",cf)
+                                    else: stats["font_sync_tested"]+=1
                                 scale=page.locator("#rr-text-larger")
                                 if scale.count():
                                     scale.click(); page.wait_for_timeout(80)
                                     cs=frame_el.evaluate("(f)=>f.contentDocument?.documentElement?.style.getPropertyValue('--rr-scale')")
                                     if not cs: issue(title,"scale-sync","no scale value on iframe")
+                                    else: stats["scale_sync_tested"]+=1
                         except PlaywrightTimeout:
                             issue(title,"iframe-load","iframe did not finish loading")
                     else:
                         n=len(page.locator("main").inner_text()) if page.locator("main").count() else 0
                         if n<80: issue(title,"editorial-content",f"only {n} characters in main")
-                    fn=f"{slug(title)}-{name}.png"
-                    page.screenshot(path=str(OUT/fn),full_page=False); screenshots.append(fn)
                 except Exception as e: issue(title,"navigation-or-test",e)
                 finally: page.close()
             if name=="desktop": stats["desktop_pages"]+=len(items)
