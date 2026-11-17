@@ -97,8 +97,9 @@ def main():
                     top_fn=f"{page_slug}-{name}.png"
                     page.screenshot(path=str(OUT/top_fn),full_page=False); screenshots.append(top_fn)
                     frame_el=page.locator("iframe").first
+                    frame_src=""
+                    frame_stage="find iframe"
                     if frame_el.count():
-                        frame_src=""
                         frame_stage="read iframe source"
                         try:
                             frame_src=frame_el.get_attribute("src",timeout=3000) or ""
@@ -127,10 +128,10 @@ def main():
                                 try:
                                     probe=frame.locator("body").evaluate("(b)=>({text:(b.textContent||'').trim().length,controls:b.querySelectorAll('input,select,textarea,button,canvas').length,children:b.children.length})",timeout=5000)
                                     if frame.url=="about:blank" or (probe["text"]<30 and probe["controls"]==0):
-                                        issue(qa_name,"iframe-load",f"child frame remained blank; src={frame_el.get_attribute('src')}; {wait_error}")
+                                        issue(qa_name,"iframe-load",f"child frame remained blank; src={frame_src}; {wait_error}")
                                         continue
                                 except Exception as probe_error:
-                                    issue(qa_name,"iframe-load",f"child frame was not inspectable; src={frame_el.get_attribute('src')}; {probe_error}")
+                                    issue(qa_name,"iframe-load",f"child frame was not inspectable; src={frame_src}; {probe_error}")
                                     continue
                             frame_stage="read iframe title"
                             page.wait_for_timeout(250)
@@ -181,7 +182,7 @@ def main():
                             else:
                                 issue(qa_name,"missing-app-frame","iframe frame was not available")
                             if item.get("mature") and name=="desktop" and frame:
-                                src=frame_el.get_attribute("src")
+                                src=frame_src
                                 if src:
                                     direct_ctx=browser.new_context(viewport={"width":width,"height":height},service_workers="block")
                                     direct_ctx.add_init_script("try{localStorage.removeItem('rr-age-confirmed')}catch(e){}")
