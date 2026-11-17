@@ -22,6 +22,15 @@ SECRET_PATTERNS=[
  ("bearer credential",re.compile(rb"(?i)authorization\s*[:=]\s*bearer\s+[A-Za-z0-9._~+/=-]{20,}")),
  ("email address",re.compile(rb"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b",re.I)),
  ("phone-like number",re.compile(rb"(?<!\d)(?:\+?\d[\s().-]?){9,14}(?!\d)")),
+ ("Indian Aadhaar-like identifier",re.compile(rb"\b\d{4}[\s-]?\d{4}[\s-]?\d{4}\b")),
+ ("Indian PAN-like identifier",re.compile(rb"\b[A-Z]{5}\d{4}[A-Z]\b",re.I)),
+ ("US SSN-like identifier",re.compile(rb"\b\d{3}-\d{2}-\d{4}\b")),
+ ("password assignment",re.compile(rb"(?i)password\s*[:=]\s*['\"][^'\"]{8,}")),
+ ("JWT-like token",re.compile(rb"\beyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\b")),
+ ("Slack token",re.compile(rb"\bxox[baprs]-[A-Za-z0-9-]{10,}\b")),
+ ("GitLab token",re.compile(rb"\bglpat-[A-Za-z0-9_-]{20,}\b")),
+ ("private/internal URL",re.compile(rb"(?i)\bhttps?://(?:localhost|127(?:\.\d{1,3}){3}|10(?:\.\d{1,3}){3}|192\.168(?:\.\d{1,3}){2}|172\.(?:1[6-9]|2\d|3[01])(?:\.\d{1,3}){2}|[A-Za-z0-9.-]+\.internal)(?::\d+)?[^\s]*")),
+ ("home-address label",re.compile(rb"(?i)(?:home|residential|street)\s+address\s*[:=]")),
 ]
 def slug(s):
     out=re.sub(r"[^a-z0-9]+","-",Path(s).stem.lower()).strip("-")
