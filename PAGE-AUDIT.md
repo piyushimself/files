@@ -166,3 +166,17 @@ A catalogue review found `100 Manga That Will Change How You Think` had been pla
 The earlier 27 published / 57 withheld and 27-wrapper / 26-app figures describe older artifacts and are superseded by this regenerated artifact. The updated 34 / 50 figures above are the current build counts.
 
 Browser-level runtime/visual testing remains unverified: this execution environment blocks Chromium navigation and timed out on a set-content attempt. Do not mark visual, mobile, accessibility or interaction acceptance as passed based on static checks.
+
+
+## Latest regenerated artifact verification — 17 November 2026
+
+Run 44098125417 completed successfully after the Cross-disciplinary shelf rename and manga category correction. Its uploaded artifact was independently extracted and checked:
+
+- Catalogue: 34 entries (32 interactive HTML, 2 editorial articles).
+- Category distribution: Manga & Comics 11; Cinema 6; Art 4; Cross-disciplinary 4; Interactive tools 4; Learning 3; Reading & Literature 2.
+- 32 generated apps and 32 non-empty inline JavaScript blocks: all pass Node.js syntax validation.
+- 34 collection wrappers: all have non-empty document titles; 0 missing local iframe targets.
+- 50 withheld sources: 49 documents/text/code sources pending human review plus 1 exact duplicate HTML source. No unique HTML page is withheld by the readable-text scanner.
+- The four broad cross-media library pages are grouped under Cross-disciplinary instead of the generic Other label.
+
+This is build/artifact validation only. Browser runtime, visual regression, mobile layout, accessibility, keyboard interaction and document-by-document editorial/rights review remain outstanding.
