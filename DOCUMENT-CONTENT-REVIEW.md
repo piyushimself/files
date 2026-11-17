@@ -1,0 +1,104 @@
+# Source-document content review
+
+**Status: reviewed for content quality and publication risk; not cleared for publication.**
+
+## Scope and method
+
+- 48 source files were extracted: 43 PDFs, 3 DOCX files, 1 TXT file and 1 Pine Script file.
+- One exact duplicate PDF pair was identified, leaving **47 unique source documents**: 42 unique PDFs, 3 DOCX, 1 TXT and 1 Pine file.
+- The 574-page combined-film PDF is a duplicate of its (1) copy; both remain withheld, and the unique content needs to be reviewed only once.
+- Text extraction completed for all 48 files with no extraction errors. OCR was used on three low-text pages. The extracted text was reviewed for structure, count consistency, sample content, sensitive themes, attribution and obvious editorial problems.
+- This is a substantive editorial triage, not a line-by-line fact-check of every book, film, author, rating or URL. Visual inspection is still required for PDFs whose column/table layouts produce garbled text extraction.
+- The extraction detected no common contact or credential patterns. That is not a complete privacy review.
+
+## Rights decision
+
+**All 48 original files remain withheld. No document is approved for publication.**
+
+The text scan did not establish a publication licence or ownership for any of these files. Mentions of Creative Commons, public domain, authors, publishers or ISBNs inside a document are not proof that the document itself is licensed for republication. Absence of a copyright notice is also not permission.
+
+Several files contain substantial third-party material: poems, film descriptions, book descriptions, curated lists, ratings, quotations, and aggregated collections. Obtain evidence of authorship/licence/permission before publishing them. For compilations, confirm rights for both the compilation and any reproduced descriptions or excerpts.
+
+**Repository exposure:** withholding a file from GitHub Pages does not make it private. The originals remain accessible in this public GitHub repository. If rights are uncertain, move the originals to a private repository or private storage before treating them as safe.
+
+## Per-file editorial review
+
+| Source file | Content review and issues found | Decision |
+|---|---|---|
+| 1000_Creative_Educational_Cultural_Links.pdf | A large resource directory with descriptions and URLs. The document's “verified/safe” framing is not substantiated by a current link check. Links can be dead, redirected, changed or unsafe over time. | Withhold; validate all links and soften “verified” claims. |
+| 1000_Google_Searches_Grand_Curiosity_Atlas.pdf | Curiosity/search prompts cover cultures and communities. Some wording frames groups as “pure,” “last,” secretive or frozen in time. Rephrase to avoid exoticising and essentialising living communities; add reliable sources for factual framing. | Withhold; cultural and factual edit required. |
+| 1000_Greatest_Fictional_Books.pdf | The contents counts sum to 1,000, but the cover says 26 traditions while the contents lists 36 sections. The list includes memoir/non-fiction works despite “Fictional Books” in the title; memoir entries appear in the list. Some “already listed” placeholders reduce usefulness. | Withhold; correct scope, categories, duplicates and classification. |
+| 1000_Inspirations.pdf | The contents claims 1,000, while the extracted numbered list contains 1,001 items and one section is labelled 201. Minor count inconsistency; some prompts touch on sensitive social issues. | Withhold; reconcile count and add suitable content notes. |
+| 1000_Writing_Prompts.docx | The file contains 835 prompts, not 1,000+. The title/cover overstates the inventory. | Withhold; rename to the actual count or complete the missing prompts. |
+| 100_essential_films.pdf | A 100-film list with adult/erotic material among the selections. Descriptions and selection claims need attribution and fact-checking. | Withhold; rights review and mature-content label required. |
+| 2000_Inspirations (1).pdf | The title and “200 each” framing are inaccurate: the ten section counts add to approximately 1,462, not 2,000. The sections have materially different counts. | Withhold; complete the missing content or retitle/recount accurately. |
+| 200_Films_Like_Frida.pdf | A 200-film recommendation list with short editorial descriptions. Selection rationale and factual details need source checks; no republication rights established. | Withhold; rights and fact-check required. |
+| 200_prompts_emotion_wonder_v2.pdf | Reflective prompts include grief, trauma and emotionally intense themes. The material should distinguish journaling prompts from therapeutic advice and include content notes. | Withhold; add boundaries/content notes and review attribution. |
+| 200_prompts_mind_detox_v2.pdf | Useful reflective structure, but “detox” can imply a mental-health intervention. Avoid suggesting that prompts treat or cure anxiety or other conditions; add a clear non-therapy note. | Withhold; revise health framing and establish rights. |
+| 200_thinkers_quiet_mind_v2.pdf | Philosophical/psychological material is presented as a course for reducing anxiety and mental noise. Claims and thinker attributions need sources; do not imply clinical efficacy. | Withhold; source-check and reframe as reflective education, not treatment. |
+| 300_Films_Filmography.pdf | A 300-film list. Names/transliterations need proofreading; examples include damaged diacritics in filmmaker names. Some evaluative claims are unattributed. | Withhold; proofread names and source factual claims. |
+| 500_Films_500_Music_Global_Guide.pdf | The 500-film/500-music structure is present. Quotes and descriptive claims need attribution; selection criteria and rights for descriptions are unclear. | Withhold; rights and attribution review. |
+| 500_Manga_Movies.pdf | A manga-adaptation film list with mature titles/themes. Entry descriptions and title counts need a complete audit. | Withhold; rights review and mature-content label required. |
+| 50_e_art_films.pdf | An explicitly erotic/art-cinema guide. Its distinction between erotic art cinema and pornography is an editorial claim, not a self-evident fact. | Withhold; 18+ label, fact-check and rights review. |
+| ATH - Pine.txt | Static review found a major timeframe mismatch: monthly breakout logic is chart-timeframe logic, while the weekly exit is requested from a monthly chart. Lower-timeframe request.security returns do not provide a full weekly event stream to monthly logic; the exit can miss intra-month weekly signals and reports monthly close rather than the actual weekly exit close. Stop/target levels are displayed and used for sizing, but are not enforced as stop/target exits. Portfolio return/CAGR compounds each leg's percentage return without weighting by deployed capital; drawdown is not a true account-equity drawdown. It is an indicator, not a TradingView strategy backtest, and was not compiled/backtested in TradingView. | Withhold from “tested strategy” claims; redesign timeframe handling and metrics, then compile/backtest. |
+| A_Filmmakers_Reading_List.pdf | A curated reading list. Statements about which works are influential or widely cited need references; titles/authors and edition details need checking. | Withhold; source-check and rights review. |
+| A_Life_Worth_Living_500_Suggestions.docx | A 500-item life/reading/art list. There are duplicate identity/name references (e.g. Meera Bai/Mirabai) and translation/attribution issues that need checking; some recommendations are subjective but written as definitive. | Withhold; deduplicate and verify translations/attributions. |
+| Aag_Ki_Kavitayen.pdf | A 100-poem Hindi compilation containing poems attributed to modern and well-known poets. Full poems are likely protected literary works; no permission evidence was found. | **High rights risk — keep withheld unless explicit permission/licence is documented.** |
+| All_Film_Collections_Combined_compressed (1).pdf | 574-page, approximately 211,000-word aggregate of multiple film collections and descriptions. It is an exact duplicate of the un-suffixed file. The compilation contains extensive third-party film/book descriptions and sensitive/adult material. | Withhold; review one copy only; rights clearance required for the entire compilation. |
+| All_Film_Collections_Combined_compressed.pdf | Exact byte-for-byte duplicate of the (1) file. No separate content review is needed. | Withhold as duplicate; retain only one working copy if the owner later chooses. |
+| Bold_Cinema_Collection.pdf | A 300+ film collection with erotic/explicit sections. Streaming/platform availability is time-sensitive and needs current verification. | Withhold; 18+ label, current availability checks and rights review. |
+| Crypto_Trend_Rider_4H.pine | Static review found no request.security lookahead use, but trade/alert conditions are not gated by barstate.isconfirmed, so intrabar signals/alerts can appear and disappear. The Chandelier candidate can move down, loosening a long stop; the initial risk stop is not the enforced exit. Exit is close-based, not an intrabar stop fill. Partial exits are counted as separate trade events, so win rate/average R/holding statistics are not position-level; unrealised drawdown, fees, slippage and crypto funding are omitted. It is an indicator, not a Strategy Tester strategy, and was not compiled/backtested in TradingView. | Withhold from performance claims; fix confirmation, stop ratchet, position-level metrics and realistic costs before relying on it. |
+| Cybersecurity_Stories_For_Your_Teams.pdf | Security analogies are useful as discussion starters, but the GDPR/NIS2/DORA incident-reporting timelines are oversimplified and should not be used as compliance guidance without official citations and legal review. Metaphors must not be mistaken for technical equivalence. | Withhold from training publication until regulatory claims are corrected and sourced. |
+| Cybersecurity_Storytelling_Movies.pdf | Movie-to-security mappings are illustrative, not technical controls. Cost and impact claims (e.g. BEC/phishing losses) lack citations. Add sources and label analogies clearly. | Withhold; fact-check and source claims. |
+| Films_That_Open_New_Human_Domains.pdf | A 200-film thematic list with strongly interpretive descriptions. Separate subjective interpretation from verifiable facts and establish rights for descriptions. | Withhold; editorial/source review. |
+| Free_Art_Resource_Library.docx | Resource directory contains at least one missing URL and time-sensitive audience/subscriber claims. Every link and access/licence statement needs checking. | Withhold; repair missing links and verify resource licences. |
+| Global_Kids_Books_Complete_Guide.pdf | Substantial overlap with the “FINAL” reading guide (roughly 55% token-set similarity). Text extraction shows table/column ordering problems on some pages; the 600+ count needs an auditable inventory. | Withhold; visually inspect layout, reconcile with the FINAL version and count titles. |
+| Global_Kids_Reading_Guide_FINAL (1).pdf | Near-duplicate of the complete guide, with overlapping age bands and recommendations. Choose one canonical version and merge only genuinely unique entries; verify age suitability and book metadata. | Withhold; consolidate and source-check. |
+| Personal_Reference_Film_Books_Art.pdf | A 49-entry personal reference with adult/erotic cinema. Rating glyphs appear as ####I in extracted text, suggesting a font/encoding or export issue requiring visual inspection. | Withhold; fix glyph rendering, label mature material and verify rights. |
+| Reading_Course_Emotions_Wonder.pdf | A 40-book reflective course. Strong outcome promises are subjective and should be reframed as intentions, not guaranteed personal transformation. | Withhold; soften claims and verify bibliographic details. |
+| Three_Year_Old_Reading_Guide (1).pdf | A 60-story/40-week guide. It makes an unsupported neuroscience claim that daily reading creates “more neural pathways” than weekend reading. Left-to-right reading guidance is not universal across scripts/languages. | Withhold; remove unsupported science claims and make literacy guidance language-aware. |
+| World_Stories_3YearOld_Guide.pdf | Near-duplicate of the other three-year-old guide (roughly 57% token-set similarity). Some table/column text extracts in the wrong order. The shared neuroscience claim needs removal. | Withhold; consolidate with the other guide and visually verify layout. |
+| asian_books_curriculum.pdf | A 300-book/6-arc curriculum contains visible editorial placeholders such as “Not Asian — replace with …” and non-Asian entries inside an Asian-literature list. | **Not publication-ready — remove placeholders, correct scope and re-audit all entries.** |
+| asian_cinema_curriculum.pdf | A 200-film curriculum with interpretive commentary. Verify country/region classifications, titles, directors and cultural framing; add sources for factual claims. | Withhold; source and editorial review. |
+| cinema_900 (1).pdf | The title claims 900 films, while the library-3 contents identifies the corresponding world-cinema collection as 835. Reconcile the count and duplicate policy. | Withhold; inventory/count audit. |
+| complete_movie_encyclopedia.pdf | Claims 647 films and streaming availability verified in 2025. The availability statement is stale in 2026; library-3 refers to 649, a two-title discrepancy. | Withhold; reconcile count and remove/update dated availability claims. |
+| complete_movie_ratings.pdf | Claims 218 unique films, but section labels imply 100 essential, 50 erotic-art and 100 anime entries while extracted section counts are 98, 33 and 87. The 218 total matches those actual counts, not the section labels. | Withhold; correct section titles/counts and verify ratings/source dates. |
+| complete_movie_ratings_647.pdf | A 647-title ratings collection. Ratings require source/date/methodology; the relationship to the 647-film encyclopedia and 649 count in library-3 must be reconciled. | Withhold; reconcile and source ratings. |
+| definitive_anime_encyclopedia.pdf | A 200-work anime guide includes a Hayao Miyazaki quote that the document itself identifies as misquoted. Remove it rather than repeating a known false attribution. | Withhold; remove false attribution and verify all quotes. |
+| library-3.pdf | A 4,942-item personal film/art library. Its top-level category totals add to 4,942, but subcollection counts conflict with other files (900 vs 835; 647 vs 649). It aggregates overlapping collections and sensitive material. | Withhold; reconcile source-of-truth counts, duplicates and rights. |
+| manga_recommendations.pdf | A short recommendation list includes mature romance/manhwa titles. Confirm age suitability and the rights to descriptions. | Withhold; mature-content label and rights review. |
+| masters_of_art.pdf | A 25-artist guide with biographical and work descriptions. Verify dates, works, quotes and image/description rights. | Withhold; fact-check and rights review. |
+| masters_of_e_art_cinema.pdf | A 15-filmmaker erotic-art-cinema guide. It incorrectly says Jane Campion is the only woman to have won the Palme d'Or; later women directors have also won. Explicit material requires an 18+ label. | **Not publication-ready — correct the false claim, add 18+ notice and verify rights.** |
+| meditation_on_death.pdf | A 100-work death/mortality curriculum. It makes a strong promise that the course will change the reader's remaining years; this is subjective and emotionally intense. Add content notes and remove guaranteed-outcome language. | Withhold; editorial/content-warning and rights review. |
+| memento-mori-course.pdf | A 50-work mortality course. It includes emotionally intense material and needs content notes, careful framing and bibliographic verification. | Withhold; content-warning and rights review. |
+| sensitive_cinema.pdf | A 253-film guide across sensitive themes. Some “what it teaches” statements are overly absolute; one line frames love containing violence as still love, which risks normalising abuse. Reframe as interpretation and add specific content warnings. | **Not publication-ready — rewrite harmful framing and add content notes.** |
+| ultimate_anime_guide.pdf | A 54-work anime guide repeats the known misattributed/misquoted Miyazaki line. Remove it and verify all quotes and recommendations. | Withhold; correct attribution and verify rights. |
+
+## Pine Script review notes
+
+Both Pine files were inspected statically, not executed or compiled in TradingView.
+
+### ATH - Pine.txt
+
+1. The monthly signal calculations depend on the chart timeframe, so the script must be on a monthly chart; this is not enforced.
+2. A weekly exit requested from monthly logic cannot reliably process every weekly close inside the month. The current code can miss an intra-month weekly exit and uses the monthly close for reported P&L.
+3. Stored stop-loss and target levels are used for sizing/display, but the code does not actually exit at those levels; the primary exit is the weekly-SMA condition.
+4. totalReturnPct, CAGR and drawdown are not valid account-level metrics because per-leg percentage returns are compounded without position-size/capital weighting.
+5. The script is an indicator with custom simulated trades, not a TradingView strategy backtest. Do not treat its metrics as a Strategy Tester result.
+
+### Crypto_Trend_Rider_4H.pine
+
+1. Entry, exit, partial and alert conditions are not consistently restricted to confirmed 4-hour bars; intrabar signals can repaint or alert before the bar closes.
+2. The Chandelier candidate can move down as the rolling high/ATR changes; a long trailing stop should normally ratchet and never loosen.
+3. The initial stop used for sizing is not the same as an enforced stop exit; exits are close-based and may not represent stop-order fills.
+4. Partial exits count as separate trade events, so win rate, average R and holding-period statistics are not position-level metrics.
+5. Fees, slippage, spread and crypto funding are not modelled. The indicator is not a strategy backtest.
+
+## Required before any source document is published
+
+1. Confirm authorship, licence or written permission for every source file and every substantial third-party description, poem, quote or excerpt.
+2. Reconcile counts and duplicates across the film, manga and reading collections.
+3. Correct the high-priority factual/editorial problems listed above.
+4. Visually inspect the PDFs with table/column extraction problems and the rating glyph issue.
+5. Verify all external URLs and time-sensitive streaming claims.
+6. Keep all originals withheld until the above checks are complete.
