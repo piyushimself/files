@@ -184,7 +184,7 @@ def enhance_app(path, category_name):
         text=text[:body_match.start()]+replacement+text[body_match.end():]
     # Resolve head boundaries independently of whether body metadata was already present.
     head_open=re.search(r"<head\b[^>]*>",text,re.I)
-    head_close=re.search(r"</head\\s*>",text,re.I)
+    head_close=re.search(r"</head\s*>",text,re.I)
     if head_close:
         if not head_open:
             # Repair a stray closing head by creating a matching opening tag.
