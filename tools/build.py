@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib, html, json, re, shutil, sys
 from datetime import date
 from pathlib import Path
+from bs4 import BeautifulSoup
 
 ROOT=Path(__file__).resolve().parents[1]
 SITE=ROOT/"site"
@@ -89,6 +90,61 @@ def extract_document_text(path, raw):
     return "\n".join(chunks)
 def scan_bytes(data):
     return [label for label,rx in SECRET_PATTERNS if rx.search(data)]
+def write_article(slug_name,title,source,mature):
+    soup=BeautifulSoup(source,"html.parser")
+    body=soup.body or soup
+    for node in body.find_all(["script","style","noscript","nav","footer","header","form","iframe","svg"]):
+        node.decompose()
+    allowed={"main","article","section","h1","h2","h3","h4","p","ul","ol","li","blockquote","table","thead","tbody","tr","th","td","figure","figcaption","img","a","strong","em","b","i","code","pre","hr","br"}
+    for tag in list(body.find_all(True)):
+        if tag.name=="div":
+            block={"h1","h2","h3","h4","p","ul","ol","table","blockquote","section","article","figure"}
+            if any(getattr(child,"name",None) in block for child in tag.find_all(recursive=False)):
+                tag.unwrap()
+            else:
+                tag.name="p"
+        elif tag.name in {"span","font","center"}:
+            tag.unwrap()
+        elif tag.name not in allowed:
+            tag.unwrap()
+        if getattr(tag,"attrs",None) is not None:
+            keep={"href","src","alt","colspan","rowspan","scope"}
+            tag.attrs={k:v for k,v in tag.attrs.items() if k in keep}
+            if tag.name=="a" and tag.get("href","").lower().startswith("javascript:"):
+                tag.unwrap()
+            if tag.name=="img":
+                src=tag.get("src","")
+                if src.startswith(("http://","https://")):
+                    alt=tag.get("alt","")
+                    tag.replace_with(alt if alt else "")
+                elif not src:
+                    tag.decompose()
+    for h in body.find_all("h1"):
+        h.name="h2"
+    headings=[]
+    for h in body.find_all(["h2","h3"]):
+        label=" ".join(h.get_text(" ",strip=True).split())
+        if not label: continue
+        ident=re.sub(r"[^a-z0-9]+","-",label.lower()).strip("-") or "section"
+        base=ident; suffix=2
+        while any(x.get("id")==ident for x in body.find_all(["h2","h3"])):
+            ident=base+"-"+str(suffix); suffix+=1
+        h["id"]=ident
+        headings.append((ident,label,h.name))
+    body_html="".join(str(x) for x in body.contents)
+    plain=BeautifulSoup(body_html,"html.parser").get_text(" ",strip=True)
+    words=len(re.findall(r"\w+",plain))
+    minutes=max(1,round(words/220))
+    toc="".join("<li class='"+level+"'><a href='#"+html.escape(i)+"'>"+html.escape(label)+"</a></li>" for i,label,level in headings)
+    robots='<meta name="robots" content="noindex,nofollow">' if mature else '<meta name="robots" content="index,follow">'
+    gate=""
+    if mature:
+        gate="""<section id="age-gate" class="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-title"><div><p class="kicker">Mature collection</p><h2 id="age-title">Adults only</h2><p>This collection may contain mature themes and is intended for readers aged 18 or over.</p><button id="age-confirm" type="button">I am 18 or older — continue</button><a href="../../index.html">Return to the library</a></div></section><script>try{if(localStorage.getItem('rr-age-confirmed')==='yes')document.getElementById('age-gate').hidden=true}catch(e){}document.getElementById('age-confirm').addEventListener('click',()=>{try{localStorage.setItem('rr-age-confirmed','yes')}catch(e){}document.getElementById('age-gate').hidden=true})</script>"""
+    toc_html="<nav class='article-toc' aria-label='On this page'><h2>On this page</h2><ol>"+toc+"</ol></nav>" if headings else ""
+    dest=COLLECTIONS/slug_name/"index.html"; dest.parent.mkdir(parents=True,exist_ok=True)
+    doc="<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>"+robots+"<title>"+html.escape(title)+" — The Reading Room</title><link rel='stylesheet' href='../../assets/reading-room.css'><link rel='stylesheet' href='../../assets/article.css'></head><body><header class='article-head'><a href='../../index.html'>← The Reading Room</a><span>Reading time · "+str(minutes)+" min</span></header><main class='article-layout'><article class='reading-article'><p class='kicker'>From the collection</p><h1>"+html.escape(title)+"</h1><div class='article-content'>"+body_html+"</div></article>"+toc_html+"</main>"+gate+"<footer class='site-footer'><a href='../../index.html'>THE READING ROOM</a><p>A personal atlas of stories, images, ideas and useful knowledge.</p><p>Last updated: "+date.today().isoformat()+"</p></footer></body></html>"
+    dest.write_text(doc,encoding="utf-8")
+    return dest.relative_to(SITE).as_posix(),plain
 def write_wrapper(slug_name,title,app_rel,mature):
     dest=COLLECTIONS/slug_name/"index.html"; dest.parent.mkdir(parents=True,exist_ok=True)
     robots='<meta name="robots" content="noindex,nofollow">' if mature else '<meta name="robots" content="index,follow">'
@@ -126,21 +182,29 @@ def main():
             if name in seen: name += "-"+hashlib.sha1(p.name.encode()).hexdigest()[:6]
             seen.add(name)
             mature=bool(MATURE.search(p.name) or re.search(r"(?i)adult|18\+|mature",source[:12000]))
-            app_name=name+".html"
-            app_dest=APPS/app_name
-            # Preserve app source byte-for-byte for ordinary apps. Mature copies gain only noindex metadata.
-            app_dest.write_bytes(raw)
-            if mature:
-                try:
-                    text=app_dest.read_text(encoding="utf-8")
-                    if re.search(r"<head[^>]*>",text,re.I):
-                        text=re.sub(r"(<head[^>]*>)",r'\1<meta name="robots" content="noindex,nofollow">',text,count=1,flags=re.I)
-                    app_dest.write_text(text,encoding="utf-8")
-                except UnicodeDecodeError:
-                    withheld.append({"file":p.name,"reason":"mature HTML could not be safely tagged noindex"}); app_dest.unlink(missing_ok=True); continue
+            interactive=bool(re.search(r"<script\b|<(?:button|input|select|textarea|canvas)\b|\son(?:click|change|submit)\s*=",source,re.I))
             title=title_from_html(source,p.name)
-            href=write_wrapper(name,title,app_name,mature)
-            items.append({"title":title,"description":"Open the preserved original interactive collection.","category":category(p.name),"kind":"Interactive HTML","href":href,"mature":mature,"searchText":searchable_text(source)})
+            if interactive:
+                app_name=name+".html"
+                app_dest=APPS/app_name
+                app_dest.write_bytes(raw)
+                if mature:
+                    try:
+                        text=app_dest.read_text(encoding="utf-8")
+                        if re.search(r"<head[^>]*>",text,re.I):
+                            text=re.sub(r"(<head[^>]*>)",r'\1<meta name="robots" content="noindex,nofollow">',text,count=1,flags=re.I)
+                        app_dest.write_text(text,encoding="utf-8")
+                    except UnicodeDecodeError:
+                        withheld.append({"file":p.name,"reason":"mature HTML could not be safely tagged noindex"}); app_dest.unlink(missing_ok=True); continue
+                href=write_wrapper(name,title,app_name,mature)
+                kind="Interactive HTML"
+                search_text=searchable_text(source)
+                description="Open the preserved original interactive collection."
+            else:
+                href,search_text=write_article(name,title,source,mature)
+                kind="Editorial article"
+                description="A cleaned, accessible reading edition with a contents guide."
+            items.append({"title":title,"description":description,"category":category(p.name),"kind":kind,"href":href,"mature":mature,"searchText":search_text})
         elif ext in {".pdf",".docx"}:
             # Rights and personal-data review cannot be inferred from a filename. No document is published
             # until its exact source path is approved in a human-reviewed policy manifest.
