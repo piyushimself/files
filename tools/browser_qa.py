@@ -118,7 +118,12 @@ def main():
                                     else: stats["mature_iframe_sync_tested"]+=1
                             app_fn=f"{page_slug}-app-{name}.png"
                             if frame:
-                                frame.locator("body").screenshot(path=str(OUT/app_fn)); screenshots.append(app_fn)
+                                frame_box=frame_el.bounding_box()
+                                if frame_box and frame_box["width"]>0 and frame_box["height"]>0:
+                                    page.screenshot(path=str(OUT/app_fn),clip=frame_box)
+                                else:
+                                    page.screenshot(path=str(OUT/app_fn),full_page=False)
+                                screenshots.append(app_fn)
                                 body_text=frame.locator("body").inner_text(timeout=3000).strip()
                                 if len(body_text)<100:
                                     issue(qa_name,"empty-app-content",f"embedded app body has only {len(body_text)} visible characters")
