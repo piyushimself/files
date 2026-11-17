@@ -36,7 +36,7 @@ def main() -> int:
         script_path = Path(tmp) / "inline.js"
         for page in pages:
             source = page.read_text(encoding="utf-8", errors="replace")
-            for index, match in enumerate(re.finditer(r"<script\\b[^>]*>(.*?)</script\\s*>", source, re.I | re.S), start=1):
+            for index, match in enumerate(re.finditer(r"<script\b[^>]*>(.*?)</script\s*>", source, re.I | re.S), start=1):
                 script = match.group(1)
                 if not script.strip():
                     continue
@@ -54,7 +54,7 @@ def main() -> int:
         failures.append(f"catalog has {len(items)} entries but {len(wrappers)} collection wrappers exist")
 
     home_js = (SITE / "assets" / "reading-room.js").read_text(encoding="utf-8")
-    category_match = re.search(r"const categoryOrder=(\\[[^;]+\\]);", home_js)
+    category_match = re.search(r"const categoryOrder=(\[[^;]+\]);", home_js)
     if not category_match:
         failures.append("Could not find the homepage category order")
     else:
