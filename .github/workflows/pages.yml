@@ -48,7 +48,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: reading-room-document-review-redacted
-          path: document-review-redacted/
+          path: |
+            document-review-redacted/summary.md
+            document-review-redacted/manifest.json
+            document-review-redacted/README.txt
           if-no-files-found: warn
           retention-days: 1
       - name: Install Chromium test runner
