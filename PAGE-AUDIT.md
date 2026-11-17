@@ -83,3 +83,16 @@ The 43 PDFs, 3 DOCX, 1 TXT and 1 Pine source have not yet all been inspected pag
 - [ ] Reconcile the published catalogue against this source inventory.\n- [ ] Confirm that missing-title fallback uses visible H1 text and review remaining pages with no title/H1.
 
 **Do not mark the archive complete until all acceptance checks are either passed or explicitly recorded as not applicable.**
+
+
+## Generated-build audit — 17 November 2026
+
+The successful CI artifact was downloaded and its generated `review-report.html`, `data/catalog.json`, and output tree were inspected.
+
+- The artifact contains 27 published interactive HTML collections and 57 withheld source files.
+- The current phone-like-number expression (`(?:\\+?\\d[\\s().-]?){9,14}`) is broad enough to flag ordinary numeric sequences. A match is a review signal, not proof of a phone number or personal data.
+- The publishing report currently lists sensitive-scan matches before the unconditional manual-review hold for PDF/DOCX. This can mislead readers into interpreting a generic scan match as a confirmed privacy issue, even though every PDF/DOCX is withheld pending human copyright/content review.
+- Keep all PDF/DOCX/TXT/Pine sources withheld for now. Do not relax the publication gate based on these findings. Before changing the detector or allowlisting anything, inspect the exact matched context in each flagged file and distinguish genuine personal data, intentional public contact information, and ordinary numeric content.
+- The artifact's 27/57 counts are build facts, not evidence that all 27 pages have passed browser-level QA or that all 57 exclusions are justified by confirmed sensitive data.
+
+Follow-up: refine the scan report so it clearly separates (1) mandatory manual content/rights review, (2) potential sensitive-data findings requiring contextual verification, and (3) duplicate/empty-source exclusions. Consider a higher-precision phone-number detector only after reviewing representative false positives and true positives.
