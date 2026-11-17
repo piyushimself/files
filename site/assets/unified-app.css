@@ -18,7 +18,7 @@ body :is(input,select,textarea){background:var(--rr-surface)!important;color:var
 body input::placeholder,body textarea::placeholder{color:var(--rr-muted)!important;opacity:1}
 body button,body [role=button],body [role=tab]{background:var(--rr-raised)!important;color:var(--rr-ink)!important;border:1px solid var(--rr-line)!important;padding:.48rem .7rem;cursor:pointer}
 body button:hover,body [role=button]:hover,body [role=tab]:hover{border-color:var(--rr-accent)!important;color:var(--rr-accent)!important}
-body :is([class*=card],[class*=tile],[class*=panel],[class*=modal],[class*=dialog],[class*=toolbar],[class*=filter],[class*=control],[class*=legend],[class*=category-section]){background:var(--rr-surface)!important;color:var(--rr-ink)!important;border-color:var(--rr-line)!important}
+body :is([class*=card],[class*=tile],[class*=panel],[class*=modal],[class*=dialog],[class*=toolbar],[class*=filter],[class*=control],[class*=legend],[class*=category-section],.mc,.legend,.manga-card,.manga-grid,.category-section){background:var(--rr-surface)!important;color:var(--rr-ink)!important;border-color:var(--rr-line)!important}
 body :is([class*=card],[class*=tile],[class*=panel]) :is(a,span,strong,b,em,p,small,div){color:var(--rr-ink)!important}
 body :is(button,[role=button],[role=tab])[aria-pressed=true],body :is(button,[role=button],[role=tab])[aria-selected=true],body .active,body .selected{background:var(--rr-accent)!important;border-color:var(--rr-accent)!important;color:#fff!important}
 body :focus-visible{outline:3px solid var(--rr-focus)!important;outline-offset:2px!important}
@@ -28,3 +28,13 @@ body :is(.filter-bar,.filters,.filter-row,.toolbar,.controls,.tabs,.filter-strip
 body :is(.card,.tile,.panel,.modal,.dialog,.filter-panel,.toolbar,.control-panel){border-radius:8px!important;box-shadow:0 5px 18px rgba(20,43,73,.08)}
 @media(max-width:700px){body :is(.controls,.filter-bar,.filter-strip){position:relative!important;top:auto!important;padding:.8rem!important}body :is(.manga-grid,.mg,.card-grid){grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr))!important}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* Explicit repairs for legacy manga layouts whose class names are abbreviated. */
+body .legend,body .mc{background:var(--rr-surface)!important;color:var(--rr-ink)!important;border-color:var(--rr-line)!important}
+body .legend .li,body .legend .li *{color:var(--rr-ink)!important}
+body .mc .mt,body .mc .mi,body .mc .mi *,body .mc .mt *,body .mc .ma{color:var(--rr-ink)!important}
+body :is(header,nav,.hero,.masthead,.controls,.tabs-bar,.nav-bar){background:var(--rr-surface)!important;color:var(--rr-ink)!important;border-color:var(--rr-line)!important}
+body :is(header,nav,.hero,.masthead) :is(h1,h2,h3,p,a,span,strong,small){color:var(--rr-ink)!important}
+body :is(.sub,.hd-label,.hero-eyebrow,.stat-l,.count-label,.category-count,.filter-label){color:var(--rr-muted)!important}
+body :is(.fb,.filter-btn,.tab-btn,.f-btn,.nav-tab,.theme-chip){background:var(--rr-raised)!important;color:var(--rr-ink)!important;border-color:var(--rr-line)!important}
+body :is(.fb.active,.filter-btn.active,.tab-btn.active,.f-btn.on,.nav-tab.active,.theme-chip.active){background:var(--rr-accent)!important;color:#fff!important;border-color:var(--rr-accent)!important}
