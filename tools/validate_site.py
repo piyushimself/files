@@ -8,9 +8,6 @@ import tempfile
 from pathlib import Path
 from urllib.parse import unquote, urlparse
 from bs4 import BeautifulSoup
-from urllib.parse import unquote, urlparse
-
-from bs4 import BeautifulSoup
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site"
@@ -36,7 +33,12 @@ def main() -> int:
     failures: list[str] = []
     # Check document metadata, duplicate IDs, and local asset/iframe targets.
     for page in sorted([*APPS.glob("*.html"), *(SITE / "collections").glob("*/index.html")]):
-        soup = BeautifulSoup(page.read_text(encoding="utf-8", errors="replace"), "html.parser")
+        raw_html = page.read_text(encoding="utf-8", errors="replace")
+        head_open_count = len(re.findall(r"<head\\b", raw_html, re.I))
+        head_close_count = len(re.findall(r"</head\\s*>", raw_html, re.I))
+        if head_open_count != 1 or head_close_count != 1:
+            failures.append(f"{page.relative_to(SITE)}: expected exactly one opening and closing head tag; found {head_open_count}/{head_close_count}")
+        soup = BeautifulSoup(raw_html, "html.parser")
         if not soup.title or not soup.title.get_text(" ", strip=True):
             failures.append(f"{page.relative_to(SITE)}: missing document title")
         if not soup.find("meta", attrs={"name": re.compile(r"^viewport$", re.I)}):
