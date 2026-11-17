@@ -221,7 +221,7 @@ def enhance_app(path, category_name):
         text=text[:head_open_end+1]+"<title>"+app_title+"</title>"+text[head_open_end+1:]
     # Qwen's imported palette uses low-contrast muted colours and dark chips.
     # Repair the generated copy only, retaining its original layout and gradient identity.
-    if path.name == "Qwen_html_20260604_f25nf6z8p.html" and 'id="rr-qwen-contrast"' not in text:
+    if "100 Manga That Will Change How You Think" in text and 'id="rr-qwen-contrast"' not in text:
         qwen_css="""<style id="rr-qwen-contrast">
 header h1{background-image:linear-gradient(90deg,#9f3344,#176e70)!important;-webkit-text-fill-color:transparent!important;color:var(--rr-ink)!important}
 header p,.status-bar,.rank,.meta,.excerpt,.modal .subtitle,.empty{color:var(--rr-muted)!important}
