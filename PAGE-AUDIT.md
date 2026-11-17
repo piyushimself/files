@@ -109,3 +109,25 @@ A generated-artifact script syntax pass checked 25 substantial inline JavaScript
 - The Grand Library source contains a large inline database and filter/render pipeline. Static source inspection confirms its data is embedded, but the displayed counts and startup state require browser-level testing; the header's claimed total of 8,335 must be reconciled against actual category array lengths before being treated as verified.
 
 The syntax pass is not a browser test. It cannot validate DOM element IDs, initialization timing, event handlers, rendering correctness, iframe layout, or filtering behaviour.
+
+
+## Count reconciliation — 17 November 2026
+
+The latest generated artifact was parsed with Node.js against the embedded JavaScript data objects; these are source-data counts, not counts inferred from empty-state placeholders:
+
+| Collection | Actual records | Previous displayed claim | Action |
+|---|---:|---:|---|
+| Complete Film Collection | 1,629 | 1,619 in document title and initial result counter | Corrected title and initial counter to 1,629 |
+| Film & Art Library — Essential Films | 98 | 100 | Corrected section label/title/description to 98 |
+| Film & Art Library — Biographical Films | 190 | 200 | Corrected title to 190 |
+| Film & Art Library — World Cinema | 563 | 500 | Corrected label/title/description to 563 |
+| Film & Art Library — Curated Films | 835 | 900 | Corrected label/title to 835 |
+| Film & Art Library — Movie Encyclopedia | 649 | 647 | Corrected description to 649 |
+| Film & Art Library — Fictional Books | 484 | 1,000 | Corrected label/title to 484 |
+| Film & Art Library — Music | 266 | 500 | Corrected label/title to 266 |
+| Grand Library | 8,335 | 8,335 | Verified: category arrays sum to 8,335 (3,420 films + 205 anime + 2,365 manga + 830 books + 365 music + 25 art + 100 poems + 190 thinkers + 835 prompts) |
+| The Curator's Library | 1,731 | 1,731 | Verified exact array length |
+
+The earlier note describing Big_library.html and grand_library (2).html as empty was incorrect: the GitHub file-content wrapper returned empty content for these large files, while the repository tree and generated artifact confirm substantial source files and embedded data. This has been superseded by the artifact-based inspection above.
+
+The generated app artifact contains 26 interactive HTML apps. All 26 inline script blocks passed Node.js syntax validation after the Qwen author-string correction. This still does not prove successful runtime initialization or visual correctness in a browser. A headless Chromium smoke-test attempt did not complete within the execution window; browser-level acceptance remains open rather than being marked passed.
