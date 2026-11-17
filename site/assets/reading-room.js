@@ -32,7 +32,7 @@ function render(){
   save.addEventListener("click",()=>{if(state.favorites.has(x.href))state.favorites.delete(x.href);else state.favorites.add(x.href);safeStore.set("rr-favorites",JSON.stringify([...state.favorites]));render()});
   top.append(h,save);
   const p=document.createElement("p");p.textContent=x.description||"Explore this part of the library.";
-  const meta=document.createElement("div");meta.className="collection-meta";const c=document.createElement("span");c.textContent=x.category;const t=document.createElement("span");t.textContent=x.kind||"Collection";meta.append(c,t);
+  const meta=document.createElement("div");meta.className="collection-meta";const c=document.createElement("span");c.textContent=x.category;const t=document.createElement("span");t.textContent=x.kind||"Collection";meta.append(c,t);if(x.mature){const age=document.createElement("span");age.textContent="Mature · 18+";meta.append(age)}
   article.append(top,p,meta);root.append(article);
  });
 }
