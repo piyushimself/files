@@ -143,8 +143,6 @@ def enhance_app(path, category_name):
     text=re.sub(r'@import\s+url\([\'"]?https?://fonts\.googleapis\.com[^)]*\)\s*;?', '', text, flags=re.I)
     additions='<link rel="stylesheet" href="../assets/unified-app.css"><script src="../assets/unified-app.js" defer></script>'
     h=re.search(r"<h1\b[^>]*>(.*?)</h1>",raw,re.I|re.S)
-        t=html.unescape(re.sub(r"\s+"," ",h.group(1))).strip()
-        t=html.unescape(re.sub(r"\s+"," ",h.group(1))).strip()
         text=text[:body_match.start()]+replacement+text[body_match.end():]
     if "</head>" in text.lower():
     h=re.search(r"<h1\b[^>]*>(.*?)</h1>",raw,re.I|re.S)
