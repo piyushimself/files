@@ -1,3 +1,5 @@
-# Build-time document tooling; source documents remain private until reviewed.
+# Build-time document tooling and OCR. Source documents remain private until reviewed.
 PyMuPDF>=1.24,<2
 python-docx>=1.1,<2
+pytesseract>=0.3.10,<1
+Pillow>=10,<13
