@@ -28,6 +28,7 @@ def overflow(target,label):
         x=target.evaluate("""() => {
           const w=document.documentElement.clientWidth;
           const s=Math.max(document.documentElement.scrollWidth,document.body?.scrollWidth||0);
+          if(s<=w+4) return {w,s,nodes:[]};
           const nodes=[...document.querySelectorAll("body *")].map(el=>{
             const r=el.getBoundingClientRect(),cs=getComputedStyle(el);
             return {tag:el.tagName.toLowerCase(),id:el.id||"",cls:typeof el.className==="string"?el.className.slice(0,100):"",width:Math.round(r.width),left:Math.round(r.left),right:Math.round(r.right),scroll:el.scrollWidth,client:el.clientWidth,min:cs.minWidth,whiteSpace:cs.whiteSpace,overflowX:cs.overflowX,display:cs.display};
@@ -143,15 +144,22 @@ def main():
                                 except Exception as e:
                                     issue(qa_name,"iframe-screenshot",e)
                                 screenshots.append(app_fn)
-                                body_text=frame.locator("body").inner_text(timeout=5000).strip()
+                                body_text=frame.locator("body").evaluate("(b)=>(b.textContent||'').trim().slice(0,2000)",timeout=10000)
                                 visible_controls=frame.locator("body :is(input,textarea,select,button,[role=button],canvas)").count()
                                 content_nodes=frame.locator("body > *:not(style):not(script):not(link)").count()
                                 if len(body_text)<100 and visible_controls==0:
                                     issue(qa_name,"empty-app-content",f"embedded app body has only {len(body_text)} visible characters and no controls")
                                 if content_nodes==0:
                                     issue(qa_name,"empty-app-dom","embedded app body has no rendered content elements")
-                                if frame.locator("#grid").count() and frame.locator("#grid > *").count()==0:
-                                    issue(qa_name,"empty-data-grid","app defines #grid but renders no collection cards")
+                                for grid_selector in ("#grid","#cardsGrid","#mangaGrid","#filmGrid","#cardGrid","#collectionGrid"):
+                                    grid=frame.locator(grid_selector)
+                                    if grid.count() and grid.locator(":scope > *").count()==0:
+                                        issue(qa_name,"empty-data-grid",f"app defines {grid_selector} but renders no collection cards")
+                                hidden=frame.locator(".sr-only,.visually-hidden").first
+                                if hidden.count():
+                                    hidden_style=hidden.evaluate("(e)=>{const s=getComputedStyle(e);return {position:s.position,width:parseFloat(s.width),height:parseFloat(s.height),overflow:s.overflow,clipPath:s.clipPath}}")
+                                    if hidden_style["position"]!="absolute" or hidden_style["width"]>2 or hidden_style["height"]>2:
+                                        issue(qa_name,"screen-reader-utility-visible",json.dumps(hidden_style))
                             else:
                                 issue(qa_name,"missing-app-frame","iframe frame was not available")
                             if item.get("mature") and name=="desktop" and frame:
@@ -236,8 +244,8 @@ def main():
                                     cs=frame_el.evaluate("(f)=>f.contentDocument?.documentElement?.style.getPropertyValue('--rr-scale')")
                                     if not cs: issue(qa_name,"scale-sync","no scale value on iframe")
                                     else: stats["scale_sync_tested"]+=1
-                        except PlaywrightTimeout:
-                            issue(qa_name,"iframe-load",f"iframe did not reach DOM-ready state; src={frame_el.get_attribute('src')}")
+                        except PlaywrightTimeout as timeout_error:
+                            issue(qa_name,"iframe-inspection-timeout",f"src={frame_el.get_attribute('src')}; {timeout_error}")
                     else:
                         n=len(page.locator("main").inner_text()) if page.locator("main").count() else 0
                         if n<80: issue(qa_name,"editorial-content",f"only {n} characters in main")
