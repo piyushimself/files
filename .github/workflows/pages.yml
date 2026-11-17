@@ -33,6 +33,7 @@ jobs:
       - name: Build safe site
         run: |
           python -m pip install --upgrade pip
+          python -m pip install -r requirements-build.txt
           python tools/build.py
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
