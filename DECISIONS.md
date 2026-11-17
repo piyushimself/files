@@ -36,3 +36,11 @@
 - Add a local theme layer to generated interactive app copies; synchronize theme and text size with the parent page. Original source HTML at repository root remains unchanged.
 - Keep all visual assets local; no CDN, remote fonts, or third-party scripts are introduced.
 - Validate the generated site through the main GitHub Actions build/deploy workflow before considering this pass complete.
+
+## 2026-11-17 — Blue editorial design refinement
+- Adopt a consistent blue-led identity: pale blue-gray light surfaces and deep navy dark surfaces, with one blue accent family.
+- Remove pure-white panels and decorative red/green accents from shared design layers; retain status colors only where they communicate meaningful state.
+- Set a compact typography scale and one system sans-serif family for all normal content and controls.
+- Keep page layouts contextual to their material: catalogues for cinema, reading/discovery for manga, visual lessons for art, structured paths for curricula, and task-specific layouts for tools.
+- Normalize existing filters, chips, tabs, forms and selected states in interactive pages; do not invent metadata filters when the underlying content does not provide the fields.
+- Research references: USWDS collection and typography guidance, linked in DESIGN.md.
