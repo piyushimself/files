@@ -96,9 +96,9 @@ def pdf_text(raw):
     metadata={k:bool(meta.get(k)) for k in ("title","author","subject","keywords","creator","producer")}
     return "\n\n".join(chunks),{"pages":len(pdf),"ocr_pages":ocr_pages,"ocr_errors":errors,"metadata_fields_present":metadata}
 
-def safe_name(name):
+def safe_name(name,digest):
     value=re.sub(r"[^a-z0-9]+","-",Path(name).stem.lower()).strip("-")
-    return (value[:90] or "document")+".txt"
+    return (value[:78] or "document")+"-"+digest[:8]+".txt"
 
 def main():
     sources=sorted(p for p in ROOT.iterdir() if p.is_file() and p.suffix.lower() in EXTS and p.name not in EXCLUDE)
@@ -120,7 +120,7 @@ def main():
             rights={k:len(v.findall(content)) for k,v in RIGHTS.items()}
             meta.update({"characters":len(content),"words":len(re.findall(r"\S+",content)),"redactions":redactions,"rights_markers":{k:v for k,v in rights.items() if v}})
             if not content.strip(): meta["extraction_warning"]="No text extracted; manual visual inspection required"
-            outpath=OUT/safe_name(path.name)
+            outpath=OUT/safe_name(path.name,digest)
             outpath.write_text(f"# Redacted review copy: {path.name}\n\n{content}\n",encoding="utf-8")
             meta["review_text_file"]=outpath.name
             records.append(meta)
