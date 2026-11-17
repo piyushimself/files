@@ -96,3 +96,16 @@ The successful CI artifact was downloaded and its generated `review-report.html`
 - The artifact's 27/57 counts are build facts, not evidence that all 27 pages have passed browser-level QA or that all 57 exclusions are justified by confirmed sensitive data.
 
 Follow-up: refine the scan report so it clearly separates (1) mandatory manual content/rights review, (2) potential sensitive-data findings requiring contextual verification, and (3) duplicate/empty-source exclusions. Consider a higher-precision phone-number detector only after reviewing representative false positives and true positives.
+
+
+## Interactive source checks — 17 November 2026
+
+A generated-artifact script syntax pass checked 25 substantial inline JavaScript blocks across the published interactive apps with Node.js syntax validation.
+
+- `Qwen_html_20260604_f25nf6z8p.html` failed: one manga entry had an unquoted author string (`Ryousuke Takeuchi & Takeshi Obata`), which stopped the entire inline script from parsing. The source entry has been corrected on this branch; the post-fix CI artifact still needs a fresh syntax pass.
+- The Film & Art Library source embeds a non-empty dataset (4,942 entries across its data groups), including 98 entries in its “Essential 100” group and 835 in its “900 Curated World Cinema” group. Several labels/counts therefore need editorial reconciliation; do not infer that “0 of 0” is caused by absent data. Verify runtime initialization in a real browser.
+- The Complete Film Collection source embeds 1,629 film records, while the catalogue title says 1,619 Films. Its own page heading says 1,629 unique films. This is an explicit metadata mismatch to correct after verifying whether duplicate/filtered records are intended.
+- The Curator's Library embeds 1,731 records and its page header reports 1,731 entries. Its initial “Nothing found” state is a UI empty-state element; it is not evidence that the dataset is empty. Browser-level initialization and filter behaviour remain to be tested.
+- The Grand Library source contains a large inline database and filter/render pipeline. Static source inspection confirms its data is embedded, but the displayed counts and startup state require browser-level testing; the header's claimed total of 8,335 must be reconciled against actual category array lengths before being treated as verified.
+
+The syntax pass is not a browser test. It cannot validate DOM element IDs, initialization timing, event handlers, rendering correctness, iframe layout, or filtering behaviour.
