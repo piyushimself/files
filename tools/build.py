@@ -164,6 +164,30 @@ def enhance_app(path, category_name):
         app_title=html.escape(title_from_html(text, path.name))
         text=re.sub(r'<head\b[^>]*>', lambda m: m.group(0)+'<title>'+app_title+'</title>', text, count=1, flags=re.I)
     path.write_text(text,encoding="utf-8")
+def inject_app_age_gate(path):
+    """Add a same-origin 18+ self-declaration gate to the app itself, not only its wrapper."""
+    text=path.read_text(encoding="utf-8")
+    if "rr-app-age-gate" in text: return
+    css="""<style id="rr-app-age-style">
+#rr-app-age-gate{position:fixed!important;inset:0!important;z-index:2147483647!important;display:grid!important;place-items:center!important;padding:1.25rem!important;background:var(--rr-canvas,#f3f6fb)!important;color:var(--rr-ink,#172b45)!important;font:inherit!important}
+#rr-app-age-gate[hidden]{display:none!important}
+#rr-app-age-gate .rr-app-age-card{box-sizing:border-box!important;width:min(100%,34rem)!important;max-width:34rem!important;padding:clamp(1.4rem,4vw,2.2rem)!important;background:var(--rr-surface,#fff)!important;color:var(--rr-ink,#172b45)!important;border:1px solid var(--rr-line,#d7e0ec)!important;border-radius:14px!important;box-shadow:0 24px 70px rgba(0,0,0,.18)!important}
+#rr-app-age-gate .rr-age-kicker{margin:0 0 .6rem!important;color:var(--rr-accent,#2868b2)!important;font-size:.72rem!important;font-weight:700!important;letter-spacing:.12em!important;text-transform:uppercase!important}
+#rr-app-age-gate h1{margin:0 0 .75rem!important;color:var(--rr-ink,#172b45)!important;font-size:clamp(1.6rem,4vw,2.2rem)!important;line-height:1.15!important}
+#rr-app-age-gate p{margin:0 0 1rem!important;color:var(--rr-muted,#526984)!important;line-height:1.65!important}
+#rr-app-age-gate button{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:44px!important;padding:.7rem 1rem!important;border:0!important;border-radius:8px!important;background:var(--rr-accent,#2868b2)!important;color:#fff!important;font:inherit!important;font-weight:700!important;cursor:pointer!important}
+#rr-app-age-gate a{display:inline-block!important;margin-left:1rem!important;color:var(--rr-accent,#2868b2)!important;text-decoration:underline!important}
+</style>"""
+    gate="""<section id="rr-app-age-gate" role="dialog" aria-modal="true" aria-labelledby="rr-app-age-title">
+<div class="rr-app-age-card"><p class="rr-age-kicker">Mature collection · 18+</p><h1 id="rr-app-age-title">Adults only</h1><p>This collection may contain mature themes and is intended for readers aged 18 or over. This is a self-declaration prompt, not identity or age verification.</p><button id="rr-app-age-confirm" type="button" autofocus>I am 18 or older — continue</button><a href="../index.html">Return to The Reading Room</a></div></section>
+<script>(function(){const gate=document.getElementById('rr-app-age-gate');const hide=()=>{gate.hidden=true;};try{if(localStorage.getItem('rr-age-confirmed')==='yes')hide();}catch(e){}document.getElementById('rr-app-age-confirm').addEventListener('click',()=>{try{localStorage.setItem('rr-age-confirmed','yes');}catch(e){}hide();});window.addEventListener('storage',e=>{if(e.key==='rr-age-confirmed'&&e.newValue==='yes')hide();});window.addEventListener('message',e=>{if(e.data&&e.data.type==='rr-age-confirmed')hide();});})();</script>"""
+    head=re.search(r"</head\s*>",text,re.I)
+    if head: text=text[:head.start()]+css+text[head.start():]
+    body=re.search(r"</body\s*>",text,re.I)
+    if body: text=text[:body.start()]+gate+text[body.start():]
+    else: text+=gate
+    path.write_text(text,encoding="utf-8")
+
 def write_article(slug_name,title,source,mature,category_name):
     soup=BeautifulSoup(source,"html.parser")
     body=soup.body or soup
