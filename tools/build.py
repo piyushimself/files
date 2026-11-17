@@ -182,7 +182,7 @@ def enhance_app(path, category_name):
     if body_match and "data-rr-category" not in body_match.group(1):
         replacement='<body'+body_match.group(1)+' data-rr-category="'+html.escape(category_name,quote=True)+'">'
         text=text[:body_match.start()]+replacement+text[body_match.end():]
-    head_open=re.search(r"<head\b[^>]*>",text,re.I)
+        head_open=re.search(r"""<head\b[^>]*>""",text,re.I)
     head_close=re.search(r"</head\s*>",text,re.I)
     if head_close:
         if not head_open:
@@ -220,11 +220,11 @@ def inject_app_age_gate(path):
     """Add a same-origin 18+ self-declaration gate and noindex metadata to the app itself."""
     text=path.read_text(encoding="utf-8")
     # Direct app URLs must be noindex too; wrapper metadata does not apply inside an iframe.
-    robots=re.search(r"<meta\\b[^>]*\\bname=[\\"\']robots[\\"\'][^>]*>",text,re.I)
+    robots=re.search(r"""<meta\b[^>]*\bname=["']robots["'][^>]*>""",text,re.I)
     if robots:
         tag=robots.group(0)
-        if re.search(r"\\bcontent\\s*=",tag,re.I):
-            tag=re.sub(r"\\bcontent\\s*=\\s*([\\"\']).*?\\1",'content="noindex,nofollow"',tag,count=1,flags=re.I)
+        if re.search(r"""\bcontent\s*=""",tag,re.I):
+            tag=re.sub(r"""\bcontent\s*=\s*(["']).*?\1""",'content="noindex,nofollow"',tag,count=1,flags=re.I)
         else:
             tag=tag[:-1]+' content="noindex,nofollow">'
         text=text[:robots.start()]+tag+text[robots.end():]
