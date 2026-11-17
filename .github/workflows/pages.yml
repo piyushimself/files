@@ -2,7 +2,7 @@ name: Build and deploy Reading Room
 
 on:
   push:
-    branches: [main, site-build]
+    branches: [main]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -13,7 +13,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: reading-room-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -53,10 +53,14 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: reading-room-browser-qa
-          path: browser-qa-report/
+          path: |
+            browser-qa-report/
+            site/data/catalog.json
+            PUBLISHING-REVIEW.md
           if-no-files-found: warn
           retention-days: 14
       - name: Upload Pages artifact
+        if: always()
         uses: actions/upload-pages-artifact@v3
         with:
           path: site
