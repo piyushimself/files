@@ -36,15 +36,33 @@ def slug(s):
     out=re.sub(r"[^a-z0-9]+","-",Path(s).stem.lower()).strip("-")
     return out or hashlib.sha1(s.encode()).hexdigest()[:10]
 def category(name):
-    n=name.lower()
+    # Explicit, reviewable filename mapping first; broad keyword rules are only a fallback.
+    n=Path(name).name.lower()
+    explicit={
+      "global_kids_books_complete_guide.pdf":"Family",
+      "global_kids_reading_guide_final (1).pdf":"Family",
+      "three_year_old_reading_guide (1).pdf":"Family",
+      "world_stories_3yearold_guide.pdf":"Family",
+      "1000_greatest_fictional_books.pdf":"Reading & Literature",
+      "aag_ki_kavitayen.pdf":"Reading & Literature",
+      "a_filmmakers_reading_list.pdf":"Reading & Literature",
+      "cybersecurity_stories_for_your_teams.pdf":"Security",
+      "ath - pine.txt":"Security",
+      "crypto_trend_rider_4h.pine":"Security",
+      "meditation_on_death.pdf":"Learning",
+      "blackout_poetry_tutorial.html":"Reading & Literature",
+      "life-fiction-curriculum.html":"Reading & Literature",
+      "asian_books_curriculum.pdf":"Reading & Literature",
+    }
+    if n in explicit: return explicit[n]
     if any(x in n for x in ("generator","diary","tracker","typewriter","journal")): return "Interactive tools"
-    if any(x in n for x in ("film","cinema","movie")): return "Cinema"
+    if any(x in n for x in ("cybersecurity","security","crypto_trend","\.pine","ath - pine")): return "Security"
+    if any(x in n for x in ("kid","child","three_year","world_stories","reading_guide","global_kids")): return "Family"
     if any(x in n for x in ("manga","manhwa","anime","comic")): return "Manga & Comics"
-    if any(x in n for x in ("art","watercolour","collage","bob_ross","poetry")): return "Art"
-    if any(x in n for x in ("kid","child","three_year","world_stories","reading_guide")): return "Family"
-    if any(x in n for x in ("security","cyber","crypto","pine","ath")): return "Security"
-    if any(x in n for x in ("curriculum","course","development","prompt","thinker","inspiration")): return "Learning"
-    if any(x in n for x in ("book","reading","poem","kavit","fiction","literature")): return "Reading & Literature"
+    if any(x in n for x in ("film","cinema","movie")): return "Cinema"
+    if any(x in n for x in ("poetry","poem","kavit","fiction","literature","book","reading_list","asian_books")): return "Reading & Literature"
+    if any(x in n for x in ("art","watercolour","collage","bob_ross")): return "Art"
+    if any(x in n for x in ("curriculum","course","development","prompt","thinker","inspiration","meditation","memento")): return "Learning"
     return "Other"
 def searchable_text(raw):
     raw=re.sub(r"(?is)<(script|style|noscript|svg)\b.*?</\1>"," ",raw)
@@ -100,7 +118,7 @@ def extract_document_text(path, raw):
 def scan_bytes(data):
     return [label for label,rx in SECRET_PATTERNS if rx.search(data)]
 def shell_header(title):
-    return """<header class="rr-shell-header"><a class="rr-shell-brand" href="../../index.html">THE READING ROOM <small>PERSONAL LIBRARY</small></a><nav class="rr-shell-tools" aria-label="Library navigation"><a href="../../index.html">Home</a><details class="rr-nav-menu"><summary>Browse collections</summary><div class="rr-nav-panel"><label class="sr-only" for="rr-nav-search">Search collections</label><input id="rr-nav-search" type="search" placeholder="Find a collection…"><nav id="rr-nav-links" class="rr-nav-links" aria-label="All collections"></nav></div></details><a id="rr-prev" href="#" hidden>← Previous</a><a id="rr-next" href="#" hidden>Next →</a><button id="rr-theme-toggle" type="button">Dark mode</button><button id="rr-text-smaller" type="button" aria-label="Decrease text size">A−</button><button id="rr-text-larger" type="button" aria-label="Increase text size">A+</button></nav></header>"""
+    return """<header class="rr-shell-header"><a class="rr-shell-brand" href="../../index.html">THE READING ROOM <small>PERSONAL LIBRARY</small></a><nav class="rr-shell-tools" aria-label="Library navigation"><a href="../../index.html">Home</a><details class="rr-nav-menu"><summary>Browse collections</summary><div class="rr-nav-panel"><label class="sr-only" for="rr-nav-search">Search collections</label><input id="rr-nav-search" type="search" placeholder="Find a collection…"><nav id="rr-nav-links" class="rr-nav-links" aria-label="All collections"></nav></div></details><a id="rr-prev" href="#" hidden>← Previous</a><a id="rr-next" href="#" hidden>Next →</a><button id="rr-theme-toggle" type="button">Dark mode</button><label class="rr-font-label" for="rr-font-family">Font</label><select id="rr-font-family" aria-label="Reader font"><option value="system">System</option><option value="serif">Serif</option><option value="mono">Mono</option></select><button id="rr-text-smaller" type="button" aria-label="Decrease text size">A−</button><button id="rr-text-larger" type="button" aria-label="Increase text size">A+</button></nav></header>"""
 def enhance_app(path, category_name):
     text=path.read_text(encoding="utf-8")
     additions='<link rel="stylesheet" href="../assets/unified-app.css"><script src="../assets/unified-app.js" defer></script>'
