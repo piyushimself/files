@@ -109,3 +109,9 @@ Both Pine files were inspected statically, not executed or compiled in TradingVi
 - GDPR, Article 33: https://eur-lex.europa.eu/eli/reg/2016/679/oj#art_33
 - NIS2, Article 23: https://eur-lex.europa.eu/eli/dir/2022/2555/oj#art_23
 - DORA, Commission Delegated Regulation (EU) 2025/301, Article 5: https://eur-lex.europa.eu/eli/reg_del/2025/301/oj/eng#art_5
+
+
+### Official TradingView references for the Pine findings
+
+- Lower-timeframe request.security() returns one intrabar per chart bar; request.security_lower_tf() returns an array of available intrabars: https://www.tradingview.com/pine-script-docs/faq/other-data-and-timeframes/
+- barstate.isconfirmed is true on the closing update of a realtime bar, but does not work inside a request.security() call: https://www.tradingview.com/pine-script-docs/concepts/bar-states/
