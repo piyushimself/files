@@ -27,3 +27,5 @@
 - A conservative scan checks credentials, private keys, email addresses, phone-like numbers, selected national-ID patterns, password assignments, JWT-like tokens, and private/internal URLs. A match withholds the entire source file; false positives are possible and must be reviewed without exposing matched values.
 - CI build and artifact upload succeeded. The GitHub Pages deployment action failed. Do not repeatedly retry deployment; after merging, configure repository Settings → Pages → Build and deployment → Source: GitHub Actions if it is not already enabled.
 - The Pages workflow runs on both `site-build` and `main`, so merging the final PR to `main` will trigger the production build.
+
+- 2026-11-17 publication configuration: GitHub Pages source was corrected from branch publishing (`main` root) to GitHub Actions so the generated `site/` artifact is deployed by the repository workflow.
