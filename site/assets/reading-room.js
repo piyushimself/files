@@ -6,13 +6,22 @@ const state={items:[],category:"All",query:"",sort:"featured",favorites:new Set(
 const theme=safeStore.get("rr-theme");
 if(theme==="dark"||theme==="light")document.documentElement.dataset.theme=theme;
 else if(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)document.documentElement.dataset.theme="dark";
-$("#theme-toggle").addEventListener("click",()=>{const next=document.documentElement.dataset.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=next;safeStore.set("rr-theme",next)});
-let scale=1;
-$("#text-smaller").addEventListener("click",()=>{scale=Math.max(.88,scale-.06);document.documentElement.style.setProperty("--body-scale",scale)});
-$("#text-larger").addEventListener("click",()=>{scale=Math.min(1.2,scale+.06);document.documentElement.style.setProperty("--body-scale",scale)});
+const themeButton=$("#theme-toggle");
+function applyThemeLabel(){themeButton.textContent=document.documentElement.dataset.theme==="dark"?"Light mode":"Dark mode"}
+applyThemeLabel();
+themeButton.addEventListener("click",()=>{const next=document.documentElement.dataset.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=next;safeStore.set("rr-theme",next);applyThemeLabel()});
+const fontSelect=$("#font-select");
+const savedFont=safeStore.get("rr-font-family")||"system";
+document.documentElement.dataset.rrFont=["serif","mono"].includes(savedFont)?savedFont:"system";
+fontSelect.value=document.documentElement.dataset.rrFont;
+fontSelect.addEventListener("change",()=>{document.documentElement.dataset.rrFont=fontSelect.value;safeStore.set("rr-font-family",fontSelect.value)});
+let scale=Math.min(1.2,Math.max(.88,parseFloat(safeStore.get("rr-text-scale")||"1")||1));
+document.documentElement.style.setProperty("--body-scale",scale);
+$("#text-smaller").addEventListener("click",()=>{scale=Math.max(.88,scale-.06);document.documentElement.style.setProperty("--body-scale",scale);safeStore.set("rr-text-scale",String(scale))});
+$("#text-larger").addEventListener("click",()=>{scale=Math.min(1.2,scale+.06);document.documentElement.style.setProperty("--body-scale",scale);safeStore.set("rr-text-scale",String(scale))});
 $("#last-updated").textContent=new Intl.DateTimeFormat(undefined,{year:"numeric",month:"long",day:"numeric"}).format(new Date());
-const categories=["All","Saved","Cinema","Manga & Comics","Art","Reading & Literature","Learning","Family","Security","Interactive tools","Other"];
-function renderFilters(){const root=$("#category-filters");root.replaceChildren();categories.forEach(cat=>{const b=document.createElement("button");b.className="filter-button";b.type="button";b.textContent=cat;b.setAttribute("aria-pressed",String(state.category===cat));b.addEventListener("click",()=>{state.category=cat;render()});root.append(b)})}
+const categoryOrder=["Cinema","Manga & Comics","Art","Reading & Literature","Learning","Family","Security","Interactive tools","Cross-disciplinary"];
+function renderFilters(){const root=$("#category-filters");root.replaceChildren();const categories=["All","Saved",...categoryOrder.filter(cat=>state.items.some(item=>item.category===cat))];categories.forEach(cat=>{const b=document.createElement("button");b.className="filter-button";b.type="button";b.textContent=cat;b.setAttribute("aria-pressed",String(state.category===cat));b.addEventListener("click",()=>{state.category=cat;render()});root.append(b)})}
 function remember(href){state.recent=[href,...state.recent.filter(x=>x!==href)].slice(0,30);safeStore.set("rr-recent",JSON.stringify(state.recent))}
 function render(){
  renderFilters();

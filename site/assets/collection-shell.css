@@ -1,8 +1,10 @@
-:root{--rr-shell-height:62px}
+:root{--rr-shell-height:62px;--reader-font:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}:root[data-rr-font="serif"]{--reader-font:Georgia,"Times New Roman",serif}:root[data-rr-font="mono"]{--reader-font:ui-monospace,SFMono-Regular,Consolas,monospace}body{font-family:var(--reader-font)}
 .rr-shell-header{position:sticky;top:0;z-index:500;min-height:var(--rr-shell-height);display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.62rem clamp(1rem,3vw,2rem);background:var(--surface);color:var(--ink);border-bottom:1px solid var(--line)}
 .rr-shell-brand{display:flex;align-items:center;gap:.55rem;color:var(--ink);font-size:.9rem;font-weight:750;text-decoration:none;white-space:nowrap;letter-spacing:.01em}
 .rr-shell-brand small{display:block;color:var(--muted);font-size:.76rem;font-weight:500;letter-spacing:0}
 .rr-shell-tools{display:flex;align-items:center;gap:.38rem;flex-wrap:wrap}
+.rr-font-label{font-size:.78rem;color:var(--muted);margin-left:.2rem}
+#rr-font-family{font:inherit;font-size:.84rem;color:var(--ink);background:var(--surface-raised);border:1px solid var(--line);border-radius:6px;padding:.45rem .5rem;max-width:6.5rem}
 .rr-shell-tools a,.rr-shell-tools button,.rr-nav-menu summary{font:inherit;font-size:.86rem;color:var(--ink);text-decoration:none;background:var(--surface-raised);border:1px solid var(--line);border-radius:6px;padding:.45rem .62rem;cursor:pointer}
 .rr-shell-tools a:hover,.rr-shell-tools button:hover,.rr-nav-menu summary:hover{border-color:var(--accent);color:var(--accent)}
 .rr-shell-tools button:focus-visible,.rr-shell-tools a:focus-visible,.rr-nav-menu summary:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
