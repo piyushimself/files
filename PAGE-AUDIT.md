@@ -213,3 +213,13 @@ The broad phone-like-number detector also produced false positives from SVG coor
 - The validator checked 32 apps, 32 inline JavaScript blocks, 34 catalogue entries, 34 wrappers, and 64 local app assets. All checks passed.
 - The publishing report lists 34 published HTML collections and 50 withheld sources. Withheld items include 46 PDF/DOCX documents pending manual copyright/content review, 3 text/code sources pending review, and 1 byte-identical duplicate HTML source. Empty HTML source files are excluded.
 - This is stronger static/generated-output QA, but not a full interactive browser test. The local Chromium binary hangs even on a trivial data URL in this execution environment, so dynamic rendering, filters, theme switching, keyboard flows, console errors and visual mobile/desktop review remain outstanding.
+
+## Current branch verification — 17 November 2026
+
+- Current branch head: `e0b60d69fd0fd0820344eb75558af04a55dd3c46`.
+- Workflow run [44099730334](https://github.com/piyushimself/files/actions/runs/44099730334) completed successfully on that exact head.
+- Build, generated-site integrity validation and Pages artifact upload passed. The deploy job was skipped as expected for a pull request.
+- The validator checks generated app/wrapper metadata, duplicate IDs, inline JavaScript syntax, catalogue-to-wrapper consistency, homepage category coverage, catalogue destinations, wrapper iframe targets and local app asset references.
+- This remains static/build validation. No successful real-browser run has yet established that filters, controls, responsive rendering, keyboard interaction, accessibility or console behaviour work correctly.
+- All 43 PDFs, 3 DOCX, 1 TXT and 1 Pine source remain withheld for manual content/rights/privacy review. No binary document has been promoted based only on automated text extraction.
+- PR #4 remains a draft and is not merged.
