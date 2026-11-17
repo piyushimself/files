@@ -21,7 +21,7 @@ SECRET_PATTERNS=[
  ("generic API token",re.compile(rb"(?i)(?:api[_-]?key|access[_-]?token|client[_-]?secret)\s*[:=]\s*['\"]?[A-Za-z0-9_./+=-]{20,}")),
  ("bearer credential",re.compile(rb"(?i)authorization\s*[:=]\s*bearer\s+[A-Za-z0-9._~+/=-]{20,}")),
  ("email address",re.compile(rb"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b",re.I)),
- ("phone-like number",re.compile(rb"(?<!\d)(?:\+?\d[\s().-]?){9,14}(?!\d)")),
+ ("phone-like number",re.compile(rb"(?<!\d)(?:(?:\+|00)91[\s-]?|0)?[6-9]\d{9}(?!\d)|(?<!\d)\+[1-9](?:[\s()-]*\d){8,13}(?!\d)|(?<!\d)[6-9]\d{4}[\s-]\d{5}(?!\d)")),
  ("Indian Aadhaar-like identifier",re.compile(rb"\b\d{4}[\s-]?\d{4}[\s-]?\d{4}\b")),
  ("Indian PAN-like identifier",re.compile(rb"\b[A-Z]{5}\d{4}[A-Z]\b",re.I)),
  ("US SSN-like identifier",re.compile(rb"\b\d{3}-\d{2}-\d{4}\b")),
