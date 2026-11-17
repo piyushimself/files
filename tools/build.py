@@ -84,6 +84,13 @@ def title_from_html(raw, filename):
         t=re.sub(r"<[^>]+>"," ",m.group(1))
         t=html.unescape(re.sub(r"\s+"," ",t)).strip()
         if t: return t
+    # When an interactive source omits <title>, use its visible H1 before falling
+    # back to a filename-derived label. This prevents raw filenames becoming titles.
+    h=re.search(r"<h1\\b[^>]*>(.*?)</h1>",raw,re.I|re.S)
+    if h:
+        t=re.sub(r"<[^>]+>"," ",h.group(1))
+        t=html.unescape(re.sub(r"\\s+"," ",t)).strip()
+        if t: return t
     return Path(filename).stem.replace("_"," ").replace("-"," ").strip().title()
 def extract_document_text(path, raw):
     """Extract searchable text; OCR image-only PDF pages and DOCX images when possible."""
