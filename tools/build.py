@@ -36,9 +36,9 @@ def category(name):
     if any(x in n for x in ("book","reading","poem","kavit","fiction","literature")): return "Reading & Literature"
     return "Other"
 def searchable_text(raw):
-    raw=re.sub(r"(?is)<(script|style|noscript|svg)\\b.*?</\\1>"," ",raw)
+    raw=re.sub(r"(?is)<(script|style|noscript|svg)\b.*?</\1>"," ",raw)
     raw=re.sub(r"(?s)<[^>]+>"," ",raw)
-    return html.unescape(re.sub(r"\\s+"," ",raw)).strip()[:250000]
+    return html.unescape(re.sub(r"\s+"," ",raw)).strip()[:250000]
 def title_from_html(raw, filename):
     m=re.search(r"<title[^>]*>(.*?)</title>",raw,re.I|re.S)
     if m:
@@ -62,8 +62,8 @@ def extract_document_text(path, raw):
                 if len(txt.strip())<40:
                     pix=page.get_pixmap(matrix=fitz.Matrix(1.8,1.8),alpha=False)
                     img=Image.open(io.BytesIO(pix.tobytes("png")))
-                    try: txt += "\\n"+pytesseract.image_to_string(img,lang="eng+hin")
-                    except Exception: txt += "\\n"+pytesseract.image_to_string(img,lang="eng")
+                    try: txt += "\n"+pytesseract.image_to_string(img,lang="eng+hin")
+                    except Exception: txt += "\n"+pytesseract.image_to_string(img,lang="eng")
                 chunks.append(txt)
         elif ext==".docx":
             from docx import Document
@@ -85,7 +85,7 @@ def extract_document_text(path, raw):
                             continue
     except Exception as exc:
         raise RuntimeError(type(exc).__name__) from None
-    return "\\n".join(chunks)
+    return "\n".join(chunks)
 def scan_bytes(data):
     return [label for label,rx in SECRET_PATTERNS if rx.search(data)]
 def write_wrapper(slug_name,title,app_rel,mature):
@@ -108,7 +108,7 @@ def main():
         if ext in {".pdf",".docx"}:
             try:
                 extracted=extract_document_text(p,raw)
-                scan_data += b"\\n"+extracted.encode("utf-8",errors="ignore")
+                scan_data += b"\n"+extracted.encode("utf-8",errors="ignore")
                 if not extracted.strip():
                     withheld.append({"file":p.name,"reason":"no extractable text; OCR/content review required"})
                     continue
@@ -153,7 +153,7 @@ def main():
     for x in withheld: report.append(f"- **{x['file']}** — {x['reason']}")
     report += ["","## Notes","- Withheld filenames are reported without reproducing matched values or document contents.","- PDF/DOCX and text/code files require human review before allowlisting.","- Original root-level source files are never modified.",""]
     REPORT.write_text("\n".join(report),encoding="utf-8")
-    (SITE/"robots.txt").write_text("User-agent: *\nAllow: /\nDisallow: /collections/\nSitemap: https://piyushimself.github.io/files/sitemap.xml\n",encoding="utf-8")
+    (SITE/"robots.txt").write_text("User-agent: *\nAllow: /\nSitemap: https://piyushimself.github.io/files/sitemap.xml\n",encoding="utf-8")
     urls=["https://piyushimself.github.io/files/","https://piyushimself.github.io/files/404.html"]+[f"https://piyushimself.github.io/files/{x['href']}" for x in items if not x["mature"]]
     (SITE/"sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join(f"<url><loc>{html.escape(u)}</loc></url>" for u in urls)+"</urlset>",encoding="utf-8")
     print(f"Build complete: {len(items)} HTML collections; {len(withheld)} files withheld.")
