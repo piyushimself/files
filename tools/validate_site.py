@@ -38,8 +38,8 @@ def main() -> int:
         head_close_count = len(re.findall(r"</head\s*>", raw_html, re.I))
         if head_open_count != 1 or head_close_count != 1:
             failures.append(f"{page.relative_to(SITE)}: expected exactly one opening and closing head tag; found {head_open_count}/{head_close_count}")
-        style_open_count = len(re.findall(r"<style\\b", raw_html, re.I))
-        style_close_count = len(re.findall(r"</style\\s*>", raw_html, re.I))
+        style_open_count = len(re.findall(r"<style\b", raw_html, re.I))
+        style_close_count = len(re.findall(r"</style\s*>", raw_html, re.I))
         if style_open_count != style_close_count:
             failures.append(f"{page.relative_to(SITE)}: unbalanced style tags; found {style_open_count}/{style_close_count}")
         soup = BeautifulSoup(raw_html, "html.parser")
