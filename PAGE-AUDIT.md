@@ -1,6 +1,6 @@
 # Page-by-page editorial and publishing audit
 
-Audit branch: `content-and-visual-qa`  
+Audit branch: `site-build`  
 Base reviewed: `main` at `48bb7c7d156cdb1763c99048d68083d4e05566e8`  
 Status: **in progress — not a 100% sign-off**
 
@@ -25,7 +25,7 @@ These checks are useful for triage, but they do **not** replace browser interact
 | `manga-comics-master.html` | Large interactive index with tabs, controls and cards; requires browser interaction and mobile layout testing. |
 | `manga-index.html` | Large interactive index; needs the same visual and filter-function checks. Mature/transgressive content must remain gated and noindex. |
 | `manga-guide.html` | Static reading guide; verify semantic conversion preserves all sections and sequence. |
-| `manga-archive-v4.html` | Empty source file; cannot be published as a useful page. |
+| `manga-archive-v4.html` | Large (about 1.2 MB) interactive source. The GitHub file-content preview returned an empty body because of its size, but the generated artifact contains the full app and browser screenshots confirm its collection renders. Retain the mature-content gate and complete filter/interaction checks. |
 | `manhwa300.html` | Adult romance manhwa source; retain 18+ gate and noindex; verify filter behaviour after theme changes. |
 | `manhwa_300_filter_app.html` | Missing `<title>` tag; visible H1 is `300 Adult Het Romance Manhwa`. Build metadata now uses the visible H1 when the title tag is absent, avoiding a filename-derived title. Retain 18+ gate and noindex. |
 | `300_animated_films.html` | Interactive film table with search/filter controls; verify table responsiveness and filter operation. |
@@ -51,8 +51,8 @@ These checks are useful for triage, but they do **not** replace browser interact
 | `typewriter.html` | Small writing tool; add a useful description and test input/output. |
 | `collage-idea-generator.html` | Interactive generator; keep task-specific controls and validate generation flow. |
 | `collage-idea-generato - Theme.html` | Near-duplicate generator variant; compare behaviour and decide whether both variants deserve separate catalogue entries. |
-| `Big_library.html` | Empty source file; cannot be published as a useful page. |
-| `grand_library (2).html` | Empty source file; cannot be published as a useful page. |
+| `Big_library.html` | Large (about 1.5 MB) interactive source. The API text preview is empty for this file size; the generated artifact contains its embedded dataset. Verified section counts are corrected in the generated copy, not the original source. |
+| `grand_library (2).html` | Large (about 1.6 MB) interactive source. The API text preview is empty for this file size; the generated artifact contains the embedded dataset. Verify its count and filters in the browser. |
 
 ## Category mapping decisions
 
@@ -242,3 +242,13 @@ The follow-up workflow on the repaired branch is the acceptance gate for this co
 The Chromium suite is broad smoke/interaction coverage, not exhaustive testing of every bespoke control or a formal WCAG audit. Keyboard-only navigation, screen-reader behavior, detailed color-contrast measurement, and exhaustive per-control semantics still require separate review.
 
 Document rights/content review remains separate from browser QA. All source PDFs/DOCX/TXT/Pine files remain withheld; extraction and OCR do not establish publication permission or complete human fact-checking.
+
+## Generated-copy-only count and markup corrections — 17 November 2026
+
+The original root-level HTML sources are preserved byte-for-byte against the main baseline. The build applies verified presentation corrections only to generated copies under site/apps/:
+
+- Big_library.html: correct the seven section labels/descriptions to the actual embedded array counts (98, 190, 563, 835, 649, 484 and 266).
+- film_collection_v8.html: correct the title and initial result counter from 1,619 to 1,629, matching its embedded 1,629 records.
+- Qwen_html_20260604_f25nf6z8p.html: quote the malformed author value and close the malformed style element in the generated copy so the app script and markup parse correctly.
+
+The Qwen, Big Library and Complete Film Collection sources are restored to their exact main blobs. Count/markup repairs do not alter the root source uploads.

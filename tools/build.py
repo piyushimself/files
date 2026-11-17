@@ -155,6 +155,25 @@ def enhance_app(path, category_name):
         malformed=re.search(r"</\s*thead\s*>\s*(?=<body\b)",text,re.I)
         if malformed:
             text=text[:malformed.start()]+"</style>"+text[malformed.end():]
+    # Correct verified catalogue-count mismatches only in generated copies.
+    # Keep the original root-level HTML uploads byte-for-byte unchanged.
+    if path.name == "big-library.html":
+        corrections = (
+            ('{key:"essential_100",label:"Essential 100",type:"film",part:"PART I · SEC 01",title:"100 Essential Films",desc:"100 films that demand to be seen - 30 genres, 28 countries, nearly a century of image-making.",filterType:"film"},', '{key:"essential_100",label:"Essential 98",type:"film",part:"PART I · SEC 01",title:"98 Essential Films",desc:"98 films that demand to be seen - 30 genres, 28 countries, nearly a century of image-making.",filterType:"film"},'),
+            ('{key:"biographical",label:"Biog. Films",type:"film",part:"PART I · SEC 02",title:"200 Biographical Films",desc:"Lives vividly told - artists, musicians, scientists, rebels. Organised by subject category.",filterType:"film_bio"},', '{key:"biographical",label:"Biog. Films",type:"film",part:"PART I · SEC 02",title:"190 Biographical Films",desc:"Lives vividly told - artists, musicians, scientists, rebels. Organised by subject category.",filterType:"film_bio"},'),
+            ('{key:"world_cinema",label:"Open Worlds",type:"film",part:"PART I · SEC 03",title:"A Life Worth Living - 500 Films",desc:"Cinema as philosophy made visible - 500 films from every inhabited continent and seven decades.",filterType:"film_world"},', '{key:"world_cinema",label:"World Cinema 563",type:"film",part:"PART I · SEC 03",title:"A Life Worth Living - 563 Films",desc:"Cinema as philosophy made visible - 563 films from every inhabited continent and seven decades.",filterType:"film_world"},'),
+            ('{key:"curated_900",label:"900 Films",type:"film",part:"PART I · SEC 05",title:"900 Curated World Cinema",desc:"World Cinema Masterpieces, Sensual and Mood Cinema, Explicit Erotic Art Cinema - with IMDb scores.",filterType:"film_900"},', '{key:"curated_900",label:"Curated 835",type:"film",part:"PART I · SEC 05",title:"835 Curated World Cinema",desc:"World Cinema Masterpieces, Sensual and Mood Cinema, Explicit Erotic Art Cinema - with IMDb scores.",filterType:"film_900"},'),
+            ('{key:"movie_enc",label:"Encyclopedia",type:"film",part:"PART I · SEC 07",title:"Complete Movie Encyclopedia",desc:"647 films with IMDb, Rotten Tomatoes, streaming availability, and editorial rating.",filterType:"film_enc"},', '{key:"movie_enc",label:"Encyclopedia 649",type:"film",part:"PART I · SEC 07",title:"Complete Movie Encyclopedia",desc:"649 films with IMDb, Rotten Tomatoes, streaming availability, and editorial rating.",filterType:"film_enc"},'),
+            ('{key:"books_1000",label:"1000 Books",type:"book",part:"PART III · SEC 12",title:"1000 Greatest Fictional Books",desc:"From Ancient Greek to contemporary global fiction, organised by literary tradition.",filterType:"book"},', '{key:"books_1000",label:"Books 484",type:"book",part:"PART III · SEC 12",title:"484 Greatest Fictional Books",desc:"From Ancient Greek to contemporary global fiction, organised by literary tradition.",filterType:"book"},'),
+            ('{key:"music",label:"500 Music",type:"music",part:"PART IV · SEC 16",title:"A Life Worth Living - 500 Albums",desc:"Essential albums spanning jazz, classical, world music, folk, and beyond.",filterType:"music"},', '{key:"music",label:"Music 266",type:"music",part:"PART IV · SEC 16",title:"A Life Worth Living - 266 Albums",desc:"Essential albums spanning jazz, classical, world music, folk, and beyond.",filterType:"music"},')
+        )
+        for old, new in corrections:
+            if old not in text:
+                raise RuntimeError("Expected Big Library count line was not found in generated source copy")
+            text = text.replace(old, new, 1)
+    elif path.name == "film-collection-v8.html":
+        text = text.replace("<title>The Complete Film Collection — 1,619 Films</title>", "<title>The Complete Film Collection — 1,629 Films</title>", 1)
+        text = text.replace('<span class="result-count" id="resultCount">1,619 films</span>', '<span class="result-count" id="resultCount">1,629 films</span>', 1)
     # Remove remote font dependencies; the reader controls typography locally.
     text=re.sub(r'<link[^>]+(?:fonts\.googleapis\.com|fonts\.gstatic\.com)[^>]*>', '', text, flags=re.I)
     text=re.sub(r'@import\s+url\([\'"]?https?://fonts\.googleapis\.com[^)]*\)\s*;?', '', text, flags=re.I)
@@ -371,7 +390,7 @@ def main():
             withheld.append({"file":p.name,"reason":"text/code held for manual content and sensitive-data review"})
     items.sort(key=lambda x:(x["category"],x["title"].casefold()))
     (DATA/"catalog.json").write_text(json.dumps({"generated":date.today().isoformat(),"items":items},ensure_ascii=False,indent=2),encoding="utf-8")
-    report=["# Publishing review","",f"Build date: {date.today().isoformat()}","",f"Published interactive HTML collections: **{len(items)}**","",f"Withheld source files: **{len(withheld)}**",""]
+    report=["# Publishing review","",f"Build date: {date.today().isoformat()}","",f"Published HTML collections: **{len(items)}**","",f"Withheld source files: **{len(withheld)}**",""]
     for x in withheld: report.append(f"- **{x['file']}** — {x['reason']}")
     report += [
         "",
@@ -385,7 +404,7 @@ def main():
         ""
     ]
     REPORT.write_text("\n".join(report),encoding="utf-8")
-    report_html="<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><meta name='robots' content='noindex,nofollow'><title>Publishing review — The Reading Room</title><link rel='stylesheet' href='assets/reading-room.css'></head><body><main class='intro'><p class='kicker'>Internal publishing record</p><h1>Content review<br><em>and exclusions.</em></h1><p class='intro-copy'>Build date: "+date.today().isoformat()+"</p><p>Published interactive HTML collections: <strong>"+str(len(items))+"</strong></p><p>Withheld source files: <strong>"+str(len(withheld))+"</strong></p><ul>"+''.join("<li><strong>"+html.escape(x['file'])+"</strong> — "+html.escape(x['reason'])+"</li>" for x in withheld)+"</ul><p>Matched sensitive values are never included in this report. Original source files remain unchanged.</p><a href='./'>Return to the library</a></main></body></html>"
+    report_html="<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><meta name='robots' content='noindex,nofollow'><title>Publishing review — The Reading Room</title><link rel='stylesheet' href='assets/reading-room.css'></head><body><main class='intro'><p class='kicker'>Internal publishing record</p><h1>Content review<br><em>and exclusions.</em></h1><p class='intro-copy'>Build date: "+date.today().isoformat()+"</p><p>Published HTML collections: <strong>"+str(len(items))+"</strong></p><p>Withheld source files: <strong>"+str(len(withheld))+"</strong></p><ul>"+''.join("<li><strong>"+html.escape(x['file'])+"</strong> — "+html.escape(x['reason'])+"</li>" for x in withheld)+"</ul><p>Matched sensitive values are never included in this report. Original source files remain unchanged.</p><a href='./'>Return to the library</a></main></body></html>"
     (SITE/"review-report.html").write_text(report_html,encoding="utf-8")
     (SITE/"robots.txt").write_text("User-agent: *\nAllow: /\nSitemap: https://piyushimself.github.io/files/sitemap.xml\n",encoding="utf-8")
     urls=["https://piyushimself.github.io/files/","https://piyushimself.github.io/files/404.html"]+[f"https://piyushimself.github.io/files/{x['href']}" for x in items if not x["mature"]]

@@ -52,3 +52,9 @@
 - Preserve the original root HTML exactly. Repair only the generated copy under `site/apps/`.
 - Strengthen browser QA to inspect the actual iframe content frame, capture the embedded body, reject empty app DOMs, and reject an empty `#grid` when one is expected.
 - Keep PR #5 in draft until the repaired full workflow passes and the document-rights/privacy and page-level editorial limitations are resolved or explicitly accepted.
+
+## 2026-11-17 — Preserve source uploads while correcting generated presentation
+- Restored Qwen_html_20260604_f25nf6z8p.html, Big_library.html and film_collection_v8.html to the exact main blobs.
+- The generated site quotes the malformed Qwen author value, repairs its malformed style terminator, and corrects verified Big Library and Complete Film Collection counts only in site/apps/ copies.
+- The builder fails if an expected Big Library source line is absent, preventing silent partial count corrections.
+- This keeps original root uploads immutable while the public site displays the verified counts.
