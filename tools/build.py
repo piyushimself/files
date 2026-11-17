@@ -142,6 +142,8 @@ def shell_header(title):
     return """<header class="rr-shell-header"><a class="rr-shell-brand" href="../../index.html">THE READING ROOM <small>PERSONAL LIBRARY</small></a><nav class="rr-shell-tools" aria-label="Library navigation"><a href="../../index.html">Home</a><details class="rr-nav-menu"><summary>Browse collections</summary><div class="rr-nav-panel"><label class="sr-only" for="rr-nav-search">Search collections</label><input id="rr-nav-search" type="search" placeholder="Find a collection…"><nav id="rr-nav-links" class="rr-nav-links" aria-label="All collections"></nav></div></details><a id="rr-prev" href="#" hidden>← Previous</a><a id="rr-next" href="#" hidden>Next →</a><button id="rr-theme-toggle" type="button">Dark mode</button><label class="rr-font-label" for="rr-font-family">Font</label><select id="rr-font-family" aria-label="Reader font"><option value="system">System</option><option value="serif">Serif</option><option value="mono">Mono</option></select><button id="rr-text-smaller" type="button" aria-label="Decrease text size">A−</button><button id="rr-text-larger" type="button" aria-label="Increase text size">A+</button></nav></header>"""
 def enhance_app(path, category_name):
     text=path.read_text(encoding="utf-8")
+    # Repair one malformed author string in the imported Qwen manga data, only in the generated copy.
+    text=text.replace('author: Ryousuke Takeuchi & Takeshi Obata",', 'author: "Ryousuke Takeuchi & Takeshi Obata",')
     # Repair the known unquoted author value in the generated copy only.
     text=text.replace("author: Ryousuke Takeuchi & Takeshi Obata, year: 2014", "author: \"Ryousuke Takeuchi & Takeshi Obata\", year: 2014")
     # Repair a malformed legacy style terminator in the generated copy only.
