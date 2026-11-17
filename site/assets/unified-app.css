@@ -13,6 +13,7 @@ body h4,body h5,body h6{font-size:1rem!important;line-height:1.4!important;font-
 body p,body li,body label,body td,body th{font-size:1rem!important;line-height:1.62!important}
 body :is(small,.small,.meta,.metadata,.caption,.subtitle,.author,.manga-author,.rank-num,.category-count,.count-pill,.stat-l,.fl,.ms .lbl,.mn,.ma){font-size:.86rem!important}
 body a{color:var(--rr-accent)!important;text-underline-offset:.18em}
+body .playlist-cta a{color:#fff!important}
 body :is(button,input,select,textarea){font:inherit!important;border-radius:6px!important}
 body :is(input,select,textarea){background:var(--rr-surface)!important;color:var(--rr-ink)!important;border:1px solid var(--rr-line)!important;padding:.5rem .68rem}
 body input::placeholder,body textarea::placeholder{color:var(--rr-muted)!important;opacity:1}
@@ -20,7 +21,7 @@ body button,body [role=button],body [role=tab]{background:var(--rr-raised)!impor
 body button:hover,body [role=button]:hover,body [role=tab]:hover{border-color:var(--rr-accent)!important;color:var(--rr-accent)!important}
 body :is([class*=card],[class*=tile],[class*=panel],[class*=modal],[class*=dialog],[class*=toolbar],[class*=filter],[class*=control],[class*=legend],[class*=category-section],.mc,.legend,.manga-card,.manga-grid,.category-section){background:var(--rr-surface)!important;border-color:var(--rr-line)!important}
 
-body :is(button,[role=button],[role=tab])[aria-pressed=true],body :is(button,[role=button],[role=tab])[aria-selected=true],body .active,body .selected{background:var(--rr-accent)!important;border-color:var(--rr-accent)!important;color:#fff!important}
+body :is(button,[role=button],[role=tab])[aria-pressed=true],body :is(button,[role=button],[role=tab])[aria-selected=true],body :is(button,[role=button],[role=tab]).active,body :is(button,[role=button],[role=tab]).selected{background:var(--rr-accent)!important;border-color:var(--rr-accent)!important;color:#fff!important}
 body :focus-visible{outline:3px solid var(--rr-focus)!important;outline-offset:2px!important}
 body table{border-collapse:collapse}body th,body td{border-color:var(--rr-line)!important}
 body :is(header,nav,footer,aside,section,article,main){border-color:var(--rr-line)}
