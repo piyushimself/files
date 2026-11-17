@@ -80,6 +80,9 @@ def searchable_text(raw):
     raw=re.sub(r"(?s)<[^>]+>"," ",raw)
     return html.unescape(re.sub(r"\s+"," ",raw)).strip()[:250000]
 def title_from_html(raw, filename):
+    source_stem=Path(filename).stem.lower().replace("_","-").replace(" ","-")
+    if source_stem=="manhwa300": return "300 Adult Het Romance Manhwa — Editorial Atlas"
+    if source_stem=="manhwa-300-filter-app": return "300 Adult Het Romance Manhwa — Searchable Index"
     m=re.search(r"<title[^>]*>(.*?)</title>",raw,re.I|re.S)
     if m:
         t=re.sub(r"<[^>]+>"," ",m.group(1))
