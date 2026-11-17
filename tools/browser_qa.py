@@ -145,7 +145,7 @@ def main():
                                     except Exception as e: issue(qa_name,"search-control",e)
                                 if frame:
                                     tabs=frame.locator('[role="tab"],.tab,.tab-btn,.ntab,.vt')
-                                    safe=re.compile(r"^(all(?:\\s+tasks?)?|any|unwatched|watched|top\\s+\\d+|essential(?:\\s+\\d+)?|blog(?:\\s+films?)?(?:\\s+\\d+)?|films?(?:\\s+\\d+)?|cinema|anime(?:\\s+\\d+)?|manga(?:\\s+\\d+)?|books?(?:\\s+\\d+)?|nature|emotion(?:\\s*&\\s*mood)?|light(?:\\s*&\\s*atmosphere)?|urban(?:\\s*&\\s*travel)?|still life|abstract|completed|grid|list|default|standard|modern|romance|drama|comedy|thriller|action|fantasy|history|poetry|painting|popular|recommended)(?:\\s+✓)?$",re.I)
+                                    safe=re.compile(r"^(all(?:\s+tasks?)?|any|unwatched|watched|top\s+\d+|essential(?:\s+\d+)?|blog(?:\s+films?)?(?:\s+\d+)?|films?(?:\s+\d+)?|cinema|anime(?:\s+\d+)?|manga(?:\s+\d+)?|books?(?:\s+\d+)?|nature|emotion(?:\s*&\s*mood)?|light(?:\s*&\s*atmosphere)?|urban(?:\s*&\s*travel)?|still life|abstract|completed|grid|list|default|standard|modern|romance|drama|comedy|thriller|action|fantasy|history|poetry|painting|popular|recommended)(?:\s+✓)?$",re.I)
                                     for ti in range(min(tabs.count(),80)):
                                         tab=tabs.nth(ti)
                                         try:
