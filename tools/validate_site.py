@@ -34,8 +34,8 @@ def main() -> int:
     # Check document metadata, duplicate IDs, and local asset/iframe targets.
     for page in sorted([*APPS.glob("*.html"), *(SITE / "collections").glob("*/index.html")]):
         raw_html = page.read_text(encoding="utf-8", errors="replace")
-        head_open_count = len(re.findall(r"<head\\b", raw_html, re.I))
-        head_close_count = len(re.findall(r"</head\\s*>", raw_html, re.I))
+        head_open_count = len(re.findall(r"<head\b", raw_html, re.I))
+        head_close_count = len(re.findall(r"</head\s*>", raw_html, re.I))
         if head_open_count != 1 or head_close_count != 1:
             failures.append(f"{page.relative_to(SITE)}: expected exactly one opening and closing head tag; found {head_open_count}/{head_close_count}")
         soup = BeautifulSoup(raw_html, "html.parser")
