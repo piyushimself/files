@@ -339,10 +339,17 @@ def main():
     (DATA/"catalog.json").write_text(json.dumps({"generated":date.today().isoformat(),"items":items},ensure_ascii=False,indent=2),encoding="utf-8")
     report=["# Publishing review","",f"Build date: {date.today().isoformat()}","",f"Published interactive HTML collections: **{len(items)}**","",f"Withheld source files: **{len(withheld)}**",""]
     for x in withheld: report.append(f"- **{x['file']}** — {x['reason']}")
-    report += ["","## Notes","- Withheld filenames are reported without reproducing matched values or document contents.","- PDF/DOCX and text/code files require human review before allowlisting.
-- Exact duplicate documents are identified; review each unique source once.
-- Build dependency files are excluded from content review.
-- Mature HTML content is scanned across the complete source; both wrapper and direct app URLs show an 18+ self-declaration gate. This is not identity or age verification.","- Original root-level source files are never modified.",""]
+    report += [
+        "",
+        "## Notes",
+        "- Withheld filenames are reported without reproducing matched values or document contents.",
+        "- PDF/DOCX and text/code files require human review before allowlisting.",
+        "- Exact duplicate documents are identified; review each unique source once.",
+        "- Build dependency files are excluded from content review.",
+        "- Mature HTML content is scanned across the complete source; both wrapper and direct app URLs show an 18+ self-declaration gate. This is not identity or age verification.",
+        "- Original root-level source files are never modified.",
+        ""
+    ]
     REPORT.write_text("\n".join(report),encoding="utf-8")
     report_html="<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><meta name='robots' content='noindex,nofollow'><title>Publishing review — The Reading Room</title><link rel='stylesheet' href='assets/reading-room.css'></head><body><main class='intro'><p class='kicker'>Internal publishing record</p><h1>Content review<br><em>and exclusions.</em></h1><p class='intro-copy'>Build date: "+date.today().isoformat()+"</p><p>Published interactive HTML collections: <strong>"+str(len(items))+"</strong></p><p>Withheld source files: <strong>"+str(len(withheld))+"</strong></p><ul>"+''.join("<li><strong>"+html.escape(x['file'])+"</strong> — "+html.escape(x['reason'])+"</li>" for x in withheld)+"</ul><p>Matched sensitive values are never included in this report. Original source files remain unchanged.</p><a href='./'>Return to the library</a></main></body></html>"
     (SITE/"review-report.html").write_text(report_html,encoding="utf-8")
