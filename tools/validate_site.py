@@ -23,7 +23,7 @@ def main() -> int:
         for page in pages:
             source = page.read_text(encoding="utf-8", errors="replace")
             for index, match in enumerate(
-                re.finditer(r"<script\\b[^>]*>(.*?)</script\\s*>", source, re.I | re.S),
+                re.finditer(r"<script\b[^>]*>(.*?)</script\s*>", source, re.I | re.S),
                 start=1,
             ):
                 script = match.group(1)
