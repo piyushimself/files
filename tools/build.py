@@ -229,6 +229,9 @@ header p,.status-bar,.rank,.meta,.excerpt,.modal .subtitle,.empty{color:var(--rr
 .chip.active{background:var(--rr-accent)!important;color:#fff!important;border-color:var(--rr-accent)!important}
 .tag{background:var(--rr-raised)!important;color:var(--rr-accent)!important;border-color:var(--rr-line)!important}
 .rating{color:#805500!important}
+:root[data-theme=dark] header h1{background-image:linear-gradient(90deg,#ff9a9e,#72d8d0)!important}
+:root[data-theme=dark] .chip.active{color:#0b1627!important}
+:root[data-theme=dark] .rating{color:#ffd166!important}
 .chip:focus-visible,.page-btn:focus-visible,.card:focus-visible{outline:3px solid var(--rr-focus)!important;outline-offset:2px!important}
 </style>"""
         head_end=text.lower().find("</head>")
