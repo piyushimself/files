@@ -90,6 +90,8 @@ def main():
                     if item.get("mature"):
                         if page.locator("#age-gate").count()==0 or not page.locator("#age-gate").is_visible(): issue(qa_name,"age-gate","18+ gate missing or hidden")
                         if "noindex" not in (page.locator('meta[name="robots"]').get_attribute("content") or ""): issue(qa_name,"robots","mature page not noindex")
+                    elif page.locator("#age-gate").count() and page.locator("#age-gate").is_visible():
+                        issue(qa_name,"unexpected-age-gate","non-mature collection is incorrectly blocked by an 18+ gate")
                     overflow(page,qa_name+"-"+name)
                     top_fn=f"{page_slug}-{name}.png"
                     page.screenshot(path=str(OUT/top_fn),full_page=False); screenshots.append(top_fn)
