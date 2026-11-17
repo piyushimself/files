@@ -213,9 +213,12 @@ def enhance_app(path, category_name):
     # Add responsive metadata after normalizing even non-standard documents without a <head>.
     if not re.search(r'<meta\b[^>]*name=["\']viewport["\']', text, re.I):
         text=re.sub(r'<head\b[^>]*>', lambda m: m.group(0)+'<meta name="viewport" content="width=device-width, initial-scale=1.0">', text, count=1, flags=re.I)
-    if not re.search(r'<title\\b', text, re.I):
+    if "<title" not in text.lower():
         app_title=html.escape(title_from_html(text, path.name))
-        text=re.sub(r'<head\\b[^>]*>', lambda m: m.group(0)+'<title>'+app_title+'</title>', text, count=1, flags=re.I)
+        head_start=text.lower().find("<head")
+        head_open_end=text.find(">",head_start) if head_start >= 0 else -1
+        if head_open_end < 0: raise RuntimeError("Generated app has no opening head tag for title fallback")
+        text=text[:head_open_end+1]+"<title>"+app_title+"</title>"+text[head_open_end+1:]
     # Qwen's imported palette uses low-contrast muted colours and dark chips.
     # Repair the generated copy only, retaining its original layout and gradient identity.
     if path.name == "Qwen_html_20260604_f25nf6z8p.html" and 'id="rr-qwen-contrast"' not in text:
