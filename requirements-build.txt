@@ -1,0 +1,3 @@
+# Build-time document tooling; source documents remain private until reviewed.
+PyMuPDF>=1.24,<2
+python-docx>=1.1,<2
