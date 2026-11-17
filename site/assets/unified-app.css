@@ -38,3 +38,26 @@ body :is(header,nav,.hero,.masthead) :is(h1,h2,h3,p,a,span,strong,small){color:v
 body :is(.sub,.hd-label,.hero-eyebrow,.stat-l,.count-label,.category-count,.filter-label){color:var(--rr-muted)!important}
 body :is(.fb,.filter-btn,.tab-btn,.f-btn,.nav-tab,.theme-chip){background:var(--rr-raised)!important;color:var(--rr-ink)!important;border-color:var(--rr-line)!important}
 body :is(.fb.active,.filter-btn.active,.tab-btn.active,.f-btn.on,.nav-tab.active,.theme-chip.active){background:var(--rr-accent)!important;color:#fff!important;border-color:var(--rr-accent)!important}
+
+/* Page-specific contrast repairs confirmed from source markup. */
+body .manga-card,body .mc{background:var(--rr-surface)!important;color:var(--rr-ink)!important;border:1px solid var(--rr-line)!important}
+body .manga-card :is(h1,h2,h3,h4,a,.manga-title,.manga-author,.manga-meta,.manga-desc,.rank-num,.badge,.anime-tag,.no-anime),
+body .mc :is(h1,h2,h3,h4,a,.mt,.mi,.ma,.mn,.tags,.tag,.tg){color:var(--rr-ink)!important}
+body .manga-card :is(.rating,.manga-meta,.manga-author,.manga-desc,.anime-tag,.no-anime),
+body .mc :is(.mi,.ma,.mn,.tags,.tag,.tg){color:var(--rr-muted)!important}
+body .manga-card .badge,body .mc .tag{background:var(--rr-raised)!important;border:1px solid var(--rr-line)!important}
+body .manga-card :is(.rating,.rank-num),body .mc .num{color:var(--rr-accent)!important}
+body .controls,body .tabs-bar,body .nav-bar,body .filter-wrap{top:5.5rem!important;z-index:90!important}
+body .hero{min-height:0!important}
+body .hero-content{padding-top:2.5rem!important;padding-bottom:2.5rem!important}
+body .masthead{padding:1.25rem 1rem!important}
+body .masthead h1{font-size:clamp(1.8rem,4vw,2.5rem)!important}
+body .header{padding:2rem 1.25rem 1.5rem!important}
+body .header h1{font-size:clamp(1.8rem,4vw,2.6rem)!important;line-height:1.18!important}
+body .hd-title{font-size:clamp(1.8rem,4vw,2.7rem)!important;line-height:1.18!important}
+body .hero-title{font-size:clamp(1.9rem,4vw,2.8rem)!important;line-height:1.18!important}
+@media(max-width:700px){
+ body .controls,body .tabs-bar,body .nav-bar,body .filter-wrap{top:4.5rem!important}
+ body .header-meta,body .hd-stats,body .hero-stats{gap:.75rem!important}
+ body .manga-grid,body .card-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))!important}
+}
