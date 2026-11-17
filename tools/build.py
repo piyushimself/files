@@ -228,20 +228,33 @@ def main():
     for p in source_files:
         raw=p.read_bytes()
         ext=p.suffix.lower()
-        scan_data=raw
+        extracted=""
         if ext in {".pdf",".docx"}:
             try:
                 extracted=extract_document_text(p,raw)
-                scan_data += b"\n"+extracted.encode("utf-8",errors="ignore")
                 if not extracted.strip():
                     withheld.append({"file":p.name,"reason":"no extractable text; OCR/content review required"})
                     continue
             except Exception as exc:
                 withheld.append({"file":p.name,"reason":"document extraction failed ("+str(exc)+"); held for manual review"})
                 continue
+            # Scan extracted document text, not compressed PDF/DOCX bytes.
+            scan_data=extracted.encode("utf-8",errors="ignore")
+        elif ext==".html":
+            # Ignore scripts, styles, SVG path coordinates and markup.
+            visible=searchable_text(raw.decode("utf-8",errors="replace"))
+            scan_data=visible.encode("utf-8",errors="ignore")
+        else:
+            scan_data=raw
         hits=scan_bytes(scan_data)
+        if ext in {".pdf",".docx"}:
+            # Documents stay unpublished until explicit rights/content review.
+            reason="document held for manual copyright and content review"
+            if hits: reason += "; potential sensitive-data indicators requiring context: "+", ".join(hits)
+            withheld.append({"file":p.name,"reason":reason})
+            continue
         if hits:
-            withheld.append({"file":p.name,"reason":"sensitive-data scan: "+", ".join(hits)})
+            withheld.append({"file":p.name,"reason":"potential sensitive-data indicators in readable text: "+", ".join(hits)})
             continue
         if ext==".html":
             digest=hashlib.sha256(raw).hexdigest()
