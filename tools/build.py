@@ -27,6 +27,7 @@ def slug(s):
     return out or hashlib.sha1(s.encode()).hexdigest()[:10]
 def category(name):
     n=name.lower()
+    if any(x in n for x in ("generator","diary","tracker","typewriter","journal")): return "Interactive tools"
     if any(x in n for x in ("film","cinema","movie")): return "Cinema"
     if any(x in n for x in ("manga","manhwa","anime","comic")): return "Manga & Comics"
     if any(x in n for x in ("art","watercolour","collage","bob_ross","poetry")): return "Art"
