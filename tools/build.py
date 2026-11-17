@@ -42,6 +42,46 @@ def title_from_html(raw, filename):
         t=html.unescape(re.sub(r"\s+"," ",t)).strip()
         if t: return t
     return Path(filename).stem.replace("_"," ").replace("-"," ").strip().title()
+def extract_document_text(path, raw):
+    """Extract searchable text; OCR image-only PDF pages and DOCX images when possible."""
+    ext=path.suffix.lower()
+    chunks=[]
+    try:
+        if ext==".pdf":
+            import fitz
+            import pytesseract
+            from PIL import Image
+            import io
+            doc=fitz.open(stream=raw,filetype="pdf")
+            for page in doc:
+                txt=page.get_text("text") or ""
+                if len(txt.strip())<40:
+                    pix=page.get_pixmap(matrix=fitz.Matrix(1.8,1.8),alpha=False)
+                    img=Image.open(io.BytesIO(pix.tobytes("png")))
+                    try: txt += "\\n"+pytesseract.image_to_string(img,lang="eng+hin")
+                    except Exception: txt += "\\n"+pytesseract.image_to_string(img,lang="eng")
+                chunks.append(txt)
+        elif ext==".docx":
+            from docx import Document
+            import io, zipfile
+            from PIL import Image
+            import pytesseract
+            doc=Document(io.BytesIO(raw))
+            chunks.extend(p.text for p in doc.paragraphs)
+            for table in doc.tables:
+                for row in table.rows:
+                    chunks.append(" | ".join(cell.text for cell in row.cells))
+            with zipfile.ZipFile(io.BytesIO(raw)) as z:
+                for name in z.namelist():
+                    if name.startswith("word/media/"):
+                        try:
+                            img=Image.open(io.BytesIO(z.read(name)))
+                            chunks.append(pytesseract.image_to_string(img,lang="eng+hin"))
+                        except Exception:
+                            continue
+    except Exception as exc:
+        raise RuntimeError(type(exc).__name__) from None
+    return "\\n".join(chunks)
 def scan_bytes(data):
     return [label for label,rx in SECRET_PATTERNS if rx.search(data)]
 def write_wrapper(slug_name,title,app_rel,mature):
@@ -59,11 +99,22 @@ def main():
     source_files=sorted(p for p in ROOT.iterdir() if p.is_file() and p.suffix.lower() in {".html",".pdf",".docx",".txt",".pine"})
     for p in source_files:
         raw=p.read_bytes()
-        hits=scan_bytes(raw)
+        ext=p.suffix.lower()
+        scan_data=raw
+        if ext in {".pdf",".docx"}:
+            try:
+                extracted=extract_document_text(p,raw)
+                scan_data += b"\\n"+extracted.encode("utf-8",errors="ignore")
+                if not extracted.strip():
+                    withheld.append({"file":p.name,"reason":"no extractable text; OCR/content review required"})
+                    continue
+            except Exception as exc:
+                withheld.append({"file":p.name,"reason":"document extraction failed ("+str(exc)+"); held for manual review"})
+                continue
+        hits=scan_bytes(scan_data)
         if hits:
             withheld.append({"file":p.name,"reason":"sensitive-data scan: "+", ".join(hits)})
             continue
-        ext=p.suffix.lower()
         if ext==".html":
             source=raw.decode("utf-8",errors="replace")
             name=slug(p.name)
