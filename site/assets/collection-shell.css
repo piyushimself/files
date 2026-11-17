@@ -14,3 +14,6 @@
 .rr-shell-footer{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:1rem clamp(1rem,3vw,2.2rem);border-top:1px solid var(--line);color:var(--muted);font-size:.78rem}
 .rr-shell-footer a{color:var(--accent)}
 @media(max-width:700px){.rr-shell-header{align-items:flex-start;flex-direction:column;gap:.55rem;padding:.7rem 1rem}.rr-shell-tools{width:100%;gap:.3rem}.rr-shell-tools a,.rr-shell-tools button,.rr-nav-menu summary{padding:.42rem .55rem;font-size:.76rem}.rr-nav-panel{left:0;right:auto}.rr-shell-tools #rr-prev,.rr-shell-tools #rr-next{display:none}}
+
+.rr-reading-meta{max-width:1120px;margin:.65rem auto 0;padding:0 1.4rem;color:var(--muted);font-size:.78rem;text-align:right}
+@media(max-width:700px){.rr-reading-meta{padding:0 1rem;text-align:left}}
