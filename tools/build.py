@@ -217,9 +217,25 @@ def enhance_app(path, category_name):
         text=re.sub(r'<head\b[^>]*>', lambda m: m.group(0)+'<title>'+app_title+'</title>', text, count=1, flags=re.I)
     path.write_text(text,encoding="utf-8")
 def inject_app_age_gate(path):
-    """Add a same-origin 18+ self-declaration gate to the app itself, not only its wrapper."""
+    """Add a same-origin 18+ self-declaration gate and noindex metadata to the app itself."""
     text=path.read_text(encoding="utf-8")
-    if "rr-app-age-gate" in text: return
+    # Direct app URLs must be noindex too; wrapper metadata does not apply inside an iframe.
+    robots=re.search(r'<meta\\b[^>]*\\bname=["\\']robots["\\'][^>]*>',text,re.I)
+    if robots:
+        tag=robots.group(0)
+        if re.search(r'\\bcontent\\s*=',tag,re.I):
+            tag=re.sub(r'\\bcontent\\s*=\\s*(["\\']).*?\\1','content="noindex,nofollow"',tag,count=1,flags=re.I)
+        else:
+            tag=tag[:-1]+' content="noindex,nofollow">'
+        text=text[:robots.start()]+tag+text[robots.end():]
+    else:
+        head_open=re.search(r'<head\\b[^>]*>',text,re.I)
+        if head_open:
+            meta='<meta name="robots" content="noindex,nofollow">'
+            text=text[:head_open.end()]+meta+text[head_open.end():]
+    if "rr-app-age-gate" in text:
+        path.write_text(text,encoding="utf-8")
+        return
     css="""<style id="rr-app-age-style">
 #rr-app-age-gate{position:fixed!important;inset:0!important;z-index:2147483647!important;display:grid!important;place-items:center!important;padding:1.25rem!important;background:var(--rr-canvas,#f3f6fb)!important;color:var(--rr-ink,#172b45)!important;font:inherit!important}
 #rr-app-age-gate[hidden]{display:none!important}

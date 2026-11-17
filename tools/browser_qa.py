@@ -186,14 +186,18 @@ def main():
                                 if src:
                                     direct_ctx=browser.new_context(viewport={"width":width,"height":height},service_workers="block")
                                     direct_ctx.add_init_script("try{localStorage.removeItem('rr-age-confirmed')}catch(e){}")
-                                    direct=direct_ctx.new_page(); watch(direct,qa_name+"-direct-app")
+                                    direct=direct_ctx.new_page(); direct.set_default_timeout(8000); watch(direct,qa_name+"-direct-app")
                                     direct_url=urljoin(page.url,src)
                                     dr=direct.goto(direct_url,wait_until="domcontentloaded",timeout=30000)
                                     if not dr or dr.status>=400: issue(qa_name,"direct-app-http",dr.status if dr else "no response")
                                     direct.wait_for_timeout(200)
                                     dg=direct.locator("#rr-app-age-gate")
                                     if dg.count()==0 or not dg.is_visible(): issue(qa_name,"direct-app-age-gate","direct app URL bypasses the 18+ gate")
-                                    if "noindex" not in (direct.locator('meta[name="robots"]').get_attribute("content") or ""): issue(qa_name,"direct-app-robots","direct mature app missing noindex")
+                                    direct_robots=direct.locator('meta[name="robots"]')
+                                    if direct_robots.count()==0:
+                                        issue(qa_name,"direct-app-robots","direct mature app is missing robots metadata")
+                                    elif "noindex" not in (direct_robots.get_attribute("content",timeout=3000) or ""):
+                                        issue(qa_name,"direct-app-robots","direct mature app is not marked noindex")
                                     if dg.count() and dg.is_visible():
                                         gate_fn=f"{page_slug}-direct-gate.png"
                                         direct.screenshot(path=str(OUT/gate_fn),full_page=False); screenshots.append(gate_fn)
