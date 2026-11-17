@@ -26,8 +26,10 @@ jobs:
           python-version: "3.12"
       - name: Install OCR engine
         run: |
-          sudo apt-get update
-          sudo apt-get install -y tesseract-ocr tesseract-ocr-hin
+          if ! command -v tesseract >/dev/null 2>&1; then
+            sudo apt-get install -y tesseract-ocr tesseract-ocr-hin
+          fi
+          tesseract --version
       - name: Build safe site
         run: |
           python -m pip install --upgrade pip
