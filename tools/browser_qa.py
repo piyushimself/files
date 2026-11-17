@@ -105,7 +105,8 @@ def main():
                             frame_title=frame_el.evaluate("(f)=>f.contentDocument?.title||''")
                             if not frame_title.strip(): issue(qa_name,"iframe-title","embedded app title missing")
                             stats["iframes_loaded"]+=1
-                            frame=page.frames[-1] if len(page.frames)>1 else None
+                            frame_handle=frame_el.element_handle()
+                            frame=frame_handle.content_frame() if frame_handle else None
                             if frame: overflow(frame,qa_name+"-iframe-"+name)
                             if item.get("mature") and frame:
                                 app_gate=frame.locator("#rr-app-age-gate")
@@ -118,16 +119,21 @@ def main():
                                     else: stats["mature_iframe_sync_tested"]+=1
                             app_fn=f"{page_slug}-app-{name}.png"
                             if frame:
-                                frame_box=frame_el.bounding_box()
-                                if frame_box and frame_box["width"]>0 and frame_box["height"]>0:
-                                    page.screenshot(path=str(OUT/app_fn),clip=frame_box)
-                                else:
+                                try:
+                                    frame.locator("body").screenshot(path=str(OUT/app_fn),timeout=10000)
+                                except Exception as e:
+                                    issue(qa_name,"iframe-screenshot",e)
                                     page.screenshot(path=str(OUT/app_fn),full_page=False)
                                 screenshots.append(app_fn)
-                                body_text=frame.locator("body").inner_text(timeout=3000).strip()
+                                body_text=frame.locator("body").inner_text(timeout=5000).strip()
                                 visible_controls=frame.locator("body :is(input,textarea,select,button,[role=button],canvas)").count()
+                                content_nodes=frame.locator("body > *:not(style):not(script):not(link)").count()
                                 if len(body_text)<100 and visible_controls==0:
                                     issue(qa_name,"empty-app-content",f"embedded app body has only {len(body_text)} visible characters and no controls")
+                                if content_nodes==0:
+                                    issue(qa_name,"empty-app-dom","embedded app body has no rendered content elements")
+                                if frame.locator("#grid").count() and frame.locator("#grid > *").count()==0:
+                                    issue(qa_name,"empty-data-grid","app defines #grid but renders no collection cards")
                             else:
                                 issue(qa_name,"missing-app-frame","iframe frame was not available")
                             if item.get("mature") and name=="desktop" and frame:
