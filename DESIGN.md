@@ -4,7 +4,7 @@
 A personal, cross-disciplinary library for curious readers: cinema, manga and comics, art practice, literature, learning, family reading, and security research. The experience should feel like a considered independent journal and archive, not a file dump or a generic dashboard.
 
 ## Concept
-**The Reading Room is an editorial atlas.** The home page is a calm index of collections, while each source work keeps its own voice and original interaction model. Navigation is quiet and predictable; typography carries the hierarchy; metadata helps readers choose without reducing every item to a statistic. The visual language is contemporary and paper-like without using a cream-and-terracotta palette.
+**The Reading Room is an editorial atlas.** The home page is a calm index of collections, while each source work keeps its own voice and original interaction model. Navigation is quiet and predictable; typography carries the hierarchy; metadata helps readers choose without reducing every item to a statistic. The visual language is contemporary, blue-led and calm, with tinted surfaces rather than stark white panels.
 
 ## Color tokens — Blue editorial system
 | Token | Light | Dark | Use |
@@ -17,7 +17,7 @@ A personal, cross-disciplinary library for curious readers: cinema, manga and co
 | Accent | #2868B2 | #78B5F4 | Links, selected filters and primary controls |
 | Accent strong | #1D5596 | #9AC9FA | Hover and high-emphasis links |
 | Line | #C6D4E5 | #2A4260 | Dividers and control borders |
-| Focus | #1F70C8 | #9BC AFF | Keyboard focus indicator |
+| Focus | #1F70C8 | #9BCAFF | Keyboard focus indicator |
 
 No pure-white page panels, arbitrary red/green heading colors, or unrelated accent colors. Keep semantic status colors only where color communicates a real state (for example, an error or success); never use them decoratively. Blue is the brand accent, not a reason to recolor photographs, artwork, charts or meaningful content.
 
