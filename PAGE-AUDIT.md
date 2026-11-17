@@ -143,3 +143,26 @@ A repository validator now runs after the site build in GitHub Actions. It extra
 - All local iframe targets referenced by collection wrappers resolve to files in the generated artifact (0 missing targets).
 - All 26 generated apps / 26 non-empty inline JavaScript blocks passed an independent Node.js syntax check.
 - Headless Chromium did not complete within the available execution window in this environment. Consequently, dynamic browser initialization, actual filter interactions, visual breakpoints, console errors, and keyboard flows remain unverified. Do not treat static validation as a substitute for those checks.
+
+
+## Readable-content scan correction and regenerated catalogue — 17 November 2026
+
+The previous sensitive-data scanner searched raw HTML markup and binary PDF/DOCX streams. That caused false positives from SVG coordinates, CSS values and compressed document bytes. The scanner now:
+
+- scans visible/searchable HTML text after removing scripts, styles, SVG and markup;
+- scans extracted PDF/DOCX text (including OCR text) rather than compressed binary bytes;
+- keeps every PDF and DOCX withheld for mandatory manual copyright/content review regardless of scan result;
+- labels scan matches as potential indicators requiring contextual review, not confirmed sensitive data.
+
+The regenerated artifact for run 44097584360 was inspected:
+- 34 catalogue entries: 32 interactive HTML apps and 2 editorial articles.
+- 34 collection wrappers; all have titles and all local iframe targets resolve.
+- 32 generated apps / 32 inline JavaScript blocks pass Node.js syntax validation.
+- 50 withheld items; the only withheld HTML is the byte-identical duplicate `top500_manga.html`. The other 49 are source documents/text/code held for manual review (43 PDFs, 3 DOCX, 2 TXT including the build requirements file, and 1 Pine file).
+- Previously withheld HTML pages including Bob Ross, The Four Arcs, Manga Guide and related collections are now included after their false positives disappeared when scanning visible text. This does not exempt any page from editorial or browser QA.
+
+A catalogue review found `100 Manga That Will Change How You Think` had been placed in `Other` because its source filename does not contain manga/anime keywords. It is now explicitly mapped to `Manga & Comics`.
+
+The earlier 27 published / 57 withheld and 27-wrapper / 26-app figures describe older artifacts and are superseded by this regenerated artifact. The updated 34 / 50 figures above are the current build counts.
+
+Browser-level runtime/visual testing remains unverified: this execution environment blocks Chromium navigation and timed out on a set-content attempt. Do not mark visual, mobile, accessibility or interaction acceptance as passed based on static checks.
