@@ -13,7 +13,7 @@ COLLECTIONS=SITE/"collections"
 DATA=SITE/"data"
 REPORT=ROOT/"PUBLISHING-REVIEW.md"
 EXCLUDE={".git",".github","site","tools","__pycache__"}
-MATURE=re.compile(r"(?:18\+|18-plus|adult[-_ ](?:manga|manhwa|comics?|romance)|taboo|transgressive|dark[-_ ]ink|manhwa300|manhwa[-_ ]300|top500[-_ ]adult|forbidden[-_ ]pages|sensual[-_ ]mood|hentai|ecchi|nsfw|porn(?:ography)?|erotic|sexually explicit|explicit sexual content|cinematic[-_ ]database|film[-_ ]collection|the[-_ ]curators[-_ ]library|four[-_ ]arcs[-_ ]library|manga[-_ ]1000|manga[-_ ]archive[-_ ]v4|manga[-_ ]comics[-_ ]master)",re.I)
+MATURE=re.compile(r"(?:18\+|18-plus|adult[-_ ](?:manga|manhwa|comics?|romance)|taboo|transgressive|dark[-_ ]ink|manhwa300|manhwa[-_ ]300|top500[-_ ]adult|forbidden[-_ ]pages|sensual[-_ ]mood|hentai|ecchi|nsfw|porn(?:ography)?|erotic|sexually explicit|explicit sexual content|300[-_ ]animated[-_ ]films|cinematic[-_ ]database|cinematic[-_ ]canon|film[-_ ]collection|big[-_ ]library|the[-_ ]curators[-_ ]library|four[-_ ]arcs[-_ ]library|grand[-_ ]library|manga[-_ ]1000|manga[-_ ]archive[-_ ]v4|manga[-_ ]comics[-_ ]master)",re.I)
 SECRET_PATTERNS=[
  ("private key",re.compile(rb"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----")),
  ("AWS access key",re.compile(rb"\bAKIA[0-9A-Z]{16}\b")),
