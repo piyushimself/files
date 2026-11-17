@@ -117,7 +117,13 @@ def main():
                                     if app_gate.is_visible(): issue(qa_name,"age-gate-sync","wrapper confirmation did not dismiss iframe gate")
                                     else: stats["mature_iframe_sync_tested"]+=1
                             app_fn=f"{page_slug}-app-{name}.png"
-                            page.screenshot(path=str(OUT/app_fn),full_page=False); screenshots.append(app_fn)
+                            if frame:
+                                frame.locator("body").screenshot(path=str(OUT/app_fn)); screenshots.append(app_fn)
+                                body_text=frame.locator("body").inner_text(timeout=3000).strip()
+                                if len(body_text)<100:
+                                    issue(qa_name,"empty-app-content",f"embedded app body has only {len(body_text)} visible characters")
+                            else:
+                                issue(qa_name,"missing-app-frame","iframe frame was not available")
                             if item.get("mature") and name=="desktop" and frame:
                                 src=frame_el.get_attribute("src")
                                 if src:
