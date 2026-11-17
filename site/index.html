@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f6f8">
+  <meta name="description" content="The Reading Room — a personal atlas of cinema, books, manga, art, learning and ideas.">
+  <meta property="og:title" content="The Reading Room">
+  <meta property="og:description" content="A personal atlas of stories, images, ideas and useful knowledge.">
+  <meta property="og:type" content="website">
+  <meta name="robots" content="index,follow">
+  <title>The Reading Room — A Personal Editorial Atlas</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="assets/reading-room.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="masthead">
+    <a class="wordmark" href="./" aria-label="The Reading Room home">THE READING ROOM<span> / PERSONAL LIBRARY</span></a>
+    <nav class="top-actions" aria-label="Reader tools">
+      <button id="theme-toggle" class="quiet-button" type="button" aria-label="Toggle color theme">Theme</button>
+      <button id="text-smaller" class="quiet-button" type="button" aria-label="Decrease text size">A−</button>
+      <button id="text-larger" class="quiet-button" type="button" aria-label="Increase text size">A+</button>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="intro">
+      <p class="kicker">A living collection · Mumbai and everywhere</p>
+      <h1>A place for things<br><em>worth returning to.</em></h1>
+      <p class="intro-copy">An evolving personal atlas of films, books, manga, art, learning paths and ideas. Browse by subject, search across collections, or follow a thread that catches your attention.</p>
+      <div class="search-wrap">
+        <label class="sr-only" for="library-search">Search the library</label>
+        <input id="library-search" type="search" placeholder="Search titles and collections…" autocomplete="off">
+        <span id="result-count" class="result-count" aria-live="polite"></span>
+      </div>
+    </section>
+    <section class="collection-tools" aria-label="Collection filters">
+      <div id="category-filters" class="filter-list" role="group" aria-label="Filter by collection"></div>
+      <div class="sort-wrap">
+        <label for="sort-select">Sort</label>
+        <select id="sort-select">
+          <option value="featured">Curated order</option>
+          <option value="az">Title A–Z</option>
+          <option value="za">Title Z–A</option>
+        </select>
+      </div>
+    </section>
+    <section class="library-section" aria-labelledby="collection-heading">
+      <div class="section-heading">
+        <div><p class="kicker">Browse the shelves</p><h2 id="collection-heading">Collections</h2></div>
+        <p class="section-note">Choose a subject to explore its original material.</p>
+      </div>
+      <div id="collection-grid" class="collection-grid">
+        <p class="empty-state">The collection index will appear here after the first safe build.</p>
+      </div>
+    </section>
+    <section class="about-strip">
+      <p class="kicker">A note on the archive</p>
+      <p>Some entries are original interactive tools and remain in their original form. Documents are published only after content, privacy and rights checks. Items awaiting review are deliberately kept out of the public reading experience.</p>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <a class="wordmark" href="./">THE READING ROOM</a>
+    <p>A personal atlas of stories, images, ideas and useful knowledge.</p>
+    <p>Last updated: <time id="last-updated"></time></p>
+  </footer>
+  <script src="assets/reading-room.js" defer></script>
+</body>
+</html>
