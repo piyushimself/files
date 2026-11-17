@@ -77,6 +77,10 @@ body .hero-title{font-size:clamp(1.9rem,4vw,2.8rem)!important;line-height:1.18!i
   --accent:var(--rr-accent);--accent2:var(--rr-accent);--blue:var(--rr-accent);
   --gold:var(--rr-accent);--gold2:var(--rr-accent);--gold3:var(--rr-accent);
   --gold-lt:var(--rr-accent);--gold-dim:var(--rr-raised);
+  --bg-card:var(--rr-surface);--bg-raised:var(--rr-raised);--bg-hover:var(--rr-raised);
+  --ink-dim:var(--rr-muted);--ink-faint:var(--rr-muted);--hairline:var(--rr-line);
+  --gold-bright:var(--rr-accent);--gold:var(--rr-accent);
+  --cream:var(--rr-surface);--paper:var(--rr-surface);--paper-dark:var(--rr-raised);--paper-mid:var(--rr-raised);
   --sans:var(--rr-font);--f-sans:var(--rr-font);
 }
 
