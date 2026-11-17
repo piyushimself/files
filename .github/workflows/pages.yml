@@ -37,6 +37,8 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -r requirements-build.txt
           python tools/build.py
+      - name: Validate generated app scripts
+        run: python tools/validate_site.py
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
