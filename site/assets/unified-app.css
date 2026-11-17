@@ -94,7 +94,6 @@ body .hero-title{font-size:clamp(1.9rem,4vw,2.8rem)!important;line-height:1.18!i
   body .watch-actions{width:100%!important;margin-left:0!important;flex-wrap:wrap!important}
   body .watch-action-btn{flex:1 1 30%!important;min-width:0!important;white-space:normal!important}
   body .tabs-wrap{max-width:100%!important;overflow-x:auto!important}
-  body #tabs{width:max-content!important;max-width:none!important;min-width:max-content!important}
   body .progress-wrap{display:flex!important;width:calc(100% - 2rem)!important;max-width:100%!important;flex-wrap:wrap!important;gap:8px!important;padding:10px 14px!important}
   body .progress-bar-outer{flex:1 1 120px!important;width:auto!important;min-width:0!important}
   body .progress-count{min-width:0!important}
