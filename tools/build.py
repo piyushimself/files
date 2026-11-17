@@ -138,18 +138,20 @@ def shell_header(title):
     return """<header class="rr-shell-header"><a class="rr-shell-brand" href="../../index.html">THE READING ROOM <small>PERSONAL LIBRARY</small></a><nav class="rr-shell-tools" aria-label="Library navigation"><a href="../../index.html">Home</a><details class="rr-nav-menu"><summary>Browse collections</summary><div class="rr-nav-panel"><label class="sr-only" for="rr-nav-search">Search collections</label><input id="rr-nav-search" type="search" placeholder="Find a collection…"><nav id="rr-nav-links" class="rr-nav-links" aria-label="All collections"></nav></div></details><a id="rr-prev" href="#" hidden>← Previous</a><a id="rr-next" href="#" hidden>Next →</a><button id="rr-theme-toggle" type="button">Dark mode</button><label class="rr-font-label" for="rr-font-family">Font</label><select id="rr-font-family" aria-label="Reader font"><option value="system">System</option><option value="serif">Serif</option><option value="mono">Mono</option></select><button id="rr-text-smaller" type="button" aria-label="Decrease text size">A−</button><button id="rr-text-larger" type="button" aria-label="Increase text size">A+</button></nav></header>"""
 def enhance_app(path, category_name):
     text=path.read_text(encoding="utf-8")
-    # Use the local reader typography controls; avoid external font dependencies and inconsistent loading.
-    text=re.sub(r'<link[^>]+(?:fonts\.googleapis\.com|fonts\.gstatic\.com)[^>]*>', '', text, flags=re.I)
-    text=re.sub(r'@import\s+url\([\'"]?https?://fonts\.googleapis\.com[^)]*\)\s*;?', '', text, flags=re.I)
+    # Remove remote font dependencies; the reader controls typography locally.
+    text=re.sub(r'<link[^>]+(?:fonts\\.googleapis\\.com|fonts\\.gstatic\\.com)[^>]*>', '', text, flags=re.I)
+    text=re.sub(r'@import\\s+url\\([\\'"]?https?://fonts\\.googleapis\\.com[^)]*\\)\\s*;?', '', text, flags=re.I)
     additions='<link rel="stylesheet" href="../assets/unified-app.css"><script src="../assets/unified-app.js" defer></script>'
-    h=re.search(r"<h1\b[^>]*>(.*?)</h1>",raw,re.I|re.S)
+    body_match=re.search(r"<body([^>]*)>",text,re.I)
+    if body_match and "data-rr-category" not in body_match.group(1):
+        replacement='<body'+body_match.group(1)+' data-rr-category="'+html.escape(category_name,quote=True)+'">'
         text=text[:body_match.start()]+replacement+text[body_match.end():]
     if "</head>" in text.lower():
-    h=re.search(r"<h1\b[^>]*>(.*?)</h1>",raw,re.I|re.S)
+        match=re.search(r"</head\\s*>",text,re.I)
         if match and "unified-app.css" not in text:
             text=text[:match.start()]+additions+text[match.start():]
     else:
-    h=re.search(r"<h1\b[^>]*>(.*?)</h1>",raw,re.I|re.S)
+        match=re.search(r"<html[^>]*>",text,re.I)
         if match:
             text=text[:match.end()]+"<head>"+additions+"</head>"+text[match.end():]
         else:
