@@ -213,9 +213,25 @@ def enhance_app(path, category_name):
     # Add responsive metadata after normalizing even non-standard documents without a <head>.
     if not re.search(r'<meta\b[^>]*name=["\']viewport["\']', text, re.I):
         text=re.sub(r'<head\b[^>]*>', lambda m: m.group(0)+'<meta name="viewport" content="width=device-width, initial-scale=1.0">', text, count=1, flags=re.I)
-    if not re.search(r'<title\b', text, re.I):
+    if not re.search(r'<title\\b', text, re.I):
         app_title=html.escape(title_from_html(text, path.name))
-        text=re.sub(r'<head\b[^>]*>', lambda m: m.group(0)+'<title>'+app_title+'</title>', text, count=1, flags=re.I)
+        text=re.sub(r'<head\\b[^>]*>', lambda m: m.group(0)+'<title>'+app_title+'</title>', text, count=1, flags=re.I)
+    # Qwen's imported palette uses low-contrast muted colours and dark chips.
+    # Repair the generated copy only, retaining its original layout and gradient identity.
+    if path.name == "Qwen_html_20260604_f25nf6z8p.html" and 'id="rr-qwen-contrast"' not in text:
+        qwen_css="""<style id="rr-qwen-contrast">
+header h1{background-image:linear-gradient(90deg,#9f3344,#176e70)!important;-webkit-text-fill-color:transparent!important;color:var(--rr-ink)!important}
+header p,.status-bar,.rank,.meta,.excerpt,.modal .subtitle,.empty{color:var(--rr-muted)!important}
+.chip{background:var(--rr-raised)!important;color:var(--rr-ink)!important;border-color:var(--rr-line)!important}
+.chip.active{background:var(--rr-accent)!important;color:#fff!important;border-color:var(--rr-accent)!important}
+.tag{background:var(--rr-raised)!important;color:var(--rr-accent)!important;border-color:var(--rr-line)!important}
+.rating{color:#805500!important}
+.chip:focus-visible,.page-btn:focus-visible,.card:focus-visible{outline:3px solid var(--rr-focus)!important;outline-offset:2px!important}
+</style>"""
+        head_end=text.lower().find("</head>")
+        if head_end < 0:
+            raise RuntimeError("Qwen generated app has no closing head tag for contrast repair")
+        text=text[:head_end]+qwen_css+text[head_end:]
     path.write_text(text,encoding="utf-8")
 def inject_app_age_gate(path):
     """Add a same-origin 18+ self-declaration gate and noindex metadata to the app itself."""
