@@ -150,10 +150,27 @@ def enhance_app(path, category_name):
     if body_match and "data-rr-category" not in body_match.group(1):
         replacement='<body'+body_match.group(1)+' data-rr-category="'+html.escape(category_name,quote=True)+'">'
         text=text[:body_match.start()]+replacement+text[body_match.end():]
-    if "</head>" in text.lower():
-        match=re.search(r"</head\s*>",text,re.I)
-        if match and "unified-app.css" not in text:
-            text=text[:match.start()]+additions+text[match.start():]
+    head_open=re.search(r"<head\b[^>]*>",text,re.I)
+    head_close=re.search(r"</head\s*>",text,re.I)
+    if head_close:
+        if not head_open:
+            # Repair a stray closing head by creating a matching opening tag.
+            text=text[:head_close.start()]+"<head>"+text[head_close.start():]
+            head_open=re.search(r"<head\b[^>]*>",text,re.I)
+            head_close=re.search(r"</head\s*>",text,re.I)
+        if "unified-app.css" not in text and head_close:
+            text=text[:head_close.start()]+additions+text[head_close.start():]
+    elif head_open:
+        # Some imported files have an opening <head> but omit </head>.
+        # Add the shared assets inside that head, then close it before <body>.
+        if "unified-app.css" not in text:
+            text=text[:head_open.end()]+additions+text[head_open.end():]
+        body_match=re.search(r"<body\b[^>]*>",text,re.I)
+        if body_match:
+            text=text[:body_match.start()]+"</head>"+text[body_match.start():]
+        else:
+            html_close=re.search(r"</html\s*>",text,re.I)
+            if html_close: text=text[:html_close.start()]+"</head>"+text[html_close.start():]
     else:
         match=re.search(r"<html[^>]*>",text,re.I)
         if match:
