@@ -195,3 +195,21 @@ The CI validator now checks more than JavaScript syntax:
 - every local image, script, stylesheet, source, video and audio reference in generated apps resolves.
 
 Latest workflow run 44098594862 passed the build, generated-site integrity validator and artifact upload. The deploy job was correctly skipped because this is a pull request.
+
+
+## Responsive metadata and false-positive correction — 17 November 2026
+
+A generated-artifact inspection found three metadata defects that the earlier syntax-only checks could not catch: `manhwa-300-filter-app.html` lacked both a document title and viewport metadata, and `typewriter.html` lacked viewport metadata. The builder now normalizes the document head first and then injects missing metadata, including for legacy files that omit a `<head>` element. The validator now checks all generated apps and collection wrappers for title, viewport metadata, duplicate IDs, and broken local references.
+
+The first stricter run correctly failed on the legacy no-`<head>` document. The builder was fixed rather than weakening the test. The subsequent run passed.
+
+The broad phone-like-number detector also produced false positives from SVG coordinates, year ranges, and CSS numeric values. It was replaced with more specific checks for Indian mobile-number formats and explicitly international `+` formats. This reduced unnecessary holds without removing the independent email, PAN/Aadhaar-like, credential, and token checks. Potential matches remain review indicators, not proof of personal data.
+
+## Latest generated artifact verification — 17 November 2026
+
+- Workflow run `44099484845` succeeded: site build, generated-app validation, and Pages artifact upload all passed.
+- Generated artifact contains 32 interactive app HTML files and 34 collection wrappers (34 catalogue entries).
+- All 32 apps and 34 wrappers have a non-empty document title and viewport metadata; no duplicate IDs were detected in these generated HTML documents.
+- The validator checked 32 apps, 32 inline JavaScript blocks, 34 catalogue entries, 34 wrappers, and 64 local app assets. All checks passed.
+- The publishing report lists 34 published HTML collections and 50 withheld sources. Withheld items include 46 PDF/DOCX documents pending manual copyright/content review, 3 text/code sources pending review, and 1 byte-identical duplicate HTML source. Empty HTML source files are excluded.
+- This is stronger static/generated-output QA, but not a full interactive browser test. The local Chromium binary hangs even on a trivial data URL in this execution environment, so dynamic rendering, filters, theme switching, keyboard flows, console errors and visual mobile/desktop review remain outstanding.
