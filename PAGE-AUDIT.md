@@ -13,7 +13,7 @@ The following checks were performed against source HTML:
 - exact duplicate detection for `top500_manga.html` and `top500_adult_manga.html`;
 - filename/category matching and obvious false-positive maturity rules.
 
-These checks are useful for triage, but they do **not** replace browser interaction testing, visual checks at desktop/mobile widths, keyboard testing, or a full semantic/content review.
+These checks are useful for triage, but they do **not** replace browser interaction testing, visual checks at desktop/mobile widths, keyboard testing, or a full semantic/content review. The `manga-comics-master.html` source includes a distinct Taboo Comics collection; its mature gate is intentional even though the page is also a broad multi-collection index.
 
 ## HTML source findings
 
@@ -21,13 +21,13 @@ These checks are useful for triage, but they do **not** replace browser interact
 |---|---|
 | `manga-1000.html` | Reviewed source CSS and class names. Legacy `.mc`, `.mt`, `.mi`, `.ma`, `.legend`, `.controls` require targeted contrast and sticky-header fixes. |
 | `top500_adult_manga.html` | Reviewed source CSS and class names. Legacy `.manga-card`, `.manga-title`, `.manga-author`, `.controls` require coordinated surfaces and readable text. |
-| `top500_manga.html` | Byte-identical to `top500_adult_manga.html`; keep one canonical published entry and report the duplicate rather than showing two copies. |
+| `top500_manga.html` | Byte-identical to `top500_adult_manga.html`; build hashes source HTML and withholds the duplicate instead of showing two copies. |
 | `manga-comics-master.html` | Large interactive index with tabs, controls and cards; requires browser interaction and mobile layout testing. |
 | `manga-index.html` | Large interactive index; needs the same visual and filter-function checks. Mature/transgressive content must remain gated and noindex. |
 | `manga-guide.html` | Static reading guide; verify semantic conversion preserves all sections and sequence. |
 | `manga-archive-v4.html` | Empty source file; cannot be published as a useful page. |
 | `manhwa300.html` | Adult romance manhwa source; retain 18+ gate and noindex; verify filter behaviour after theme changes. |
-| `manhwa_300_filter_app.html` | Missing document title; add a meaningful title after confirming its actual visible heading and purpose. |
+| `manhwa_300_filter_app.html` | Missing `<title>` tag; visible H1 is `300 Adult Het Romance Manhwa`. Build metadata now uses the visible H1 when the title tag is absent, avoiding a filename-derived title. Retain 18+ gate and noindex. |
 | `300_animated_films.html` | Interactive film table with search/filter controls; verify table responsiveness and filter operation. |
 | `cinematic-database (1).html` | Large interactive film database; audit table/card contrast, sticky controls and filter combinations. |
 | `cinematic_canon (1).html` | Large interactive film canon; verify search, category navigation and small-screen reading. |
@@ -80,6 +80,6 @@ The 43 PDFs, 3 DOCX, 1 TXT and 1 Pine source have not yet all been inspected pag
 - [ ] Inspect all PDF/DOCX pages (including image-only pages) and OCR output before any publication decision.
 - [ ] Confirm source-to-output text completeness for each converted document.
 - [ ] Check internal links, image paths, console errors and generated sitemap.
-- [ ] Reconcile the published catalogue against this source inventory.
+- [ ] Reconcile the published catalogue against this source inventory.\n- [ ] Confirm that missing-title fallback uses visible H1 text and review remaining pages with no title/H1.
 
 **Do not mark the archive complete until all acceptance checks are either passed or explicitly recorded as not applicable.**
