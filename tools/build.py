@@ -139,15 +139,15 @@ def shell_header(title):
 def enhance_app(path, category_name):
     text=path.read_text(encoding="utf-8")
     # Remove remote font dependencies; the reader controls typography locally.
-    text=re.sub(r'<link[^>]+(?:fonts\\.googleapis\\.com|fonts\\.gstatic\\.com)[^>]*>', '', text, flags=re.I)
-    text=re.sub(r'@import\\s+url\\([\\'"]?https?://fonts\\.googleapis\\.com[^)]*\\)\\s*;?', '', text, flags=re.I)
+    text=re.sub(r'<link[^>]+(?:fonts\.googleapis\.com|fonts\.gstatic\.com)[^>]*>', '', text, flags=re.I)
+    text=re.sub(r'@import\s+url\([\'"]?https?://fonts\.googleapis\.com[^)]*\)\s*;?', '', text, flags=re.I)
     additions='<link rel="stylesheet" href="../assets/unified-app.css"><script src="../assets/unified-app.js" defer></script>'
     body_match=re.search(r"<body([^>]*)>",text,re.I)
     if body_match and "data-rr-category" not in body_match.group(1):
         replacement='<body'+body_match.group(1)+' data-rr-category="'+html.escape(category_name,quote=True)+'">'
         text=text[:body_match.start()]+replacement+text[body_match.end():]
     if "</head>" in text.lower():
-        match=re.search(r"</head\\s*>",text,re.I)
+        match=re.search(r"</head\s*>",text,re.I)
         if match and "unified-app.css" not in text:
             text=text[:match.start()]+additions+text[match.start():]
     else:
