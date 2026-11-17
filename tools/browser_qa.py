@@ -21,7 +21,8 @@ def issue(page,kind,detail): issues.append({"page":page,"kind":kind,"detail":str
 def watch(page,label):
     page.on("pageerror",lambda e:issue(label,"pageerror",e))
     page.on("console",lambda m:issue(label,"console",m.text) if m.type=="error" else None)
-def slug(s): return re.sub(r"[^a-z0-9-]+","-",s.lower()).strip("-")[:65] or "collection"
+    page.on("requestfailed",lambda r:issue(label,"requestfailed",f"{r.url} ({r.failure})") if r.url.startswith(BASE) and r.resource_type in ("document","script","stylesheet","xhr","fetch") else None)
+def slug(s): return re.sub(r"[^a-z0-9-]+","-",str(s).lower()).strip("-")[:72] or "collection"
 def overflow(target,label):
     try:
         x=target.evaluate("""() => {
@@ -77,68 +78,81 @@ def main():
                 home.locator("#category-filters button").filter(has_text="All").first.click()
             for item in items:
                 title=item.get("title") or item.get("href","untitled")
-                page=ctx.new_page(); watch(page,title+"-"+name)
+                page_slug=Path(item.get("href","")).parent.name or slug(title)
+                qa_name=f"{title} [{page_slug}]"
+                page=ctx.new_page(); watch(page,qa_name+"-"+name)
                 try:
                     r=page.goto(BASE+item.get("href",""),wait_until="domcontentloaded",timeout=30000)
-                    if not r or r.status>=400: issue(title,"http",r.status if r else "no response")
+                    if not r or r.status>=400: issue(qa_name,"http",r.status if r else "no response")
                     page.wait_for_timeout(1000)
-                    if not page.title().strip(): issue(title,"title","missing title")
-                    if page.locator("main").count()==0: issue(title,"landmark","main landmark missing")
+                    if not page.title().strip(): issue(qa_name,"title","missing title")
+                    if page.locator("main").count()==0: issue(qa_name,"landmark","main landmark missing")
                     if item.get("mature"):
-                        if page.locator("#age-gate").count()==0 or not page.locator("#age-gate").is_visible(): issue(title,"age-gate","18+ gate missing or hidden")
-                        if "noindex" not in (page.locator('meta[name="robots"]').get_attribute("content") or ""): issue(title,"robots","mature page not noindex")
-                    overflow(page,title+"-"+name)
+                        if page.locator("#age-gate").count()==0 or not page.locator("#age-gate").is_visible(): issue(qa_name,"age-gate","18+ gate missing or hidden")
+                        if "noindex" not in (page.locator('meta[name="robots"]').get_attribute("content") or ""): issue(qa_name,"robots","mature page not noindex")
+                    overflow(page,qa_name+"-"+name)
+                    top_fn=f"{page_slug}-{name}.png"
+                    page.screenshot(path=str(OUT/top_fn),full_page=False); screenshots.append(top_fn)
                     frame_el=page.locator("iframe").first
                     if frame_el.count():
                         try:
-                            page.wait_for_function("document.querySelector('iframe')?.contentDocument?.readyState==='complete'",timeout=12000)
+                            # Trigger loading=lazy before waiting for the embedded app.
+                            frame_el.scroll_into_view_if_needed(timeout=8000)
+                            page.wait_for_function("() => { const f=document.querySelector('iframe'); return !!(f && f.contentDocument && f.contentDocument.readyState !== 'loading'); }",timeout=30000)
+                            page.wait_for_timeout(250)
                             frame_title=frame_el.evaluate("(f)=>f.contentDocument?.title||''")
-                            if not frame_title.strip(): issue(title,"iframe-title","embedded app title missing")
+                            if not frame_title.strip(): issue(qa_name,"iframe-title","embedded app title missing")
                             stats["iframes_loaded"]+=1
                             frame=page.frames[-1] if len(page.frames)>1 else None
-                            if frame: overflow(frame,title+"-iframe-"+name)
-                            fn=f"{slug(title)}-{name}.png"
-                            page.screenshot(path=str(OUT/fn),full_page=False); screenshots.append(fn)
-                            if item.get("mature") and name=="desktop" and frame:
+                            if frame: overflow(frame,qa_name+"-iframe-"+name)
+                            if item.get("mature") and frame:
                                 app_gate=frame.locator("#rr-app-age-gate")
                                 if app_gate.count()==0 or not app_gate.is_visible():
-                                    issue(title,"direct-app-age-gate","mature iframe did not show its own 18+ gate")
+                                    issue(qa_name,"direct-app-age-gate","mature iframe did not show its own 18+ gate")
                                 else:
                                     page.locator("#age-confirm").click()
-                                    page.wait_for_timeout(150)
-                                    if app_gate.is_visible(): issue(title,"age-gate-sync","wrapper confirmation did not dismiss iframe gate")
+                                    page.wait_for_timeout(180)
+                                    if app_gate.is_visible(): issue(qa_name,"age-gate-sync","wrapper confirmation did not dismiss iframe gate")
                                     else: stats["mature_iframe_sync_tested"]+=1
+                            app_fn=f"{page_slug}-app-{name}.png"
+                            page.screenshot(path=str(OUT/app_fn),full_page=False); screenshots.append(app_fn)
+                            if item.get("mature") and name=="desktop" and frame:
                                 src=frame_el.get_attribute("src")
                                 if src:
-                                    direct=ctx.new_page(); watch(direct,title+"-direct-app")
+                                    direct=ctx.new_page(); watch(direct,qa_name+"-direct-app")
                                     direct_url=urljoin(page.url,src)
                                     dr=direct.goto(direct_url,wait_until="domcontentloaded",timeout=30000)
-                                    if not dr or dr.status>=400: issue(title,"direct-app-http",dr.status if dr else "no response")
-                                    direct.wait_for_timeout(180)
+                                    if not dr or dr.status>=400: issue(qa_name,"direct-app-http",dr.status if dr else "no response")
+                                    direct.wait_for_timeout(200)
                                     dg=direct.locator("#rr-app-age-gate")
-                                    if dg.count()==0 or not dg.is_visible(): issue(title,"direct-app-age-gate","direct app URL bypasses the 18+ gate")
-                                    if "noindex" not in (direct.locator('meta[name="robots"]').get_attribute("content") or ""): issue(title,"direct-app-robots","direct mature app missing noindex")
+                                    if dg.count()==0 or not dg.is_visible(): issue(qa_name,"direct-app-age-gate","direct app URL bypasses the 18+ gate")
+                                    if "noindex" not in (direct.locator('meta[name="robots"]').get_attribute("content") or ""): issue(qa_name,"direct-app-robots","direct mature app missing noindex")
                                     if dg.count() and dg.is_visible():
+                                        gate_fn=f"{page_slug}-direct-gate.png"
+                                        direct.screenshot(path=str(OUT/gate_fn),full_page=False); screenshots.append(gate_fn)
                                         direct.locator("#rr-app-age-confirm").click()
-                                        direct.wait_for_timeout(80)
-                                        if dg.is_visible(): issue(title,"direct-app-confirm","direct app age confirmation did not dismiss gate")
+                                        direct.wait_for_timeout(100)
+                                        if dg.is_visible(): issue(qa_name,"direct-app-confirm","direct app age confirmation did not dismiss gate")
                                         else: stats["direct_mature_apps_tested"]+=1
                                     direct.close()
-                                else: issue(title,"direct-app-url","mature iframe source missing")
-                            if name=="desktop" and not item.get("mature"):
-                                # Search fields, select filters and tabs are safe, reversible test targets.
+                                else: issue(qa_name,"direct-app-url","mature iframe source missing")
+                            if name=="desktop":
+                                # Safe, reversible app controls are exercised after any mature gate is confirmed.
                                 sh=frame_el.evaluate_handle("""f=>f.contentDocument?.querySelector('input[type=search],input[placeholder*="search" i]')""")
                                 se=sh.as_element()
                                 if se:
                                     try: se.fill("qa-no-result-unique"); se.fill(""); stats["search_controls_tested"]+=1
-                                    except Exception as e: issue(title,"search-control",e)
-                                th=frame_el.evaluate_handle("f=>f.contentDocument?.querySelector('[role=tab]')")
-                                te=th.as_element()
-                                if te:
-                                    try: te.click(timeout=1200); stats["tabs_tested"]+=1
-                                    except Exception as e: issue(title,"tab-control",e)
-                                # Use Playwright Locators for native selects; ElementHandle has no locator() method.
+                                    except Exception as e: issue(qa_name,"search-control",e)
                                 if frame:
+                                    tabs=frame.locator('[role="tab"],.tab,.tab-btn,.ntab,.vt')
+                                    safe=re.compile(r"^(all(?:\\s+tasks?)?|any|unwatched|watched|top\\s+\\d+|essential(?:\\s+\\d+)?|blog(?:\\s+films?)?(?:\\s+\\d+)?|films?(?:\\s+\\d+)?|cinema|anime(?:\\s+\\d+)?|manga(?:\\s+\\d+)?|books?(?:\\s+\\d+)?|nature|emotion(?:\\s*&\\s*mood)?|light(?:\\s*&\\s*atmosphere)?|urban(?:\\s*&\\s*travel)?|still life|abstract|completed|grid|list|default|standard|modern|romance|drama|comedy|thriller|action|fantasy|history|poetry|painting|popular|recommended)(?:\\s+✓)?$",re.I)
+                                    for ti in range(min(tabs.count(),80)):
+                                        tab=tabs.nth(ti)
+                                        try:
+                                            label=tab.inner_text(timeout=300).strip()
+                                            if label and safe.match(label) and tab.is_visible() and tab.is_enabled():
+                                                tab.click(timeout=1200); stats["tabs_tested"]+=1; break
+                                        except Exception: pass
                                     selects=frame.locator("select")
                                     for si in range(min(selects.count(),4)):
                                         sel=selects.nth(si)
@@ -151,50 +165,43 @@ def main():
                                                 if old is not None: sel.select_option(old)
                                                 stats["select_controls_tested"]+=1
                                                 break
-                                        except Exception as e: issue(title,"select-control",e)
-                                # Exercise one reversible filter/view chip when present.
-                                if frame:
-                                    candidates=frame.locator("button,[role=button],[role=tab],.filter-btn,.filter-button,.filter-chip,.fb,.tab-btn,.nav-tab")
-                                    safe=re.compile(r"^(all|any|unwatched|watched|essential(?:\s+\d+)?|blog(?:\s+films?)?(?:\s+\d+)?|films?(?:\s+\d+)?|anime(?:\s+\d+)?|manga(?:\s+\d+)?|books?(?:\s+\d+)?|nature|emotion(?:\s*&\s*mood)?|light(?:\s*&\s*atmosphere)?|urban(?:\s*&\s*travel)?|still life|abstract|completed|grid|list|default|standard)(?:\s+✓)?$",re.I)
-                                    for bi in range(min(candidates.count(),80)):
+                                        except Exception as e: issue(qa_name,"select-control",e)
+                                    candidates=frame.locator("button,[role=button],.filter-btn,.filter-button,.filter-chip,.fb,.nav-tab")
+                                    for bi in range(min(candidates.count(),100)):
                                         btn=candidates.nth(bi)
                                         try:
                                             label=btn.inner_text(timeout=300).strip()
                                             if label and safe.match(label) and btn.is_visible() and btn.is_enabled():
-                                                btn.click(timeout=1200)
-                                                stats["filter_controls_tested"]+=1
-                                                break
+                                                btn.click(timeout=1200); stats["filter_controls_tested"]+=1; break
                                         except Exception: pass
                                 toggle=page.locator("#rr-theme-toggle")
                                 if toggle.count():
-                                    toggle.click(); page.wait_for_timeout(80)
+                                    toggle.click(); page.wait_for_timeout(120)
                                     pt=page.locator("html").get_attribute("data-theme")
                                     ct=frame_el.evaluate("(f)=>f.contentDocument?.documentElement?.dataset.theme")
-                                    if ct and ct!=pt: issue(title,"theme-sync",f"parent={pt}, iframe={ct}")
+                                    if ct and ct!=pt: issue(qa_name,"theme-sync",f"parent={pt}, iframe={ct}")
                                     else: stats["theme_sync_tested"]+=1
                                     page.wait_for_timeout(150)
-                                    dark_fn=f"{slug(title)}-dark-desktop.png"
+                                    dark_fn=f"{page_slug}-dark-desktop.png"
                                     page.screenshot(path=str(OUT/dark_fn),full_page=False); screenshots.append(dark_fn)
                                 font=page.locator("#rr-font-family")
                                 if font.count():
                                     font.select_option("serif"); page.wait_for_timeout(80)
                                     cf=frame_el.evaluate("(f)=>f.contentDocument?.documentElement?.dataset.rrFont")
-                                    if cf and cf!="serif": issue(title,"font-sync",cf)
+                                    if cf and cf!="serif": issue(qa_name,"font-sync",cf)
                                     else: stats["font_sync_tested"]+=1
                                 scale=page.locator("#rr-text-larger")
                                 if scale.count():
                                     scale.click(); page.wait_for_timeout(80)
                                     cs=frame_el.evaluate("(f)=>f.contentDocument?.documentElement?.style.getPropertyValue('--rr-scale')")
-                                    if not cs: issue(title,"scale-sync","no scale value on iframe")
+                                    if not cs: issue(qa_name,"scale-sync","no scale value on iframe")
                                     else: stats["scale_sync_tested"]+=1
                         except PlaywrightTimeout:
-                            issue(title,"iframe-load","iframe did not finish loading")
+                            issue(qa_name,"iframe-load",f"iframe did not reach DOM-ready state; src={frame_el.get_attribute('src')}")
                     else:
                         n=len(page.locator("main").inner_text()) if page.locator("main").count() else 0
-                        if n<80: issue(title,"editorial-content",f"only {n} characters in main")
-                        fn=f"{slug(title)}-{name}.png"
-                        page.screenshot(path=str(OUT/fn),full_page=False); screenshots.append(fn)
-                except Exception as e: issue(title,"navigation-or-test",e)
+                        if n<80: issue(qa_name,"editorial-content",f"only {n} characters in main")
+                except Exception as e: issue(qa_name,"navigation-or-test",e)
                 finally: page.close()
             if name=="desktop": stats["desktop_pages"]+=len(items)
             else: stats["mobile_pages"]+=len(items)
