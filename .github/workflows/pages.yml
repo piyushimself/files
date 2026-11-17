@@ -3,6 +3,8 @@ name: Build and deploy Reading Room
 on:
   push:
     branches: [main, site-build]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -40,6 +42,7 @@ jobs:
         with:
           path: site
   deploy:
+    if: github.event_name != 'pull_request'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
