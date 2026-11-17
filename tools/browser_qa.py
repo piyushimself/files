@@ -119,7 +119,9 @@ def main():
                             if item.get("mature") and name=="desktop" and frame:
                                 src=frame_el.get_attribute("src")
                                 if src:
-                                    direct=ctx.new_page(); watch(direct,qa_name+"-direct-app")
+                                    direct_ctx=browser.new_context(viewport={"width":width,"height":height},service_workers="block")
+                                    direct_ctx.add_init_script("try{localStorage.removeItem('rr-age-confirmed')}catch(e){}")
+                                    direct=direct_ctx.new_page(); watch(direct,qa_name+"-direct-app")
                                     direct_url=urljoin(page.url,src)
                                     dr=direct.goto(direct_url,wait_until="domcontentloaded",timeout=30000)
                                     if not dr or dr.status>=400: issue(qa_name,"direct-app-http",dr.status if dr else "no response")
@@ -134,7 +136,7 @@ def main():
                                         direct.wait_for_timeout(100)
                                         if dg.is_visible(): issue(qa_name,"direct-app-confirm","direct app age confirmation did not dismiss gate")
                                         else: stats["direct_mature_apps_tested"]+=1
-                                    direct.close()
+                                    direct_ctx.close()
                                 else: issue(qa_name,"direct-app-url","mature iframe source missing")
                             if name=="desktop":
                                 # Safe, reversible app controls are exercised after any mature gate is confirmed.
