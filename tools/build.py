@@ -143,9 +143,9 @@ def enhance_app(path, category_name):
 def write_article(slug_name,title,source,mature,category_name):
     soup=BeautifulSoup(source,"html.parser")
     body=soup.body or soup
-    for node in body.find_all(["script","style","noscript","nav","footer","header","form","iframe","svg"]):
+    for node in body.find_all(["script","style","noscript","iframe","svg"]):
         node.decompose()
-    allowed={"main","article","section","h1","h2","h3","h4","p","ul","ol","li","blockquote","table","thead","tbody","tr","th","td","figure","figcaption","img","a","strong","em","b","i","code","pre","hr","br"}
+    allowed={"main","article","section","header","footer","nav","h1","h2","h3","h4","p","ul","ol","li","blockquote","table","thead","tbody","tr","th","td","figure","figcaption","img","a","strong","em","b","i","code","pre","hr","br"}
     for tag in list(body.find_all(True)):
         if tag.name=="div":
             block={"h1","h2","h3","h4","p","ul","ol","table","blockquote","section","article","figure"}
