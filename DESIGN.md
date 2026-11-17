@@ -31,3 +31,11 @@ Collection entries use a narrow vertical color rail and a short editorial descri
 - No autoplay, scroll-triggered animation, or hover-only information.
 - Mature entries are marked clearly and require an 18+ confirmation before opening.
 - Favourites and reading history are optional enhancements and must fail safely when storage is unavailable.
+
+## 2026-11-17 — Unified second-pass system
+- Every generated collection page uses one shared navigation shell: home, searchable collection directory, previous/next, theme control, and text-size controls.
+- Editorial pages and interactive app wrappers share the same header, navigation, spacing, footer, and design tokens.
+- Embedded interactive pages keep their source functionality, but receive a local, no-CDN theme layer for the Reading Room palette, typography, controls, focus states, and dark-mode synchronization.
+- Theme and text-size preferences are shared across the parent shell and same-origin embedded pages using local storage and a small postMessage bridge.
+- The original root-level HTML files remain untouched; the styling layer is applied only to generated copies under site/apps/.
+- Visual normalization is intentionally conservative around charts, illustrations, and app-specific components so functional meaning is not flattened.
