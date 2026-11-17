@@ -13,7 +13,7 @@ COLLECTIONS=SITE/"collections"
 DATA=SITE/"data"
 REPORT=ROOT/"PUBLISHING-REVIEW.md"
 EXCLUDE={".git",".github","site","tools","__pycache__"}
-MATURE=re.compile(r"(adult|18\+|taboo|sensual|transgressive|dark-ink|manhwa300)",re.I)
+MATURE=re.compile(r"(18\+|18-plus|adult[-_ ](?:manga|manhwa|comics?|romance)|taboo|sensual|transgressive|dark[-_ ]ink|manhwa300)",re.I)
 SECRET_PATTERNS=[
  ("private key",re.compile(rb"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----")),
  ("AWS access key",re.compile(rb"\bAKIA[0-9A-Z]{16}\b")),
