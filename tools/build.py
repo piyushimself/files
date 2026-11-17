@@ -58,6 +58,7 @@ def category(name):
       "bob_ross_complete_guide.html":"Art",
       "free-art-resources.html":"Art",
       "political-comics-list.html":"Manga & Comics",
+      "qwen_html_20260604_f25nf6z8p.html":"Manga & Comics",
       "anime-manga-values-curriculum.html":"Learning",
       "human-development-curriculum.html":"Learning",
       "living-curriculum-2026.html":"Learning",
