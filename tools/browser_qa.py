@@ -98,16 +98,31 @@ def main():
                     frame_el=page.locator("iframe").first
                     if frame_el.count():
                         try:
-                            # Trigger loading=lazy before waiting for the embedded app.
-                            frame_el.scroll_into_view_if_needed(timeout=8000)
-                            page.wait_for_function("() => { const f=document.querySelector('iframe'); return !!(f && f.contentDocument && f.contentDocument.readyState !== 'loading'); }",timeout=30000)
+                            # Force lazy frames to load, then inspect the actual child frame.
+                            frame_el.evaluate("(f)=>{f.loading='eager'}")
+                            frame_handle=frame_el.element_handle()
+                            frame=frame_handle.content_frame() if frame_handle else None
+                            if not frame:
+                                issue(qa_name,"missing-app-frame","iframe element has no child browsing context")
+                                continue
+                            try:
+                                frame.wait_for_load_state("domcontentloaded",timeout=30000)
+                            except PlaywrightTimeout:
+                                # Some large legacy apps render their DOM before Playwright observes
+                                # the navigation event. Accept only a real, populated child document.
+                                try:
+                                    frame.locator("body").wait_for(state="attached",timeout=5000)
+                                    probe=frame.locator("body").evaluate("(b)=>({text:(b.innerText||'').trim().length,controls:b.querySelectorAll('input,select,textarea,button,canvas').length,children:b.children.length})",timeout=5000)
+                                    if frame.url=="about:blank" or (probe["text"]<30 and probe["controls"]==0):
+                                        raise RuntimeError("child frame remained blank after navigation timeout")
+                                except Exception as wait_error:
+                                    issue(qa_name,"iframe-load",f"child frame did not become usable; src={frame_el.get_attribute('src')}; {wait_error}")
+                                    continue
                             page.wait_for_timeout(250)
                             frame_title=frame_el.evaluate("(f)=>f.contentDocument?.title||''")
                             if not frame_title.strip(): issue(qa_name,"iframe-title","embedded app title missing")
                             stats["iframes_loaded"]+=1
-                            frame_handle=frame_el.element_handle()
-                            frame=frame_handle.content_frame() if frame_handle else None
-                            if frame: overflow(frame,qa_name+"-iframe-"+name)
+                            overflow(frame,qa_name+"-iframe-"+name)
                             if item.get("mature") and frame:
                                 app_gate=frame.locator("#rr-app-age-gate")
                                 if app_gate.count()==0 or not app_gate.is_visible():
@@ -120,10 +135,13 @@ def main():
                             app_fn=f"{page_slug}-app-{name}.png"
                             if frame:
                                 try:
-                                    frame.locator("body").screenshot(path=str(OUT/app_fn),timeout=10000)
+                                    frame_box=frame_el.bounding_box()
+                                    if frame_box and frame_box["width"]>0 and frame_box["height"]>0:
+                                        page.screenshot(path=str(OUT/app_fn),clip=frame_box)
+                                    else:
+                                        raise RuntimeError("iframe has no visible bounding box")
                                 except Exception as e:
                                     issue(qa_name,"iframe-screenshot",e)
-                                    page.screenshot(path=str(OUT/app_fn),full_page=False)
                                 screenshots.append(app_fn)
                                 body_text=frame.locator("body").inner_text(timeout=5000).strip()
                                 visible_controls=frame.locator("body :is(input,textarea,select,button,[role=button],canvas)").count()
