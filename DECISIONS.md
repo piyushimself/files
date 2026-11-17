@@ -44,3 +44,11 @@
 - Keep page layouts contextual to their material: catalogues for cinema, reading/discovery for manga, visual lessons for art, structured paths for curricula, and task-specific layouts for tools.
 - Normalize existing filters, chips, tabs, forms and selected states in interactive pages; do not invent metadata filters when the underlying content does not provide the fields.
 - Research references: USWDS collection and typography guidance, linked in DESIGN.md.
+
+
+## 2026-11-17 — Screenshot review found a missed blank app
+- The first full Chromium run (44108196857) reported zero issues, but manual inspection of its screenshots found the Qwen manga app blank.
+- Root cause: malformed source terminator `</ thead>` left its `<style>` element unclosed, so the browser parsed the remaining app markup as CSS.
+- Preserve the original root HTML exactly. Repair only the generated copy under `site/apps/`.
+- Strengthen browser QA to inspect the actual iframe content frame, capture the embedded body, reject empty app DOMs, and reject an empty `#grid` when one is expected.
+- Keep PR #5 in draft until the repaired full workflow passes and the document-rights/privacy and page-level editorial limitations are resolved or explicitly accepted.
