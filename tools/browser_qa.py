@@ -16,7 +16,7 @@ wrappers=sorted((SITE/"collections").glob("*/index.html"))
 viewports=[("desktop",1440,1000),("mobile",390,844)]
 issues=[]; screenshots=[]
 stats={"catalog_items":len(items),"apps":len(apps),"wrappers":len(wrappers),"desktop_pages":0,"mobile_pages":0,"iframes_loaded":0,"search_controls_tested":0,"select_controls_tested":0,"filter_controls_tested":0,"tabs_tested":0,"shell_controls_tested":0}
-def issue(page,kind,detail): issues.append({"page":page,"kind":kind,"detail":str(detail)[:400]})
+def issue(page,kind,detail): issues.append({"page":page,"kind":kind,"detail":str(detail)[:2000]})
 def watch(page,label):
     page.on("pageerror",lambda e:issue(label,"pageerror",e))
     page.on("console",lambda m:issue(label,"console",m.text) if m.type=="error" else None)
@@ -51,7 +51,7 @@ def main():
             except PlaywrightTimeout: issue("home","catalogue-render","cards did not render")
             if home.locator("#collection-grid .collection-item").count()!=len(items): issue("home","catalogue-count",home.locator("#collection-grid .collection-item").count())
             overflow(home,"home-"+name)
-            home.screenshot(path=str(OUT/f"home-{name}.png"),full_page=True); screenshots.append(f"home-{name}.png")
+            home.screenshot(path=str(OUT/f"home-{name}.png"),full_page=False); screenshots.append(f"home-{name}.png")
             if name=="desktop":
                 home.locator("#library-search").fill("manga")
                 if home.locator("#collection-grid .collection-item").count()<1: issue("home","search","manga search returned no items")
@@ -76,7 +76,7 @@ def main():
                 try:
                     r=page.goto(BASE+item.get("href",""),wait_until="domcontentloaded",timeout=30000)
                     if not r or r.status>=400: issue(title,"http",r.status if r else "no response")
-                    page.wait_for_timeout(120)
+                    page.wait_for_timeout(1000)
                     if not page.title().strip(): issue(title,"title","missing title")
                     if page.locator("main").count()==0: issue(title,"landmark","main landmark missing")
                     if item.get("mature"):
