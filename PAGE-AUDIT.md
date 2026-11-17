@@ -180,3 +180,18 @@ Run 44098125417 completed successfully after the Cross-disciplinary shelf rename
 - The four broad cross-media library pages are grouped under Cross-disciplinary instead of the generic Other label.
 
 This is build/artifact validation only. Browser runtime, visual regression, mobile layout, accessibility, keyboard interaction and document-by-document editorial/rights review remain outstanding.
+
+
+## Homepage filter and CI integrity hardening — 17 November 2026
+
+A catalogue review caught a second-order issue from the Cross-disciplinary category rename: the homepage still had a hard-coded `Other` filter and would not offer a Cross-disciplinary filter. The homepage now builds its subject filters from categories actually present in the generated catalogue, preserving the intended subject order and avoiding empty Family/Security filters while those shelves have no published entries.
+
+The CI validator now checks more than JavaScript syntax:
+- generated app inline JavaScript syntax;
+- catalogue entry count equals collection-wrapper count;
+- every category in the catalogue is represented in the homepage filter taxonomy;
+- every catalogue destination exists;
+- every wrapper has a document title and its iframe target exists;
+- every local image, script, stylesheet, source, video and audio reference in generated apps resolves.
+
+Latest workflow run 44098594862 passed the build, generated-site integrity validator and artifact upload. The deploy job was correctly skipped because this is a pull request.
