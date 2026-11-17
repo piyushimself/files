@@ -131,3 +131,15 @@ The latest generated artifact was parsed with Node.js against the embedded JavaS
 The earlier note describing Big_library.html and grand_library (2).html as empty was incorrect: the GitHub file-content wrapper returned empty content for these large files, while the repository tree and generated artifact confirm substantial source files and embedded data. This has been superseded by the artifact-based inspection above.
 
 The generated app artifact contains 26 interactive HTML apps. All 26 inline script blocks passed Node.js syntax validation after the Qwen author-string correction. This still does not prove successful runtime initialization or visual correctness in a browser. A headless Chromium smoke-test attempt did not complete within the execution window; browser-level acceptance remains open rather than being marked passed.
+
+
+## CI and generated-link checks — 17 November 2026
+
+A repository validator now runs after the site build in GitHub Actions. It extracts every non-empty inline script from generated apps and runs Node.js --check; the validator is part of the pull-request workflow so a syntax regression fails CI rather than silently publishing.
+
+- Latest run: 44096128735 — build succeeded; generated-app script validation succeeded; artifact upload succeeded. Deployment was correctly skipped for the pull request.
+- Latest generated artifact: 27 collection wrapper pages and 26 interactive app files.
+- All 27 collection wrappers have a non-empty document title.
+- All local iframe targets referenced by collection wrappers resolve to files in the generated artifact (0 missing targets).
+- All 26 generated apps / 26 non-empty inline JavaScript blocks passed an independent Node.js syntax check.
+- Headless Chromium did not complete within the available execution window in this environment. Consequently, dynamic browser initialization, actual filter interactions, visual breakpoints, console errors, and keyboard flows remain unverified. Do not treat static validation as a substitute for those checks.
