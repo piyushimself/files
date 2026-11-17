@@ -7,6 +7,8 @@ import subprocess
 import tempfile
 from pathlib import Path
 from urllib.parse import unquote, urlparse
+from bs4 import BeautifulSoup
+from urllib.parse import unquote, urlparse
 
 from bs4 import BeautifulSoup
 
@@ -32,6 +34,30 @@ def main() -> int:
 
     checked = 0
     failures: list[str] = []
+    # Check document metadata, duplicate IDs, and local asset/iframe targets.
+    for page in sorted([*APPS.glob("*.html"), *(SITE / "collections").glob("*/index.html")]):
+        soup = BeautifulSoup(page.read_text(encoding="utf-8", errors="replace"), "html.parser")
+        if not soup.title or not soup.title.get_text(" ", strip=True):
+            failures.append(f"{page.relative_to(SITE)}: missing document title")
+        if not soup.find("meta", attrs={"name": re.compile(r"^viewport$", re.I)}):
+            failures.append(f"{page.relative_to(SITE)}: missing viewport meta")
+        seen_ids: set[str] = set()
+        duplicate_ids: set[str] = set()
+        for element in soup.select("[id]"):
+            element_id = element.get("id", "")
+            if element_id in seen_ids:
+                duplicate_ids.add(element_id)
+            seen_ids.add(element_id)
+        if duplicate_ids:
+            failures.append(f"{page.relative_to(SITE)}: duplicate IDs: {', '.join(sorted(duplicate_ids))}")
+        for element in soup.find_all(["a", "link", "script", "img", "iframe"]):
+            attribute = "href" if element.name in {"a", "link"} else "src"
+            target_url = (element.get(attribute) or "").strip()
+            if not target_url or target_url.startswith(("#", "data:", "http:", "https:", "mailto:", "javascript:")):
+                continue
+            local_path = unquote(urlparse(target_url).path)
+            if local_path and not (page.parent / local_path).resolve().exists():
+                failures.append(f"{page.relative_to(SITE)}: broken local {attribute}: {target_url}")
     with tempfile.TemporaryDirectory(prefix="reading-room-js-") as tmp:
         script_path = Path(tmp) / "inline.js"
         for page in pages:
