@@ -223,3 +223,22 @@ The broad phone-like-number detector also produced false positives from SVG coor
 - This remains static/build validation. No successful real-browser run has yet established that filters, controls, responsive rendering, keyboard interaction, accessibility or console behaviour work correctly.
 - All 43 PDFs, 3 DOCX, 1 TXT and 1 Pine source remain withheld for manual content/rights/privacy review. No binary document has been promoted based only on automated text extraction.
 - PR #4 remains a draft and is not merged.
+
+
+## Browser screenshot review and QA hardening — 17 November 2026
+
+Workflow run [44108196857](https://github.com/piyushimself/files/actions/runs/44108196857) completed successfully. Its Chromium report recorded 34/34 desktop collection pages, 34/34 mobile collection pages, 64 iframe loads, 19 search controls, 13 select controls, 15 filter controls, 3 tabs, 4 shell controls, 15 direct mature-app gate checks, 30 mature iframe-sync checks, 33 theme-sync checks, 32 font-sync checks, 32 text-scale checks, and zero automated issues.
+
+The screenshot artifact was downloaded and reviewed. That visual review found a defect missed by the initial automated test: `Qwen_html_20260604_f25nf6z8p.html` has an unclosed `<style>` element because the source contains the malformed terminator `</ thead>` immediately before `<body>`. The browser therefore treated the app markup as stylesheet text and showed a blank embedded page. The original source remains unchanged.
+
+A generated-copy-only repair was added to `tools/build.py`: when exactly one style element is unclosed and the malformed `</ thead>` occurs immediately before the body, the generated app copy receives the correct `</style>` terminator. The browser QA was also strengthened to:
+- obtain the actual iframe content frame from its element handle;
+- capture the embedded app body rather than silently falling back to a wrapper screenshot;
+- fail on an empty embedded body/DOM; and
+- fail when an app defines `#grid` but renders no cards.
+
+The follow-up workflow on the repaired branch is the acceptance gate for this correction. Do not treat the earlier zero-issue report as final: it is superseded by this screenshot finding and the strengthened checks.
+
+The Chromium suite is broad smoke/interaction coverage, not exhaustive testing of every bespoke control or a formal WCAG audit. Keyboard-only navigation, screen-reader behavior, detailed color-contrast measurement, and exhaustive per-control semantics still require separate review.
+
+Document rights/content review remains separate from browser QA. All source PDFs/DOCX/TXT/Pine files remain withheld; extraction and OCR do not establish publication permission or complete human fact-checking.
