@@ -48,7 +48,7 @@ Several files contain substantial third-party material: poems, film descriptions
 | All_Film_Collections_Combined_compressed.pdf | Exact byte-for-byte duplicate of the (1) file. No separate content review is needed. | Withhold as duplicate; retain only one working copy if the owner later chooses. |
 | Bold_Cinema_Collection.pdf | A 300+ film collection with erotic/explicit sections. Streaming/platform availability is time-sensitive and needs current verification. | Withhold; 18+ label, current availability checks and rights review. |
 | Crypto_Trend_Rider_4H.pine | Static review found no request.security lookahead use, but trade/alert conditions are not gated by barstate.isconfirmed, so intrabar signals/alerts can appear and disappear. The Chandelier candidate can move down, loosening a long stop; the initial risk stop is not the enforced exit. Exit is close-based, not an intrabar stop fill. Partial exits are counted as separate trade events, so win rate/average R/holding statistics are not position-level; unrealised drawdown, fees, slippage and crypto funding are omitted. It is an indicator, not a Strategy Tester strategy, and was not compiled/backtested in TradingView. | Withhold from performance claims; fix confirmation, stop ratchet, position-level metrics and realistic costs before relying on it. |
-| Cybersecurity_Stories_For_Your_Teams.pdf | Security analogies are useful as discussion starters, but the GDPR/NIS2/DORA incident-reporting timelines are oversimplified and should not be used as compliance guidance without official citations and legal review. Metaphors must not be mistaken for technical equivalence. | Withhold from training publication until regulatory claims are corrected and sourced. |
+| Cybersecurity_Stories_For_Your_Teams.pdf | Security analogies are useful as discussion starters, but the GDPR/NIS2/DORA incident-reporting timelines are oversimplified. GDPR Article 33 is a 72-hour controller notification where feasible and subject to the risk exception; NIS2 uses a 24-hour early warning, 72-hour incident notification and one-month final report; DORA RTS 2025/301 uses an initial notification within four hours of major classification and no later than 24 hours after awareness, followed by staged reports. Metaphors must not be mistaken for technical equivalence. See the official references below. | Withhold from training publication until regulatory claims are corrected and sourced. |
 | Cybersecurity_Storytelling_Movies.pdf | Movie-to-security mappings are illustrative, not technical controls. Cost and impact claims (e.g. BEC/phishing losses) lack citations. Add sources and label analogies clearly. | Withhold; fact-check and source claims. |
 | Films_That_Open_New_Human_Domains.pdf | A 200-film thematic list with strongly interpretive descriptions. Separate subjective interpretation from verifiable facts and establish rights for descriptions. | Withhold; editorial/source review. |
 | Free_Art_Resource_Library.docx | Resource directory contains at least one missing URL and time-sensitive audience/subscriber claims. Every link and access/licence statement needs checking. | Withhold; repair missing links and verify resource licences. |
@@ -102,3 +102,10 @@ Both Pine files were inspected statically, not executed or compiled in TradingVi
 4. Visually inspect the PDFs with table/column extraction problems and the rating glyph issue.
 5. Verify all external URLs and time-sensitive streaming claims.
 6. Keep all originals withheld until the above checks are complete.
+
+
+### Official references for the cybersecurity reporting-timeline correction
+
+- GDPR, Article 33: https://eur-lex.europa.eu/eli/reg/2016/679/oj#art_33
+- NIS2, Article 23: https://eur-lex.europa.eu/eli/dir/2022/2555/oj#art_23
+- DORA, Commission Delegated Regulation (EU) 2025/301, Article 5: https://eur-lex.europa.eu/eli/reg_del/2025/301/oj/eng#art_5
