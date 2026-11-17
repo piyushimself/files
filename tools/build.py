@@ -143,7 +143,7 @@ def shell_header(title):
 def enhance_app(path, category_name):
     text=path.read_text(encoding="utf-8")
     # Repair the known unquoted author value in the generated copy only.
-    text=text.replace("author: Ryousuke Takeuchi & Takeshi Obata, year: 2014", "author: \\\"Ryousuke Takeuchi & Takeshi Obata\\\", year: 2014")
+    text=text.replace("author: Ryousuke Takeuchi & Takeshi Obata, year: 2014", "author: \"Ryousuke Takeuchi & Takeshi Obata\", year: 2014")
     # Repair a malformed legacy style terminator in the generated copy only.
     # Qwen's source has one opening <style> and a typo "</ thead>" immediately
     # before <body>; browsers then treat the entire app as CSS and render blank.
