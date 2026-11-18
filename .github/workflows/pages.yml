@@ -57,6 +57,14 @@ jobs:
             document-review-redacted/*.txt
           if-no-files-found: warn
           retention-days: 1
+      - name: Upload temporary source PDFs for visual review
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: reading-room-source-pdfs-visual-review
+          path: "*.pdf"
+          if-no-files-found: error
+          retention-days: 1
       - name: Install Chromium test runner
         run: |
           python -m pip install playwright==1.56.0
