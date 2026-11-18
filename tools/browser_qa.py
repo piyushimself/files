@@ -204,7 +204,7 @@ def main():
                             except Exception as e:
                                 issue(qa_name,"initial-app-screenshot",e)
                             if frame.locator(".stat-n").count():
-                                contrast_state=frame.evaluate("""()=>({actual:getComputedStyle(document.querySelector(".stat-n")).color,expected:getComputedStyle(document.documentElement).getPropertyValue("--rr-ink").trim()})""")
+                                contrast_state=frame.evaluate("""()=>{const e=document.createElement("span");e.style.color="var(--rr-ink)";document.body.append(e);const expected=getComputedStyle(e).color;e.remove();return {actual:getComputedStyle(document.querySelector(".stat-n")).color,expected}}""")
                                 if contrast_state["actual"]!=contrast_state["expected"]:
                                     issue(qa_name,"stat-foreground-contrast",json.dumps(contrast_state))
                             if name=="mobile" and frame.locator(".hero-vertical").count():
