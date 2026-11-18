@@ -64,25 +64,34 @@ body .hero-title{font-size:clamp(1.9rem,4vw,2.8rem)!important;line-height:1.18!i
 }
 
 
-/* Semantic token bridge: map legacy app palettes to the shared Reading Room theme. */
+/* Semantic token bridge: force legacy inline palettes to use the shared editorial system.
+   !important is intentional: many legacy documents redeclare these variables in their own
+   inline :root blocks after the shared stylesheet is loaded. */
 :root{
-  --bg:var(--rr-canvas);--bg2:var(--rr-surface);--bg3:var(--rr-raised);--bg4:var(--rr-raised);--bg5:var(--rr-raised);
-  --surface:var(--rr-surface);--surface2:var(--rr-raised);--surface3:var(--rr-raised);
-  --card:var(--rr-surface);--card-bg:var(--rr-surface);--card-h:var(--rr-raised);
-  --s0:var(--rr-canvas);--s1:var(--rr-surface);--s2:var(--rr-raised);--s3:var(--rr-raised);
-  --text:var(--rr-ink);--text1:var(--rr-ink);--text2:var(--rr-muted);--text3:var(--rr-muted);--text4:var(--rr-muted);
-  --t1:var(--rr-ink);--t2:var(--rr-ink);--t3:var(--rr-muted);--t4:var(--rr-muted);
-  --ink:var(--rr-ink);--muted:var(--rr-muted);--dim:var(--rr-muted);
-  --border:var(--rr-line);--border2:var(--rr-line);--border3:var(--rr-line);
-  --line:var(--rr-line);--b1:var(--rr-line);--b2:var(--rr-line);--b3:var(--rr-line);
-  --accent:var(--rr-accent);--accent2:var(--rr-accent);--blue:var(--rr-accent);
-  --gold:var(--rr-accent);--gold2:var(--rr-accent);--gold3:var(--rr-accent);
-  --gold-lt:var(--rr-accent);--gold-dim:var(--rr-raised);
-  --bg-card:var(--rr-surface);--bg-raised:var(--rr-raised);--bg-hover:var(--rr-raised);
-  --ink-dim:var(--rr-muted);--ink-faint:var(--rr-muted);--hairline:var(--rr-line);
-  --gold-bright:var(--rr-accent);--gold:var(--rr-accent);
-  --cream:var(--rr-surface);--paper:var(--rr-surface);--paper-dark:var(--rr-raised);--paper-mid:var(--rr-raised);
-  --sans:var(--rr-font);--f-sans:var(--rr-font);
+  --bg:var(--rr-canvas)!important;--bg2:var(--rr-surface)!important;--bg3:var(--rr-raised)!important;--bg4:var(--rr-raised)!important;--bg5:var(--rr-raised)!important;
+  --surface:var(--rr-surface)!important;--surface2:var(--rr-raised)!important;--surface3:var(--rr-raised)!important;
+  --card:var(--rr-surface)!important;--card-bg:var(--rr-surface)!important;--card-h:var(--rr-raised)!important;
+  --s0:var(--rr-canvas)!important;--s1:var(--rr-surface)!important;--s2:var(--rr-raised)!important;--s3:var(--rr-raised)!important;
+  --text:var(--rr-ink)!important;--text1:var(--rr-ink)!important;--text2:var(--rr-muted)!important;--text3:var(--rr-muted)!important;--text4:var(--rr-muted)!important;
+  --t1:var(--rr-ink)!important;--t2:var(--rr-ink)!important;--t3:var(--rr-muted)!important;--t4:var(--rr-muted)!important;
+  --ink:var(--rr-ink)!important;--muted:var(--rr-muted)!important;--dim:var(--rr-muted)!important;
+  --border:var(--rr-line)!important;--border2:var(--rr-line)!important;--border3:var(--rr-line)!important;
+  --b1:var(--rr-line)!important;--b2:var(--rr-line)!important;--b3:var(--rr-line)!important;--line:var(--rr-line)!important;
+  --accent:var(--rr-accent)!important;--accent2:var(--rr-accent)!important;--blue:var(--rr-accent)!important;
+  --gold:var(--rr-accent)!important;--gold2:var(--rr-accent)!important;--gold3:var(--rr-accent)!important;--gold-lt:var(--rr-accent)!important;--gold-dim:var(--rr-raised)!important;--gold-bright:var(--rr-accent)!important;
+  --bg-card:var(--rr-surface)!important;--bg-raised:var(--rr-raised)!important;--bg-hover:var(--rr-raised)!important;
+  --ink-dim:var(--rr-muted)!important;--ink-faint:var(--rr-muted)!important;--hairline:var(--rr-line)!important;
+  --cream:var(--rr-surface)!important;--paper:var(--rr-surface)!important;--paper-dark:var(--rr-raised)!important;--paper-mid:var(--rr-raised)!important;
+  --s1:var(--rr-surface)!important;--s2:var(--rr-raised)!important;--s3:var(--rr-raised)!important;
+  --t1:var(--rr-ink)!important;--t2:var(--rr-ink)!important;--t3:var(--rr-muted)!important;--t4:var(--rr-muted)!important;
+  --b1:var(--rr-line)!important;--b2:var(--rr-line)!important;--b3:var(--rr-line)!important;
+  --film:#547f88!important;--anime:#8976a8!important;--books:#a34f38!important;--poetry:#a46d87!important;--art:#64866c!important;
+  --fd:#e1e9e6!important;--ad:#e9e3ef!important;--bd:#f0e3d8!important;--pd:#eee2e8!important;--xd:#e2eadf!important;
+  --sans:var(--rr-font)!important;--f-sans:var(--rr-font)!important;
+}
+:root[data-theme=dark]{
+  --fd:#263a39!important;--ad:#393047!important;--bd:#49352d!important;--pd:#45313b!important;--xd:#2e3c30!important;
+  --film:#8db6bd!important;--anime:#b6a4d2!important;--books:#e0a18a!important;--poetry:#d7a0bb!important;--art:#9ebd9e!important;
 }
 
 /* Mobile repairs for legacy fixed-width toolbars, tables and paper canvases. */
