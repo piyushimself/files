@@ -60,13 +60,13 @@ This is a reproducible, rule-based deduplication method, not a global film-datab
 
 ## Visual table verification
 
-The original PDF was rendered and visually inspected at pages 13, 26 and 34:
+All 15 ranking pages (21–35) were reviewed in a contact sheet for consistent table geometry and column placement; pages 21, 26 and 34 were additionally inspected at high resolution:
 - The columns align correctly in the sampled pages.
 - The “Peter Mullan” director record belongs to rank 257, *The Magdalene Sisters*, on page 26. It is not part of the *Antichrist* row.
 - The *Antichrist* rows at ranks 610–611 are two category records for the same film, not a column-shift defect.
 - The anime score and RT columns are aligned in the sampled page 34 table.
 
-The earlier Peter Mullan and detached-score concerns were extraction-order false positives in those sampled pages. This does not substitute for a visual check of every table page. IMDb/RT source URLs and collection dates remain unresolved.
+The earlier Peter Mullan and detached-score concerns were extraction-order false positives in those sampled pages. The page 21 heading was also corrected from “All 647 Films Ranked” to “All 647 Ranked Entries by IMDb Score”. The contact-sheet review checks layout consistency, not every title/score individually. IMDb/RT source URLs and collection dates remain unresolved.
 
 ## Source-PDF correction
 
