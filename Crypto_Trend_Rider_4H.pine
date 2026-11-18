@@ -48,7 +48,7 @@ useEmaCrossExit = input.bool(true, "Also Exit on Fast/Slow EMA Cross-Under", gro
 
 enablePartialTarget = input.bool(true, "Enable Partial Profit Target", group=gTarget)
 partialRR   = input.float(2.0, "Partial Target R-Multiple", minval=0.1, group=gTarget)
-partialPct  = input.float(50.0, "Qty % to Scale Out at Target", minval=1.0, maxval=100.0, group=gTarget)
+partialPct  = input.float(50.0, "Qty % to Scale Out at Target", minval=1.0, maxval=99.0, group=gTarget)
 
 maxPyramidLegs = input.int(2, "Max Concurrent Legs", minval=1, maxval=10, group=gPyramid)
 enablePyramidOnPullback = input.bool(true, "Add Leg on Pullback Bounce (while trend intact)", group=gPyramid)
@@ -58,9 +58,11 @@ riskPerLegPct        = input.float(1.0, "Risk % of Capital Per Leg", minval=0.1,
 maxCapitalDeployPct  = input.float(80.0, "Max Total Capital Deployed (%)", minval=10.0, maxval=100.0, step=5.0, group=gCapital)
 
 // Set these to the actual venue/account assumptions. Zero disables that cost.
+// Spread is the estimated per-side spread cost as a percentage of notional.
 // Funding is an estimate per elapsed 8-hour interval, not historical exchange data.
 feePctPerSide       = input.float(0.0, "Trading fee per side (%)", minval=0.0, step=0.001, group=gCosts)
 slippagePctPerSide  = input.float(0.0, "Slippage per side (%)", minval=0.0, step=0.001, group=gCosts)
+spreadPctPerSide    = input.float(0.0, "Spread cost per side (%)", minval=0.0, step=0.001, group=gCosts)
 fundingPctPer8h     = input.float(0.0, "Funding cost per 8h (%)", minval=0.0, step=0.001, group=gCosts)
 
 scoreThreshold = input.float(60.0, "Composite Score Threshold (gates READY)", minval=0.0, maxval=100.0, group=gScore)
@@ -234,7 +236,7 @@ if buySignal
     array.push(legEntryBar, bar_index)
     array.push(legEntryTime, time_close)
     array.push(legRealizedPnlCcy, 0.0)
-    array.push(legEntryCostCcy, entryP * qtyV * (feePctPerSide + slippagePctPerSide) / 100.0)
+    array.push(legEntryCostCcy, entryP * qtyV * (feePctPerSide + slippagePctPerSide + spreadPctPerSide) / 100.0)
     array.push(legTrend, trendScoreLive)
     array.push(legMomentum, momentumScoreLive)
     array.push(legVolume, volumeScoreLive)
@@ -270,7 +272,7 @@ if enablePartialTarget and wasInTrade and barstate.isconfirmed and not stopHit a
                 scaleQty  = math.min(qtyOrig * partialPct / 100.0, qtyRemain)
                 fillPrice = open > targetP ? open : targetP
                 entryCost = array.get(legEntryCostCcy, i) * scaleQty / qtyOrig
-                exitCost  = fillPrice * scaleQty * (feePctPerSide + slippagePctPerSide) / 100.0
+                exitCost  = fillPrice * scaleQty * (feePctPerSide + slippagePctPerSide + spreadPctPerSide) / 100.0
                 heldMs    = math.max(time_close - array.get(legEntryTime, i), 0)
                 fundingIntervals = math.floor(heldMs / 28800000.0)
                 fundingCost = entryP * scaleQty * fundingPctPer8h / 100.0 * fundingIntervals
@@ -303,7 +305,7 @@ if sellSignal
         qtyOrig   = array.get(legQtyOriginal, i)
         qtyRemain = array.get(legQtyRemaining, i)
         remainingEntryCost = array.get(legEntryCostCcy, i) * qtyRemain / qtyOrig
-        remainingExitCost  = exitPrice * qtyRemain * (feePctPerSide + slippagePctPerSide) / 100.0
+        remainingExitCost  = exitPrice * qtyRemain * (feePctPerSide + slippagePctPerSide + spreadPctPerSide) / 100.0
         heldMs = math.max(time_close - array.get(legEntryTime, i), 0)
         fundingIntervals = math.floor(heldMs / 28800000.0)
         remainingFundingCost = entryP * qtyRemain * fundingPctPer8h / 100.0 * fundingIntervals
@@ -523,7 +525,7 @@ if barstate.islast
     f_row(infoTable, 4, "ADX", str.tostring(adxValue, "#.#") + (adxStrong ? " (strong)" : " (weak)"), adxStrong ? color.lime : color.gray)
     f_row(infoTable, 5, "Dist. to Trailing Stop", str.tostring(distToStopPct, "#.#") + "%", distToStopPct > 0 ? color.lime : color.red)
     f_row(infoTable, 6, "Recommendation", recCategory + " - " + recReason, statusColor)
-    f_row(infoTable, 7, "Fee / slip / funding per 8h", str.tostring(feePctPerSide, "#.###") + "% / " + str.tostring(slippagePctPerSide, "#.###") + "% / " + str.tostring(fundingPctPer8h, "#.###") + "%", color.silver)
+    f_row(infoTable, 7, "Fee / slip / spread / funding per 8h", str.tostring(feePctPerSide, "#.###") + "% / " + str.tostring(slippagePctPerSide, "#.###") + "% / " + str.tostring(spreadPctPerSide, "#.###") + "% / " + str.tostring(fundingPctPer8h, "#.###") + "%", color.silver)
 
     f_header(infoTable, 8, "OPEN LEGS", str.tostring(openLegCount) + " / " + str.tostring(maxPyramidLegs), openLegCount > 0 ? color.lime : color.silver)
 
