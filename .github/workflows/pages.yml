@@ -52,6 +52,7 @@ jobs:
             document-review-redacted/summary.md
             document-review-redacted/manifest.json
             document-review-redacted/README.txt
+            document-review-redacted/*.txt
           if-no-files-found: warn
           retention-days: 1
       - name: Install Chromium test runner
