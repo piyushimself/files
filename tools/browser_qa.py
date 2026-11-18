@@ -16,7 +16,7 @@ apps=sorted((SITE/"apps").glob("*.html"))
 wrappers=sorted((SITE/"collections").glob("*/index.html"))
 viewports=[("desktop",1440,1000),("tablet",768,1024),("mobile",390,844)]
 issues=[]; screenshots=[]
-stats={"catalog_items":len(items),"apps":len(apps),"wrappers":len(wrappers),"desktop_pages":0,"mobile_pages":0,"iframes_loaded":0,"search_controls_tested":0,"select_controls_tested":0,"filter_controls_tested":0,"tabs_tested":0,"shell_controls_tested":0,"direct_mature_apps_tested":0,"mature_iframe_sync_tested":0,"theme_sync_tested":0,"font_sync_tested":0,"scale_sync_tested":0,"filter_disclosures_tested":0}
+stats={"catalog_items":len(items),"apps":len(apps),"wrappers":len(wrappers),"desktop_pages":0,"mobile_pages":0,"iframes_loaded":0,"search_controls_tested":0,"select_controls_tested":0,"filter_controls_tested":0,"tabs_tested":0,"shell_controls_tested":0,"direct_mature_apps_tested":0,"mature_iframe_sync_tested":0,"theme_sync_tested":0,"font_sync_tested":0,"scale_sync_tested":0,"filter_disclosures_tested":0,"reader_shell_mobile_pages_tested":0,"reader_shell_mobile_controls_tested":0,"reader_nav_menu_tested":0}
 def issue(page,kind,detail): issues.append({"page":page,"kind":kind,"detail":str(detail)[:2000]})
 def watch(page,label):
     page.on("pageerror",lambda e:issue(label,"pageerror",e))
@@ -120,7 +120,7 @@ def main():
                 page=ctx.new_page(); page.set_default_timeout(8000); watch(page,qa_name+"-"+name)
                 # Each collection must start with the default collapsed state. The shared
                 # preference is intentionally persisted, so isolate QA pages from earlier tests.
-                page.add_init_script("try{localStorage.removeItem('rr-filters-open')}catch(e){}")
+                page.add_init_script("try{localStorage.removeItem('rr-filters-open');localStorage.removeItem('rr-age-confirmed')}catch(e){}")
                 try:
                     r=page.goto(BASE+item.get("href",""),wait_until="domcontentloaded",timeout=30000)
                     if not r or r.status>=400: issue(qa_name,"http",r.status if r else "no response")
@@ -142,6 +142,49 @@ def main():
                     elif page.locator("#age-gate").count() and page.locator("#age-gate").is_visible():
                         issue(qa_name,"unexpected-age-gate","non-mature collection is incorrectly blocked by an 18+ gate")
                     overflow(page,qa_name+"-"+name)
+                    if name=="mobile":
+                        shell_state=page.locator(".rr-shell-tools").evaluate("""e=>{
+                          const cs=getComputedStyle(e),v=window.innerWidth;
+                          const visible=[...e.children].filter(x=>!x.hidden&&getComputedStyle(x).display!=="none");
+                          const boxes=visible.map(x=>{const r=x.getBoundingClientRect();return {id:x.id||x.className||x.tagName.toLowerCase(),left:Math.round(r.left),right:Math.round(r.right),top:Math.round(r.top),bottom:Math.round(r.bottom)}});
+                          const rows=[...new Set(boxes.map(x=>x.top))];
+                          return {wrap:cs.flexWrap,overflowX:cs.overflowX,client:e.clientWidth,scroll:e.scrollWidth,viewport:v,rows,boxes};
+                        }""")
+                        if shell_state["wrap"]!="wrap" or shell_state["overflowX"] not in ("visible","clip") or shell_state["scroll"]>shell_state["client"]+4 or len(shell_state["rows"])>2 or any(x["left"]<0 or x["right"]>shell_state["viewport"]+2 for x in shell_state["boxes"]):
+                            issue(qa_name,"reader-toolbar-layout",json.dumps(shell_state))
+                        for selector in ("#rr-theme-toggle","#rr-font-family","#rr-text-smaller","#rr-text-larger"):
+                            control=page.locator(selector)
+                            if control.count()!=1 or not control.is_visible():
+                                issue(qa_name,"reader-toolbar-control",f"{selector} must be present and visible on mobile")
+                        for selector in ("#rr-prev","#rr-next"):
+                            control=page.locator(selector)
+                            if control.count() and control.is_visible():
+                                issue(qa_name,"reader-toolbar-duplicate-navigation",f"{selector} should be hidden on mobile")
+                        stats["reader_shell_mobile_pages_tested"]+=1
+                        stats["reader_shell_mobile_controls_tested"]+=len(shell_state["boxes"])
+                        # Mature wrappers intentionally block the page until the reader
+                        # confirms. Verify the gate first, then exercise the menu behind it.
+                        # Each page resets the confirmation in its init script so this
+                        # interaction is tested independently for every mature wrapper.
+                        if item.get("mature"):
+                            wrapper_gate=page.locator("#age-gate")
+                            confirm=page.locator("#age-confirm")
+                            if wrapper_gate.count()==1 and wrapper_gate.is_visible() and confirm.count()==1:
+                                confirm.click()
+                                page.wait_for_function("()=>document.querySelector('#age-gate')?.hidden===true",timeout=3000)
+                            else:
+                                issue(qa_name,"age-gate-navigation-test","mature wrapper must expose its confirmation before navigation controls are exercised")
+                        menu=page.locator(".rr-nav-menu > summary")
+                        if menu.count()==1:
+                            menu.click()
+                            links=page.locator("#rr-nav-links a")
+                            if not page.locator(".rr-nav-menu").evaluate("(e)=>e.open") or links.count()!=len(items):
+                                issue(qa_name,"reader-nav-menu",f"mobile collection browser did not expose all {len(items)} links (found {links.count()})")
+                            else:
+                                stats["reader_nav_menu_tested"]+=1
+                            menu.click()
+                        else:
+                            issue(qa_name,"reader-nav-menu","Browse collections control missing")
                     top_fn=f"{page_slug}-{name}.png"
                     page.screenshot(path=str(OUT/top_fn),full_page=False); screenshots.append(top_fn)
                     frame_el=page.locator("iframe").first
