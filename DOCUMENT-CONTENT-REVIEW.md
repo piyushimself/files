@@ -63,7 +63,7 @@ Several files contain substantial third-party material: poems, film descriptions
 | cinema_900 (1).pdf | Internal contradiction: the cover lists 100 films in each of three lists (300 total), while the contents and section introductions say 300 films per list (900 total). The contents' regional subtotals add to 300 for each list, supporting the 900 framing, but the cover is materially wrong. The extracted list sections also show numbering extending well beyond 100. The separate library-3 collection reports 835, likely a de-duplicated/overlap-adjusted count, but that relationship is not documented. | **Not publication-ready — correct cover and reconcile 900 raw entries against 835 library entries; state duplicate policy.** |
 | complete_movie_encyclopedia.pdf | Claims 647 films and streaming availability verified in 2025. The availability statement is stale in 2026; library-3 refers to 649, a two-title discrepancy. | Withhold; reconcile count and remove/update dated availability claims. |
 | complete_movie_ratings.pdf | Claims 218 unique films, but section labels imply 100 essential, 50 erotic-art and 100 anime entries while extracted section counts are 98, 33 and 87. The 218 total matches those actual counts, not the section labels. | Withhold; correct section titles/counts and verify ratings/source dates. |
-| complete_movie_ratings_647.pdf | The three named sections are internally consistent at 100 essential + 50 erotic-art + 88 anime = 238 entries; the remaining titles are director filmographies. The claimed 647 unique total still needs a reproducible deduplication manifest and reconciliation with library-3's 649. Text extraction exposes likely row/column alignment defects: the Antichrist record appears to place a second name (Peter Mullan) in the director/year sequence, and later anime rows show scores/100% values detached from titles/directors. These may be PDF table extraction artifacts, so inspect the rendered pages before changing source records. IMDb/RT values also need source URLs and an as-of date per record or batch. | Withhold; reconcile total and duplicates, visually inspect affected tables, and add rating provenance/date. |
+| complete_movie_ratings_647.pdf | The three named sections contain 100 essential + 50 erotic-art + 88 anime = 238 entries; the combined ranking contains 647 numbered rows (1–647). A reproducible title/director/year normalization finds 18 repeated category records, leaving 629 distinct films under that rule; see FILM-RATINGS-DEDUPLICATION.md. Visual inspection of pages 13, 26 and 34 confirms the sampled table columns align: Peter Mullan belongs to The Magdalene Sisters (rank 257), not Antichrist, and the Antichrist rows are duplicate category entries. The earlier extraction-alignment concerns are false positives in those sampled pages, but every table page still needs visual review. Page 2/cover overstate uniqueness; page 36 statistics currently reflect 647 rows including repeats. IMDb/RT values still need source URLs and an as-of date per record or batch. | Withhold; correct 647-entry/629-film claims and statistics labels, complete remaining visual checks, and add rating provenance/date. |
 | definitive_anime_encyclopedia.pdf | A 200-work anime guide includes a Hayao Miyazaki quote that the document itself identifies as misquoted. Remove it rather than repeating a known false attribution. | Withhold; remove false attribution and verify all quotes. |
 | library-3.pdf | A 4,942-item personal film/art library. Its top-level category totals add to 4,942, but subcollection counts conflict with other files (900 vs 835; 647 vs 649). It aggregates overlapping collections and sensitive material. Its 900-slot world-cinema source is represented as 835 in the combined library, and the film encyclopedia appears as 649 there versus 647 in its standalone file. | Withhold; reconcile source-of-truth counts, duplicates and rights. |
 | manga_recommendations.pdf | A short recommendation list includes mature romance/manhwa titles. Confirm age suitability and the rights to descriptions. | Withhold; mature-content label and rights review. |
@@ -115,3 +115,41 @@ Both Pine files were inspected statically, not executed or compiled in TradingVi
 
 - Lower-timeframe request.security() returns one intrabar per chart bar; request.security_lower_tf() returns an array of available intrabars: https://www.tradingview.com/pine-script-docs/faq/other-data-and-timeframes/
 - barstate.isconfirmed is true on the closing update of a realtime bar, but does not work inside a request.security() call: https://www.tradingview.com/pine-script-docs/concepts/bar-states/
+
+
+## Pine remediation follow-up — 18 November 2026
+
+### Crypto_Trend_Rider_4H.pine — proposed correction in PR #14
+
+The source revision in [PR #14](https://github.com/piyushimself/files/pull/14) now:
+
+- gates entries, add-ons, partial exits, full exits and alerts on confirmed 4-hour bars;
+- ratchets the long Chandelier stop upward and evaluates the prior bar's stop against the current bar, avoiding same-bar look-ahead from a newly raised stop;
+- enforces a shared stop using the ratcheted Chandelier and the initial stops of all open legs, with gap-down fills assumed at the bar open;
+- uses a high-touch target fill assumption, with stop/EMA exits taking priority when both conditions occur in one bar;
+- rolls partial realized P&L into the parent leg so reported trade counts, win rate, R multiple and holding duration are based on completed legs;
+- adds configurable fee, slippage and funding-cost estimates; and
+- labels drawdown as closed-leg drawdown rather than implying mark-to-market account drawdown.
+
+A CI static-invariant check was added for these source properties. **This is not a Pine compiler or Strategy Tester result.** The revision remains an indicator-based simulation. TradingView compilation/backtesting and exchange-specific cost calibration are external acceptance steps; until those are completed, do not present the displayed results as validated strategy performance.
+
+### ATH - Pine.txt — still unresolved
+
+No source change is claimed for ATH in this pass. Its monthly signal logic, weekly exit stream, stop/target semantics and account-level performance metrics require a coherent timeframe/execution redesign. A safe change cannot be inferred from the current indicator without deciding how monthly entries are timestamped relative to weekly events and what fill priority applies when multiple levels are crossed inside one month. Keep the file withheld and do not claim a backtest.
+
+## Source-PDF correction pass — generated corrections awaiting merge
+
+The following high-confidence editorial corrections have been applied to a review branch and visually sampled on the modified pages. They are **not publication-cleared**; all source files remain withheld pending ownership/licence evidence and broader fact-checking.
+
+| Source | Applied correction | Validation and remaining limitation |
+|---|---|---|
+| `masters_of_e_art_cinema.pdf` | Replaced the false claim that Jane Campion is the only woman to win the Palme d'Or with the accurate “first woman” wording and her 1993 win for *The Piano*. | Corrected page 10 visually inspected. Other biographical and interpretive claims still need source checks. |
+| `sensitive_cinema.pdf` | Replaced the harmful “love that contains violence is still love” framing with a family-violence content note stating that violence is not proof of love. | Corrected page 24 visually inspected. The full catalogue still needs a content-warning and interpretation review. |
+| `definitive_anime_encyclopedia.pdf`, `ultimate_anime_guide.pdf` | Removed the known misattributed/misquoted Miyazaki line and substituted original editorial taglines. | Corrected closing/quote pages visually inspected. Other quotations remain unverified. |
+| `complete_movie_ratings.pdf` | Corrected the cover and section headings to 218 unique films: 98 Essential, 33 Erotic Art and 87 Anime. | Cover and changed section pages visually inspected; ratings provenance and as-of dates remain missing. |
+| `complete_movie_ratings_647.pdf` | Corrected “647 unique titles” to 647 ranked entries / 629 distinct films under the documented title-director-year rule; corrected page 2 methodology, page 36 unique-film metrics, page footers and final tagline. | Pages 1, 2, 36 and 39 visually inspected. All 647 ranked rows parsed with a complete rank sequence; 18 duplicate groups identified. A parser and CSV manifest are being added. Ratings source URLs and as-of dates remain unresolved. |
+| `complete_movie_encyclopedia.pdf` | Replaced the 2025 “verified” streaming claim with a clear historical-notes / not-current-availability disclaimer. | Pages 2 and 55 visually inspected. Individual platform entries were not rechecked live; retain as historical notes only. |
+| `Cybersecurity_Stories_For_Your_Teams.pdf` | Corrected the GDPR, NIS2 and DORA reporting timelines and removed the generic “72-hour” ransomware countdown. | Pages 15 and 17 visually inspected against the official references already listed above. Scope/classification and legal advice remain organisation-specific. |
+| `Three_Year_Old_Reading_Guide (1).pdf`, `World_Stories_3YearOld_Guide.pdf` | Removed unsupported “more neural pathways” claims and changed reading-direction advice to follow the script/language. The first guide's headings were also changed to remove the “10 minutes beats 1 hour” and left-to-right assertions. | Modified page 15 visually inspected. Other developmental claims in both guides still require careful review. |
+
+The review branch is `source-pdf-corrections`; its correction runner is `tools/correct_source_pdfs.py`. The latest successful correction workflow is [44373234367](https://github.com/piyushimself/files/actions/runs/44373234367); a follow-up run is required for the heading changes and the new deduplication manifest. None of these corrections makes the PDFs eligible for public Pages publication.
