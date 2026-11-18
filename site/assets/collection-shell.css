@@ -17,3 +17,42 @@
 .rr-app-title{max-width:1500px;margin:.65rem auto;padding:0 clamp(1rem,2vw,1.5rem);font-size:.92rem;color:var(--muted)}
 .rr-shell-header a,.rr-shell-header button,.rr-shell-header summary{font-size:.88rem}
 @media(max-width:700px){.rr-shell-header{align-items:flex-start;flex-direction:column;gap:.55rem;padding:.7rem 1rem}.rr-shell-tools{width:100%;gap:.3rem}.rr-shell-tools a,.rr-shell-tools button,.rr-nav-menu summary{padding:.42rem .55rem;font-size:.82rem}.rr-nav-panel{left:0;right:auto}.rr-shell-tools #rr-prev,.rr-shell-tools #rr-next{display:none}.rr-reading-meta{text-align:left}}
+
+
+/* Compact, deliberate collection navigation on phones: keep the brand clear,
+   put all reader controls on one touch-scrollable rail instead of wrapping into
+   oversized rows that consume the first screen. */
+@media(max-width:700px){
+  .rr-shell-header{
+    box-sizing:border-box!important;display:flex!important;flex-direction:column!important;
+    align-items:stretch!important;gap:.45rem!important;padding:.62rem .75rem!important;
+    min-height:0!important;width:100%!important;max-width:100%!important;overflow:visible!important;
+  }
+  .rr-shell-brand{font-size:.78rem!important;gap:.4rem!important;white-space:normal!important;line-height:1.2!important}
+  .rr-shell-brand small{font-size:.68rem!important}
+  .rr-shell-tools{
+    box-sizing:border-box!important;display:flex!important;flex-wrap:nowrap!important;
+    align-items:center!important;gap:.35rem!important;width:100%!important;min-width:0!important;
+    overflow-x:auto!important;overflow-y:hidden!important;padding:2px 1px 6px!important;
+    -webkit-overflow-scrolling:touch!important;overscroll-behavior-x:contain!important;
+    scrollbar-width:thin!important;
+  }
+  .rr-shell-tools>a,.rr-shell-tools>button,.rr-shell-tools>.rr-nav-menu>summary{
+    box-sizing:border-box!important;display:inline-flex!important;align-items:center!important;
+    justify-content:center!important;flex:0 0 auto!important;min-height:36px!important;
+    padding:.38rem .55rem!important;font-size:.75rem!important;line-height:1.15!important;
+    white-space:nowrap!important;border-radius:7px!important;
+  }
+  .rr-shell-tools .rr-font-label{display:none!important}
+  .rr-shell-tools #rr-font-family{
+    flex:0 0 5.3rem!important;width:5.3rem!important;max-width:5.3rem!important;
+    min-height:36px!important;padding:.35rem .4rem!important;font-size:.75rem!important;
+  }
+  .rr-nav-panel{
+    position:fixed!important;left:.65rem!important;right:.65rem!important;top:auto!important;
+    width:auto!important;max-width:none!important;max-height:min(68vh,560px)!important;
+    z-index:1000!important;
+  }
+  .rr-reading-meta{font-size:.78rem!important;line-height:1.5!important;padding:.45rem .75rem 0!important}
+  .rr-app-title{font-size:.82rem!important;line-height:1.5!important;margin:.55rem auto!important;padding:0 .75rem!important;overflow-wrap:anywhere!important}
+}
