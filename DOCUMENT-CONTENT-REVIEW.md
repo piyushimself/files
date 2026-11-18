@@ -128,10 +128,10 @@ The source revision in [PR #14](https://github.com/piyushimself/files/pull/14) n
 - enforces a shared stop using the ratcheted Chandelier and the initial stops of all open legs, with gap-down fills assumed at the bar open;
 - uses a high-touch target fill assumption, with stop/EMA exits taking priority when both conditions occur in one bar;
 - rolls partial realized P&L into the parent leg so reported trade counts, win rate, R multiple and holding duration are based on completed legs;
-- adds configurable fee, slippage and funding-cost estimates; and
+- adds configurable fee, slippage, spread and funding-cost estimates (user-supplied assumptions, not historical exchange data); and
 - labels drawdown as closed-leg drawdown rather than implying mark-to-market account drawdown.
 
-A CI static-invariant check was added for these source properties. **This is not a Pine compiler or Strategy Tester result.** The revision remains an indicator-based simulation. TradingView compilation/backtesting and exchange-specific cost calibration are external acceptance steps; until those are completed, do not present the displayed results as validated strategy performance.
+A CI static-invariant check was added for these source properties. **This is not a Pine compiler or Strategy Tester result.** The revision remains an indicator-based simulation. TradingView compilation/backtesting and exchange-specific fee, spread, slippage and funding calibration are external acceptance steps; until those are completed, do not present the displayed results as validated strategy performance.
 
 ### ATH - Pine.txt — still unresolved
 
