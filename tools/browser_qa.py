@@ -14,7 +14,7 @@ OUT.mkdir(exist_ok=True)
 items=json.loads((SITE/"data/catalog.json").read_text(encoding="utf-8")).get("items",[])
 apps=sorted((SITE/"apps").glob("*.html"))
 wrappers=sorted((SITE/"collections").glob("*/index.html"))
-viewports=[("desktop",1440,1000),("mobile",390,844)]
+viewports=[("desktop",1440,1000),("tablet",768,1024),("mobile",390,844)]
 issues=[]; screenshots=[]
 stats={"catalog_items":len(items),"apps":len(apps),"wrappers":len(wrappers),"desktop_pages":0,"mobile_pages":0,"iframes_loaded":0,"search_controls_tested":0,"select_controls_tested":0,"filter_controls_tested":0,"tabs_tested":0,"shell_controls_tested":0,"direct_mature_apps_tested":0,"mature_iframe_sync_tested":0,"theme_sync_tested":0,"font_sync_tested":0,"scale_sync_tested":0}
 def issue(page,kind,detail): issues.append({"page":page,"kind":kind,"detail":str(detail)[:2000]})
@@ -37,6 +37,26 @@ def overflow(target,label):
         }""")
         if x["s"]>x["w"]+4: issue(label,"horizontal-overflow",json.dumps(x))
     except Exception as e: issue(label,"layout-check",e)
+def mobile_tabs(target,label):
+    """Check that legacy category navigation stays compact and scrollable on narrow screens."""
+    try:
+        result=target.evaluate("""() => {
+          const tabs=document.querySelector('.tabs');
+          if(!tabs) return null;
+          const style=getComputedStyle(tabs);
+          const w=window.innerWidth;
+          const buttons=[...tabs.querySelectorAll('.tab-btn')].map(b=>{
+            const r=b.getBoundingClientRect();
+            return {label:(b.innerText||'').trim().slice(0,50),width:Math.round(r.width),height:Math.round(r.height)};
+          });
+          return {viewport:w,wrap:style.flexWrap,overflowX:style.overflowX,width:Math.round(tabs.getBoundingClientRect().width),buttons};
+        }""")
+        if result:
+            bad=[b for b in result["buttons"] if b["height"]>56 or b["width"]>result["viewport"]*.82]
+            if result["wrap"]!="nowrap" or result["overflowX"] not in ("auto","scroll") or bad:
+                issue(label,"mobile-tab-layout",json.dumps({**result,"oversized":bad}))
+    except Exception as e:
+        issue(label,"mobile-tab-layout-check",e)
 def main():
     if (len(items),len(wrappers),len(apps))!=(34,34,32):
         issue("inventory","counts",f"Expected 34/34/32; found {len(items)}/{len(wrappers)}/{len(apps)}")
@@ -140,6 +160,7 @@ def main():
                             stats["iframes_loaded"]+=1
                             frame_stage="check iframe responsive overflow"
                             overflow(frame,qa_name+"-iframe-"+name)
+                            if name!="desktop": mobile_tabs(frame,qa_name+"-iframe-"+name)
                             if item.get("mature") and frame:
                                 frame_stage="synchronize mature-content gate"
                                 app_gate=frame.locator("#rr-app-age-gate")
