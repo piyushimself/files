@@ -537,7 +537,7 @@ def fix_kids_guide_visual_layout() -> None:
         doc.close()
         raise RuntimeError(f'{path.name}: expected one final Happy reading sentence')
     sentence = footer[0]
-    glyph_rect = fitz.Rect(sentence.x1 + 1, sentence.y0 - 2,
+    glyph_rect = fitz.Rect(sentence.x1 - 0.5, sentence.y0 - 2,
                            min(sentence.x1 + 43, page.rect.width - 20), sentence.y1 + 2)
     # Sample the teal panel margin, away from both text and missing-glyph boxes.
     panel_fill = sample_rgb(page, 48, int((sentence.y0 + sentence.y1) / 2))
