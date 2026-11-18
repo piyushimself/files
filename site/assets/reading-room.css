@@ -64,3 +64,9 @@ h2{font-size:1.45rem;line-height:1.3;letter-spacing:-.015em;margin:0;font-weight
   .top-actions>*{flex:0 0 auto;min-height:40px;white-space:nowrap}
   .top-actions .quiet-select{width:9rem;max-width:9rem}
 }
+
+
+@media(max-width:700px){
+  .top-actions .quiet-select{width:7.5rem;max-width:7.5rem;padding:.35rem .42rem;font-size:.78rem}
+  .top-actions .quiet-button{min-height:36px;padding:.35rem .5rem;font-size:.8rem}
+}
