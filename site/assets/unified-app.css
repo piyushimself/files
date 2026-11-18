@@ -297,3 +297,26 @@ body .rr-filter-disclosure[open]> :is(.arc-filters,.filter-bar,#filters){border:
 /* Manhwa and other legacy apps use a dedicated controls-section wrapper. */
 body .rr-filter-disclosure> .controls-section{box-sizing:border-box!important;position:static!important;top:auto!important;z-index:auto!important;width:100%!important;max-width:100%!important;margin:.55rem 0 0!important;box-shadow:none!important}
 body .rr-filter-disclosure[open]> .controls-section{border:1px solid var(--rr-line)!important;border-radius:8px!important}
+
+
+/* Grand Library: keep its category tabs inside the mobile iframe viewport.
+   The original .ntab row has intrinsic-width flex children; allow the row to
+   wrap instead of extending the document by a few pixels on narrow screens. */
+@media(max-width:600px){
+  body *:has(> .ntab){
+    box-sizing:border-box!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    flex-wrap:wrap!important;
+    gap:6px!important;
+  }
+  body .ntab{
+    box-sizing:border-box!important;
+    flex:0 1 auto!important;
+    min-width:0!important;
+    max-width:100%!important;
+    white-space:normal!important;
+  }
+  body .ntab .tcnt{flex:0 0 auto!important;white-space:nowrap!important}
+}
