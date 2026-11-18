@@ -223,3 +223,23 @@ ATH - Pine.txt remains unresolved. Its monthly signal and weekly exit timing, st
 
 ### Completion state
 Not complete. PR #17's QA is green but post-merge deployment still needs verification; PR #16 is pending branch refresh and merge; PR #18 has visual follow-up defects; multiple source-document findings and external TradingView validation remain outstanding. Do not notify completion from a passing build or merged PR alone.
+
+
+## Continuation checkpoint — 19 November 2026, 01:03 IST
+
+### Post-merge site verification
+- Main run [#251](https://github.com/piyushimself/files/actions/runs/44380872713) for PR #17 merge commit `1903c3787156523193380affa23b13ed4c6d2e11` completed successfully, with both build and Pages deploy jobs green.
+- Its browser artifact `reading-room-browser-qa` (ID `14463562848`) was downloaded and inspected. It reports 34 collections, 32 apps, 34 wrappers, 34 desktop pages, 68 mobile pages, 96 iframe loads, 204 mobile reader controls, 34 reader navigation menus, 7 direct mature-app gate tests and zero issues.
+- GitHub Pages deployment job success is confirmed. An independent live HTTP fetch could not be completed from this environment because the site was inaccessible to the browser fetcher and outbound DNS/network resolution was unavailable; do not claim a separate live-browser verification beyond the GitHub deployment result.
+
+### Toddler-guide PDF layout corrections
+- The initial corrected-PDF review identified a two-line “10” badge in each toddler guide and two missing-glyph squares after “Happy reading.” in `Three_Year_Old_Reading_Guide (1).pdf`.
+- The correction script now centers “10” on one line in both badges, removes the unsupported footer glyphs cleanly, and fixes the two whitespace-normalization expressions in its 647-PDF idempotence checks.
+- Workflow [44381955172](https://github.com/piyushimself/files/actions/runs/44381955172) completed successfully, committed only the two reviewed PDF corrections to the PR branch, and uploaded artifact `toddler-guide-pdf-layout-fixes` (ID 14464436487). Both fresh page-15 renders were inspected at full size and pass the visual checks.
+- PR [#18](https://github.com/piyushimself/files/pull/18) remains open pending removal of the temporary one-off workflow, a fresh PR regression run, and merge/deployment verification.
+
+### Remaining work
+- PR #16 still needs branch refresh against current main, mergeability/check revalidation and merge if clean. Its run #245 passed the full Chromium suite with zero issues and the static Pine invariants passed; TradingView compilation/backtesting and exchange-specific cost calibration remain external.
+- PR #18 still contains only a high-confidence correction pass for ten PDFs; full-page editorial/factual review, remaining count/scope issues, cultural classification, URL verification, table/layout review and rating provenance remain incomplete.
+- Rights/ownership evidence is still absent for the source files. Keep them withheld from Pages. The GitHub repository is public, so the root-level source files remain accessible there; changing visibility or rewriting history requires explicit informed authorization.
+- The final completion report is not ready. Do not notify completion.
