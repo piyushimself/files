@@ -11,13 +11,13 @@ FIRST_PAGE_INDEX = 20
 LAST_PAGE_INDEX = 34
 def normalize_name(value: str) -> str:
     value = unicodedata.normalize("NFKC", value).casefold()
-    value = re.sub(r"[^\\w]+", " ", value, flags=re.UNICODE)
+    value = re.sub(r"[^\w]+", " ", value, flags=re.UNICODE)
     return " ".join(value.split())
 
 def normalize_title(title: str, director: str, year: str) -> str:
     """Strip only recognized trailing category/year/director/alias labels."""
     title = unicodedata.normalize("NFKC", title).strip()
-    match = re.search(r"\\s+\\(([^()]*)\\)$", title)
+    match = re.search(r"\s+\(([^()]*)\)$", title)
     if match:
         label = normalize_name(match.group(1))
         director_tokens = normalize_name(director).split()
