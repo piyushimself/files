@@ -347,7 +347,7 @@ def edit_ratings_647() -> None:
     old = block_rect(page, '647 Unique Titles')
     redact(page, [old], (1, 1, 1))
     put(page, old, '647 Ranked Entries · 629 Unique Films · IMDb + RT',
-        font='Times-Italic', size=13.0, color=(221/255, 216/255, 192/255),
+        font='Times-Italic', size=12.2, color=(221/255, 216/255, 192/255),
         align=fitz.TEXT_ALIGN_CENTER, lineheight=1.0,
         label='647-entry cover subtitle')
 
