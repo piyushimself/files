@@ -15,7 +15,7 @@ ROOT = Path(os.environ.get("RR_SOURCE_PDF_ROOT", Path(__file__).resolve().parent
 
 
 def block_rect(page: fitz.Page, needle: str) -> fitz.Rect:
-    normalize = lambda value: re.sub(r'\\s+', ' ', value).strip().casefold()
+    normalize = lambda value: re.sub(r'\s+', ' ', value).strip().casefold()
     target = normalize(needle)
     matches = [fitz.Rect(b[:4]) for b in page.get_text('blocks') if target in normalize(b[4])]
     if len(matches) != 1:
