@@ -37,5 +37,30 @@ require(source.count("array.push(tradePnlPct,") == 1, "one completed-leg percent
 require(source.count("array.push(tradeRMultiple,") == 1, "one completed-leg R result must be recorded per leg")
 require(source.count("array.push(tradeDurationBars,") == 1, "one completed-leg duration must be recorded per leg")
 
+ath = (ROOT / "ATH_Weekly_Confirmed_Strategy.pine").read_text(encoding="utf-8")
+legacy_ath = (ROOT / "ATH - Pine.txt").read_text(encoding="utf-8")
+
+require(ath.startswith("//@version=5"), "ATH replacement must be Pine v5")
+require('strategy("ATH Monthly Breakout / Weekly Execution Strategy v1"' in ath,
+        "ATH replacement must be a Strategy Tester strategy")
+require("timeframe.in_seconds()" in ath and "chartSeconds != 604800" in ath and "runtime.error(" in ath,
+        "ATH strategy must reject non-weekly charts")
+require('request.security(syminfo.tickerid, "M"' in ath and
+        "lookahead=barmerge.lookahead_on" in ath and "open[1]" in ath and "close[1]" in ath,
+        "ATH strategy must use previous confirmed monthly data without lookahead")
+require("barstate.isconfirmed and newMonth" in ath,
+        "monthly signals must be processed on confirmed weekly bars")
+require("weeklyExit = barstate.isconfirmed" in ath and "strategy.close_all" in ath,
+        "weekly SMA exit must execute on confirmed weekly closes")
+require("strategy.exit(" in ath and "stop=stopPrice" in ath and "limit=target1" in ath and "limit=target2" in ath,
+        "ATH stops and targets must be real strategy exit orders")
+require("strategy.equity" in ath and "strategy.opentrades" in ath,
+        "position sizing must use strategy equity and actual open legs")
+require("cumEquityMult" not in ath and "cagrPct" not in ath and "tradePnlPct" not in ath,
+        "remove custom per-leg compounded account metrics")
+require("DEPRECATED" in legacy_ath and "ATH_Weekly_Confirmed_Strategy.pine" in legacy_ath,
+        "old ATH indicator file must clearly point to its replacement")
+
 print("Crypto Trend Rider static safety/accounting invariants passed.")
-print("This does not compile Pine or validate exchange fills; use TradingView for that.")
+print("ATH weekly-strategy static safety checks passed.")
+print("Static checks do not compile Pine or validate broker fills; use TradingView for that.")
