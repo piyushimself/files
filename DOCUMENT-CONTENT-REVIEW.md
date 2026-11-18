@@ -115,3 +115,24 @@ Both Pine files were inspected statically, not executed or compiled in TradingVi
 
 - Lower-timeframe request.security() returns one intrabar per chart bar; request.security_lower_tf() returns an array of available intrabars: https://www.tradingview.com/pine-script-docs/faq/other-data-and-timeframes/
 - barstate.isconfirmed is true on the closing update of a realtime bar, but does not work inside a request.security() call: https://www.tradingview.com/pine-script-docs/concepts/bar-states/
+
+
+## Pine remediation follow-up — 18 November 2026
+
+### Crypto_Trend_Rider_4H.pine — proposed correction in PR #14
+
+The source revision in [PR #14](https://github.com/piyushimself/files/pull/14) now:
+
+- gates entries, add-ons, partial exits, full exits and alerts on confirmed 4-hour bars;
+- ratchets the long Chandelier stop upward and evaluates the prior bar's stop against the current bar, avoiding same-bar look-ahead from a newly raised stop;
+- enforces a shared stop using the ratcheted Chandelier and the initial stops of all open legs, with gap-down fills assumed at the bar open;
+- uses a high-touch target fill assumption, with stop/EMA exits taking priority when both conditions occur in one bar;
+- rolls partial realized P&L into the parent leg so reported trade counts, win rate, R multiple and holding duration are based on completed legs;
+- adds configurable fee, slippage and funding-cost estimates; and
+- labels drawdown as closed-leg drawdown rather than implying mark-to-market account drawdown.
+
+A CI static-invariant check was added for these source properties. **This is not a Pine compiler or Strategy Tester result.** The revision remains an indicator-based simulation. TradingView compilation/backtesting and exchange-specific cost calibration are external acceptance steps; until those are completed, do not present the displayed results as validated strategy performance.
+
+### ATH - Pine.txt — still unresolved
+
+No source change is claimed for ATH in this pass. Its monthly signal logic, weekly exit stream, stop/target semantics and account-level performance metrics require a coherent timeframe/execution redesign. A safe change cannot be inferred from the current indicator without deciding how monthly entries are timestamped relative to weekly events and what fill priority applies when multiple levels are crossed inside one month. Keep the file withheld and do not claim a backtest.
