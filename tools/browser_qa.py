@@ -210,6 +210,8 @@ def main():
                                     issue(qa_name,"four-arcs-dark-theme-contrast",json.dumps(arcs))
                                 if frame.locator(".stat-num").count() and frame.locator(".stat-num").first.evaluate("(e)=>getComputedStyle(e).color")!="rgb(232, 232, 240)":
                                     issue(qa_name,"four-arcs-stat-contrast",frame.locator(".stat-num").first.evaluate("(e)=>getComputedStyle(e).color"))
+                                if frame.locator(".arc-count").count() and frame.locator(".arc-count").first.evaluate("(e)=>getComputedStyle(e).color")!="rgb(232, 232, 240)":
+                                    issue(qa_name,"four-arcs-count-contrast",frame.locator(".arc-count").first.evaluate("(e)=>getComputedStyle(e).color"))
                                 if frame.locator(".arc-title").count() and frame.locator(".arc-title").first.evaluate("(e)=>getComputedStyle(e).color")!="rgb(217, 178, 232)":
                                     issue(qa_name,"four-arcs-section-title-contrast",frame.locator(".arc-title").first.evaluate("(e)=>getComputedStyle(e).color"))
                             if frame.locator(".hero-tag").count():
