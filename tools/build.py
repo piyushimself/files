@@ -213,7 +213,7 @@ def enhance_app(path, category_name):
     # Inject the shared filter disclosure independently of the theme layer, including
     # imported apps that already reference unified-app.css.
     if "filter-disclosure.js" not in text:
-        head_close=re.search(r"</head\\s*>",text,re.I)
+        head_close=re.search(r"</head\s*>",text,re.I)
         if head_close:
             text=text[:head_close.start()]+'<script src="../assets/filter-disclosure.js" defer></script>'+text[head_close.start():]
     # Add responsive metadata after normalizing even non-standard documents without a <head>.
