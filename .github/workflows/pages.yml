@@ -40,6 +40,8 @@ jobs:
           python tools/build.py
       - name: Validate generated app scripts
         run: python tools/validate_site.py
+      - name: Validate Pine Script safety invariants
+        run: python tools/validate_pine_static.py
       - name: Extract redacted source documents for review
         continue-on-error: true
         run: python tools/document_review_extract.py
@@ -54,6 +56,14 @@ jobs:
             document-review-redacted/README.txt
             document-review-redacted/*.txt
           if-no-files-found: warn
+          retention-days: 1
+      - name: Upload temporary source PDFs for visual review
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: reading-room-source-pdfs-visual-review
+          path: "*.pdf"
+          if-no-files-found: error
           retention-days: 1
       - name: Install Chromium test runner
         run: |

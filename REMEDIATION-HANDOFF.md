@@ -91,3 +91,46 @@ PR #12, “Fix mobile collection navigation overflow”, was merged:
 ## Automation / notification
 
 An hourly condition-watch automation titled “Reading Room Completion Watch” is active. It checks repo commits, PRs, workflow runs, browser QA artifacts and deployment, and should notify only when all correctable work is genuinely complete or clearly blocked and documented. The automation is a status watch; it does not itself perform the repairs.
+
+
+
+## Latest continuation checkpoint — 18 November 2026, 23:25 IST
+
+### Deployment and CI status
+
+- Main run [#228](https://github.com/piyushimself/files/actions/runs/44357926956) completed successfully, including deployment of the PR #12 mobile navigation fix.
+- Main run [#229](https://github.com/piyushimself/files/actions/runs/44358098251) completed successfully, including deployment of the post-merge browser evidence update.
+- Main run [#231](https://github.com/piyushimself/files/actions/runs/44358176598) completed successfully, including deployment of this handoff file.
+- Main run [#230](https://github.com/piyushimself/files/actions/runs/44358148370) built and passed Chromium QA but its deploy job failed only because GitHub Pages was already deploying commit 3ddb7d1d30bfc3dcc574ba798e96289934073012; later runs #229 and #231 deployed successfully. This was a deployment concurrency conflict, not a site-build/browser failure.
+- Latest downloaded browser artifact from run #231 reports 34 collections, 32 apps, 96 iframe loads, 20 search, 14 select, 15 filter, 3 tabs, 4 shell controls, 63 filter disclosures and zero automated issues. Contact sheets of all 34 collection mobile screenshots, 34 desktop screenshots, and the mobile app screenshots were reviewed. Selected individual screenshots were inspected at full size.
+
+### Additional mobile reader finding and fix in progress
+
+Visual inspection found that the collection reader toolbar's horizontally scrollable rail clipped the System font selector and text-size controls in the initial 390px mobile viewport. Although technically swipeable, those controls were not discoverable. PR [#13](https://github.com/piyushimself/files/pull/13) changes the phone layout to wrap controls into visible rows and extends Chromium QA to assert all required controls are visible, the toolbar has no horizontal overflow, Previous/Next remain hidden, and Browse collections exposes all 34 catalogue links.
+
+- PR #13 head: cfc2d03d0a7fa94cb9e640de4c5552a6189a3043
+- Workflow run #232: [44364534543](https://github.com/piyushimself/files/actions/runs/44364534543) — was in progress at checkpoint; poll before merge.
+- Do not merge until the new assertions pass and its screenshots are visually inspected.
+
+### Pine remediation in progress
+
+PR [#14](https://github.com/piyushimself/files/pull/14) contains a proposed correction to Crypto_Trend_Rider_4H.pine:
+- confirmed-bar gating for entries, add-ons, exits and alerts;
+- ratcheted Chandelier stop and prior-bar stop evaluation;
+- enforced initial/shared stop and gap-fill assumption;
+- target high-touch fills with stop priority;
+- partial P&L rolled into completed-leg metrics;
+- configurable fee/slippage/funding estimates; and
+- closed-leg drawdown labeling.
+
+A static CI invariant check was added. It is not a Pine compiler or Strategy Tester run. TradingView compile/backtest and actual exchange-cost calibration remain external acceptance steps. PR #14 workflow is queued/running; poll the check run before deciding whether to merge.
+
+ATH - Pine.txt remains unresolved. Its monthly signal and weekly exit timing, stop/target semantics, and account-level metrics need a coherent execution model; no speculative code edit has been made. Keep both Pine sources withheld.
+
+## Next actions from this checkpoint
+
+1. Poll PR #13 run #232; inspect report and mobile screenshots. If the wrap layout passes and looks correct, merge, then verify the main deployment.
+2. Poll PR #14's workflow/check run. Inspect the static validator output. Review the Pine diff carefully; do not describe it as compiled or backtested. If CI passes and the code review is sound, merge the source correction while keeping it withheld; record TradingView validation as externally blocked.
+3. Continue source-document corrections and count reconciliation. Rights evidence remains unproven for all source documents, so none is cleared for Pages publication.
+4. Continue visual PDF page inspection for table/column extraction and rating glyph defects. Do not alter source entries based only on garbled text extraction.
+5. Continue resolving the ATH Pine execution model, count discrepancies and factual/editorial issues listed above.

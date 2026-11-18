@@ -12,8 +12,9 @@ indicator("Crypto Trend Rider - 4H Trend Following (Large-Cap)", overlay=true, m
 // (fast/slow EMA cross-under) OR the trailing stop being hit - whichever
 // comes first.
 //
-// Runs directly on the 4H chart (no security() calls needed - crypto is
-// 24/7 so there's no session/weekly-close mismatch to worry about).
+// Runs on a 4H chart. Trade decisions are made only after a 4H bar closes.
+// The script remains an indicator-based simulation, not a Strategy Tester
+// strategy. Fill assumptions are estimates; configure exchange costs below.
 // ============================================================
 
 gTrend    = "Trend Filter"
@@ -24,6 +25,7 @@ gExit     = "Exit / Trailing Stop"
 gTarget   = "Partial Profit Target"
 gPyramid  = "Pyramiding"
 gCapital  = "Capital & Position Sizing"
+gCosts    = "Trading Cost Estimates"
 gScore    = "Score Thresholds"
 
 emaFastLen  = input.int(21, "Fast EMA", group=gTrend)
@@ -55,7 +57,20 @@ accountCapital       = input.float(30000, "Account Capital", minval=1, group=gCa
 riskPerLegPct        = input.float(1.0, "Risk % of Capital Per Leg", minval=0.1, maxval=10.0, step=0.1, group=gCapital)
 maxCapitalDeployPct  = input.float(80.0, "Max Total Capital Deployed (%)", minval=10.0, maxval=100.0, step=5.0, group=gCapital)
 
+// Set these to the actual venue/account assumptions. Zero disables that cost.
+// Funding is an estimate per elapsed 8-hour interval, not historical exchange data.
+feePctPerSide       = input.float(0.0, "Trading fee per side (%)", minval=0.0, step=0.001, group=gCosts)
+slippagePctPerSide  = input.float(0.0, "Slippage per side (%)", minval=0.0, step=0.001, group=gCosts)
+fundingPctPer8h     = input.float(0.0, "Funding cost per 8h (%)", minval=0.0, step=0.001, group=gCosts)
+
 scoreThreshold = input.float(60.0, "Composite Score Threshold (gates READY)", minval=0.0, maxval=100.0, group=gScore)
+
+// The model is calibrated for four-hour candles. Refuse other chart
+// intervals rather than silently producing signals and holding-period stats
+// with different semantics.
+chartSeconds = timeframe.in_seconds()
+if na(chartSeconds) or chartSeconds != 14400
+    runtime.error("Crypto Trend Rider must be applied to a 4-hour (240-minute) chart.")
 
 // ============================================================
 // CORE SERIES
@@ -70,8 +85,8 @@ rsiValue = ta.rsi(close, rsiLen)
 volAvg  = ta.sma(volume, volAvgLen)
 volGood = volume > volAvg * volMultiplier
 
-atrValue       = ta.atr(chandelierLen)
-chandelierLine = ta.highest(high, chandelierLen) - atrValue * chandelierMult
+atrValue           = ta.atr(chandelierLen)
+chandelierCandidate = ta.highest(high, chandelierLen) - atrValue * chandelierMult
 
 trendStackBull = emaFast > emaSlow and emaSlow > emaMajor
 trendUp        = trendStackBull and close > emaMajor
@@ -130,13 +145,36 @@ var int[]   legEntryBar     = array.new_int(0)
 var float[] legEntryTime    = array.new_float(0)
 var float[] legTrend        = array.new_float(0)
 var float[] legMomentum     = array.new_float(0)
-var float[] legVolume       = array.new_float(0)
+var float[] legVolume          = array.new_float(0)
+var float[] legRealizedPnlCcy   = array.new_float(0)
+var float[] legEntryCostCcy     = array.new_float(0)
 
 var float totalCapitalDeployed = 0.0
 var float firstEntryTimeGlobal = na
 var float lastExitTimeGlobal   = na
+var float lastBatchExitPrice   = na
 
 wasInTrade = array.size(legEntry) > 0
+
+// Ratchet the long Chandelier stop upward while a position is open. Use the
+// PREVIOUS bar's stop for this bar's stop test so today's high/ATR cannot
+// retroactively move a stop above today's low.
+var float chandelierLine = na
+if barstate.isconfirmed
+    chandelierLine := wasInTrade ? (na(chandelierLine[1]) ? chandelierCandidate : math.max(chandelierLine[1], chandelierCandidate)) : chandelierCandidate
+
+float stopForBar = na
+if wasInTrade
+    stopForBar := array.get(legInitSL, 0)
+    if not na(chandelierLine[1])
+        stopForBar := math.max(stopForBar, chandelierLine[1])
+    for i = 0 to array.size(legInitSL) - 1
+        stopForBar := math.max(stopForBar, array.get(legInitSL, i))
+
+stopHit = barstate.isconfirmed and wasInTrade and not na(stopForBar) and low <= stopForBar
+stopFillPrice = stopHit ? (open < stopForBar ? open : stopForBar) : na
+trendBreakExit = barstate.isconfirmed and useEmaCrossExit and ta.crossunder(emaFast, emaSlow)
+entryAllowed = not stopHit and not trendBreakExit
 
 // WATCH: building - price above the major trend EMA, ADX climbing, but
 // the fast/slow/major stack isn't fully aligned yet.
@@ -146,8 +184,8 @@ watchCondition = not wasInTrade and close > emaMajor and not trendUp and adxValu
 // entry trigger (the EMA cross-up).
 readyCondition = not wasInTrade and trendUp and adxStrong and diBull and compositeScoreLive >= scoreThreshold
 
-watchTriggered = watchCondition and not watchCondition[1]
-readyTriggered = readyCondition and not readyCondition[1]
+watchTriggered = barstate.isconfirmed and watchCondition and not watchCondition[1]
+readyTriggered = barstate.isconfirmed and readyCondition and not readyCondition[1]
 
 // ============================================================
 // POSITION SIZING
@@ -163,10 +201,10 @@ f_qtyFor(entryP, slP) =>
 // ENTRY TRIGGERS
 // ============================================================
 emaCrossUp = ta.crossover(emaFast, emaSlow)
-firstEntryTrigger = not wasInTrade and emaCrossUp and close > emaMajor and diBull and adxValue > adxThreshold * 0.75 and volGood
+firstEntryTrigger = barstate.isconfirmed and not wasInTrade and emaCrossUp and close > emaMajor and diBull and adxValue > adxThreshold * 0.75 and volGood
 
 pullbackTouch = trendUp and low <= emaFast * (1 + pullbackBandPct / 100.0)
-addTrigger = enablePyramidOnPullback and wasInTrade and trendUp and adxStrong and diBull and ta.crossover(close, emaFast) and pullbackTouch[1]
+addTrigger = barstate.isconfirmed and enablePyramidOnPullback and wasInTrade and trendUp and adxStrong and diBull and ta.crossover(close, emaFast) and pullbackTouch[1]
 
 potentialSL      = math.min(chandelierLine, low)
 potentialQty     = f_qtyFor(close, potentialSL)
@@ -175,10 +213,10 @@ potentialCapital = potentialQty * close
 canAddLeg = array.size(legEntry) < maxPyramidLegs and potentialQty > 0 and
      (totalCapitalDeployed + potentialCapital) <= capitalCeiling
 
-firstEntrySignal = firstEntryTrigger and canAddLeg
-addSignal         = addTrigger and canAddLeg
+firstEntrySignal = firstEntryTrigger and canAddLeg and entryAllowed
+addSignal         = addTrigger and canAddLeg and entryAllowed
 buySignal         = firstEntrySignal or addSignal
-legCapReached     = (firstEntryTrigger or addTrigger) and not canAddLeg
+legCapReached     = (firstEntryTrigger or addTrigger) and not canAddLeg and entryAllowed
 
 if buySignal
     entryP = close
@@ -194,14 +232,16 @@ if buySignal
     array.push(legQtyRemaining, qtyV)
     array.push(legPartialDone, false)
     array.push(legEntryBar, bar_index)
-    array.push(legEntryTime, time)
+    array.push(legEntryTime, time_close)
+    array.push(legRealizedPnlCcy, 0.0)
+    array.push(legEntryCostCcy, entryP * qtyV * (feePctPerSide + slippagePctPerSide) / 100.0)
     array.push(legTrend, trendScoreLive)
     array.push(legMomentum, momentumScoreLive)
     array.push(legVolume, volumeScoreLive)
 
     totalCapitalDeployed := totalCapitalDeployed + capV
     if na(firstEntryTimeGlobal)
-        firstEntryTimeGlobal := time
+        firstEntryTimeGlobal := time_close
 
 // ============================================================
 // STATS ENGINE
@@ -216,25 +256,27 @@ var bool  partialTriggeredThisBar = false
 partialTriggeredThisBar := false
 
 // ---- PARTIAL PROFIT TARGET (per open leg) ----
-if enablePartialTarget and wasInTrade
+// Stop/EMA exits take priority if both a stop and a target are touched in one bar.
+// Target fills use the target price, or the opening price after a favourable gap.
+if enablePartialTarget and wasInTrade and barstate.isconfirmed and not stopHit and not trendBreakExit
     for i = 0 to array.size(legEntry) - 1
-        if not array.get(legPartialDone, i)
+        if not array.get(legPartialDone, i) and bar_index > array.get(legEntryBar, i)
             entryP  = array.get(legEntry, i)
             riskA   = array.get(legRisk, i)
             targetP = entryP + riskA * partialRR
-            if riskA > 0 and close >= targetP
+            if riskA > 0 and high >= targetP
                 qtyOrig   = array.get(legQtyOriginal, i)
                 qtyRemain = array.get(legQtyRemaining, i)
                 scaleQty  = math.min(qtyOrig * partialPct / 100.0, qtyRemain)
-                pnlCcy    = (close - entryP) * scaleQty
-                pnlPct    = (close - entryP) / entryP * 100
-                rMult     = (close - entryP) / riskA
+                fillPrice = open > targetP ? open : targetP
+                entryCost = array.get(legEntryCostCcy, i) * scaleQty / qtyOrig
+                exitCost  = fillPrice * scaleQty * (feePctPerSide + slippagePctPerSide) / 100.0
+                heldMs    = math.max(time_close - array.get(legEntryTime, i), 0)
+                fundingIntervals = math.floor(heldMs / 28800000.0)
+                fundingCost = entryP * scaleQty * fundingPctPer8h / 100.0 * fundingIntervals
+                pnlCcy = (fillPrice - entryP) * scaleQty - entryCost - exitCost - fundingCost
 
-                array.push(tradePnlPct, pnlPct)
-                array.push(tradePnlCcy, pnlCcy)
-                array.push(tradeRMultiple, rMult)
-                array.push(tradeDurationBars, float(bar_index - array.get(legEntryBar, i)))
-
+                array.set(legRealizedPnlCcy, i, array.get(legRealizedPnlCcy, i) + pnlCcy)
                 cumPnlCcy := cumPnlCcy + pnlCcy
                 totalCapitalDeployed := totalCapitalDeployed - scaleQty * entryP
                 array.set(legQtyRemaining, i, qtyRemain - scaleQty)
@@ -242,34 +284,46 @@ if enablePartialTarget and wasInTrade
                 partialTriggeredThisBar := true
 
 // ---- FULL EXIT (all remaining legs) ----
-trendBreakExit  = useEmaCrossExit and ta.crossunder(emaFast, emaSlow)
-trailingStopHit = close < chandelierLine
-sellSignal      = wasInTrade and (trendBreakExit or trailingStopHit)
+// The shared stop is the tightest of the ratcheted Chandelier and all open
+// legs' initial stops. A gap below it is filled at the bar open; otherwise
+// the stop is assumed filled at its level. EMA exits are close-based.
+sellSignal = barstate.isconfirmed and wasInTrade and (trendBreakExit or stopHit)
+exitPrice = stopHit ? stopFillPrice : close
 
 var float lastBatchPnlCcy   = na
 var int   lastBatchLegCount = 0
 
 if sellSignal
     lastBatchLegCount := array.size(legEntry)
-    float batchCcy = 0.0
+    float batchNewPnlCcy = 0.0
+    float batchTotalPnlCcy = 0.0
     for i = 0 to array.size(legEntry) - 1
         entryP    = array.get(legEntry, i)
         riskA     = array.get(legRisk, i)
+        qtyOrig   = array.get(legQtyOriginal, i)
         qtyRemain = array.get(legQtyRemaining, i)
-        pnlCcy    = (close - entryP) * qtyRemain
-        pnlPct    = (close - entryP) / entryP * 100
-        rMult     = riskA != 0 ? (close - entryP) / riskA : na
+        remainingEntryCost = array.get(legEntryCostCcy, i) * qtyRemain / qtyOrig
+        remainingExitCost  = exitPrice * qtyRemain * (feePctPerSide + slippagePctPerSide) / 100.0
+        heldMs = math.max(time_close - array.get(legEntryTime, i), 0)
+        fundingIntervals = math.floor(heldMs / 28800000.0)
+        remainingFundingCost = entryP * qtyRemain * fundingPctPer8h / 100.0 * fundingIntervals
+        remainingNetPnl = (exitPrice - entryP) * qtyRemain - remainingEntryCost - remainingExitCost - remainingFundingCost
+        legTotalNetPnl = array.get(legRealizedPnlCcy, i) + remainingNetPnl
+        pnlPct = entryP * qtyOrig > 0 ? legTotalNetPnl / (entryP * qtyOrig) * 100.0 : na
+        rMult = riskA * qtyOrig > 0 ? legTotalNetPnl / (riskA * qtyOrig) : na
 
         array.push(tradePnlPct, pnlPct)
-        array.push(tradePnlCcy, pnlCcy)
+        array.push(tradePnlCcy, legTotalNetPnl)
         array.push(tradeRMultiple, rMult)
         array.push(tradeDurationBars, float(bar_index - array.get(legEntryBar, i)))
 
-        batchCcy += pnlCcy
+        batchNewPnlCcy += remainingNetPnl
+        batchTotalPnlCcy += legTotalNetPnl
 
-    cumPnlCcy := cumPnlCcy + batchCcy
-    lastBatchPnlCcy := batchCcy
-    lastExitTimeGlobal := time
+    cumPnlCcy := cumPnlCcy + batchNewPnlCcy
+    lastBatchPnlCcy := batchTotalPnlCcy
+    lastBatchExitPrice := exitPrice
+    lastExitTimeGlobal := time_close
     totalCapitalDeployed := 0.0
 
     array.clear(legEntry)
@@ -283,8 +337,10 @@ if sellSignal
     array.clear(legTrend)
     array.clear(legMomentum)
     array.clear(legVolume)
+    array.clear(legRealizedPnlCcy)
+    array.clear(legEntryCostCcy)
 
-totalTrades = array.size(tradePnlCcy)   // includes partial scale-outs + full closes
+totalTrades = array.size(tradePnlCcy)   // completed legs; partial exits are rolled into each leg result
 
 var float winCount        = 0.0
 var float sumPnlCcy       = 0.0
@@ -391,7 +447,8 @@ displayTrend    = openLegCount > 0 ? array.get(legTrend, mostRecentIdx)    : tre
 displayMomentum = openLegCount > 0 ? array.get(legMomentum, mostRecentIdx) : momentumScoreLive
 displayVolume   = openLegCount > 0 ? array.get(legVolume, mostRecentIdx)   : volumeScoreLive
 
-distToStopPct = (close - chandelierLine) / close * 100.0
+displayStop = wasInTrade and not na(stopForBar) ? stopForBar : chandelierLine
+distToStopPct = close != 0 and not na(displayStop) ? (close - displayStop) / close * 100.0 : na
 
 // ============================================================
 // VISUALS
@@ -429,7 +486,7 @@ if addSignal
 
 if sellSignal
     pnlText = (lastBatchPnlCcy >= 0 ? "+" : "") + str.tostring(lastBatchPnlCcy, "#.##")
-    label.new(bar_index, high, "SELL " + str.tostring(close, "#.####") + " (" + str.tostring(lastBatchLegCount) + " legs)\n" + pnlText,
+    label.new(bar_index, high, "SELL " + str.tostring(lastBatchExitPrice, "#.####") + " (" + str.tostring(lastBatchLegCount) + " legs)\n" + pnlText,
          style=label.style_label_down,
          color=color.new(lastBatchPnlCcy >= 0 ? color.green : color.red, 0),
          textcolor=color.white, size=size.tiny)
@@ -466,11 +523,12 @@ if barstate.islast
     f_row(infoTable, 4, "ADX", str.tostring(adxValue, "#.#") + (adxStrong ? " (strong)" : " (weak)"), adxStrong ? color.lime : color.gray)
     f_row(infoTable, 5, "Dist. to Trailing Stop", str.tostring(distToStopPct, "#.#") + "%", distToStopPct > 0 ? color.lime : color.red)
     f_row(infoTable, 6, "Recommendation", recCategory + " - " + recReason, statusColor)
+    f_row(infoTable, 7, "Fee / slip / funding per 8h", str.tostring(feePctPerSide, "#.###") + "% / " + str.tostring(slippagePctPerSide, "#.###") + "% / " + str.tostring(fundingPctPer8h, "#.###") + "%", color.silver)
 
-    f_header(infoTable, 7, "OPEN LEGS", str.tostring(openLegCount) + " / " + str.tostring(maxPyramidLegs), openLegCount > 0 ? color.lime : color.silver)
+    f_header(infoTable, 8, "OPEN LEGS", str.tostring(openLegCount) + " / " + str.tostring(maxPyramidLegs), openLegCount > 0 ? color.lime : color.silver)
 
     for i = 0 to maxPyramidLegs - 1
-        rowIdx = 8 + i
+        rowIdx = 9 + i
         if i < openLegCount
             legText = "#" + str.tostring(i + 1) + ": " + str.tostring(array.get(legEntry, i), "#.####") +
                  " x" + str.tostring(array.get(legQtyRemaining, i), "#.##") +
@@ -480,24 +538,25 @@ if barstate.islast
         else
             f_row(infoTable, rowIdx, "Leg " + str.tostring(i + 1), "-", color.gray)
 
-    statsHeaderRow = 8 + maxPyramidLegs
-    f_header(infoTable, statsHeaderRow, "HISTORY", "(" + str.tostring(totalTrades) + " closes/partials)", color.silver)
-    f_row(infoTable, statsHeaderRow + 1, "Net P&L (currency)", totalTrades > 0 ? (cumPnlCcy >= 0 ? "+" : "") + str.tostring(cumPnlCcy, "#.##") : "-", totalTrades > 0 and cumPnlCcy >= 0 ? color.lime : color.red)
+    statsHeaderRow = 9 + maxPyramidLegs
+    f_header(infoTable, statsHeaderRow, "HISTORY", "(" + str.tostring(totalTrades) + " completed legs)", color.silver)
+    f_row(infoTable, statsHeaderRow + 1, "Net P&L (currency)", (totalTrades > 0 or cumPnlCcy != 0) ? (cumPnlCcy >= 0 ? "+" : "") + str.tostring(cumPnlCcy, "#.##") : "-", cumPnlCcy >= 0 ? color.lime : color.red)
     f_row(infoTable, statsHeaderRow + 2, "Win Rate", totalTrades > 0 ? str.tostring(winRate, "#.#") + "%" : "-", color.white)
     f_row(infoTable, statsHeaderRow + 3, "Avg Win / Avg Loss", totalTrades > 0 ? (na(avgWinCcy) ? "-" : "+" + str.tostring(avgWinCcy, "#.##")) + " / " + (na(avgLossCcy) ? "-" : str.tostring(avgLossCcy, "#.##")) : "-", color.white)
     f_row(infoTable, statsHeaderRow + 4, "Profit Factor", totalTrades > 0 ? (na(profitFactor) ? "∞" : str.tostring(profitFactor, "#.##")) : "-", (na(profitFactor) or profitFactor >= 1) ? color.lime : color.red)
-    f_row(infoTable, statsHeaderRow + 5, "Max Drawdown (currency)", totalTrades > 0 ? "-" + str.tostring(maxDDCcy, "#.##") : "-", color.red)
+    f_row(infoTable, statsHeaderRow + 5, "Closed-leg drawdown (ccy)", totalTrades > 0 ? "-" + str.tostring(maxDDCcy, "#.##") : "-", color.red)
     f_row(infoTable, statsHeaderRow + 6, "Best / Worst Close", totalTrades > 0 ? "+" + str.tostring(bestTradeCcy, "#.##") + " / " + str.tostring(worstTradeCcy, "#.##") : "-", color.white)
     f_row(infoTable, statsHeaderRow + 7, "Avg R Multiple", totalTrades > 0 and not na(avgR) ? str.tostring(avgR, "#.##") + "R" : "-", (not na(avgR) and avgR >= 0) ? color.lime : color.red)
     f_row(infoTable, statsHeaderRow + 8, "Avg Holding (bars)", totalTrades > 0 ? str.tostring(avgHoldingBars, "#.#") : "-", color.white)
+    f_row(infoTable, statsHeaderRow + 9, "Metrics", "Closed legs only; open/unrealized DD excluded", color.silver)
 
 // ============================================================
 // ALERTS
 // ============================================================
-alertcondition(watchTriggered, title="Trend WATCH", message="{{ticker}}: Above major trend EMA, ADX building - watch for stack alignment")
-alertcondition(readyTriggered, title="Trend READY", message="{{ticker}}: EMA stack aligned + ADX strong - waiting for cross-up entry")
-alertcondition(firstEntrySignal, title="Trend BUY (1st leg)", message="{{ticker}}: Fast EMA crossed above slow EMA with trend + volume confirmation - first entry")
-alertcondition(addSignal, title="Trend ADD (pullback leg)", message="{{ticker}}: Pullback to fast EMA bounced while trend intact - leg added")
-alertcondition(legCapReached, title="Trend Trigger - Cap Reached", message="{{ticker}}: Entry trigger fired but leg count or capital cap blocked it")
-alertcondition(partialTriggeredThisBar, title="Partial Profit Target Hit", message="{{ticker}}: Partial target reached - scaled out a portion, remainder trailing")
-alertcondition(sellSignal, title="Trend Exit - SELL ALL LEGS", message="{{ticker}}: Trend break or trailing stop hit - exiting all open legs")
+alertcondition(barstate.isconfirmed and watchTriggered, title="Trend WATCH", message="{{ticker}}: Above major trend EMA, ADX building - watch for stack alignment")
+alertcondition(barstate.isconfirmed and readyTriggered, title="Trend READY", message="{{ticker}}: EMA stack aligned + ADX strong - waiting for cross-up entry")
+alertcondition(barstate.isconfirmed and firstEntrySignal, title="Trend BUY (1st leg)", message="{{ticker}}: Fast EMA crossed above slow EMA with trend + volume confirmation - first entry")
+alertcondition(barstate.isconfirmed and addSignal, title="Trend ADD (pullback leg)", message="{{ticker}}: Pullback to fast EMA bounced while trend intact - leg added")
+alertcondition(barstate.isconfirmed and legCapReached, title="Trend Trigger - Cap Reached", message="{{ticker}}: Entry trigger fired but leg count or capital cap blocked it")
+alertcondition(barstate.isconfirmed and partialTriggeredThisBar, title="Partial Profit Target Hit", message="{{ticker}}: Partial target reached - scaled out a portion, remainder trailing")
+alertcondition(barstate.isconfirmed and sellSignal, title="Trend Exit - SELL ALL LEGS", message="{{ticker}}: Trend break or trailing stop hit - exiting all open legs")
