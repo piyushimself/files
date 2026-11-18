@@ -1,7 +1,7 @@
 //@version=5
 strategy("ATH Monthly Breakout / Weekly Execution Strategy v1",
      overlay=true,
-     pyramiding=3,
+     pyramiding=20,
      initial_capital=30000,
      default_qty_type=strategy.fixed,
      default_qty_value=1,
@@ -51,12 +51,16 @@ closeRangePct = input.float(50.0, "Minimum close position in monthly range (%)",
      tooltip="50 means the monthly close must be in the upper half of its high-low range.")
 confirmBufferPct = input.float(0.5, "Confirmation buffer above ATH wick (%)",
      minval=0.0, step=0.1, group=gEntry)
+tightPct = input.float(20.0, "Tight base threshold (% range)", minval=1.0, maxval=80.0, step=1.0, group=gEntry)
+fallbackMed = input.int(2, "Fallback months for Medium consolidation score", minval=1, group=gEntry)
+fallbackHigh = input.int(3, "Fallback months for High consolidation score", minval=1, group=gEntry)
+tooLongMonths = input.int(9, "Stale-base penalty threshold (months)", minval=1, group=gEntry)
 
 riskPerLegPct = input.float(1.0, "Risk per entry (% of strategy equity)",
-     minval=0.1, maxval=5.0, step=0.1, group=gRisk)
+     minval=0.1, maxval=10.0, step=0.1, group=gRisk)
 maxCapitalDeployPct = input.float(80.0, "Maximum deployed capital (%)",
      minval=10.0, maxval=100.0, step=5.0, group=gRisk)
-maxPyramidLegs = input.int(3, "Maximum open entry legs", minval=1, maxval=3, group=gRisk)
+maxPyramidLegs = input.int(3, "Maximum open entry legs", minval=1, maxval=20, group=gRisk)
 
 stopTypeInput = input.string("Confirmation Month Low", "Initial stop",
      options=["Confirmation Month Low", "Monthly ATR"], group=gExit)
@@ -126,7 +130,7 @@ var float pendingLevel = na
 var float[] consolHistoryArr = array.new_float()
 
 priorATH = runningATH
-athSignal = newMonth and not na(priorATH) and mHigh > priorATH and monthlyIsBullish
+athSignal = barstate.isconfirmed and newMonth and not na(priorATH) and mHigh > priorATH and monthlyIsBullish
 
 if newMonth
     if athSignal
@@ -146,7 +150,7 @@ if newMonth
 
 tightnessPct = not na(consolHigh) and not na(consolLow) and consolHigh > 0 ?
      (consolHigh - consolLow) / consolHigh * 100.0 : na
-isTightBase = not na(tightnessPct) and tightnessPct <= 20.0
+isTightBase = not na(tightnessPct) and tightnessPct <= tightPct
 distanceFromATH = not na(runningATH) and runningATH > 0 ?
      (runningATH - mClose) / runningATH * 100.0 : na
 
@@ -165,19 +169,19 @@ f_trendScore(c, smaF, smaS, hh, hl) =>
     score += hl ? 20.0 : 0.0
     score
 
-f_consolLengthScore(months, historyArr) =>
+f_consolLengthScore(months, historyArr, fbMed, fbHigh, staleMonths) =>
     float score = 0.0
     if array.size(historyArr) >= 2
         avgPast = array.sum(historyArr) / array.size(historyArr)
         ratio = avgPast > 0 ? months / avgPast : (months > 0 ? 2.0 : 0.0)
         score := ratio >= 1.2 ? 30.0 : ratio >= 0.7 ? 20.0 : ratio >= 0.3 ? 10.0 : 0.0
     else
-        score := months >= 3 ? 30.0 : months >= 2 ? 20.0 : months >= 1 ? 10.0 : 0.0
-    months >= 9 ? math.min(score, 20.0) : score
+        score := months >= fbHigh ? 30.0 : months >= fbMed ? 20.0 : months >= 1 ? 10.0 : 0.0
+    months >= staleMonths ? math.min(score, 20.0) : score
 
-f_baseScore(tight, months, historyArr, rising, dryUp) =>
-    lengthScore = f_consolLengthScore(months, historyArr)
-    tightnessScore = na(tight) ? 0.0 : 30.0 * (1.0 - f_clamp01((tight - 20.0) / 20.0))
+f_baseScore(tight, tightThreshold, months, historyArr, fbMed, fbHigh, staleMonths, rising, dryUp) =>
+    lengthScore = f_consolLengthScore(months, historyArr, fbMed, fbHigh, staleMonths)
+    tightnessScore = na(tight) ? 0.0 : 30.0 * (1.0 - f_clamp01((tight - tightThreshold) / tightThreshold))
     risingScore = rising ? 20.0 : 0.0
     dryUpScore = dryUp ? 20.0 : 0.0
     math.min(lengthScore + tightnessScore + risingScore + dryUpScore, 100.0)
@@ -190,7 +194,7 @@ f_volumeScore(volCur, volAvg, volMult, dryUp) =>
     math.min(expansionScore + aboveAvgScore + dryUpScore, 100.0)
 
 trendScore = f_trendScore(mClose, mSmaFast, mSmaSlow, higherHigh, higherLow)
-baseScore = f_baseScore(tightnessPct, consolMonths, consolHistoryArr, risingLowsInBase, volDryingUp)
+baseScore = f_baseScore(tightnessPct, tightPct, consolMonths, consolHistoryArr, fallbackMed, fallbackHigh, tooLongMonths, risingLowsInBase, volDryingUp)
 volumeScore = f_volumeScore(mVolume, mVolAvg, volMultiplier, volDryingUp)
 compositeScore = (trendScore + baseScore + volumeScore) / 3.0
 
@@ -203,8 +207,8 @@ readyCondition = enableReady and strategy.opentrades == 0 and not athSignal and
      not na(distanceFromATH) and distanceFromATH >= 0 and distanceFromATH <= readyZonePct and
      isTightBase and volLooksGood and consolMonths >= 3 and compositeScore >= scoreThreshold
 
-watchTriggered = newMonth and watchCondition and not watchCondition[1]
-readyTriggered = newMonth and readyCondition and not readyCondition[1]
+watchTriggered = barstate.isconfirmed and newMonth and watchCondition and not watchCondition[1]
+readyTriggered = barstate.isconfirmed and newMonth and readyCondition and not readyCondition[1]
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CONFIRMED MONTHLY TRIGGER
@@ -213,7 +217,7 @@ readyTriggered = newMonth and readyCondition and not readyCondition[1]
 // that confirmation month also remains above the trigger level.
 // ─────────────────────────────────────────────────────────────────────────────
 triggerLevel = pendingLevel
-confirmEntryTrigger = newMonth and not na(triggerLevel) and mHigh > triggerLevel
+confirmEntryTrigger = barstate.isconfirmed and newMonth and not na(triggerLevel) and mHigh > triggerLevel
 
 if newMonth
     if confirmEntryTrigger
@@ -226,6 +230,7 @@ if newMonth
 // ─────────────────────────────────────────────────────────────────────────────
 weeklySMA = ta.sma(close, weeklySmaLen)
 weeklyExit = barstate.isconfirmed and close < weeklySMA and close < open
+weeklyExitSignal = weeklyExit and strategy.position_size > 0
 
 pointValue = nz(syminfo.pointvalue, 1.0)
 float deployedCapital = 0.0
@@ -246,11 +251,11 @@ qtyByCapital = entryPrice > 0 and pointValue > 0 ?
      math.floor(capitalRoom / (entryPrice * pointValue)) : 0.0
 entryQty = math.min(qtyByRisk, qtyByCapital)
 
-entrySignal = confirmEntryTrigger and close > triggerLevel and not weeklyExit and
+entrySignal = barstate.isconfirmed and confirmEntryTrigger and close > triggerLevel and not weeklyExit and
      strategy.opentrades < maxPyramidLegs and entryQty >= 1
-entryBlocked = confirmEntryTrigger and not entrySignal
+entryBlocked = barstate.isconfirmed and confirmEntryTrigger and not entrySignal
 
-if weeklyExit and strategy.position_size > 0
+if weeklyExitSignal
     strategy.close_all(comment="Red weekly close below weekly SMA")
 
 var int legSequence = 0
@@ -284,7 +289,7 @@ if athSignal
          style=label.style_label_down, color=color.new(color.fuchsia, 0),
          textcolor=color.white, size=size.tiny)
 
-if weeklyExit and strategy.position_size > 0
+if weeklyExitSignal
     label.new(bar_index, high, "WEEKLY SMA EXIT",
          style=label.style_label_down, color=color.new(color.red, 0),
          textcolor=color.white, size=size.tiny)
@@ -294,7 +299,7 @@ if weeklyExit and strategy.position_size > 0
 // ─────────────────────────────────────────────────────────────────────────────
 winRate = strategy.closedtrades > 0 ?
      strategy.wintrades / strategy.closedtrades * 100.0 : na
-statusText = weeklyExit and strategy.position_size > 0 ? "WEEKLY EXIT" :
+statusText = weeklyExitSignal ? "WEEKLY EXIT" :
      entrySignal ? "BUY" : entryBlocked ? "TRIGGER BLOCKED" :
      strategy.opentrades > 0 ? "IN TRADE" :
      not na(pendingLevel) ? "ARMED" : readyCondition ? "READY" :
@@ -351,7 +356,7 @@ plotshape(athSignal, title="Confirmed monthly ATH signal", style=shape.xcross,
      location=location.abovebar, color=color.fuchsia, size=size.tiny)
 plotshape(entrySignal, title="Strategy entry", style=shape.triangleup,
      location=location.belowbar, color=color.lime, size=size.tiny)
-plotshape(weeklyExit and strategy.position_size > 0, title="Weekly SMA exit",
+plotshape(weeklyExitSignal, title="Weekly SMA exit",
      style=shape.triangledown, location=location.abovebar, color=color.red, size=size.tiny)
 plotshape(watchTriggered, title="WATCH", style=shape.circle,
      location=location.belowbar, color=color.yellow, size=size.tiny)
@@ -364,7 +369,7 @@ alertcondition(entrySignal, title="ATH strategy entry",
      message="{{ticker}}: Confirmed monthly trigger and weekly execution filter passed; Strategy Tester entry submitted.")
 alertcondition(entryBlocked, title="ATH trigger blocked",
      message="{{ticker}}: Monthly confirmation occurred but the weekly entry, risk size or capital/leg cap blocked the trade.")
-alertcondition(weeklyExit, title="Weekly SMA exit",
+alertcondition(weeklyExitSignal, title="Weekly SMA exit",
      message="{{ticker}}: Confirmed red weekly close below the weekly SMA; remaining strategy positions are closed.")
 alertcondition(watchTriggered, title="ATH WATCH zone",
      message="{{ticker}}: Entered WATCH zone based on the previous confirmed monthly candle.")
