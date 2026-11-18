@@ -255,6 +255,142 @@ def edit_kids_guides() -> None:
     )
 
 
+def find_span_rect(page: fitz.Page, text: str, *, x_min: float | None = None,
+                   x_max: float | None = None, y_min: float | None = None,
+                   y_max: float | None = None) -> fitz.Rect:
+    matches = []
+    for block in page.get_text('dict')['blocks']:
+        for line in block.get('lines', []):
+            for span in line.get('spans', []):
+                if span.get('text', '').strip() != text:
+                    continue
+                x0, y0, x1, y1 = span['bbox']
+                if x_min is not None and x0 < x_min:
+                    continue
+                if x_max is not None and x1 > x_max:
+                    continue
+                if y_min is not None and y0 < y_min:
+                    continue
+                if y_max is not None and y1 > y_max:
+                    continue
+                matches.append(fitz.Rect(span['bbox']))
+    if len(matches) != 1:
+        raise RuntimeError(f'expected one span for {text!r}, found {len(matches)}')
+    return matches[0]
+
+
+def replace_ratings_metric(page: fitz.Page, old_label: str, old_value: str,
+                           new_label: str, new_value: str, y_min: float,
+                           y_max: float) -> None:
+    label_span = find_span_rect(page, old_label, x_min=35, x_max=250, y_min=y_min, y_max=y_max)
+    value_span = find_span_rect(page, old_value, x_min=300, x_max=380, y_min=y_min, y_max=y_max)
+    label_rect = fitz.Rect(40, label_span.y0 - 1, 300, label_span.y1 + 1)
+    value_rect = fitz.Rect(315, value_span.y0 - 1, 430, value_span.y1 + 1)
+    label_fill = sample_rgb(page, 220, int((label_span.y0 + label_span.y1) / 2))
+    value_fill = sample_rgb(page, 450, int((value_span.y0 + value_span.y1) / 2))
+    redact(page, [label_rect], label_fill)
+    redact(page, [value_rect], value_fill)
+    put(page, label_rect, new_label, font='Helvetica-Bold', size=8.5,
+        color=(13/255, 13/255, 13/255), lineheight=1.0,
+        label=f'ratings statistics label: {new_label}')
+    put(page, value_rect, new_value, font='Times-Roman', size=8.5,
+        color=(26/255, 58/255, 92/255), lineheight=1.0,
+        label=f'ratings statistics value: {new_value}')
+
+
+def edit_ratings_647() -> None:
+    path = ROOT / 'complete_movie_ratings_647.pdf'
+    doc = fitz.open(path)
+    cover_text = doc[0].get_text()
+    stats_text = doc[35].get_text()
+    if ("647 Ranked Entries" in cover_text and
+        "629 / 647 entries" in stats_text and
+        "100% RT entries (55 rows; 53 unique films)" in stats_text):
+        doc.close()
+        return
+
+    # Cover: distinguish ranked/category records from distinct films.
+    page = doc[0]
+    old = block_rect(page, '647 Unique Titles')
+    redact(page, [old], (1, 1, 1))
+    put(page, old, '647 Ranked Entries · 629 Unique Films · IMDb + RT',
+        font='Times-Italic', size=13.0, color=(221/255, 216/255, 192/255),
+        align=fitz.TEXT_ALIGN_CENTER, lineheight=1.0,
+        label='647-entry cover subtitle')
+
+    # Page 2: make the duplicate policy explicit and remove the false claim
+    # that every ranked row is a unique film.
+    page = doc[1]
+    old = block_rect(page, '647 unique titles')
+    redact(page, [old], (1, 1, 1))
+    about = (
+        'This document contains 647 ranked entries from the movie PDFs in this session. '
+        'After normalizing title, director and year, these entries represent 629 distinct films. '
+        'Eighteen repeat records are retained where a film appears in multiple source categories. '
+        'The earlier ratings PDF covered 218 films; this edition also includes director filmographies from the Masters of Cinema by Genre reference.'
+    )
+    put(page, old, about, font='Times-Roman', size=9.3,
+        color=(13/255, 13/255, 13/255), lineheight=1.08,
+        label='647-entry methodology paragraph')
+    old = block_rect(page, 'only one entry is kept in the combined ranking')
+    redact(page, [old], (1, 1, 1))
+    note = (
+        'Deduplication: 647 ranked entries include 18 cross-category repeats, representing 629 distinct films under the title/director/year rule. '
+        'Repeats remain visible to preserve source-category traceability; see FILM-RATINGS-DEDUPLICATION.md for the audit.'
+    )
+    put(page, old, note, font='Times-Roman', size=9.0,
+        color=(13/255, 13/255, 13/255), lineheight=1.08,
+        label='647-entry duplicate policy')
+
+    # Every page footer must describe entries and unique films accurately.
+    for page_index, page in enumerate(doc):
+        footer_spans = []
+        for block in page.get_text('dict')['blocks']:
+            for line in block.get('lines', []):
+                for span in line.get('spans', []):
+                    if '647 Films' in span.get('text', '') and span['bbox'][1] > page.rect.height - 30:
+                        footer_spans.append(fitz.Rect(span['bbox']))
+        if len(footer_spans) > 1:
+            raise RuntimeError(f'page {page_index+1}: multiple ratings footers found')
+        if footer_spans:
+            old = footer_spans[0]
+            rect = fitz.Rect(55, old.y0 - 1, page.rect.width - 55, old.y1 + 1)
+            fill = sample_rgb(page, 50, int((old.y0 + old.y1) / 2))
+            redact(page, [rect], fill)
+            footer = f'The Complete Movie Ratings Encyclopedia · 647 Entries · 629 Unique Films · Page {page_index+1}'
+            put(page, rect, footer, font='Helvetica', size=6.5,
+                color=(102/255, 102/255, 102/255), align=fitz.TEXT_ALIGN_CENTER,
+                lineheight=1.0, label=f'ratings footer page {page_index+1}')
+
+    # Recompute the statistics on the 629 distinct films. The 55-row 100% RT
+    # appendix is retained, with its 53-film deduplicated count made explicit.
+    page = doc[35]
+    for metric in [
+        ('Total unique films in this session', '647', 'Unique films after deduplication', '629 / 647 entries', 125, 145),
+        ('Average IMDB score', '7.59 / 10', 'Average IMDb score (unique films)', '7.58 / 10', 145, 165),
+        ('Average RT Tomatometer', '88%', 'Average RT Tomatometer (unique films)', '88%', 165, 185),
+        ('Films rated IMDB 8.5+', '27', 'Unique films rated IMDb 8.5+', '26', 185, 205),
+        ('Films rated IMDB 8.0+', '194', 'Unique films rated IMDb 8.0+', '184', 205, 225),
+        ('Films with 100% Rotten Tomatoes', '55', 'Unique films with 100% RT', '53', 225, 245),
+    ]:
+        replace_ratings_metric(page, *metric)
+    old = block_rect(page, 'Films with 100% Rotten Tomatoes (55 titles)')
+    redact(page, [old], (1, 1, 1))
+    put(page, old, '100% RT entries (55 rows; 53 unique films)',
+        font='Times-BoldItalic', size=13.5, color=(245/255, 197/255, 24/255),
+        lineheight=1.0, label='100% RT appendix count heading')
+
+    # Final-page tagline.
+    page = doc[38]
+    old = block_rect(page, '647 films')
+    redact(page, [old], (1, 1, 1))
+    put(page, old, '647 ranked entries · 629 unique films · rated and ranked',
+        font='Times-Italic', size=11.0, color=(170/255, 170/255, 170/255),
+        align=fitz.TEXT_ALIGN_CENTER, lineheight=1.0,
+        label='647-entry final-page tagline')
+    save_doc(doc, path)
+
+
 def main() -> None:
     edit_masters()
     edit_sensitive()
@@ -263,10 +399,11 @@ def main() -> None:
     edit_anime_quote('ultimate_anime_guide.pdf', 21,
                      'Choose the stories that stay with you.', 14.5)
     edit_ratings()
+    edit_ratings_647()
     edit_encyclopedia()
     edit_cybersecurity()
     edit_kids_guides()
-    print('Applied 7 source-PDF corrections. All files remain withheld pending rights clearance.')
+    print('Applied and verified source-PDF corrections. All originals remain withheld pending rights clearance.')
 
 
 if __name__ == "__main__":
