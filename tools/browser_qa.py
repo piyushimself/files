@@ -202,7 +202,6 @@ def main():
                                     stats["mature_iframe_sync_tested"]+=1
                                 else:
                                     issue(qa_name,"age-gate-sync","wrapper confirmation did not dismiss iframe gate")
-                                    else: stats["mature_iframe_sync_tested"]+=1
                             app_fn=f"{page_slug}-app-{name}.png"
                             if frame:
                                 try:
