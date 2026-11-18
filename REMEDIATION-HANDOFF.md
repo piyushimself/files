@@ -152,3 +152,8 @@ ATH - Pine.txt remains unresolved. Its monthly signal and weekly exit timing, st
 - Branch `crypto-spread-cost-model` was created from main commit `dd07e4eeb75a06460136ca7aa18fd711fd370b56`.
 - This branch adds a configurable spread-cost estimate per side to the existing fee/slippage/funding model and caps partial-target percentage at 99% so a nominally partial exit cannot leave a zero-quantity leg counted as open.
 - Static validation has been extended to assert both controls. A PR and CI run are still pending.
+
+
+## PR #16 label clarification — 19 November 2026
+
+The first PR #16 workflow completed successfully, but code review caught a dashboard label that incorrectly described fee, slippage and spread as “per 8h”. The label now distinguishes per-side trading costs from the funding estimate per 8-hour interval. A static regression assertion checks that wording. This requires a fresh PR workflow before merge.
