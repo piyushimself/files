@@ -40,6 +40,8 @@ jobs:
           python tools/build.py
       - name: Validate generated app scripts
         run: python tools/validate_site.py
+      - name: Validate Pine Script safety invariants
+        run: python tools/validate_pine_static.py
       - name: Extract redacted source documents for review
         continue-on-error: true
         run: python tools/document_review_extract.py
