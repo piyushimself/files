@@ -16,6 +16,7 @@ def require(condition: bool, message: str) -> None:
 
 
 require(source.startswith("//@version=5"), "expected Pine v5 source")
+require("chartSeconds = timeframe.in_seconds()" in source and "chartSeconds != 14400" in source and "runtime.error(" in source, "script must reject non-4H chart intervals")
 require('indicator("Crypto Trend Rider' in source, "script must remain explicitly labelled as an indicator simulation")
 require("strategy(" not in source, "do not imply Strategy Tester execution")
 require("barstate.isconfirmed and not wasInTrade and emaCrossUp" in source, "first entry must be confirmed-bar only")
