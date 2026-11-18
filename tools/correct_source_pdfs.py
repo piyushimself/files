@@ -546,6 +546,55 @@ def edit_kids_guide_headings() -> None:
 
 
 
+
+def fix_kids_guide_visual_artifacts(filename: str) -> None:
+    """Keep the tenth tip badge on one line and remove missing dingbat glyphs."""
+    path = ROOT / filename
+    doc = fitz.open(path)
+    page = doc[14]
+    spans = []
+    for block in page.get_text('dict')['blocks']:
+        for line in block.get('lines', []):
+            for span in line.get('spans', []):
+                spans.append(span)
+
+    has_ten = any(
+        span.get('text', '').strip() == '10' and
+        span['bbox'][0] < 90 and span['bbox'][1] > 500
+        for span in spans
+    )
+    if not has_ten:
+        ones = [span for span in spans if span.get('text', '').strip() == '1'
+                and span['bbox'][0] < 90 and span['bbox'][1] > 500]
+        zeros = [span for span in spans if span.get('text', '').strip() == '0'
+                 and span['bbox'][0] < 90 and span['bbox'][1] > 500]
+        if len(ones) != 1 or len(zeros) != 1:
+            raise RuntimeError(f'{filename}: expected split 10 badge digits; found {len(ones)} ones and {len(zeros)} zeros')
+        one, zero = ones[0], zeros[0]
+        fill = sample_rgb(page, max(int(one['bbox'][0] - 2), 0), int(one['bbox'][1] + 3))
+        redact(page, [fitz.Rect(one['bbox']), fitz.Rect(zero['bbox'])], fill)
+        badge = fitz.Rect(one['bbox'][0] - 5, min(one['bbox'][1], zero['bbox'][1]) - 1,
+                          max(one['bbox'][2], zero['bbox'][2]) + 10,
+                          max(one['bbox'][3], zero['bbox'][3]) + 1)
+        put(page, badge, '10', font='Helvetica-Bold', size=8.5, color=(1, 1, 1),
+            align=fitz.TEXT_ALIGN_CENTER, lineheight=1.0,
+            label=f'{filename} tenth tip badge')
+
+    dingbats = [fitz.Rect(span['bbox']) for span in spans
+                if span.get('font', '').startswith('ZapfDingbats')
+                and span['bbox'][1] > 700]
+    if dingbats:
+        for rect in dingbats:
+            fill = sample_rgb(page, max(int(rect.x0 - 2), 0), int((rect.y0 + rect.y1) / 2))
+            redact(page, [rect], fill)
+    save_doc(doc, path)
+
+
+def fix_kids_guide_visual_artifacts_all() -> None:
+    fix_kids_guide_visual_artifacts('Three_Year_Old_Reading_Guide (1).pdf')
+    fix_kids_guide_visual_artifacts('World_Stories_3YearOld_Guide.pdf')
+
+
 def main() -> None:
     edit_masters()
     edit_sensitive()
@@ -560,6 +609,7 @@ def main() -> None:
     edit_kids_guides()
     edit_kids_guide_claims()
     edit_kids_guide_headings()
+    fix_kids_guide_visual_artifacts_all()
     print('Applied and verified source-PDF corrections. All originals remain withheld pending rights clearance.')
 
 
