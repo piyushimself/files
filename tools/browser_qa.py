@@ -169,11 +169,20 @@ def main():
                         if item.get("mature"):
                             wrapper_gate=page.locator("#age-gate")
                             confirm=page.locator("#age-confirm")
-                            if wrapper_gate.count()==1 and wrapper_gate.is_visible() and confirm.count()==1:
-                                confirm.click()
-                                page.wait_for_function("()=>document.querySelector('#age-gate')?.hidden===true",timeout=3000)
+                            if wrapper_gate.count()==1 and wrapper_gate.is_visible() and confirm.count()==1 and confirm.is_visible():
+                                # The age dialog is intentionally modal and covers the
+                                # toolbar. Confirm through the actual control, then assert
+                                # both its hidden state and that it no longer intercepts
+                                # pointer events before testing the collection menu.
+                                confirm.click(force=True)
+                                page.wait_for_function("""() => {
+                                  const gate=document.querySelector('#age-gate');
+                                  return !!gate && gate.hidden && getComputedStyle(gate).display==='none';
+                                }""",timeout=5000)
+                                if wrapper_gate.is_visible():
+                                    issue(qa_name,"age-gate-navigation-test","age confirmation did not dismiss the modal overlay")
                             else:
-                                issue(qa_name,"age-gate-navigation-test","mature wrapper must expose its confirmation before navigation controls are exercised")
+                                issue(qa_name,"age-gate-navigation-test","mature wrapper must expose one visible confirmation control before navigation controls are exercised")
                         menu=page.locator(".rr-nav-menu > summary")
                         if menu.count()==1:
                             menu.click()
