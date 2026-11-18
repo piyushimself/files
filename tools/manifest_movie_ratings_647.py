@@ -9,11 +9,24 @@ import fitz
 EXPECTED_ROWS = 647
 FIRST_PAGE_INDEX = 20
 LAST_PAGE_INDEX = 34
-def normalize(value: str) -> str:
+def normalize_name(value: str) -> str:
     value = unicodedata.normalize("NFKC", value).casefold()
-    value = re.sub(r"\([^)]*\)", " ", value)
-    value = re.sub(r"[^\w]+", " ", value, flags=re.UNICODE)
+    value = re.sub(r"[^\\w]+", " ", value, flags=re.UNICODE)
     return " ".join(value.split())
+
+def normalize_title(title: str, director: str, year: str) -> str:
+    """Strip only recognized trailing category/year/director/alias labels."""
+    title = unicodedata.normalize("NFKC", title).strip()
+    match = re.search(r"\\s+\\(([^()]*)\\)$", title)
+    if match:
+        label = normalize_name(match.group(1))
+        director_tokens = normalize_name(director).split()
+        director_suffixes = {" ".join(director_tokens[-n:]) for n in range(1, len(director_tokens) + 1)}
+        categories = {"anime", "war", "animation", "drama", "essential", "erotic art", "erotic directors", "world cinema"}
+        if label in categories or label == normalize_name(year) or label in director_suffixes or label == "laputa":
+            title = title[:match.start()].strip()
+    return normalize_name(title)
+
 def parse_rows(pdf_path: Path):
     doc = fitz.open(pdf_path)
     rows = []
@@ -57,7 +70,7 @@ def parse_rows(pdf_path: Path):
 def audit(rows):
     groups = defaultdict(list)
     for row in rows:
-        groups[(normalize(str(row["title"])), normalize(str(row["director"])), str(row["year"]))].append(row)
+        groups[(normalize_title(str(row["title"]), str(row["director"]), str(row["year"])), normalize_name(str(row["director"])), str(row["year"]))].append(row)
     duplicate_groups, group_ids, canonical = [], {}, {}
     for index, (key, group) in enumerate(sorted(groups.items(), key=lambda item: min(int(r["rank"]) for r in item[1])), 1):
         first = min(int(r["rank"]) for r in group)
