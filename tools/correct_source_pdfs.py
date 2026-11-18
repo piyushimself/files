@@ -288,6 +288,64 @@ def edit_kids_guides() -> None:
     )
 
 
+
+def edit_kids_guide_claims(filename: str, replacements: list[tuple[str, str]],
+                           *, color: tuple[float, float, float], size: float = 7.4) -> None:
+    """Soften absolute developmental promises in the page-15 reading tips."""
+    path = ROOT / filename
+    doc = fitz.open(path)
+    page = doc[14]
+    for needle, replacement in replacements:
+        page_text = re.sub(r'\s+', ' ', page.get_text()).casefold()
+        replacement_text = re.sub(r'\s+', ' ', replacement).casefold()
+        needle_text = re.sub(r'\s+', ' ', needle).casefold()
+        if replacement_text in page_text:
+            continue
+        if needle_text not in page_text:
+            raise RuntimeError(f'{filename}: expected wording is neither original nor corrected: {needle}')
+        old = block_rect(page, needle)
+        fill = sample_rgb(page, int(old.x0 + 2), int(old.y0 + 2))
+        redact(page, [old], fill)
+        put(page, old, replacement, font='Helvetica-Oblique', size=size,
+            color=color, lineheight=1.08,
+            label=f'{filename} evidence-aware reading guidance')
+    save_doc(doc, path)
+
+
+def edit_kids_guide_claims() -> None:
+    edit_kids_guide_claims(
+        'Three_Year_Old_Reading_Guide (1).pdf',
+        [
+            ('If your child wants the same book 20 times in a row, that is perfect. Repetition at this age is how vocabulary, memory and security are built.',
+             'If your child asks for the same book again, rereading is fine. Familiar stories offer another chance to notice words, join in and enjoy time together.'),
+            ('A high squeaky fox, a slow rumbling bear, a shy whispered sparrow. Different voices build audio memory and make reading the highlight of the day.',
+             'Different voices can make characters easier to tell apart and keep shared reading playful.'),
+            ("Instead ask: 'Why was the fox sad?', 'What would YOU have done?', 'Was that fair?' These tiny questions build critical thinking for life.",
+             'These questions invite your child to explain, imagine and compare. Follow their curiosity; there is no need to turn every story into a quiz.'),
+            ('Let your child choose one book freely at the library each visit. Ownership of the choice builds love of books that lasts a lifetime.',
+             'Let your child choose a book at the library. Having a say can make the visit more enjoyable and support a positive reading routine.'),
+            ('A single forced reading session can create a negative association that lasts years. If the mood is off, gently close the book. Tomorrow with warmth is always better.',
+             'If the mood is off, pause and try again later. Keep shared reading warm and low-pressure; a short, pleasant session is enough.'),
+        ],
+        color=(102/255, 102/255, 102/255),
+    )
+    edit_kids_guide_claims(
+        'World_Stories_3YearOld_Guide.pdf',
+        [
+            ('If your child wants the same book 15 times in a row — wonderful! Repetition builds vocabulary, memory, and security.',
+             'If your child asks for the same book again, rereading is fine. Familiar stories offer another chance to notice words and join in.'),
+            ('Give each character a different voice. Silly voices, whispers, and roars make stories come alive and build audio memory.',
+             'Different voices can make stories playful and help children follow the characters, if your child enjoys them.'),
+            ("Instead of 'Did you like it?', ask 'Why was the fox sad?' or 'What would YOU have done?' This builds critical thinking.",
+             "Try an open question such as 'Why was the fox sad?' Follow your child's curiosity; there is no need for a right answer."),
+            ('Make the library a weekly ritual. Let your child choose one book freely — ownership boosts reading motivation.',
+             'Let your child choose a book when you visit. Having a say can make library time more engaging.'),
+            ("If your child isn't in the mood, do not push. A forced reading session creates negative associations. Try again tomorrow.",
+             'If your child is not in the mood, pause and try again later. Keep reading relaxed and enjoyable.'),
+        ],
+        color=(26/255, 82/255, 118/255),
+    )
+
 def find_span_rect(page: fitz.Page, text: str, *, x_min: float | None = None,
                    x_max: float | None = None, y_min: float | None = None,
                    y_max: float | None = None) -> fitz.Rect:
@@ -364,7 +422,7 @@ def edit_ratings_647() -> None:
 
     # Page 2: make the duplicate policy explicit and remove the false unique-title claim.
     page = doc[1]
-    page_text = re.sub(r'\\s+', ' ', page.get_text()).casefold()
+    page_text = re.sub(r'\s+', ' ', page.get_text()).casefold()
     if '647 unique titles' in page_text:
         old = block_rect(page, '647 unique titles')
         redact(page, [old], (1, 1, 1))
@@ -500,6 +558,7 @@ def main() -> None:
     edit_encyclopedia()
     edit_cybersecurity()
     edit_kids_guides()
+    edit_kids_guide_claims()
     edit_kids_guide_headings()
     print('Applied and verified source-PDF corrections. All originals remain withheld pending rights clearance.')
 
