@@ -196,3 +196,30 @@ ATH - Pine.txt remains unresolved. Its monthly signal and weekly exit timing, st
 - All ranking table pages 21–35 were reviewed together in a contact sheet for consistent column geometry; pages 21, 26 and 34 received additional high-resolution review. The extraction concerns about Peter Mullan and the anime score columns were false positives in the high-resolution samples.
 - The clean source-PDF PR branch has been updated to commit `70a0bdcf08378922cc9414b6981be872db57be93`; it includes the latest corrected 647 PDF, manifest, audit JSON and repeatable correction script.
 - Rights/ownership evidence remains unavailable; all source PDFs remain withheld.
+
+
+## Automation checkpoint — 19 November 2026, 00:56 IST
+
+### Latest site QA and deployment
+- PR [#17](https://github.com/piyushimself/files/pull/17) was squash-merged as `1903c3787156523193380affa23b13ed4c6d2e11`. It fixes the mature-wrapper age-gate handling in Chromium QA.
+- PR #17 workflow [#246](https://github.com/piyushimself/files/actions/runs/44376472525) passed: 34 collections, 32 apps, 34 wrappers, 34 desktop pages, 68 mobile pages, 96 iframe loads, 204 mobile reader controls, 34 reader navigation menus, 7 direct mature-app gate tests, and zero automated issues.
+- The #246 mobile contact sheet and all seven mature collection mobile screenshots were reviewed. Reader controls are visible in the initial 390px viewport. The direct age-gate screenshot clearly labels the prompt as self-declaration, not identity/age verification.
+- Main run [#251](https://github.com/piyushimself/files/actions/runs/44380872713) for merge commit #17 was still running at this checkpoint. Its build/deployment result and live Pages state must be checked before marking the fix deployed.
+- The latest previously completed main deployment was run [#247](https://github.com/piyushimself/files/actions/runs/44376623677) for commit `6cab6377a5e0234ff0f8a0a7a7c61994b1ad55bf`; it passed and deployed, but predates PR #17.
+
+### Pine follow-up
+- PR [#16](https://github.com/piyushimself/files/pull/16) remains open. Workflow [#245](https://github.com/piyushimself/files/actions/runs/44375453170) passed the Chromium suite with zero issues (same 34/32/96/204 coverage) and the static Pine invariant checks passed in the build.
+- The diff adds per-side spread assumptions to entry, partial-exit and final-exit costs, caps partial target allocation at 99%, and fixes the dashboard label so spread/fee/slippage are per-side while funding is per 8-hour interval.
+- Pine cost inputs remain user-calibrated assumptions, not historical exchange data. TradingView compilation/backtesting remains an external dependency. PR #16's branch is two commits behind current main and GitHub reports mergeability as unknown; refresh/recheck before merge.
+
+### Source-PDF follow-up
+- PR [#18](https://github.com/piyushimself/files/pull/18) remains open. Its latest PR workflow [#250](https://github.com/piyushimself/files/actions/runs/44378477884) passed the full Chromium suite with zero issues; its source-PDF visual-review artifact was downloaded and 19 modified pages were rendered for inspection.
+- The corrections are high-confidence but do not constitute full-page editorial or rights clearance. The PDF artifact inspection found additional layout defects not yet recorded by the previous sampled review:
+  1. On page 15 of `Three_Year_Old_Reading_Guide (1).pdf`, the “10” badge is rendered as vertically separated “1” and “0”; the closing teal panel also shows two missing-glyph squares after “Happy reading.”
+  2. On page 15 of `World_Stories_3YearOld_Guide.pdf`, the “10” badge likewise wraps into two lines.
+- These visual defects must be corrected and re-rendered before accepting the source-PDF PR. The correction script also contains two whitespace-normalization expressions written as `r'\\s+'` instead of `r'\s+'`; review/fix this idempotence-check defect before relying on repeat runs.
+- All source PDFs remain withheld from GitHub Pages and no ownership/licence/permission evidence has been established. The public repository remains public; Pages withholding does not make root-level source files private.
+- The source-document inventory still contains unresolved count/scope, factual, attribution, URL, table-layout, rating-provenance and rights findings. The 647-row/629-distinct-film audit is a documented rule-based result, not a global film-identity resolver.
+
+### Completion state
+Not complete. PR #17's QA is green but post-merge deployment still needs verification; PR #16 is pending branch refresh and merge; PR #18 has visual follow-up defects; multiple source-document findings and external TradingView validation remain outstanding. Do not notify completion from a passing build or merged PR alone.
