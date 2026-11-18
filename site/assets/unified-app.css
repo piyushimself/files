@@ -665,4 +665,5 @@ body:has(.arc-title){background:#09090d!important;color:#e8e8f0!important}
 body:has(.arc-title) .hero-title{color:#e8e8f0!important}
 body:has(.arc-title) .arc-title{color:#d9b2e8!important}
 body:has(.arc-title) :is(.stat-num,.arc-count){color:#e8e8f0!important}
+body:has(.arc-title) td[style*="color:var(--text3)"]{color:#e8e8f0!important}
 body:has(.arc-title) :is(.hero-eyebrow,.arc-label,.arc-step,.stat-lbl){color:#a0a0b8!important}
