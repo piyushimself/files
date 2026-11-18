@@ -607,3 +607,10 @@ body:has(.c-t) header .ubtn{background:var(--rr-raised)!important;color:var(--rr
   body:has(.mc) #toolbar .sort-btn{box-sizing:border-box!important;flex:0 0 auto!important;padding:8px 10px!important}
   body:has(.mc) #toolbar .tb-view{margin-left:0!important;flex:0 0 auto!important}
 }
+
+
+/* DARK INK / Manga Index: the legacy hero and category statistic numerals use
+   --cream directly. Force them to the active foreground token so they remain
+   readable after the dark-to-light theme adaptation. */
+body:has(.stat-n) :is(.hero-title,.stat-n){color:var(--rr-ink)!important}
+body:has(.stat-n) .stat-l{color:var(--rr-muted)!important}
