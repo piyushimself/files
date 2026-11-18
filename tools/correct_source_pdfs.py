@@ -418,7 +418,7 @@ def edit_ratings_647() -> None:
     old = block_rect(page, '647 films')
     redact(page, [old], (1, 1, 1))
     put(page, old, '647 ranked entries · 629 unique films · rated and ranked',
-        font='Times-Italic', size=11.0, color=(170/255, 170/255, 170/255),
+        font='Times-Italic', size=10.0, color=(170/255, 170/255, 170/255),
         align=fitz.TEXT_ALIGN_CENTER, lineheight=1.0,
         label='647-entry final-page tagline')
     save_doc(doc, path)
