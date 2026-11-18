@@ -1,7 +1,7 @@
 (()=> {
 "use strict";
 const KEY="rr-filters-open";
-const selectors=[".controls-wrap",".filter-panel",".filters-panel",".filter-container",".filter-section",".filter-wrap",".filter-bar",".filters",".toolbar",".controls"];
+const selectors=[".controls-wrap",".filter-panel",".filters-panel",".filter-container",".filter-section",".filter-wrap",".filter-bar",".filter-row",".filter-group",".filters",".toolbar",".controls","[class*=filter]","[id*=filter]","[class*=search]","[id*=search]"];
 const candidates=[...new Set(selectors.flatMap(s=>[...document.querySelectorAll(s)]))];
 function score(el){
  const cls=String(el.className||"").toLowerCase();
