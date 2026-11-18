@@ -250,6 +250,25 @@ header p,.status-bar,.rank,.meta,.excerpt,.modal .subtitle,.empty{color:var(--rr
         if head_end < 0:
             raise RuntimeError("Qwen generated app has no closing head tag for contrast repair")
         text=text[:head_end]+qwen_css+text[head_end:]
+    # The animated-film source has eight fixed-width columns; a table min-width survives column hiding.
+    # Convert the generated mobile table to a compact rank/title/year grid instead of clipping it.
+    if path.name == "300-animated-films.html" and 'id="rr-animated-mobile-table"' not in text:
+        mobile_table_css="""<style id="rr-animated-mobile-table">
+@media(max-width:640px){
+ .table-wrap{max-width:100%!important;overflow:visible!important;padding:0 12px 1rem!important}
+ .table-wrap table{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;table-layout:auto!important}
+ .table-wrap colgroup,.table-wrap thead{display:none!important}
+ .table-wrap tbody{display:block!important;width:100%!important;min-width:0!important}
+ .table-wrap tbody tr{display:grid!important;grid-template-columns:28px minmax(0,1fr) 42px!important;gap:8px!important;align-items:start!important;width:100%!important;min-width:0!important;padding:8px 2px!important}
+ .table-wrap tbody td{display:block!important;width:auto!important;min-width:0!important;max-width:100%!important;padding:6px 2px!important;overflow-wrap:anywhere!important}
+ .table-wrap tbody td:nth-child(n+4){display:none!important}
+ .table-wrap tbody td:nth-child(2){font-size:14px!important;line-height:1.35!important}
+ .table-wrap tbody td:nth-child(3){font-size:12px!important;text-align:right!important}
+}
+</style>"""
+        head_end=text.lower().find("</head>")
+        if head_end<0: raise RuntimeError("Animated film app has no closing head for mobile table repair")
+        text=text[:head_end]+mobile_table_css+text[head_end:]
     path.write_text(text,encoding="utf-8")
 def inject_app_age_gate(path):
     """Add a same-origin 18+ self-declaration gate and noindex metadata to the app itself."""
