@@ -204,6 +204,10 @@ def main():
                                     screenshots.append(f"{page_slug}-app-initial-{name}.png")
                             except Exception as e:
                                 issue(qa_name,"initial-app-screenshot",e)
+                            if frame.locator(".arc-title").count():
+                                arcs=frame.evaluate("""()=>({background:getComputedStyle(document.body).backgroundColor,title:getComputedStyle(document.querySelector(".hero-title")).color,arc:getComputedStyle(document.querySelector(".arc-title")).color})""")
+                                if arcs["background"]!="rgb(9, 9, 13)" or arcs["title"]!="rgb(232, 232, 240)":
+                                    issue(qa_name,"four-arcs-dark-theme-contrast",json.dumps(arcs))
                             if frame.locator(".hero-tag").count():
                                 mood=frame.evaluate("""()=>({background:getComputedStyle(document.body).backgroundColor,title:getComputedStyle(document.querySelector(".row-t")).color,description:getComputedStyle(document.querySelector(".row-d")).color})""")
                                 if mood["background"]!="rgb(8, 8, 16)" or mood["title"]!="rgb(207, 192, 180)" or mood["description"]!="rgb(180, 160, 166)":
