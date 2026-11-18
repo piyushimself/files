@@ -65,3 +65,5 @@ require("DEPRECATED" in legacy_ath and "ATH_Weekly_Confirmed_Strategy.pine" in l
 print("Crypto Trend Rider static safety/accounting invariants passed.")
 print("ATH weekly-strategy static safety checks passed.")
 print("Static checks do not compile Pine or validate broker fills; use TradingView for that.")
+
+require("Fee/slip/spread per side; funding per 8h" in source and "Fee / slip / spread / funding per 8h" not in source, "dashboard must distinguish per-side trading costs from 8-hour funding")
