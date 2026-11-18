@@ -187,3 +187,12 @@ ATH - Pine.txt remains unresolved. Its monthly signal and weekly exit timing, st
 2. Open a PR from `source-pdf-corrections-clean`; confirm all 10 binary PDFs and audit files are in the diff, no temporary workflow is included, and no rights-sensitive files are added to the Pages artifact.
 3. Inspect all changed PDF pages, not only the sampled pages; keep all originals withheld.
 4. Continue the remaining count, cultural scope, placeholder, quote, URL, table layout, rating provenance, and rights findings.
+
+
+## 19 November 2026 — source PDF correction refinement
+
+- The 647-rating PDF page 21 heading was found to still say “All 647 Films Ranked” after the cover/footer correction. It has now been corrected to “All 647 Ranked Entries by IMDb Score”.
+- The correction script was made idempotent per section after a partial-run failure exposed that a global completion check could re-edit already corrected cover/page-2/stat blocks. The latest correction run [44378251873](https://github.com/piyushimself/files/actions/runs/44378251873) passed and produced a fresh artifact. The page 21 rendering was visually inspected.
+- All ranking table pages 21–35 were reviewed together in a contact sheet for consistent column geometry; pages 21, 26 and 34 received additional high-resolution review. The extraction concerns about Peter Mullan and the anime score columns were false positives in the high-resolution samples.
+- The clean source-PDF PR branch has been updated to commit `70a0bdcf08378922cc9414b6981be872db57be93`; it includes the latest corrected 647 PDF, manifest, audit JSON and repeatable correction script.
+- Rights/ownership evidence remains unavailable; all source PDFs remain withheld.
