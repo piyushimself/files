@@ -614,3 +614,16 @@ body:has(.c-t) header .ubtn{background:var(--rr-raised)!important;color:var(--rr
    readable after the dark-to-light theme adaptation. */
 body:has(.stat-n) :is(.hero-title,.stat-n){color:var(--rr-ink)!important}
 body:has(.stat-n) .stat-l{color:var(--rr-muted)!important}
+
+
+/* Animated film index: on phones retain rank, title and year as the primary
+   reading columns; hide secondary metadata rather than forcing a clipped
+   desktop-width table across the screen. */
+@media(max-width:640px){
+  body:has(#hcount) .table-wrap,body:has(#hcount) .table-container{max-width:100%!important;overflow-x:visible!important}
+  body:has(#hcount) table{width:100%!important;min-width:0!important;max-width:100%!important;table-layout:fixed!important}
+  body:has(#hcount) th:nth-child(n+4),body:has(#hcount) td:nth-child(n+4){display:none!important}
+  body:has(#hcount) th,body:has(#hcount) td{padding:9px 6px!important}
+  body:has(#hcount) td:nth-child(2){white-space:normal!important;overflow-wrap:anywhere!important}
+  body:has(#hcount) td:nth-child(3){white-space:nowrap!important}
+}
