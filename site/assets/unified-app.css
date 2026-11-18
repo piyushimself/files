@@ -536,3 +536,25 @@ body:has(.c-t) .tw{max-width:100%;overflow-x:auto}
   body:has(.c-t) .leg{gap:7px!important;padding-bottom:12px!important}
   body:has(.c-t) .leg>span:last-child{margin-left:0!important;flex:1 1 100%!important;line-height:1.5!important}
 }
+
+
+/* CINÉMA OBSCURA hero: the legacy cream/gold palette was being mapped to
+   low-contrast surface/accent colours over a dark gradient. Keep the editorial
+   identity while guaranteeing readable foreground/background contrast. */
+body:has(.c-t) header{
+  background:linear-gradient(160deg,var(--rr-surface),var(--rr-canvas))!important;
+  border-bottom:1px solid var(--rr-line)!important;
+}
+body:has(.c-t) header :is(.ey,.tl,.sl){color:var(--rr-muted)!important;opacity:1!important}
+body:has(.c-t) header h1,body:has(.c-t) header h1 em{color:var(--rr-ink)!important;-webkit-text-fill-color:var(--rr-ink)!important;background:none!important}
+body:has(.c-t) header .sn{color:var(--rr-accent)!important}
+body:has(.c-t) header .ubtn{background:var(--rr-raised)!important;color:var(--rr-ink)!important;border:1px solid var(--rr-line)!important}
+@media(max-width:640px){
+ body:has(.c-t) header{padding:24px 14px 18px!important}
+ body:has(.c-t) header .ey{font-size:9px!important;letter-spacing:.16em!important;line-height:1.6!important}
+ body:has(.c-t) header h1{font-size:clamp(2rem,10vw,3.4rem)!important;line-height:1.02!important;letter-spacing:-.04em!important}
+ body:has(.c-t) header .tl{font-size:15px!important;line-height:1.5!important}
+ body:has(.c-t) header .sts{gap:14px!important}
+ body:has(.c-t) header .sn{font-size:24px!important}
+ body:has(.c-t) header .hdr-btns{margin-left:0!important;width:100%!important}
+}
