@@ -2,15 +2,15 @@ name: Build and deploy Reading Room
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - 'source-pdf-corrections-*'
   pull_request:
     branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: reading-room-${{ github.ref }}-${{ github.sha }}
@@ -93,6 +93,9 @@ jobs:
           path: site
   deploy:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: \${{ steps.deployment.outputs.page_url }}
