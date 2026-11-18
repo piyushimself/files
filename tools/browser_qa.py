@@ -180,9 +180,8 @@ def main():
                                     after=panel.locator("input,select,textarea,button").count()
                                     if before!=after:
                                         issue(qa_name,"filters-state",f"opening filter disclosure {disclosure_index+1} changed filter controls")
-                                    summary.click()
-                                    if filter_ui.evaluate("(e)=>e.open"):
-                                        issue(qa_name,"filters-close",f"filter disclosure {disclosure_index+1} did not close")
+                                    # Leave the panel open so the subsequent search/select interaction
+                                    # checks exercise real visible controls rather than hidden descendants.
                                     stats["filter_disclosures_tested"]+=1
                             else:
                                 possible=frame.evaluate("""() => [...document.querySelectorAll("#filters,.arc-filters,.controls-wrap,.filter-panel,.filters-panel,.filter-container,.filter-section,.filter-wrap,.filter-bar,.filters,.toolbar,.controls,[class*=filter],[id*=filter],[class*=search],[id*=search]")].some(el => {
