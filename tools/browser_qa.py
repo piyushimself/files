@@ -177,7 +177,7 @@ def main():
                                         issue(qa_name,"filters-close","filter disclosure did not close")
                                     stats["filter_disclosures_tested"]+=1
                             else:
-                                possible=frame.evaluate("""() => [...document.querySelectorAll(".controls-wrap,.filter-panel,.filters-panel,.filter-container,.filter-section,.filter-wrap,.filter-bar,.filters,.toolbar,.controls")].some(el => {
+                                possible=frame.evaluate("""() => [...document.querySelectorAll(".controls-wrap,.filter-panel,.filters-panel,.filter-container,.filter-section,.filter-wrap,.filter-bar,.filter-row,.filter-group,.filters,.toolbar,.controls,[class*=filter],[id*=filter],[class*=search],[id*=search]")].some(el => {
                                   const controls=el.querySelectorAll('input:not([type="hidden"]),select,textarea').length;
                                   const cls=String(el.className||"").toLowerCase();
                                   const words=(el.innerText||"").toLowerCase();
