@@ -17,9 +17,21 @@ ROOT = Path(os.environ.get("RR_SOURCE_PDF_ROOT", Path(__file__).resolve().parent
 def block_rect(page: fitz.Page, needle: str) -> fitz.Rect:
     normalize = lambda value: re.sub(r'\s+', ' ', value).strip().casefold()
     target = normalize(needle)
+    # search_for handles phrases that cross PDF text-line boundaries more
+    # consistently across PyMuPDF versions than raw block-string matching.
+    hits = page.search_for(target)
+    if hits:
+        hit_union = union([fitz.Rect(hit) for hit in hits])
+        blocks = [fitz.Rect(b[:4]) for b in page.get_text('blocks')]
+        containing = [rect for rect in blocks if rect.contains(hit_union)]
+        if len(containing) == 1:
+            return containing[0]
+        overlapping = [rect for rect in blocks if rect.intersects(hit_union)]
+        if len(overlapping) == 1:
+            return overlapping[0]
     matches = [fitz.Rect(b[:4]) for b in page.get_text('blocks') if target in normalize(b[4])]
     if len(matches) != 1:
-        raise RuntimeError(f'expected one block for {needle!r}, found {len(matches)}')
+        raise RuntimeError(f'expected one text block for {needle!r}; search hits={len(hits)}, blocks={len(matches)}')
     return matches[0]
 
 
