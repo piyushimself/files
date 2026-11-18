@@ -188,6 +188,17 @@ def main():
                                 if wrapper_gate.count() and wrapper_gate.is_visible():
                                     wrapper_gate.click()
                                     page.wait_for_timeout(180)
+                            # Capture the untouched initial app state before exercising/opening disclosures.
+                            try:
+                                initial_box=frame_el.bounding_box()
+                                if initial_box and initial_box["width"]>0 and initial_box["height"]>0:
+                                    page.screenshot(path=str(OUT/f"{page_slug}-app-initial-{name}.png"),clip=initial_box)
+                                    screenshots.append(f"{page_slug}-app-initial-{name}.png")
+                            except Exception as e:
+                                issue(qa_name,"initial-app-screenshot",e)
+                            if name=="mobile" and frame.locator(".hero-vertical").count():
+                                if frame.locator(".hero-vertical").evaluate("(e)=>getComputedStyle(e).display")!="none":
+                                    issue(qa_name,"mobile-vertical-ornament","decorative vertical caption must be hidden on mobile")
                             filter_uis=frame.locator("details.rr-filter-disclosure")
                             if filter_uis.count():
                                 for disclosure_index in range(filter_uis.count()):
