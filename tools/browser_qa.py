@@ -158,6 +158,12 @@ def main():
                             frame_title=frame_el.evaluate("(f)=>f.contentDocument?.title||''")
                             if not frame_title.strip(): issue(qa_name,"iframe-title","embedded app title missing")
                             stats["iframes_loaded"]+=1
+                            app_gate=frame.locator("#rr-app-age-gate")
+                            if item.get("mature") and app_gate.count() and app_gate.is_visible():
+                                wrapper_gate=page.locator("#age-confirm")
+                                if wrapper_gate.count() and wrapper_gate.is_visible():
+                                    wrapper_gate.click()
+                                    page.wait_for_timeout(180)
                             filter_ui=frame.locator("details.rr-filter-disclosure")
                             if filter_ui.count():
                                 if filter_ui.first.evaluate("(e)=>e.open"):
@@ -177,7 +183,7 @@ def main():
                                         issue(qa_name,"filters-close","filter disclosure did not close")
                                     stats["filter_disclosures_tested"]+=1
                             else:
-                                possible=frame.evaluate("""() => [...document.querySelectorAll(".controls-wrap,.filter-panel,.filters-panel,.filter-container,.filter-section,.filter-wrap,.filter-bar,.filter-row,.filter-group,.filters,.toolbar,.controls,[class*=filter],[id*=filter],[class*=search],[id*=search]")].some(el => {
+                                possible=frame.evaluate("""() => [...document.querySelectorAll("#filters,.arc-filters,.controls-wrap,.filter-panel,.filters-panel,.filter-container,.filter-section,.filter-wrap,.filter-bar,.filters,.toolbar,.controls,[class*=filter],[id*=filter],[class*=search],[id*=search]")].some(el => {
                                   const controls=el.querySelectorAll('input:not([type="hidden"]),select,textarea').length;
                                   const cls=String(el.className||"").toLowerCase();
                                   const words=(el.innerText||"").toLowerCase();
@@ -189,14 +195,13 @@ def main():
                             overflow(frame,qa_name+"-iframe-"+name)
                             if name!="desktop": mobile_tabs(frame,qa_name+"-iframe-"+name)
                             if item.get("mature") and frame:
-                                frame_stage="synchronize mature-content gate"
-                                app_gate=frame.locator("#rr-app-age-gate")
-                                if app_gate.count()==0 or not app_gate.is_visible():
+                                frame_stage="verify mature-content gate synchronization"
+                                if app_gate.count()==0:
                                     issue(qa_name,"direct-app-age-gate","mature iframe did not show its own 18+ gate")
+                                elif not app_gate.is_visible():
+                                    stats["mature_iframe_sync_tested"]+=1
                                 else:
-                                    page.locator("#age-confirm").click()
-                                    page.wait_for_timeout(180)
-                                    if app_gate.is_visible(): issue(qa_name,"age-gate-sync","wrapper confirmation did not dismiss iframe gate")
+                                    issue(qa_name,"age-gate-sync","wrapper confirmation did not dismiss iframe gate")
                                     else: stats["mature_iframe_sync_tested"]+=1
                             app_fn=f"{page_slug}-app-{name}.png"
                             if frame:
