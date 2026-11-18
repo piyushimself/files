@@ -144,9 +144,9 @@ def edit_ratings() -> None:
     path = ROOT / 'complete_movie_ratings.pdf'
     doc = fitz.open(path)
     page = doc[0]
-    if ("98 Essential Films" in page.get_text() and
-        "33 Erotic Art Films" in doc[5].get_text() and
-        "87 Anime Movies" in doc[6].get_text()):
+    if ("98 essential films" in page.get_text().casefold() and
+        "33 erotic art films" in doc[5].get_text().casefold() and
+        "87 anime movies" in doc[6].get_text().casefold()):
         doc.close()
         return
     old = block_rect(page, '218 unique films')
