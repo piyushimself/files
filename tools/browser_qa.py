@@ -204,6 +204,10 @@ def main():
                                     screenshots.append(f"{page_slug}-app-initial-{name}.png")
                             except Exception as e:
                                 issue(qa_name,"initial-app-screenshot",e)
+                            if frame.locator(".hero-tag").count():
+                                mood=frame.evaluate("""()=>({background:getComputedStyle(document.body).backgroundColor,title:getComputedStyle(document.querySelector(".row-t")).color,description:getComputedStyle(document.querySelector(".row-d")).color})""")
+                                if mood["background"]!="rgb(8, 8, 16)" or mood["title"]!="rgb(207, 192, 180)" or mood["description"]!="rgb(180, 160, 166)":
+                                    issue(qa_name,"sensual-cinema-contrast",json.dumps(mood))
                             if frame.locator(".stat-n").count():
                                 contrast_state=frame.evaluate("""()=>{const e=document.createElement("span");e.style.color="var(--rr-ink)";document.body.append(e);const expected=getComputedStyle(e).color;e.remove();return {actual:getComputedStyle(document.querySelector(".stat-n")).color,expected}}""")
                                 if contrast_state["actual"]!=contrast_state["expected"]:
