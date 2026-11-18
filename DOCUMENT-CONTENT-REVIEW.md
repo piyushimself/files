@@ -136,3 +136,28 @@ A CI static-invariant check was added for these source properties. **This is not
 ### ATH - Pine.txt — still unresolved
 
 No source change is claimed for ATH in this pass. Its monthly signal logic, weekly exit stream, stop/target semantics and account-level performance metrics require a coherent timeframe/execution redesign. A safe change cannot be inferred from the current indicator without deciding how monthly entries are timestamped relative to weekly events and what fill priority applies when multiple levels are crossed inside one month. Keep the file withheld and do not claim a backtest.
+
+## Source-PDF correction pass — corrected files, not publication-cleared
+
+A high-confidence correction pass has been applied to the following source PDFs. The modified pages listed below were visually inspected in rendered output. This is not a complete visual review of every page, a full fact-check of every record, or a rights clearance. **All source files remain withheld from GitHub Pages.**
+
+| Source | Correction applied | Validation and remaining limitation |
+|---|---|---|
+| `masters_of_e_art_cinema.pdf` | Corrected the false claim that Jane Campion is the only woman to win the Palme d'Or; the text now says she was the first woman to win, for *The Piano* in 1993. | Corrected page 10 visually inspected. Other biographical/interpretive claims still need source checks. |
+| `sensitive_cinema.pdf` | Replaced the harmful “love that contains violence is still love” framing with a family-violence content note stating that violence is not proof of love. | Corrected page 24 visually inspected. Full catalogue still needs content-warning and interpretation review. |
+| `definitive_anime_encyclopedia.pdf`, `ultimate_anime_guide.pdf` | Removed the known misattributed/misquoted Miyazaki line and substituted original editorial taglines. | Corrected quote pages visually inspected. Other quotations remain unverified. |
+| `complete_movie_ratings.pdf` | Corrected cover and section counts to 218 unique films: 98 Essential, 33 Erotic Art and 87 Anime. | Cover and changed section pages visually inspected. Rating provenance and as-of dates remain missing. |
+| `complete_movie_ratings_647.pdf` | Corrected 647 “unique titles” to 647 ranked category entries / 629 distinct films under the documented title-director-year rule; corrected methodology, page 36 unique-film metrics, page footers and final tagline. | Pages 1, 2, 36 and 39 visually inspected. Parser validates all ranks 1–647 and identifies 18 repeat groups. Ratings source URLs/as-of dates remain unresolved. |
+| `complete_movie_encyclopedia.pdf` | Replaced the stale 2025 “verified” streaming claim with a historical-notes / not-current-availability disclaimer. | Pages 2 and 55 visually inspected. Individual platform availability was not rechecked live; keep entries labelled historical. |
+| `Cybersecurity_Stories_For_Your_Teams.pdf` | Corrected GDPR, NIS2 and DORA reporting timelines and removed the generic “72-hour” ransomware countdown. | Pages 15 and 17 visually inspected against the official references above. Incident classification and legal interpretation remain organisation-specific. |
+| `Three_Year_Old_Reading_Guide (1).pdf`, `World_Stories_3YearOld_Guide.pdf` | Removed unsupported neural-pathway claims and replaced left-to-right reading advice with script/language-aware guidance. The first guide's headings no longer claim “10 minutes beats 1 hour” or a universal left-to-right habit. | Modified page 15 visually inspected after final typography pass; em-dash glyph issue was corrected to colons. Other developmental claims in both guides still need careful review. |
+
+## Reproducible 647-row ratings audit
+
+- `tools/manifest_movie_ratings_647.py` parses the 647 ranked table rows and validates the full rank sequence and required fields.
+- `FILM-RATINGS-647-MANIFEST.csv` contains one row per ranked entry, canonical rank, duplicate group and repeat marker.
+- `FILM-RATINGS-647-AUDIT.json` records 647 ranked entries, 629 unique films under the explicit title/director/year rule, 18 duplicate groups and recalculated unique-film statistics (IMDb mean 7.58, RT mean 88%, 26 IMDb 8.5+, 184 IMDb 8.0+, 53 unique 100% RT films; the appendix has 55 ranked rows).
+- Parenthetical title suffixes are stripped only when they are a year, a recognized source category, a director-name suffix, or the known alternate-title label “Laputa”. Other parenthetical title text is preserved.
+- This rule is reproducible but is not a global film-database identity resolver. Rating sources and as-of dates remain missing.
+
+The corrections and audit are on branch `source-pdf-corrections-clean` and are being submitted for review. The source PDFs remain excluded from the public Pages site until rights/ownership evidence is established.
