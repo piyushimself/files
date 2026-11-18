@@ -177,7 +177,7 @@ def enhance_app(path, category_name):
     # Remove remote font dependencies; the reader controls typography locally.
     text=re.sub(r'<link[^>]+(?:fonts\.googleapis\.com|fonts\.gstatic\.com)[^>]*>', '', text, flags=re.I)
     text=re.sub(r'@import\s+url\([\'"]?https?://fonts\.googleapis\.com[^)]*\)\s*;?', '', text, flags=re.I)
-    additions='<link rel="stylesheet" href="../assets/unified-app.css"><script src="../assets/unified-app.js" defer></script>'
+    additions='<link rel="stylesheet" href="../assets/unified-app.css"><script src="../assets/unified-app.js" defer></script><script src="../assets/filter-disclosure.js" defer></script>'
     body_match=re.search(r"<body([^>]*)>",text,re.I)
     if body_match and "data-rr-category" not in body_match.group(1):
         replacement='<body'+body_match.group(1)+' data-rr-category="'+html.escape(category_name,quote=True)+'">'
