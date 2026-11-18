@@ -206,11 +206,9 @@ potentialCapital = potentialQty * close
 canAddLeg = array.size(legEntry) < maxPyramidLegs and potentialQty > 0 and
      (totalCapitalDeployed + potentialCapital) <= capitalCeiling
 
-firstEntrySignal = firstEntryTrigger and canAddLeg
-addSignal         = addTrigger and canAddLeg
-buySignal         = (firstEntryTrigger or addTrigger) and canAddLeg and entryAllowed
-firstEntrySignal := firstEntryTrigger and canAddLeg and entryAllowed
-addSignal         := addTrigger and canAddLeg and entryAllowed
+firstEntrySignal = firstEntryTrigger and canAddLeg and entryAllowed
+addSignal         = addTrigger and canAddLeg and entryAllowed
+buySignal         = firstEntrySignal or addSignal
 legCapReached     = (firstEntryTrigger or addTrigger) and not canAddLeg and entryAllowed
 
 if buySignal
@@ -236,7 +234,7 @@ if buySignal
 
     totalCapitalDeployed := totalCapitalDeployed + capV
     if na(firstEntryTimeGlobal)
-        firstEntryTimeGlobal := time
+        firstEntryTimeGlobal := time_close
 
 // ============================================================
 // STATS ENGINE
@@ -442,7 +440,8 @@ displayTrend    = openLegCount > 0 ? array.get(legTrend, mostRecentIdx)    : tre
 displayMomentum = openLegCount > 0 ? array.get(legMomentum, mostRecentIdx) : momentumScoreLive
 displayVolume   = openLegCount > 0 ? array.get(legVolume, mostRecentIdx)   : volumeScoreLive
 
-distToStopPct = (close - chandelierLine) / close * 100.0
+displayStop = wasInTrade and not na(stopForBar) ? stopForBar : chandelierLine
+distToStopPct = close != 0 and not na(displayStop) ? (close - displayStop) / close * 100.0 : na
 
 // ============================================================
 // VISUALS
@@ -538,10 +537,11 @@ if barstate.islast
     f_row(infoTable, statsHeaderRow + 2, "Win Rate", totalTrades > 0 ? str.tostring(winRate, "#.#") + "%" : "-", color.white)
     f_row(infoTable, statsHeaderRow + 3, "Avg Win / Avg Loss", totalTrades > 0 ? (na(avgWinCcy) ? "-" : "+" + str.tostring(avgWinCcy, "#.##")) + " / " + (na(avgLossCcy) ? "-" : str.tostring(avgLossCcy, "#.##")) : "-", color.white)
     f_row(infoTable, statsHeaderRow + 4, "Profit Factor", totalTrades > 0 ? (na(profitFactor) ? "∞" : str.tostring(profitFactor, "#.##")) : "-", (na(profitFactor) or profitFactor >= 1) ? color.lime : color.red)
-    f_row(infoTable, statsHeaderRow + 5, "Max Drawdown (currency)", totalTrades > 0 ? "-" + str.tostring(maxDDCcy, "#.##") : "-", color.red)
+    f_row(infoTable, statsHeaderRow + 5, "Closed-leg drawdown (ccy)", totalTrades > 0 ? "-" + str.tostring(maxDDCcy, "#.##") : "-", color.red)
     f_row(infoTable, statsHeaderRow + 6, "Best / Worst Close", totalTrades > 0 ? "+" + str.tostring(bestTradeCcy, "#.##") + " / " + str.tostring(worstTradeCcy, "#.##") : "-", color.white)
     f_row(infoTable, statsHeaderRow + 7, "Avg R Multiple", totalTrades > 0 and not na(avgR) ? str.tostring(avgR, "#.##") + "R" : "-", (not na(avgR) and avgR >= 0) ? color.lime : color.red)
     f_row(infoTable, statsHeaderRow + 8, "Avg Holding (bars)", totalTrades > 0 ? str.tostring(avgHoldingBars, "#.#") : "-", color.white)
+    f_row(infoTable, statsHeaderRow + 9, "Metrics", "Closed legs only; open/unrealized DD excluded", color.silver)
 
 // ============================================================
 // ALERTS
