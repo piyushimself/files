@@ -7,6 +7,7 @@ source for publication or establish copyright/licensing permission.
 from __future__ import annotations
 
 import os
+import re
 from pathlib import Path
 import fitz
 
@@ -14,7 +15,9 @@ ROOT = Path(os.environ.get("RR_SOURCE_PDF_ROOT", Path(__file__).resolve().parent
 
 
 def block_rect(page: fitz.Page, needle: str) -> fitz.Rect:
-    matches = [fitz.Rect(b[:4]) for b in page.get_text('blocks') if needle.lower() in b[4].lower()]
+    normalize = lambda value: re.sub(r'\\s+', ' ', value).strip().casefold()
+    target = normalize(needle)
+    matches = [fitz.Rect(b[:4]) for b in page.get_text('blocks') if target in normalize(b[4])]
     if len(matches) != 1:
         raise RuntimeError(f'expected one block for {needle!r}, found {len(matches)}')
     return matches[0]
