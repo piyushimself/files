@@ -206,6 +206,9 @@ def main():
                             if name=="mobile" and frame.locator(".hero-vertical").count():
                                 if frame.locator(".hero-vertical").evaluate("(e)=>getComputedStyle(e).display")!="none":
                                     issue(qa_name,"mobile-vertical-ornament","decorative vertical caption must be hidden on mobile")
+                            if page_slug=="300-animated-films":
+                                shown=frame.locator("#hcount").inner_text().strip() if frame.locator("#hcount").count() else ""
+                                if shown!="296": issue(qa_name,"catalogue-count","animated films title/count must reflect the 296 published records")
                             filter_uis=frame.locator("details.rr-filter-disclosure")
                             if filter_uis.count():
                                 for disclosure_index in range(filter_uis.count()):
