@@ -120,7 +120,7 @@ def main():
                 page=ctx.new_page(); page.set_default_timeout(8000); watch(page,qa_name+"-"+name)
                 # Each collection must start with the default collapsed state. The shared
                 # preference is intentionally persisted, so isolate QA pages from earlier tests.
-                page.add_init_script("try{localStorage.removeItem('rr-filters-open')}catch(e){}")
+                page.add_init_script("try{localStorage.removeItem('rr-filters-open');localStorage.removeItem('rr-age-confirmed')}catch(e){}")
                 try:
                     r=page.goto(BASE+item.get("href",""),wait_until="domcontentloaded",timeout=30000)
                     if not r or r.status>=400: issue(qa_name,"http",r.status if r else "no response")
@@ -162,6 +162,18 @@ def main():
                                 issue(qa_name,"reader-toolbar-duplicate-navigation",f"{selector} should be hidden on mobile")
                         stats["reader_shell_mobile_pages_tested"]+=1
                         stats["reader_shell_mobile_controls_tested"]+=len(shell_state["boxes"])
+                        # Mature wrappers intentionally block the page until the reader
+                        # confirms. Verify the gate first, then exercise the menu behind it.
+                        # Each page resets the confirmation in its init script so this
+                        # interaction is tested independently for every mature wrapper.
+                        if item.get("mature"):
+                            wrapper_gate=page.locator("#age-gate")
+                            confirm=page.locator("#age-confirm")
+                            if wrapper_gate.count()==1 and wrapper_gate.is_visible() and confirm.count()==1:
+                                confirm.click()
+                                page.wait_for_function("()=>document.querySelector('#age-gate')?.hidden===true",timeout=3000)
+                            else:
+                                issue(qa_name,"age-gate-navigation-test","mature wrapper must expose its confirmation before navigation controls are exercised")
                         menu=page.locator(".rr-nav-menu > summary")
                         if menu.count()==1:
                             menu.click()
