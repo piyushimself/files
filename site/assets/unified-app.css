@@ -214,3 +214,61 @@ body .sr-only,body .visually-hidden{position:absolute!important;width:1px!import
   body .row-n,body .row-y{font-size:10px!important}
   body .count{font-size:10px!important;letter-spacing:.08em!important}
 }
+
+
+/* Tablet-width repairs found by the first full Chromium pass (iframe viewport ~737px). */
+@media(max-width:900px){
+  body :is(.app,.main,.content,.workspace,.layout,.page,.paper,.paper-page){
+    box-sizing:border-box!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+  }
+  body .page{
+    margin-left:auto!important;
+    margin-right:auto!important;
+    padding:clamp(12px,3vw,24px)!important;
+  }
+  body :is(.hdr,.header,.hdr-in,.nav-top,.toolbar,.controls,.watch-actions,.hdr-r,.vtabs){
+    box-sizing:border-box!important;
+    max-width:100%!important;
+    min-width:0!important;
+  }
+  body :is(.hdr,.header,.hdr-in,.nav-top){
+    display:flex!important;
+    flex-wrap:wrap!important;
+    align-items:center!important;
+    gap:8px!important;
+    height:auto!important;
+  }
+  body :is(.hdr-r,.vtabs,.watch-actions){
+    flex:1 1 100%!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin-left:0!important;
+    justify-content:flex-start!important;
+    flex-wrap:wrap!important;
+  }
+  body .watch-actions{gap:6px!important}
+  body .watch-action-btn{
+    flex:1 1 120px!important;
+    min-width:0!important;
+    max-width:100%!important;
+    white-space:normal!important;
+  }
+  body .vtabs{gap:6px!important}
+  body .sbox{
+    box-sizing:border-box!important;
+    flex:1 1 180px!important;
+    width:auto!important;
+    min-width:0!important;
+    max-width:100%!important;
+  }
+  body .sbox input,body #q{
+    box-sizing:border-box!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+  }
+}
