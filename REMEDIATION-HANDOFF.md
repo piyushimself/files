@@ -134,3 +134,21 @@ ATH - Pine.txt remains unresolved. Its monthly signal and weekly exit timing, st
 3. Continue source-document corrections and count reconciliation. Rights evidence remains unproven for all source documents, so none is cleared for Pages publication.
 4. Continue visual PDF page inspection for table/column extraction and rating glyph defects. Do not alter source entries based only on garbled text extraction.
 5. Continue resolving the ATH Pine execution model, count discrepancies and factual/editorial issues listed above.
+
+
+## Latest automation continuation — 19 November 2026, 00:23 IST
+
+### New source/Pine progress
+
+- PR [#15](https://github.com/piyushimself/files/pull/15) was squash-merged as `dd07e4eeb75a06460136ca7aa18fd711fd370b56`.
+- It replaces the old ATH indicator with `ATH_Weekly_Confirmed_Strategy.pine`, requires a weekly chart, uses only the previous confirmed monthly candle, evaluates weekly exits on confirmed weekly bars, and places actual Strategy Tester stop/limit orders.
+- PR #15's Chromium/build workflow [44373157611](https://github.com/piyushimself/files/actions/runs/44373157611) passed the site QA (34 collections, 32 apps, 96 iframe loads, 204 mobile reader controls and zero automated issues). The deploy job was skipped because this was a PR run. A main-branch deployment still needs confirmation.
+- Static Pine source invariants passed. **TradingView compilation, symbol-specific Strategy Tester backtests, Bar Magnifier fill review and broker-cost calibration remain unperformed external validation.** Do not use the new strategy live or claim performance until those checks are done.
+- Visual PDF corrections have been generated and visually sampled for 10 high-confidence documents on branch `source-pdf-corrections`; its latest correction workflow [44373234367](https://github.com/piyushimself/files/actions/runs/44373234367) passed and produced artifact `reading-room-corrected-source-pdfs`. The branch is 20 commits ahead and 4 behind main, so it still needs a clean PR/rebase and complete PDF page verification before merge.
+- The corrected 647 ratings PDF now distinguishes 647 ranked category entries from 629 unique films. The 18 duplicate groups were independently re-parsed from all 647 ranked rows; unique-film statistics recalculate to average IMDb 7.58, average RT 88%, 26 films at IMDb 8.5+, 184 at 8.0+, and 53 films at 100% RT. The complete per-row CSV manifest and executable parser are still needed to make this independently reproducible from the repository.
+
+### New Crypto Trend Rider hardening in progress
+
+- Branch `crypto-spread-cost-model` was created from main commit `dd07e4eeb75a06460136ca7aa18fd711fd370b56`.
+- This branch adds a configurable spread-cost estimate per side to the existing fee/slippage/funding model and caps partial-target percentage at 99% so a nominally partial exit cannot leave a zero-quantity leg counted as open.
+- Static validation has been extended to assert both controls. A PR and CI run are still pending.
