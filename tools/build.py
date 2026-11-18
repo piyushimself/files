@@ -13,7 +13,7 @@ COLLECTIONS=SITE/"collections"
 DATA=SITE/"data"
 REPORT=ROOT/"PUBLISHING-REVIEW.md"
 EXCLUDE={".git",".github","site","tools","__pycache__"}
-MATURE=re.compile(r"(?:18\+|18-plus|adult[-_ ](?:manga|manhwa|comics?|romance)|taboo|transgressive|dark[-_ ]ink|manhwa300|manhwa[-_ ]300|top500[-_ ]adult|forbidden[-_ ]pages|sensual[-_ ]mood|hentai|ecchi|nsfw|porn(?:ography)?|erotic|sexually explicit|explicit sexual content|300[-_ ]animated[-_ ]films|cinematic[-_ ]database|cinematic[-_ ]canon|film[-_ ]collection|big[-_ ]library|the[-_ ]curators[-_ ]library|four[-_ ]arcs[-_ ]library|grand[-_ ]library|manga[-_ ]1000|manga[-_ ]archive[-_ ]v4|manga[-_ ]comics[-_ ]master)",re.I)
+MATURE=re.compile(r"(?:18\+|18-plus|adult[-_ ](?:manga|manhwa|comics?|romance)|taboo|transgressive|dark[-_ ]ink|manhwa300|manhwa[-_ ]300|top500[-_ ]adult|forbidden[-_ ]pages|sensual[-_ ]mood|cinematic[-_ ]database|hentai|ecchi|nsfw|porn(?:ography)?|erotic|sexually explicit|explicit sexual content)",re.I)
 SECRET_PATTERNS=[
  ("private key",re.compile(rb"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----")),
  ("AWS access key",re.compile(rb"\bAKIA[0-9A-Z]{16}\b")),
@@ -155,6 +155,11 @@ def enhance_app(path, category_name):
         malformed=re.search(r"</\s*thead\s*>\s*(?=<body\b)",text,re.I)
         if malformed:
             text=text[:malformed.start()]+"</style>"+text[malformed.end():]
+    # The source advertises 300 animated films but the rendered catalogue contains 296.
+    # Correct the generated copy and its public title rather than publishing an inflated count.
+    if path.name == "300-animated-films.html":
+        text=text.replace("300 Essential Animated Films","296 Essential Animated Films")
+        text=text.replace('<span id="hcount">300</span>', '<span id="hcount">296</span>')
     # Correct verified catalogue-count mismatches only in generated copies.
     # Keep the original root-level HTML uploads byte-for-byte unchanged.
     if path.name == "big-library.html":
@@ -245,6 +250,25 @@ header p,.status-bar,.rank,.meta,.excerpt,.modal .subtitle,.empty{color:var(--rr
         if head_end < 0:
             raise RuntimeError("Qwen generated app has no closing head tag for contrast repair")
         text=text[:head_end]+qwen_css+text[head_end:]
+    # The animated-film source has eight fixed-width columns; a table min-width survives column hiding.
+    # Convert the generated mobile table to a compact rank/title/year grid instead of clipping it.
+    if path.name == "300-animated-films.html" and 'id="rr-animated-mobile-table"' not in text:
+        mobile_table_css="""<style id="rr-animated-mobile-table">
+@media(max-width:640px){
+ .table-wrap{max-width:100%!important;overflow:visible!important;padding:0 12px 1rem!important}
+ .table-wrap table{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;table-layout:auto!important}
+ .table-wrap colgroup,.table-wrap thead{display:none!important}
+ .table-wrap tbody{display:block!important;width:100%!important;min-width:0!important}
+ .table-wrap tbody tr{display:grid!important;grid-template-columns:28px minmax(0,1fr) 42px!important;gap:8px!important;align-items:start!important;width:100%!important;min-width:0!important;padding:8px 2px!important}
+ .table-wrap tbody td{display:block!important;width:auto!important;min-width:0!important;max-width:100%!important;padding:6px 2px!important;overflow-wrap:anywhere!important}
+ .table-wrap tbody td:nth-child(n+4){display:none!important}
+ .table-wrap tbody td:nth-child(2){font-size:14px!important;line-height:1.35!important}
+ .table-wrap tbody td:nth-child(3){font-size:12px!important;text-align:right!important}
+}
+</style>"""
+        head_end=text.lower().find("</head>")
+        if head_end<0: raise RuntimeError("Animated film app has no closing head for mobile table repair")
+        text=text[:head_end]+mobile_table_css+text[head_end:]
     path.write_text(text,encoding="utf-8")
 def inject_app_age_gate(path):
     """Add a same-origin 18+ self-declaration gate and noindex metadata to the app itself."""
@@ -336,9 +360,9 @@ def write_article(slug_name,title,source,mature,category_name):
     gate=""
     if mature:
         gate="""<section id="age-gate" class="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-title"><div><p class="kicker">Mature collection</p><h2 id="age-title">Adults only</h2><p>This collection may contain mature themes and is intended for readers aged 18 or over.</p><button id="age-confirm" type="button">I am 18 or older — continue</button><a href="../../index.html">Return to the library</a></div></section><script>try{if(localStorage.getItem('rr-age-confirmed')==='yes')document.getElementById('age-gate').hidden=true}catch(e){}document.getElementById('age-confirm').addEventListener('click',()=>{try{localStorage.setItem('rr-age-confirmed','yes')}catch(e){}document.getElementById('age-gate').hidden=true;document.querySelector('iframe.app-frame')?.contentWindow.postMessage({type:'rr-age-confirmed'},'*')})</script>"""
-    toc_html="<nav class='article-toc' aria-label='On this page'><h2>On this page</h2><ol>"+toc+"</ol></nav>" if headings else ""
+    toc_html="<details class='article-toc'><summary>On this page · "+str(len(headings))+" sections</summary><ol>"+toc+"</ol></details>" if headings else ""
     dest=COLLECTIONS/slug_name/"index.html"; dest.parent.mkdir(parents=True,exist_ok=True)
-    doc="<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>"+robots+"<title>"+html.escape(title)+" — The Reading Room</title><link rel='stylesheet' href='../../assets/reading-room.css'><link rel='stylesheet' href='../../assets/article.css'><link rel='stylesheet' href='../../assets/collection-shell.css'></head><body data-current='collections/"+slug_name+"/index.html' data-category='"+html.escape(category_name,quote=True)+"'>"+shell_header(title)+"<div class='rr-reading-meta'>Reading time · "+str(minutes)+" min</div><main class='article-layout'><article class='reading-article'><p class='kicker'>From the collection</p><h1>"+html.escape(title)+"</h1><div class='article-find'><label for='article-find-input'>Find in this page</label><input id='article-find-input' type='search' placeholder='Find a word or phrase'><button id='article-find-prev' type='button'>Previous</button><button id='article-find-next' type='button'>Next</button><span id='article-find-count' aria-live='polite'></span></div><div class='article-content'>"+body_html+"</div></article>"+toc_html+"</main>"+gate+"<script src=\"../../assets/article-search.js\" defer></script><script src=\"../../assets/collection-shell.js\" defer></script><footer class='site-footer'><a href='../../index.html'>THE READING ROOM</a><p>A personal atlas of stories, images, ideas and useful knowledge.</p><p>Last updated: "+date.today().isoformat()+"</p></footer></body></html>"
+    doc="<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>"+robots+"<title>"+html.escape(title)+" — The Reading Room</title><link rel='stylesheet' href='../../assets/reading-room.css'><link rel='stylesheet' href='../../assets/article.css'><link rel='stylesheet' href='../../assets/collection-shell.css'></head><body data-current='collections/"+slug_name+"/index.html' data-category='"+html.escape(category_name,quote=True)+"'>"+shell_header(title)+"<div class='rr-reading-meta'>Reading time · "+str(minutes)+" min</div><main class='article-layout'><article class='reading-article'><p class='kicker'>From the collection</p><h1>"+html.escape(title)+"</h1><div class='article-find'><label for='article-find-input'>Find in this page</label><input id='article-find-input' type='search' placeholder='Find a word or phrase'><button id='article-find-prev' type='button'>Previous</button><button id='article-find-next' type='button'>Next</button><span id='article-find-count' aria-live='polite'></span></div>"+toc_html+"<div class='article-content'>"+body_html+"</div></article></main>"+gate+"<script src=\"../../assets/article-search.js\" defer></script><script src=\"../../assets/collection-shell.js\" defer></script><footer class='site-footer'><a href='../../index.html'>THE READING ROOM</a><p>A personal atlas of stories, images, ideas and useful knowledge.</p><p>Last updated: "+date.today().isoformat()+"</p></footer></body></html>"
     dest.write_text(doc,encoding="utf-8")
     return dest.relative_to(SITE).as_posix(),plain
 def write_wrapper(slug_name,title,app_rel,mature,category_name):
@@ -401,6 +425,7 @@ def main():
             if name in seen: name += "-"+hashlib.sha1(p.name.encode()).hexdigest()[:6]
             seen.add(name)
             title=title_from_html(source,p.name)
+            if p.name == "300_animated_films.html": title="296 Essential Animated Films"
             # Classify from the collection identity, never incidental words in a large dataset.
             mature=bool(MATURE.search(p.name) or MATURE.search(title))
             interactive=bool(re.search(r"<script\b|<(?:button|input|select|textarea|canvas)\b|\son(?:click|change|submit)\s*=",source,re.I))

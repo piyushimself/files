@@ -63,6 +63,19 @@ def main():
     expected={x.get("href") for x in items}
     actual={p.relative_to(SITE).as_posix() for p in wrappers}
     if expected!=actual: issue("inventory","wrapper-mismatch",f"catalog-only={sorted(expected-actual)} wrappers-only={sorted(actual-expected)}")
+    # Regression guard: only explicitly mature collections may receive an 18+ gate.
+    expected_mature={
+        "collections/sen-mood-movies/index.html",
+        "collections/cinematic-database-1/index.html",
+        "collections/manhwa300/index.html",
+        "collections/manhwa-300-filter-app/index.html",
+        "collections/manga-index/index.html",
+        "collections/taboo-comics/index.html",
+        "collections/top500-adult-manga/index.html",
+    }
+    actual_mature={x.get("href") for x in items if x.get("mature")}
+    if actual_mature!=expected_mature:
+        issue("inventory","mature-classification",f"expected={sorted(expected_mature)} actual={sorted(actual_mature)}")
     with sync_playwright() as p:
         browser=p.chromium.launch(headless=True)
         for name,width,height in viewports:
@@ -75,6 +88,9 @@ def main():
             except PlaywrightTimeout: issue("home","catalogue-render","cards did not render")
             if home.locator("#collection-grid .collection-item").count()!=len(items): issue("home","catalogue-count",home.locator("#collection-grid .collection-item").count())
             overflow(home,"home-"+name)
+            if name=="mobile":
+                nav_state=home.locator(".top-actions").evaluate("""e=>({wrap:getComputedStyle(e).flexWrap,client:e.clientWidth,scroll:e.scrollWidth,heights:[...e.children].map(x=>Math.round(x.getBoundingClientRect().height))})""")
+                if nav_state["wrap"]!="nowrap" or nav_state["scroll"]>nav_state["client"]+4 or any(h>48 for h in nav_state["heights"]): issue("home-mobile","reader-toolbar-layout",json.dumps(nav_state))
             home.screenshot(path=str(OUT/f"home-{name}.png"),full_page=False); screenshots.append(f"home-{name}.png")
             if name=="desktop":
                 home.locator("#library-search").fill("manga")
@@ -111,6 +127,15 @@ def main():
                     page.wait_for_timeout(1000)
                     if not page.title().strip(): issue(qa_name,"title","missing title")
                     if page.locator("main").count()==0: issue(qa_name,"landmark","main landmark missing")
+                    # Editorial article pages must lead with their title; the contents guide is a compact disclosure after it.
+                    if page.locator(".reading-article").count():
+                        article=page.locator(".reading-article")
+                        if article.locator(".article-toc").count()!=1:
+                            issue(qa_name,"article-toc","article contents disclosure missing or outside the article")
+                        else:
+                            order=article.evaluate("""a=>({title:a.querySelector("h1")?.compareDocumentPosition(a.querySelector(".article-toc"))||0,contents:a.querySelector(".article-toc")?.compareDocumentPosition(a.querySelector(".article-content"))||0,open:a.querySelector(".article-toc")?.open})""")
+                            if not (order["title"] & 4) or not (order["contents"] & 4): issue(qa_name,"article-hierarchy","article title, then contents guide, then article body is required")
+                            if order["open"]: issue(qa_name,"article-toc-default","contents guide should start collapsed")
                     if item.get("mature"):
                         if page.locator("#age-gate").count()==0 or not page.locator("#age-gate").is_visible(): issue(qa_name,"age-gate","18+ gate missing or hidden")
                         if "noindex" not in (page.locator('meta[name="robots"]').get_attribute("content") or ""): issue(qa_name,"robots","mature page not noindex")
@@ -167,6 +192,50 @@ def main():
                                 if wrapper_gate.count() and wrapper_gate.is_visible():
                                     wrapper_gate.click()
                                     page.wait_for_timeout(180)
+                            if name=="mobile" and frame.locator("#searchInput").count() and frame.locator("#toolbar .tb-sort").count():
+                                archive=frame.evaluate("""()=>{const e=document.querySelector("#toolbar .tb-sort");return {search:document.querySelector(".mh-search")?.getBoundingClientRect().width||0,viewport:document.documentElement.clientWidth,sort:e?.getBoundingClientRect().width||0,sortScroll:e?.scrollWidth||0,sortClient:e?.clientWidth||0,overflow:e?getComputedStyle(e).overflowX:"visible"}}""")
+                                if archive["search"]<archive["viewport"]*.8 or archive["sort"]>archive["viewport"]+4 or (archive["sortScroll"]>archive["sortClient"]+2 and archive["overflow"] not in ("auto","scroll")):
+                                    issue(qa_name,"manga-archive-mobile-toolbar",json.dumps(archive))
+                            # Capture the untouched initial app state before exercising/opening disclosures.
+                            try:
+                                initial_box=frame_el.bounding_box()
+                                if initial_box and initial_box["width"]>0 and initial_box["height"]>0:
+                                    page.screenshot(path=str(OUT/f"{page_slug}-app-initial-{name}.png"),clip=initial_box)
+                                    screenshots.append(f"{page_slug}-app-initial-{name}.png")
+                            except Exception as e:
+                                issue(qa_name,"initial-app-screenshot",e)
+                            if frame.locator(".arc-title").count():
+                                arcs=frame.evaluate("""()=>({background:getComputedStyle(document.body).backgroundColor,title:getComputedStyle(document.querySelector(".hero-title")).color,arc:getComputedStyle(document.querySelector(".arc-title")).color})""")
+                                if arcs["background"]!="rgb(9, 9, 13)" or arcs["title"]!="rgb(232, 232, 240)":
+                                    issue(qa_name,"four-arcs-dark-theme-contrast",json.dumps(arcs))
+                                if frame.locator(".stat-num").count() and frame.locator(".stat-num").first.evaluate("(e)=>getComputedStyle(e).color")!="rgb(232, 232, 240)":
+                                    issue(qa_name,"four-arcs-stat-contrast",frame.locator(".stat-num").first.evaluate("(e)=>getComputedStyle(e).color"))
+                                if frame.locator("td[style*='color:var(--text3)']").count() and frame.locator("td[style*='color:var(--text3)']").first.evaluate("(e)=>getComputedStyle(e).color")!="rgb(232, 232, 240)":
+                                    issue(qa_name,"four-arcs-count-contrast",frame.locator("td[style*='color:var(--text3)']").first.evaluate("(e)=>getComputedStyle(e).color"))
+                                if frame.locator(".arc-title").count() and frame.locator(".arc-title").first.evaluate("(e)=>getComputedStyle(e).color")!="rgb(217, 178, 232)":
+                                    issue(qa_name,"four-arcs-section-title-contrast",frame.locator(".arc-title").first.evaluate("(e)=>getComputedStyle(e).color"))
+                                if frame.locator(".arc-count").count() and float(frame.locator(".arc-count").first.evaluate("(e)=>getComputedStyle(e).opacity")) < .55:
+                                    issue(qa_name,"four-arcs-work-count-visibility",frame.locator(".arc-count").first.evaluate("(e)=>getComputedStyle(e).opacity"))
+                            if frame.locator(".hero-tag").count():
+                                mood=frame.evaluate("""()=>({background:getComputedStyle(document.body).backgroundColor,title:getComputedStyle(document.querySelector(".row-t")).color,description:getComputedStyle(document.querySelector(".row-d")).color})""")
+                                if mood["background"]!="rgb(8, 8, 16)" or mood["title"]!="rgb(207, 192, 180)" or mood["description"]!="rgb(180, 160, 166)":
+                                    issue(qa_name,"sensual-cinema-contrast",json.dumps(mood))
+                            if frame.locator(".stat-n").count():
+                                contrast_state=frame.evaluate("""()=>{const e=document.createElement("span");e.style.color="var(--rr-ink)";document.body.append(e);const expected=getComputedStyle(e).color;e.remove();return {actual:getComputedStyle(document.querySelector(".stat-n")).color,expected}}""")
+                                if contrast_state["actual"]!=contrast_state["expected"]:
+                                    issue(qa_name,"stat-foreground-contrast",json.dumps(contrast_state))
+                            if frame.locator(".hero-vertical").count():
+                                hero_number=frame.locator(".hero-stat-n").first.evaluate("(e)=>getComputedStyle(e).color") if frame.locator(".hero-stat-n").count() else ""
+                                if hero_number!="rgb(242, 238, 230)": issue(qa_name,"hero-stat-contrast",hero_number)
+                                if name=="mobile" and frame.locator(".hero-vertical").evaluate("(e)=>getComputedStyle(e).display")!="none":
+                                    issue(qa_name,"mobile-vertical-ornament","decorative vertical caption must be hidden on mobile")
+                            if page_slug=="300-animated-films":
+                                shown=frame.locator("#hcount").inner_text().strip() if frame.locator("#hcount").count() else ""
+                                if shown!="296": issue(qa_name,"catalogue-count","animated films title/count must reflect the 296 published records")
+                            if page_slug=="300-animated-films" and name=="mobile":
+                                table_state=frame.evaluate("""()=>{const t=document.querySelector("table");return t?{width:t.getBoundingClientRect().width,viewport:document.documentElement.clientWidth,secondary:getComputedStyle(t.querySelector("tr td:nth-child(4)")||t.querySelector("th:nth-child(4)")).display}:null}""")
+                                if table_state and (table_state["width"]>table_state["viewport"]+4 or table_state["secondary"]!="none"):
+                                    issue(qa_name,"animated-film-mobile-table",json.dumps(table_state))
                             filter_uis=frame.locator("details.rr-filter-disclosure")
                             if filter_uis.count():
                                 for disclosure_index in range(filter_uis.count()):
