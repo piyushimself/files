@@ -207,8 +207,10 @@ def main():
                                 contrast_state=frame.evaluate("""()=>{const e=document.createElement("span");e.style.color="var(--rr-ink)";document.body.append(e);const expected=getComputedStyle(e).color;e.remove();return {actual:getComputedStyle(document.querySelector(".stat-n")).color,expected}}""")
                                 if contrast_state["actual"]!=contrast_state["expected"]:
                                     issue(qa_name,"stat-foreground-contrast",json.dumps(contrast_state))
-                            if name=="mobile" and frame.locator(".hero-vertical").count():
-                                if frame.locator(".hero-vertical").evaluate("(e)=>getComputedStyle(e).display")!="none":
+                            if frame.locator(".hero-vertical").count():
+                                hero_number=frame.locator(".hero-stat-n").first.evaluate("(e)=>getComputedStyle(e).color") if frame.locator(".hero-stat-n").count() else ""
+                                if hero_number!="rgb(242, 238, 230)": issue(qa_name,"hero-stat-contrast",hero_number)
+                                if name=="mobile" and frame.locator(".hero-vertical").evaluate("(e)=>getComputedStyle(e).display")!="none":
                                     issue(qa_name,"mobile-vertical-ornament","decorative vertical caption must be hidden on mobile")
                             if page_slug=="300-animated-films":
                                 shown=frame.locator("#hcount").inner_text().strip() if frame.locator("#hcount").count() else ""
