@@ -663,4 +663,6 @@ body:has(.hero-tag) .tab-btn.active{color:#fff!important}
 }
 body:has(.arc-title){background:#09090d!important;color:#e8e8f0!important}
 body:has(.arc-title) .hero-title{color:#e8e8f0!important}
-body:has(.arc-title) .hero-eyebrow,body:has(.arc-title) .arc-steps{color:#a0a0b8!important}
+body:has(.arc-title) .arc-title{color:#d9b2e8!important}
+body:has(.arc-title) .stat-num{color:#e8e8f0!important}
+body:has(.arc-title) :is(.hero-eyebrow,.arc-label,.arc-step,.stat-lbl){color:#a0a0b8!important}
