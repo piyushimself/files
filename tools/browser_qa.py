@@ -89,7 +89,7 @@ def main():
             overflow(home,"home-"+name)
             if name=="mobile":
                 nav_state=home.locator(".top-actions").evaluate("""e=>({wrap:getComputedStyle(e).flexWrap,client:e.clientWidth,scroll:e.scrollWidth,heights:[...e.children].map(x=>Math.round(x.getBoundingClientRect().height))})""")
-                if nav_state["wrap"]!="nowrap" or any(h>48 for h in nav_state["heights"]): issue("home-mobile","reader-toolbar-layout",json.dumps(nav_state))
+                if nav_state["wrap"]!="nowrap" or nav_state["scroll"]>nav_state["client"]+4 or any(h>48 for h in nav_state["heights"]): issue("home-mobile","reader-toolbar-layout",json.dumps(nav_state))
             home.screenshot(path=str(OUT/f"home-{name}.png"),full_page=False); screenshots.append(f"home-{name}.png")
             if name=="desktop":
                 home.locator("#library-search").fill("manga")
