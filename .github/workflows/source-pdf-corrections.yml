@@ -39,6 +39,8 @@ jobs:
             complete_movie_ratings.pdf
             complete_movie_encyclopedia.pdf
             Cybersecurity_Stories_For_Your_Teams.pdf
+            Three_Year_Old_Reading_Guide (1).pdf
+            World_Stories_3YearOld_Guide.pdf
           if-no-files-found: error
           retention-days: 1
       - name: Commit corrected PDFs to this review branch
