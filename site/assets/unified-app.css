@@ -366,3 +366,95 @@ body .rr-filter-disclosure[open]> .controls-section{border:1px solid var(--rr-li
     overscroll-behavior-x:contain;
   }
 }
+
+
+/* Manga & Comics Archive — restore a coherent charcoal / ivory / terracotta
+   palette. The previous generic token bridge mixed navy surfaces with the
+   archive's near-black canvas and muted its original text colors. Scope this
+   correction to the archive so other collections retain their own palettes. */
+:root:has(body .mc){
+  --rr-canvas:#111316;
+  --rr-surface:#1b1e23;
+  --rr-raised:#252a31;
+  --rr-ink:#f2eee6;
+  --rr-muted:#c0b9ad;
+  --rr-accent:#e47b68;
+  --rr-line:#3a3f47;
+  --rr-focus:#f3a18e;
+  --bg:#111316;--bg2:#1b1e23;--bg3:#252a31;--bg4:#252a31;--bg5:#252a31;
+  --panel:#1b1e23;--ink:#f2eee6;--ink2:#d1c9bc;--ink3:#b0a89b;--ink4:#91897e;
+  --border:#343941;--border2:#454b55;
+  --gold:#e2b968;--gold2:#f0cc7d;--red:#d96b5d;--red2:#f08b7c;
+  --teal:#79b6a4;--purple:#b3a1e2;
+}
+body:has(.mc){
+  background:#111316!important;
+  color:#f2eee6!important;
+}
+body:has(.mc) header,
+body:has(.mc) .tabs-bar,
+body:has(.mc) footer{
+  background:#15181c!important;
+  color:#f2eee6!important;
+  border-color:#343941!important;
+}
+body:has(.mc) :is(.hd-title,.hd-title *,header h1,header h2,.mc-title,.mc-title *, .sec-info h2){
+  color:#f2eee6!important;
+}
+body:has(.mc) :is(.hd-label,.hd-stat-l,.sec-info p,.mc-num,.mc-sub,.mc-desc,.mc-demo,.empty,.empty span,footer){
+  color:#b0a89b!important;
+}
+body:has(.mc) .hd-title em{color:#f08b7c!important}
+body:has(.mc) .hd-stat-n{color:#f0cc7d!important}
+body:has(.mc) .tabs-bar .tab-btn{
+  background:transparent!important;
+  color:#c0b9ad!important;
+  border-color:transparent!important;
+}
+body:has(.mc) .tabs-bar .tab-btn:hover{color:#fff!important;background:#252a31!important}
+body:has(.mc) .tabs-bar .tab-btn.active{
+  background:#a94439!important;
+  color:#fff!important;
+  border-color:#a94439!important;
+}
+body:has(.mc) .controls,
+body:has(.mc) .filter-strip{background:#15181c!important}
+body:has(.mc) .search-input{
+  background:#20242a!important;color:#f2eee6!important;border-color:#555d68!important;
+}
+body:has(.mc) .search-input::placeholder{color:#b0a89b!important}
+body:has(.mc) .count-pill{color:#c0b9ad!important}
+body:has(.mc) .count-pill b{color:#f0cc7d!important}
+body:has(.mc) .f-btn{
+  background:#252a31!important;color:#d1c9bc!important;border-color:#454b55!important;
+}
+body:has(.mc) .f-btn:hover{color:#fff!important;border-color:#e47b68!important}
+body:has(.mc) .f-btn.on{
+  background:#a94439!important;color:#fff!important;border-color:#a94439!important;
+}
+body:has(.mc) .card-grid{background:#343941!important}
+body:has(.mc) .mc{
+  background:#1b1e23!important;color:#f2eee6!important;border-color:#343941!important;
+}
+body:has(.mc) .mc:hover{background:#252a31!important}
+body:has(.mc) .mc :is(.mc-title,.mc-title a,.mc-note){color:#f2eee6!important}
+body:has(.mc) .mc .mc-genre{color:#f0cc7d!important}
+body:has(.mc) .mc .mc-desc{color:#c0b9ad!important}
+body:has(.mc) .mc .mc-controversy{color:#f09a8f!important}
+body:has(.mc) .mc .mc-tag{
+  background:#252a31!important;color:#d1c9bc!important;border-color:#454b55!important;
+}
+body:has(.mc) .mc .mc-tag.tc{color:#9bd2bf!important;border-color:#527f70!important}
+body:has(.mc) .mc .mc-tag.to{color:#a9cbe0!important;border-color:#587e98!important}
+body:has(.mc) .mc .mc-tag.th{color:#e8b28b!important;border-color:#966c4c!important}
+body:has(.mc) .mc .b-guide{background:#203a33!important;color:#a9ddca!important;border-color:#527f70!important}
+body:has(.mc) .mc .b-romance{background:#402b25!important;color:#f0b79b!important;border-color:#966c4c!important}
+body:has(.mc) .mc .b-index{background:#302a43!important;color:#c8b8f0!important;border-color:#706293!important}
+body:has(.mc) .mc .b-taboo{background:#452523!important;color:#ffaaa0!important;border-color:#99564f!important}
+body:has(.mc) .mc .b-1k{background:#203a33!important;color:#a9ddca!important;border-color:#527f70!important}
+body:has(.mc) .mc .mc-rating-bg{color:rgba(240,204,125,.18)!important}
+body:has(.mc) .mc .star.on{color:#f0cc7d!important}
+body:has(.mc) .mc .star.off{color:#77736c!important}
+body:has(.mc) :is(.sec-header,.sec-wrap,footer){border-color:#343941!important}
+body:has(.mc) input:focus-visible,
+body:has(.mc) button:focus-visible{outline-color:#f3a18e!important}
