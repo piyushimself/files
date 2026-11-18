@@ -424,6 +424,35 @@ def edit_ratings_647() -> None:
     save_doc(doc, path)
 
 
+
+def edit_kids_guide_headings() -> None:
+    """Remove unsupported quantitative/left-to-right claims in the toddler guide headings."""
+    path = ROOT / 'Three_Year_Old_Reading_Guide (1).pdf'
+    doc = fitz.open(path)
+    page = doc[14]
+    replacements = [
+        ('Read Every Day — 10 Minutes Beats 1 Hour on Weekends',
+         'Read Every Day — Choose a Rhythm That Works'),
+        ('Point as You Read — Build Left-to-Right Habit',
+         'Point as You Read — Follow the Language Direction'),
+    ]
+    for old_text, new_text in replacements:
+        page_text = re.sub(r'\\s+', ' ', page.get_text())
+        if new_text.casefold() in page_text.casefold():
+            continue
+        if old_text.casefold() not in page_text.casefold():
+            raise RuntimeError(f'Expected heading {old_text!r} was not found')
+        old = find_span_rect(page, old_text)
+        fill = sample_rgb(page, max(int(old.x0 - 2), 0), int((old.y0 + old.y1) / 2))
+        redact(page, [old], fill)
+        rect = fitz.Rect(old.x0, old.y0 - 1, page.rect.width - 45, old.y1 + 1)
+        put(page, rect, new_text, font='Helvetica-Bold', size=9.3,
+            color=(51/255, 51/255, 51/255), lineheight=1.0,
+            label=f'toddler guide heading: {new_text}')
+    save_doc(doc, path)
+
+
+
 def main() -> None:
     edit_masters()
     edit_sensitive()
@@ -436,6 +465,7 @@ def main() -> None:
     edit_encyclopedia()
     edit_cybersecurity()
     edit_kids_guides()
+    edit_kids_guide_headings()
     print('Applied and verified source-PDF corrections. All originals remain withheld pending rights clearance.')
 
 
