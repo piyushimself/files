@@ -90,6 +90,10 @@ def main():
             if name=="mobile":
                 nav_state=home.locator(".top-actions").evaluate("""e=>({wrap:getComputedStyle(e).flexWrap,client:e.clientWidth,scroll:e.scrollWidth,heights:[...e.children].map(x=>Math.round(x.getBoundingClientRect().height))})""")
                 if nav_state["wrap"]!="nowrap" or any(h>48 for h in nav_state["heights"]): issue("home-mobile","reader-toolbar-layout",json.dumps(nav_state))
+            if name=="mobile" and frame.locator(".mc").count():
+                                archive=frame.evaluate("""()=>({search:document.querySelector(".mh-search")?.getBoundingClientRect().width||0,viewport:document.documentElement.clientWidth,sort:document.querySelector("#toolbar .tb-sort")?.getBoundingClientRect().width||0,sortScroll:document.querySelector("#toolbar .tb-sort")?.scrollWidth||0,sortClient:document.querySelector("#toolbar .tb-sort")?.clientWidth||0})""")
+                                if archive["search"]<archive["viewport"]*.8 or archive["sort"]>archive["viewport"]+4 or archive["sortScroll"]<=archive["sortClient"]:
+                                    issue(qa_name,"manga-archive-mobile-toolbar",json.dumps(archive))
             home.screenshot(path=str(OUT/f"home-{name}.png"),full_page=False); screenshots.append(f"home-{name}.png")
             if name=="desktop":
                 home.locator("#library-search").fill("manga")
