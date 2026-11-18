@@ -164,23 +164,25 @@ def main():
                                 if wrapper_gate.count() and wrapper_gate.is_visible():
                                     wrapper_gate.click()
                                     page.wait_for_timeout(180)
-                            filter_ui=frame.locator("details.rr-filter-disclosure")
-                            if filter_ui.count():
-                                if filter_ui.first.evaluate("(e)=>e.open"):
-                                    issue(qa_name,"filters-default-open","collection filters should start collapsed")
-                                else:
-                                    summary=filter_ui.first.locator(":scope > summary")
-                                    panel=filter_ui.first.locator(":scope > :not(summary)")
+                            filter_uis=frame.locator("details.rr-filter-disclosure")
+                            if filter_uis.count():
+                                for disclosure_index in range(filter_uis.count()):
+                                    filter_ui=filter_uis.nth(disclosure_index)
+                                    if filter_ui.evaluate("(e)=>e.open"):
+                                        issue(qa_name,"filters-default-open",f"filter disclosure {disclosure_index+1} should start collapsed")
+                                        continue
+                                    summary=filter_ui.locator(":scope > summary")
+                                    panel=filter_ui.locator(":scope > :not(summary)")
                                     before=panel.locator("input,select,textarea,button").count()
                                     summary.click()
-                                    if not filter_ui.first.evaluate("(e)=>e.open"):
-                                        issue(qa_name,"filters-open","filter disclosure did not open")
+                                    if not filter_ui.evaluate("(e)=>e.open"):
+                                        issue(qa_name,"filters-open",f"filter disclosure {disclosure_index+1} did not open")
                                     after=panel.locator("input,select,textarea,button").count()
                                     if before!=after:
-                                        issue(qa_name,"filters-state","opening disclosure changed filter controls")
+                                        issue(qa_name,"filters-state",f"opening filter disclosure {disclosure_index+1} changed filter controls")
                                     summary.click()
-                                    if filter_ui.first.evaluate("(e)=>e.open"):
-                                        issue(qa_name,"filters-close","filter disclosure did not close")
+                                    if filter_ui.evaluate("(e)=>e.open"):
+                                        issue(qa_name,"filters-close",f"filter disclosure {disclosure_index+1} did not close")
                                     stats["filter_disclosures_tested"]+=1
                             else:
                                 possible=frame.evaluate("""() => [...document.querySelectorAll("#filters,.arc-filters,.controls-wrap,.filter-panel,.filters-panel,.filter-container,.filter-section,.filter-wrap,.filter-bar,.filters,.toolbar,.controls,[class*=filter],[id*=filter],[class*=search],[id*=search]")].some(el => {
