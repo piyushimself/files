@@ -214,6 +214,8 @@ def main():
                                     issue(qa_name,"four-arcs-count-contrast",frame.locator("td[style*='color:var(--text3)']").first.evaluate("(e)=>getComputedStyle(e).color"))
                                 if frame.locator(".arc-title").count() and frame.locator(".arc-title").first.evaluate("(e)=>getComputedStyle(e).color")!="rgb(217, 178, 232)":
                                     issue(qa_name,"four-arcs-section-title-contrast",frame.locator(".arc-title").first.evaluate("(e)=>getComputedStyle(e).color"))
+                                if frame.locator(".arc-count").count() and float(frame.locator(".arc-count").first.evaluate("(e)=>getComputedStyle(e).opacity")) < .55:
+                                    issue(qa_name,"four-arcs-work-count-visibility",frame.locator(".arc-count").first.evaluate("(e)=>getComputedStyle(e).opacity"))
                             if frame.locator(".hero-tag").count():
                                 mood=frame.evaluate("""()=>({background:getComputedStyle(document.body).backgroundColor,title:getComputedStyle(document.querySelector(".row-t")).color,description:getComputedStyle(document.querySelector(".row-d")).color})""")
                                 if mood["background"]!="rgb(8, 8, 16)" or mood["title"]!="rgb(207, 192, 180)" or mood["description"]!="rgb(180, 160, 166)":
