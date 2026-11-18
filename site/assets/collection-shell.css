@@ -56,3 +56,11 @@
   .rr-reading-meta{font-size:.78rem!important;line-height:1.5!important;padding:.45rem .75rem 0!important}
   .rr-app-title{font-size:.82rem!important;line-height:1.5!important;margin:.55rem auto!important;padding:0 .75rem!important;overflow-wrap:anywhere!important}
 }
+
+/* On phones, sequential navigation is available through the collection browser.
+   Hide the duplicate Previous/Next shortcuts so they do not push essential reader
+   controls off-screen; keep the remaining rail touch-scrollable when necessary. */
+@media(max-width:700px){
+  .rr-shell-tools>a#rr-prev,
+  .rr-shell-tools>a#rr-next{display:none!important}
+}
