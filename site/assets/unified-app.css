@@ -320,3 +320,49 @@ body .rr-filter-disclosure[open]> .controls-section{border:1px solid var(--rr-li
   }
   body .ntab .tcnt{flex:0 0 auto!important;white-space:nowrap!important}
 }
+
+
+/* Grand Library mobile: its filter-group flex row and native select retain
+   desktop intrinsic widths. Stack the filter controls inside the available
+   content width; keep the category tabs independently horizontally scrollable. */
+@media(max-width:600px){
+  body #filters{
+    box-sizing:border-box!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    flex-wrap:nowrap!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    gap:8px!important;
+  }
+  body #filters>.fg,body #filters .fg{
+    box-sizing:border-box!important;
+    display:flex!important;
+    flex:0 1 auto!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    flex-wrap:nowrap!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+  }
+  body #filters select.fs,body #filters #fg{
+    box-sizing:border-box!important;
+    display:block!important;
+    flex:0 1 auto!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+  }
+  body #filters .tp-tabs{
+    box-sizing:border-box!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    overflow-x:auto!important;
+    overscroll-behavior-x:contain;
+  }
+}
