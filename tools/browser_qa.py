@@ -129,8 +129,8 @@ def main():
                         if article.locator(".article-toc").count()!=1:
                             issue(qa_name,"article-toc","article contents disclosure missing or outside the article")
                         else:
-                            order=article.evaluate("""a=>({title:a.querySelector("h1")?.compareDocumentPosition(a.querySelector(".article-toc"))||0,open:a.querySelector(".article-toc")?.open})""")
-                            if not (order["title"] & 4): issue(qa_name,"article-hierarchy","article title must precede contents guide")
+                            order=article.evaluate("""a=>({title:a.querySelector("h1")?.compareDocumentPosition(a.querySelector(".article-toc"))||0,contents:a.querySelector(".article-toc")?.compareDocumentPosition(a.querySelector(".article-content"))||0,open:a.querySelector(".article-toc")?.open})""")
+                            if not (order["title"] & 4) or not (order["contents"] & 4): issue(qa_name,"article-hierarchy","article title, then contents guide, then article body is required")
                             if order["open"]: issue(qa_name,"article-toc-default","contents guide should start collapsed")
                     if item.get("mature"):
                         if page.locator("#age-gate").count()==0 or not page.locator("#age-gate").is_visible(): issue(qa_name,"age-gate","18+ gate missing or hidden")
