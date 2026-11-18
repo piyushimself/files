@@ -574,38 +574,38 @@ body:has(.c-t) header .ubtn{background:var(--rr-raised)!important;color:var(--rr
    counters readable, and make the multi-option sort strip scroll rather than
    clipping its labels at phone widths. */
 @media(max-width:768px){
-  body:has(.mc) #masthead .mh-stats-row{
+  body:has(#searchInput) #masthead .mh-stats-row{
     box-sizing:border-box!important;display:flex!important;flex-wrap:wrap!important;
     width:100%!important;max-width:100%!important;overflow:visible!important;
   }
-  body:has(.mc) #masthead .mh-search{
+  body:has(#searchInput) #masthead .mh-search{
     box-sizing:border-box!important;display:flex!important;flex:1 1 100%!important;
     width:100%!important;max-width:none!important;min-width:0!important;
     padding:8px 12px!important;border-right:0!important;border-bottom:1px solid #343941!important;
   }
-  body:has(.mc) #masthead #searchInput{
+  body:has(#searchInput) #masthead #searchInput{
     box-sizing:border-box!important;display:block!important;flex:1 1 auto!important;
     width:100%!important;min-width:0!important;min-height:38px!important;
   }
-  body:has(.mc) #masthead .mh-stat{
+  body:has(#searchInput) #masthead .mh-stat{
     box-sizing:border-box!important;flex:1 1 30%!important;min-width:0!important;
     padding:8px 7px!important;
   }
-  body:has(.mc) #masthead .mh-stat-n{font-size:18px!important}
-  body:has(.mc) #masthead .mh-stat-l{font-size:8px!important;letter-spacing:.08em!important;text-align:center!important}
-  body:has(.mc) #toolbar{
+  body:has(#searchInput) #masthead .mh-stat-n{font-size:18px!important}
+  body:has(#searchInput) #masthead .mh-stat-l{font-size:8px!important;letter-spacing:.08em!important;text-align:center!important}
+  body:has(#searchInput) #toolbar{
     box-sizing:border-box!important;display:flex!important;flex-wrap:wrap!important;
     gap:7px!important;width:100%!important;max-width:100%!important;padding:8px 10px!important;
     top:0!important;
   }
-  body:has(.mc) #toolbar .tb-sort{
+  body:has(#searchInput) #toolbar .tb-sort{
     box-sizing:border-box!important;flex:1 1 100%!important;width:100%!important;
     max-width:100%!important;min-width:0!important;overflow-x:auto!important;
     overflow-y:hidden!important;overscroll-behavior-x:contain!important;
     -webkit-overflow-scrolling:touch!important;scrollbar-width:thin!important;
   }
-  body:has(.mc) #toolbar .sort-btn{box-sizing:border-box!important;flex:0 0 auto!important;padding:8px 10px!important}
-  body:has(.mc) #toolbar .tb-view{margin-left:0!important;flex:0 0 auto!important}
+  body:has(#searchInput) #toolbar .sort-btn{box-sizing:border-box!important;flex:0 0 auto!important;padding:8px 10px!important}
+  body:has(#searchInput) #toolbar .tb-view{margin-left:0!important;flex:0 0 auto!important}
 }
 
 
