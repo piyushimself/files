@@ -1,0 +1,284 @@
+{
+  "ranked_entries": 647,
+  "unique_films_under_title_director_year_rule": 629,
+  "duplicate_groups": 18,
+  "repeat_category_records": 18,
+  "average_imdb_unique_films": "7.58",
+  "average_rt_unique_films": "88",
+  "unique_films_imdb_8_5_plus": 26,
+  "unique_films_imdb_8_0_plus": 184,
+  "unique_films_rt_100": 53,
+  "rt_100_ranked_rows": 55,
+  "duplicate_groups_detail": [
+    {
+      "duplicate_group": "D16",
+      "canonical_rank": 16,
+      "ranks": [
+        16,
+        17
+      ],
+      "title": "Grave of the Fireflies",
+      "director": "Isao Takahata",
+      "year": "1988",
+      "categories": [
+        "Essential",
+        "Anime"
+      ]
+    },
+    {
+      "duplicate_group": "D31",
+      "canonical_rank": 32,
+      "ranks": [
+        32,
+        33
+      ],
+      "title": "Apocalypse Now",
+      "director": "Francis Ford Coppola",
+      "year": "1979",
+      "categories": [
+        "Essential",
+        "War"
+      ]
+    },
+    {
+      "duplicate_group": "D35",
+      "canonical_rank": 37,
+      "ranks": [
+        37,
+        40
+      ],
+      "title": "Come and See",
+      "director": "Elem Klimov",
+      "year": "1985",
+      "categories": [
+        "Essential",
+        "War"
+      ]
+    },
+    {
+      "duplicate_group": "D96",
+      "canonical_rank": 99,
+      "ranks": [
+        99,
+        101
+      ],
+      "title": "The Tale of Princess Kaguya",
+      "director": "Isao Takahata",
+      "year": "2013",
+      "categories": [
+        "Anime",
+        "Animation"
+      ]
+    },
+    {
+      "duplicate_group": "D124",
+      "canonical_rank": 128,
+      "ranks": [
+        128,
+        132
+      ],
+      "title": "The Seventh Seal",
+      "director": "Ingmar Bergman",
+      "year": "1957",
+      "categories": [
+        "Essential",
+        "Drama"
+      ]
+    },
+    {
+      "duplicate_group": "D133",
+      "canonical_rank": 138,
+      "ranks": [
+        138,
+        139
+      ],
+      "title": "Millennium Actress",
+      "director": "Satoshi Kon",
+      "year": "2001",
+      "categories": [
+        "Anime",
+        "Animation"
+      ]
+    },
+    {
+      "duplicate_group": "D135",
+      "canonical_rank": 141,
+      "ranks": [
+        141,
+        142
+      ],
+      "title": "Nausicaa of the Valley of the Wind",
+      "director": "Hayao Miyazaki",
+      "year": "1984",
+      "categories": [
+        "Anime",
+        "Animation"
+      ]
+    },
+    {
+      "duplicate_group": "D139",
+      "canonical_rank": 146,
+      "ranks": [
+        146,
+        147
+      ],
+      "title": "Perfect Blue",
+      "director": "Satoshi Kon",
+      "year": "1997",
+      "categories": [
+        "Anime",
+        "Animation"
+      ]
+    },
+    {
+      "duplicate_group": "D160",
+      "canonical_rank": 168,
+      "ranks": [
+        168,
+        169
+      ],
+      "title": "Castle in the Sky (Laputa)",
+      "director": "Hayao Miyazaki",
+      "year": "1986",
+      "categories": [
+        "Anime",
+        "Animation"
+      ]
+    },
+    {
+      "duplicate_group": "D173",
+      "canonical_rank": 182,
+      "ranks": [
+        182,
+        184
+      ],
+      "title": "Tokyo Godfathers",
+      "director": "Satoshi Kon",
+      "year": "2003",
+      "categories": [
+        "Anime",
+        "Animation"
+      ]
+    },
+    {
+      "duplicate_group": "D272",
+      "canonical_rank": 282,
+      "ranks": [
+        282,
+        284
+      ],
+      "title": "Naked (1993)",
+      "director": "Mike Leigh",
+      "year": "1993",
+      "categories": [
+        "Erotic Art",
+        "Drama"
+      ]
+    },
+    {
+      "duplicate_group": "D286",
+      "canonical_rank": 297,
+      "ranks": [
+        297,
+        298
+      ],
+      "title": "Only Yesterday",
+      "director": "Isao Takahata",
+      "year": "1991",
+      "categories": [
+        "Anime",
+        "Animation"
+      ]
+    },
+    {
+      "duplicate_group": "D308",
+      "canonical_rank": 320,
+      "ranks": [
+        320,
+        321
+      ],
+      "title": "Paprika",
+      "director": "Satoshi Kon",
+      "year": "2006",
+      "categories": [
+        "Anime",
+        "Animation"
+      ]
+    },
+    {
+      "duplicate_group": "D378",
+      "canonical_rank": 391,
+      "ranks": [
+        391,
+        392
+      ],
+      "title": "The Piano",
+      "director": "Jane Campion",
+      "year": "1993",
+      "categories": [
+        "Essential",
+        "Erotic Directors"
+      ]
+    },
+    {
+      "duplicate_group": "D424",
+      "canonical_rank": 438,
+      "ranks": [
+        438,
+        439
+      ],
+      "title": "Pom Poko",
+      "director": "Isao Takahata",
+      "year": "1994",
+      "categories": [
+        "Anime",
+        "Animation"
+      ]
+    },
+    {
+      "duplicate_group": "D565",
+      "canonical_rank": 580,
+      "ranks": [
+        580,
+        581
+      ],
+      "title": "Sweetie",
+      "director": "Jane Campion",
+      "year": "1989",
+      "categories": [
+        "World Cinema",
+        "Erotic Directors"
+      ]
+    },
+    {
+      "duplicate_group": "D594",
+      "canonical_rank": 610,
+      "ranks": [
+        610,
+        611
+      ],
+      "title": "Antichrist",
+      "director": "Lars von Trier",
+      "year": "2009",
+      "categories": [
+        "Erotic Art",
+        "Erotic Directors"
+      ]
+    },
+    {
+      "duplicate_group": "D612",
+      "canonical_rank": 629,
+      "ranks": [
+        629,
+        630
+      ],
+      "title": "Romance (1999)",
+      "director": "Catherine Breillat",
+      "year": "1999",
+      "categories": [
+        "Erotic Art",
+        "Erotic Directors"
+      ]
+    }
+  ]
+}
