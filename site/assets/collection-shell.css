@@ -19,9 +19,8 @@
 @media(max-width:700px){.rr-shell-header{align-items:flex-start;flex-direction:column;gap:.55rem;padding:.7rem 1rem}.rr-shell-tools{width:100%;gap:.3rem}.rr-shell-tools a,.rr-shell-tools button,.rr-nav-menu summary{padding:.42rem .55rem;font-size:.82rem}.rr-nav-panel{left:0;right:auto}.rr-shell-tools #rr-prev,.rr-shell-tools #rr-next{display:none}.rr-reading-meta{text-align:left}}
 
 
-/* Compact, deliberate collection navigation on phones: keep the brand clear,
-   put all reader controls on one touch-scrollable rail instead of wrapping into
-   oversized rows that consume the first screen. */
+/* Keep the collection reader toolbar compact, but wrap controls into visible
+   rows on phones so no action depends on discovering a horizontal swipe rail. */
 @media(max-width:700px){
   .rr-shell-header{
     box-sizing:border-box!important;display:flex!important;flex-direction:column!important;
@@ -31,11 +30,9 @@
   .rr-shell-brand{font-size:.78rem!important;gap:.4rem!important;white-space:normal!important;line-height:1.2!important}
   .rr-shell-brand small{font-size:.68rem!important}
   .rr-shell-tools{
-    box-sizing:border-box!important;display:flex!important;flex-wrap:nowrap!important;
-    align-items:center!important;gap:.35rem!important;width:100%!important;min-width:0!important;
-    overflow-x:auto!important;overflow-y:hidden!important;padding:2px 1px 6px!important;
-    -webkit-overflow-scrolling:touch!important;overscroll-behavior-x:contain!important;
-    scrollbar-width:thin!important;
+    box-sizing:border-box!important;display:flex!important;flex-wrap:wrap!important;
+    align-items:center!important;align-content:flex-start!important;gap:.35rem!important;
+    width:100%!important;min-width:0!important;overflow:visible!important;padding:2px 1px 6px!important;
   }
   .rr-shell-tools>a,.rr-shell-tools>button,.rr-shell-tools>.rr-nav-menu>summary{
     box-sizing:border-box!important;display:inline-flex!important;align-items:center!important;
@@ -58,8 +55,7 @@
 }
 
 /* On phones, sequential navigation is available through the collection browser.
-   Hide the duplicate Previous/Next shortcuts so they do not push essential reader
-   controls off-screen; keep the remaining rail touch-scrollable when necessary. */
+   Hide duplicate Previous/Next shortcuts; the remaining controls wrap into visible rows. */
 @media(max-width:700px){
   .rr-shell-tools>a#rr-prev,
   .rr-shell-tools>a#rr-next{display:none!important}
