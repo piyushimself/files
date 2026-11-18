@@ -558,3 +558,13 @@ body:has(.c-t) header .ubtn{background:var(--rr-raised)!important;color:var(--rr
  body:has(.c-t) header .sn{font-size:24px!important}
  body:has(.c-t) header .hdr-btns{margin-left:0!important;width:100%!important}
 }
+
+
+/* FORBIDDEN PAGES: its decorative vertical side-caption rotates beyond the
+   narrow viewport. It is editorial ornament, not navigation; remove it on phones. */
+@media(max-width:640px){
+  body:has(.hero-vertical) .hero-vertical{display:none!important}
+  body:has(.hero-vertical) .hero-content{padding:36px 18px 42px!important}
+  body:has(.hero-vertical) .hero-stats{width:100%!important;max-width:100%!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  body:has(.hero-vertical) .hero-stat{min-width:0!important;padding:14px 12px!important}
+}
