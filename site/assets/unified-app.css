@@ -289,3 +289,7 @@ body .rr-filter-disclosure> :is(.controls-wrap,.filter-panel,.filters-panel,.fil
 body .rr-filter-disclosure[open]>:is(.controls-wrap,.filter-panel,.filters-panel,.filter-container,.filter-section,.filter-wrap,.filter-bar,.filters,.toolbar,.controls){border:1px solid var(--rr-line)!important;border-radius:8px!important}
 @media(max-width:700px){.rr-filter-disclosure{padding:0 .65rem;margin-bottom:.55rem}.rr-filter-summary{min-height:40px;padding:.5rem .7rem}.rr-filter-hint{font-size:.72rem}}
 @media(prefers-reduced-motion:reduce){.rr-filter-chevron{transition:none}}
+
+/* Explicit filter-panel layout support for collections with legacy IDs/classes. */
+body .rr-filter-disclosure> :is(.arc-filters,.filter-bar,#filters){box-sizing:border-box!important;position:static!important;top:auto!important;z-index:auto!important;width:100%!important;max-width:100%!important;margin:.55rem 0 0!important;box-shadow:none!important}
+body .rr-filter-disclosure[open]> :is(.arc-filters,.filter-bar,#filters){border:1px solid var(--rr-line)!important;border-radius:8px!important}
