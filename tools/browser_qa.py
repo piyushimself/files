@@ -90,10 +90,6 @@ def main():
             if name=="mobile":
                 nav_state=home.locator(".top-actions").evaluate("""e=>({wrap:getComputedStyle(e).flexWrap,client:e.clientWidth,scroll:e.scrollWidth,heights:[...e.children].map(x=>Math.round(x.getBoundingClientRect().height))})""")
                 if nav_state["wrap"]!="nowrap" or any(h>48 for h in nav_state["heights"]): issue("home-mobile","reader-toolbar-layout",json.dumps(nav_state))
-            if name=="mobile" and frame.locator(".mc").count():
-                                archive=frame.evaluate("""()=>{const e=document.querySelector("#toolbar .tb-sort");return {search:document.querySelector(".mh-search")?.getBoundingClientRect().width||0,viewport:document.documentElement.clientWidth,sort:e?.getBoundingClientRect().width||0,sortScroll:e?.scrollWidth||0,sortClient:e?.clientWidth||0,overflow:getComputedStyle(e).overflowX}}""")
-                                if archive["search"]<archive["viewport"]*.8 or archive["sort"]>archive["viewport"]+4 or (archive["sortScroll"]>archive["sortClient"]+2 and archive["overflow"] not in ("auto","scroll")):
-                                    issue(qa_name,"manga-archive-mobile-toolbar",json.dumps(archive))
             home.screenshot(path=str(OUT/f"home-{name}.png"),full_page=False); screenshots.append(f"home-{name}.png")
             if name=="desktop":
                 home.locator("#library-search").fill("manga")
@@ -195,6 +191,10 @@ def main():
                                 if wrapper_gate.count() and wrapper_gate.is_visible():
                                     wrapper_gate.click()
                                     page.wait_for_timeout(180)
+                            if name=="mobile" and frame.locator(".mc").count():
+                                archive=frame.evaluate("""()=>{const e=document.querySelector("#toolbar .tb-sort");return {search:document.querySelector(".mh-search")?.getBoundingClientRect().width||0,viewport:document.documentElement.clientWidth,sort:e?.getBoundingClientRect().width||0,sortScroll:e?.scrollWidth||0,sortClient:e?.clientWidth||0,overflow:e?getComputedStyle(e).overflowX:"visible"}}""")
+                                if archive["search"]<archive["viewport"]*.8 or archive["sort"]>archive["viewport"]+4 or (archive["sortScroll"]>archive["sortClient"]+2 and archive["overflow"] not in ("auto","scroll")):
+                                    issue(qa_name,"manga-archive-mobile-toolbar",json.dumps(archive))
                             # Capture the untouched initial app state before exercising/opening disclosures.
                             try:
                                 initial_box=frame_el.bounding_box()
