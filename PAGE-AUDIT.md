@@ -266,4 +266,4 @@ The previous 17 November statements that real-browser validation was unavailable
 
 ## Outstanding repository-level review item
 
-Pull request [#9](https://github.com/piyushimself/files/pull/9) remains open but is based on an older, diverged branch. Its proposed warm-neutral palette conflicts with the current blue-led design contract in `DESIGN.md`; it must not be merged as-is. Reconcile or close this stale proposal rather than leaving it as an ambiguous candidate for the production design.
+Pull request [#9](https://github.com/piyushimself/files/pull/9) was closed as superseded on 18 November. Its warm-neutral/terracotta proposal conflicted with the blue-led design contract in `DESIGN.md`, and its branch was diverged from current `main`. The historical diff remains available, but it is not a production candidate.
