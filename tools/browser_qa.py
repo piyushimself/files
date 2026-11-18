@@ -16,7 +16,7 @@ apps=sorted((SITE/"apps").glob("*.html"))
 wrappers=sorted((SITE/"collections").glob("*/index.html"))
 viewports=[("desktop",1440,1000),("tablet",768,1024),("mobile",390,844)]
 issues=[]; screenshots=[]
-stats={"catalog_items":len(items),"apps":len(apps),"wrappers":len(wrappers),"desktop_pages":0,"mobile_pages":0,"iframes_loaded":0,"search_controls_tested":0,"select_controls_tested":0,"filter_controls_tested":0,"tabs_tested":0,"shell_controls_tested":0,"direct_mature_apps_tested":0,"mature_iframe_sync_tested":0,"theme_sync_tested":0,"font_sync_tested":0,"scale_sync_tested":0}
+stats={"catalog_items":len(items),"apps":len(apps),"wrappers":len(wrappers),"desktop_pages":0,"mobile_pages":0,"iframes_loaded":0,"search_controls_tested":0,"select_controls_tested":0,"filter_controls_tested":0,"tabs_tested":0,"shell_controls_tested":0,"direct_mature_apps_tested":0,"mature_iframe_sync_tested":0,"theme_sync_tested":0,"font_sync_tested":0,"scale_sync_tested":0,"filter_disclosures_tested":0}
 def issue(page,kind,detail): issues.append({"page":page,"kind":kind,"detail":str(detail)[:2000]})
 def watch(page,label):
     page.on("pageerror",lambda e:issue(label,"pageerror",e))
@@ -158,6 +158,28 @@ def main():
                             frame_title=frame_el.evaluate("(f)=>f.contentDocument?.title||''")
                             if not frame_title.strip(): issue(qa_name,"iframe-title","embedded app title missing")
                             stats["iframes_loaded"]+=1
+                            filter_ui=frame.locator("details.rr-filter-disclosure")
+                            if filter_ui.count():
+                                if filter_ui.first.evaluate("(e)=>e.open"):
+                                    issue(qa_name,"filters-default-open","collection filters should start collapsed")
+                                else:
+                                    summary=filter_ui.first.locator(":scope > summary")
+                                    panel=filter_ui.first.locator(":scope > :not(summary)")
+                                    before=panel.locator("input,select,textarea,button").count()
+                                    summary.click()
+                                    if not filter_ui.first.evaluate("(e)=>e.open"):
+                                        issue(qa_name,"filters-open","filter disclosure did not open")
+                                    after=panel.locator("input,select,textarea,button").count()
+                                    if before!=after:
+                                        issue(qa_name,"filters-state","opening disclosure changed filter controls")
+                                    summary.click()
+                                    if filter_ui.first.evaluate("(e)=>e.open"):
+                                        issue(qa_name,"filters-close","filter disclosure did not close")
+                                    stats["filter_disclosures_tested"]+=1
+                            else:
+                                possible=frame.locator(".controls-wrap,.filter-panel,.filters-panel,.filter-container,.filter-section,.filter-wrap,.filter-bar,.filters,.toolbar,.controls")
+                                if possible.count():
+                                    issue(qa_name,"filters-disclosure-missing","filter-like controls exist but disclosure was not installed")
                             frame_stage="check iframe responsive overflow"
                             overflow(frame,qa_name+"-iframe-"+name)
                             if name!="desktop": mobile_tabs(frame,qa_name+"-iframe-"+name)
