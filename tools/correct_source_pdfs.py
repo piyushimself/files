@@ -439,7 +439,7 @@ def edit_kids_guide_headings() -> None:
          'Point as You Read: Follow the Language Direction'),
     ]
     for old_candidates, new_text in replacements:
-        page_text = re.sub(r'\\s+', ' ', page.get_text()).casefold()
+        page_text = re.sub(r'\s+', ' ', page.get_text()).casefold()
         if new_text.casefold() in page_text:
             continue
         old_text = next((candidate for candidate in old_candidates
