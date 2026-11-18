@@ -562,6 +562,9 @@ body:has(.c-t) header .ubtn{background:var(--rr-raised)!important;color:var(--rr
 
 /* FORBIDDEN PAGES: its decorative vertical side-caption rotates beyond the
    narrow viewport. It is editorial ornament, not navigation; remove it on phones. */
+body:has(.hero-vertical){--cream:#f2eee6!important;--paper:#ede5d5!important;--muted:#c0b9ad!important}
+body:has(.hero-vertical) :is(.hero-title,.hero-stat-n){color:#f2eee6!important}
+body:has(.hero-vertical) .hero-stat-l{color:#c0b9ad!important}
 @media(max-width:640px){
   body:has(.hero-vertical) .hero-vertical{display:none!important}
   body:has(.hero-vertical) .hero-content{padding:36px 18px 42px!important}
