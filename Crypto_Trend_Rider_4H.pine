@@ -65,6 +65,13 @@ fundingPctPer8h     = input.float(0.0, "Funding cost per 8h (%)", minval=0.0, st
 
 scoreThreshold = input.float(60.0, "Composite Score Threshold (gates READY)", minval=0.0, maxval=100.0, group=gScore)
 
+// The model is calibrated for four-hour candles. Refuse other chart
+// intervals rather than silently producing signals and holding-period stats
+// with different semantics.
+chartSeconds = timeframe.in_seconds()
+if na(chartSeconds) or chartSeconds != 14400
+    runtime.error("Crypto Trend Rider must be applied to a 4-hour (240-minute) chart.")
+
 // ============================================================
 // CORE SERIES
 // ============================================================
