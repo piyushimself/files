@@ -243,3 +243,13 @@ Not complete. PR #17's QA is green but post-merge deployment still needs verific
 - PR #18 still contains only a high-confidence correction pass for ten PDFs; full-page editorial/factual review, remaining count/scope issues, cultural classification, URL verification, table/layout review and rating provenance remain incomplete.
 - Rights/ownership evidence is still absent for the source files. Keep them withheld from Pages. The GitHub repository is public, so the root-level source files remain accessible there; changing visibility or rewriting history requires explicit informed authorization.
 - The final completion report is not ready. Do not notify completion.
+
+
+## Branch refresh and PDF validation checkpoint — 19 November 2026, 01:08 IST
+
+- The source-correction branch was merged forward with current main commit `1903c3787156523193380affa23b13ed4c6d2e11` using a two-parent merge commit `f1c30eed140c053f7042d45218d715cfaf90536d`. It is now 18 commits ahead and zero behind main; the PR branch includes the mature-gate QA fix.
+- The temporary one-off PDF correction workflow has been removed from the PR branch. The reproducible correction script remains.
+- The latest corrected toddler-guide PDF screenshots from workflow run [44381955172](https://github.com/piyushimself/files/actions/runs/44381955172) were inspected at full size. Both page-15 “10” badges now display on one line; the Three-Year-Old guide's footer has no unsupported glyphs or visible cover-up patch.
+- Main deployment after PR #17 is confirmed by run [44380872713](https://github.com/piyushimself/files/actions/runs/44380872713): build and deploy succeeded. The post-merge browser artifact (ID 14463562848) reports zero issues across 34 desktop pages, 68 mobile pages, 96 iframe loads, 204 reader controls and 34 reader navigation menus. Independent live HTTP verification remains unavailable in this environment due outbound DNS/network restrictions.
+- PR [#18](https://github.com/piyushimself/files/pull/18) still needs a fresh full PR workflow after the branch refresh and final report updates, then merge and post-merge deployment verification.
+- The repository remains far from full remediation: the source-document review still lists unresolved count/scope and metadata issues, unverified resource links, remaining layout/editorial checks, missing rating provenance, and absent rights evidence. Pine TradingView validation remains external. Do not notify completion.
