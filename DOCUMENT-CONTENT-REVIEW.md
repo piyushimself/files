@@ -161,3 +161,13 @@ A high-confidence correction pass has been applied to the following source PDFs.
 - This rule is reproducible but is not a global film-database identity resolver. Rating sources and as-of dates remain missing.
 
 The corrections and audit are on branch `source-pdf-corrections-clean` and are being submitted for review. The source PDFs remain excluded from the public Pages site until rights/ownership evidence is established.
+
+
+## Additional visual QA findings — 19 November 2026
+
+A direct high-resolution review of the corrected-PDF artifact for PR #18 found layout defects that were not visible in the earlier text-extraction or contact-sheet checks:
+
+- `Three_Year_Old_Reading_Guide (1).pdf`, page 15: the item-number badge for tip 10 wraps into two vertically stacked digits (“1” and “0”), rather than a single “10”. The final teal panel also displays two missing-glyph boxes after “Happy reading.” Remove the unsupported glyphs and center the two-digit number in the badge.
+- `World_Stories_3YearOld_Guide.pdf`, page 15: the item-number badge for tip 10 also wraps into two vertically stacked digits. Reposition or resize the badge text so “10” is displayed on one line.
+
+These are confirmed visual defects in the corrected artifact, not extraction false positives. Keep PR #18 open until both PDFs are corrected, rendered again, and the relevant pages are visually checked. The correction script should also fix the two literal `r'\\s+'` expressions in the 647-PDF page-2 idempotence checks to use whitespace matching (`r'\s+'`), then be rerun against already-corrected PDFs to verify idempotence.
