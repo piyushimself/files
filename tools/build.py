@@ -177,7 +177,7 @@ def enhance_app(path, category_name):
     # Remove remote font dependencies; the reader controls typography locally.
     text=re.sub(r'<link[^>]+(?:fonts\.googleapis\.com|fonts\.gstatic\.com)[^>]*>', '', text, flags=re.I)
     text=re.sub(r'@import\s+url\([\'"]?https?://fonts\.googleapis\.com[^)]*\)\s*;?', '', text, flags=re.I)
-    additions='<link rel="stylesheet" href="../assets/unified-app.css"><script src="../assets/unified-app.js" defer></script><script src="../assets/filter-disclosure.js" defer></script>'
+    additions='<link rel="stylesheet" href="../assets/unified-app.css"><script src="../assets/unified-app.js" defer></script>'
     body_match=re.search(r"<body([^>]*)>",text,re.I)
     if body_match and "data-rr-category" not in body_match.group(1):
         replacement='<body'+body_match.group(1)+' data-rr-category="'+html.escape(category_name,quote=True)+'">'
@@ -210,6 +210,12 @@ def enhance_app(path, category_name):
             text=text[:match.end()]+"<head>"+additions+"</head>"+text[match.end():]
         else:
             text="<!doctype html><html><head>"+additions+"</head><body>"+text+"</body></html>"
+    # Inject the shared filter disclosure independently of the theme layer, including
+    # imported apps that already reference unified-app.css.
+    if "filter-disclosure.js" not in text:
+        head_close=re.search(r"</head\\s*>",text,re.I)
+        if head_close:
+            text=text[:head_close.start()]+'<script src="../assets/filter-disclosure.js" defer></script>'+text[head_close.start():]
     # Add responsive metadata after normalizing even non-standard documents without a <head>.
     if not re.search(r'<meta\b[^>]*name=["\']viewport["\']', text, re.I):
         text=re.sub(r'<head\b[^>]*>', lambda m: m.group(0)+'<meta name="viewport" content="width=device-width, initial-scale=1.0">', text, count=1, flags=re.I)
