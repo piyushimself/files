@@ -68,6 +68,9 @@ def edit_masters() -> None:
     path = ROOT / 'masters_of_e_art_cinema.pdf'
     doc = fitz.open(path)
     page = doc[9]
+    print(f'DEBUG masters path={path.resolve()} size={path.stat().st_size} pages={len(doc)}')
+    print(f'DEBUG masters page10 text={page.get_text()[:900]!r}')
+    print(f'DEBUG masters search={page.search_for("Jane Campion")!r}')
     old = block_rect(page, 'Jane Campion is the only woman to have won the Palme')
     corrected = (
         "Jane Campion was the first woman to win the Palme d'Or at Cannes, for The Piano (1993). "
