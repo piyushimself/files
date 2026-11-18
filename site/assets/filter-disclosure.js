@@ -1,7 +1,7 @@
 (()=> {
 "use strict";
 const KEY="rr-filters-open";
-const selectors=["#filters",".filter-bar",".arc-filters",".controls-wrap",".filter-panel",".filters-panel",".filter-container",".filter-section",".filter-wrap",".filters",".toolbar",".controls"];
+const selectors=[".controls-section","#filters",".filter-bar",".arc-filters",".controls-wrap",".filter-panel",".filters-panel",".filter-container",".filter-section",".filter-wrap",".filters",".toolbar",".controls"];
 function count(el){return el.querySelectorAll('input:not([type="hidden"]),select,textarea').length}
 function wrap(panel,index){
  if(panel.closest(".rr-filter-disclosure"))return;
