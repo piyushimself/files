@@ -134,3 +134,34 @@ ATH - Pine.txt remains unresolved. Its monthly signal and weekly exit timing, st
 3. Continue source-document corrections and count reconciliation. Rights evidence remains unproven for all source documents, so none is cleared for Pages publication.
 4. Continue visual PDF page inspection for table/column extraction and rating glyph defects. Do not alter source entries based only on garbled text extraction.
 5. Continue resolving the ATH Pine execution model, count discrepancies and factual/editorial issues listed above.
+
+
+
+## Continuation checkpoint — 19 November 2026, 00:32 IST
+
+### Current verified state
+- PR #13 “Keep all reader controls visible on mobile” is merged. Its workflow #232 (run 44364534543) FAILED the new navigation test on seven mature-content pages: the age-gate modal intercepted the Browse collections click. The report was downloaded and inspected. The failures are genuine test failures; the rest of the run exercised 34 catalog items, 34 wrappers, 32 apps, 68 mobile page loads, 89 iframe loads and 204 reader controls.
+- Root cause under investigation: QA's age-confirmation handling is not reliably dismissing the wrapper's modal before it clicks the navigation menu. The actual wrapper gate uses #age-gate and #age-confirm; the app iframe has a separate #rr-app-age-gate/#rr-app-age-confirm. The parent wrapper gate must be dismissed and verified before testing parent navigation.
+- PR #17 “Fix mature age-gate handling in mobile browser QA” is open:
+  https://github.com/piyushimself/files/pull/17
+  Branch `fix-mature-gate-mobile-qa`, head `78b9977f7abbb66daae94491f79112964efcdc4e`.
+  It uses the actual visible confirmation control, force-clicks only after checking visibility, and verifies the modal is hidden with display:none. Run #234 / 44376472525 was queued at checkpoint. Poll and inspect the resulting report/screenshots. Do not merge until the seven cases pass and no new issues are introduced.
+- PR #14 “Correct Crypto Trend Rider risk and trade metrics” is merged. It remains an indicator simulation, not a Strategy Tester strategy. PR #16 “Model spread costs and guard partial exits” is open:
+  https://github.com/piyushimself/files/pull/16
+  Branch head `d17224f32f30cc57c4c238ac2a02bd51d1c147a6`.
+  Adds configurable per-side spread cost and caps partial target percentage at 99%. Workflow run #233 / 44375453170 was still in progress at checkpoint. Poll; inspect full static validation and browser QA. Do not merge until all checks pass.
+- PR #15 “Replace unreliable ATH indicator with weekly strategy” is merged as `dd07e4eeb75a06460136ca7aa18fd711fd370b56`; main workflow #231 / 44375319576 completed successfully including deployment. New source `ATH_Weekly_Confirmed_Strategy.pine` uses weekly chart guard, previous confirmed monthly data, confirmed weekly exit, real strategy.exit stop/limit orders and TradingView Strategy Tester metrics. `ATH - Pine.txt` is now marked deprecated and points to replacement. TradingView compilation/backtest, Bar Magnifier review and broker cost calibration remain unperformed; do not claim performance validation or live readiness.
+- Latest source PDF correction runner run #235 / 44376439524 completed successfully on branch `source-pdf-corrections`, head `d282243ca22d119fc2e9ca6e6bd4ddcb42a67b8a`. Artifact `reading-room-corrected-source-pdfs` (ID 14461588246) was downloaded and inspected. It contains corrected versions of many PDFs plus `FILM-RATINGS-647-AUDIT.json` and `FILM-RATINGS-647-MANIFEST.csv`. The 647 ranked rows resolve to 629 unique films under title+director+year matching, across 18 duplicate groups. Calculated unique-film stats: IMDb mean 7.58, RT mean 88%, 26 IMDb 8.5+, 184 IMDb 8.0+, 53 films at 100% RT (55 ranked rows). The manifest is an artifact only so far, not yet committed to main. The source-correction branch was previously 20 commits ahead / 4 behind main; inspect its latest state and create a clean PR/rebase. Do not merge wholesale without inspecting every changed PDF page and the two exact duplicate PDFs.
+- PR #16 and #17 are both open and mergeable at checkpoint.
+- Latest Actions run list included #234 (PR17, queued), #233 (PR16, in progress), #235 (source PDF correction runner, completed success).
+
+### Immediate next actions
+1. Poll run #234 (44376472525) for PR #17. Inspect QA report; confirm mature wrapper gate dismissed before menu interaction on all seven mature collections. If test still fails, diagnose selectors/overlay precisely and correct before merge.
+2. Poll run #233 (44375453170) for PR #16. Review spread/funding math, especially partial exit allocation and remaining position quantity, as well as static validator and full browser QA. Merge only if clean.
+3. Create a new correction PR from the source-pdf-corrections branch after bringing it up to date with main. Include the reproducible 647-row manifest, parser/audit source, and corrected PDFs. Inspect every changed page, not only cover pages; ensure original files are preserved or replaced only where correction is justified. Do not publish any of these PDFs on Pages pending documented rights clearance.
+4. Review corrected PDF pages for count/title labels and typography. Audit 647 manifest rows against source page images and rating sources/as-of date. The 647/629 counts are now supported by a row-level manifest but rating provenance still needs date/source evidence.
+5. Continue fixing high-confidence factual/editorial findings (Asian book placeholders/scope, Palme d'Or claim, Miyazaki quote attribution, sensitive-cinema abuse framing, reading neuroscience claim, GDPR/NIS2/DORA reporting timelines, resource URL validation, stale streaming availability).
+6. Continue checking source documents for visual table defects and Hindi poetry layout. Preserve rights-sensitive material withheld.
+7. Update DOCUMENT-CONTENT-REVIEW.md with per-finding correction commits and validation evidence; update this handoff at every meaningful checkpoint.
+8. Keep TradingView external validation clearly separated from repository static checks.
+
