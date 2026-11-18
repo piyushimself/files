@@ -211,3 +211,7 @@ def main() -> None:
     edit_encyclopedia()
     edit_cybersecurity()
     print('Applied 7 source-PDF corrections. All files remain withheld pending rights clearance.')
+
+
+if __name__ == "__main__":
+    main()
