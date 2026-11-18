@@ -91,3 +91,70 @@ PR #12, “Fix mobile collection navigation overflow”, was merged:
 ## Automation / notification
 
 An hourly condition-watch automation titled “Reading Room Completion Watch” is active. It checks repo commits, PRs, workflow runs, browser QA artifacts and deployment, and should notify only when all correctable work is genuinely complete or clearly blocked and documented. The automation is a status watch; it does not itself perform the repairs.
+
+
+
+## Latest continuation checkpoint — 18 November 2026, 23:25 IST
+
+### Deployment and CI status
+
+- Main run [#228](https://github.com/piyushimself/files/actions/runs/44357926956) completed successfully, including deployment of the PR #12 mobile navigation fix.
+- Main run [#229](https://github.com/piyushimself/files/actions/runs/44358098251) completed successfully, including deployment of the post-merge browser evidence update.
+- Main run [#231](https://github.com/piyushimself/files/actions/runs/44358176598) completed successfully, including deployment of this handoff file.
+- Main run [#230](https://github.com/piyushimself/files/actions/runs/44358148370) built and passed Chromium QA but its deploy job failed only because GitHub Pages was already deploying commit 3ddb7d1d30bfc3dcc574ba798e96289934073012; later runs #229 and #231 deployed successfully. This was a deployment concurrency conflict, not a site-build/browser failure.
+- Latest downloaded browser artifact from run #231 reports 34 collections, 32 apps, 96 iframe loads, 20 search, 14 select, 15 filter, 3 tabs, 4 shell controls, 63 filter disclosures and zero automated issues. Contact sheets of all 34 collection mobile screenshots, 34 desktop screenshots, and the mobile app screenshots were reviewed. Selected individual screenshots were inspected at full size.
+
+### Additional mobile reader finding and fix in progress
+
+Visual inspection found that the collection reader toolbar's horizontally scrollable rail clipped the System font selector and text-size controls in the initial 390px mobile viewport. Although technically swipeable, those controls were not discoverable. PR [#13](https://github.com/piyushimself/files/pull/13) changes the phone layout to wrap controls into visible rows and extends Chromium QA to assert all required controls are visible, the toolbar has no horizontal overflow, Previous/Next remain hidden, and Browse collections exposes all 34 catalogue links.
+
+- PR #13 head: cfc2d03d0a7fa94cb9e640de4c5552a6189a3043
+- Workflow run #232: [44364534543](https://github.com/piyushimself/files/actions/runs/44364534543) — was in progress at checkpoint; poll before merge.
+- Do not merge until the new assertions pass and its screenshots are visually inspected.
+
+### Pine remediation in progress
+
+PR [#14](https://github.com/piyushimself/files/pull/14) contains a proposed correction to Crypto_Trend_Rider_4H.pine:
+- confirmed-bar gating for entries, add-ons, exits and alerts;
+- ratcheted Chandelier stop and prior-bar stop evaluation;
+- enforced initial/shared stop and gap-fill assumption;
+- target high-touch fills with stop priority;
+- partial P&L rolled into completed-leg metrics;
+- configurable fee/slippage/funding estimates; and
+- closed-leg drawdown labeling.
+
+A static CI invariant check was added. It is not a Pine compiler or Strategy Tester run. TradingView compile/backtest and actual exchange-cost calibration remain external acceptance steps. PR #14 workflow is queued/running; poll the check run before deciding whether to merge.
+
+ATH - Pine.txt remains unresolved. Its monthly signal and weekly exit timing, stop/target semantics, and account-level metrics need a coherent execution model; no speculative code edit has been made. Keep both Pine sources withheld.
+
+## Next actions from this checkpoint
+
+1. Poll PR #13 run #232; inspect report and mobile screenshots. If the wrap layout passes and looks correct, merge, then verify the main deployment.
+2. Poll PR #14's workflow/check run. Inspect the static validator output. Review the Pine diff carefully; do not describe it as compiled or backtested. If CI passes and the code review is sound, merge the source correction while keeping it withheld; record TradingView validation as externally blocked.
+3. Continue source-document corrections and count reconciliation. Rights evidence remains unproven for all source documents, so none is cleared for Pages publication.
+4. Continue visual PDF page inspection for table/column extraction and rating glyph defects. Do not alter source entries based only on garbled text extraction.
+5. Continue resolving the ATH Pine execution model, count discrepancies and factual/editorial issues listed above.
+
+## Latest automation checkpoint — 19 November 2026, 00:25 IST
+
+### Merged and deployed work
+
+- PR #12 mobile navigation correction merged as `347fc95e5d5610723eef7e4bc56f5f508074d74d`; its main deployment succeeded.
+- PR #14 Crypto Trend Rider safety/accounting correction merged as `69fc889eb3cc56db2ccea2dd9f1d90f71f4f27b1`; main deployment run [44370527095](https://github.com/piyushimself/files/actions/runs/44370527095) succeeded. It adds confirmed-bar decisions, ratcheted stops, stop/target fills, completed-leg accounting and configurable fee/slippage/funding estimates. A spread estimate was missing and is being added in PR #16.
+- PR #15 ATH replacement merged as `dd07e4eeb75a06460136ca7aa18fd711fd370b56`. The replacement is a weekly Strategy Tester strategy using previous confirmed monthly data and actual stop/target orders. Static checks passed. TradingView compilation, symbol-specific backtesting, Bar Magnifier fill review and broker-cost calibration have **not** been performed; no performance claim or live use is allowed until then.
+
+### Open work
+
+- PR #16, [Model spread costs and guard partial exits](https://github.com/piyushimself/files/pull/16), adds per-side spread costs to the Crypto Trend Rider simulation and caps partial exits at 99% to avoid leaving zero-quantity legs counted as open. Workflow [44375453170](https://github.com/piyushimself/files/actions/runs/44375453170) was queued at this checkpoint. Poll and inspect before merge.
+- Branch `source-pdf-corrections` has generated and visually sampled 10 PDF corrections. The latest run [44373234367](https://github.com/piyushimself/files/actions/runs/44373234367) succeeded. A further correction is being added to the toddler guide headings to remove unsupported “10 minutes beats 1 hour” and left-to-right claims. A temporary workflow will regenerate and commit the updated PDFs and a reproducible 647-row manifest.
+- The 647-entry audit parser verified ranks 1–647 and computed 629 distinct films under title/director/year normalization, with 18 duplicate groups. Deduplicated metrics: average IMDb 7.58, average RT 88%, 26 at IMDb 8.5+, 184 at 8.0+, and 53 at 100% RT. The per-row CSV manifest and executable parser are being committed to the review branch.
+- All source files remain withheld. No rights/ownership evidence has been established for publication.
+- The site browser suite continues to report 34 collections, 32 apps, 96 iframe loads, 204 mobile reader controls and zero automated issues. This is not an exhaustive accessibility, editorial or human visual certification.
+
+### Next actions
+
+1. Poll PR #16 CI, inspect the static checks and merge if green.
+2. Regenerate the toddler guide heading corrections and deduplication manifest on `source-pdf-corrections`; visually inspect the updated page and all changed pages.
+3. Open a PR for the corrected source PDFs, parser and manifest; resolve branch divergence without overwriting current main documentation.
+4. Continue remaining count, factual, placeholder, URL, table-layout and rights findings.
+5. Poll main deployment after PR #15 and PR #16; inspect latest Pages artifact and live site.
