@@ -334,46 +334,64 @@ def replace_ratings_metric(page: fitz.Page, old_label: str, old_value: str,
 def edit_ratings_647() -> None:
     path = ROOT / 'complete_movie_ratings_647.pdf'
     doc = fitz.open(path)
-    cover_text = doc[0].get_text()
-    stats_text = doc[35].get_text()
-    if ("647 Ranked Entries" in cover_text and
-        "629 / 647 entries" in stats_text and
-        "100% RT entries (55 rows; 53 unique films)" in stats_text):
-        doc.close()
-        return
 
     # Cover: distinguish ranked/category records from distinct films.
     page = doc[0]
-    old = block_rect(page, '647 Unique Titles')
-    redact(page, [old], (1, 1, 1))
-    put(page, old, '647 Ranked Entries · 629 Unique Films · IMDb + RT',
-        font='Times-Italic', size=12.2, color=(221/255, 216/255, 192/255),
-        align=fitz.TEXT_ALIGN_CENTER, lineheight=1.0,
-        label='647-entry cover subtitle')
+    cover_text = page.get_text().casefold()
+    if '647 unique titles' in cover_text:
+        old = block_rect(page, '647 Unique Titles')
+        redact(page, [old], (1, 1, 1))
+        put(page, old, '647 Ranked Entries · 629 Unique Films · IMDb + RT',
+            font='Times-Italic', size=12.2, color=(221/255, 216/255, 192/255),
+            align=fitz.TEXT_ALIGN_CENTER, lineheight=1.0,
+            label='647-entry cover subtitle')
+    elif '647 ranked entries' not in cover_text:
+        raise RuntimeError('647-entry cover claim is neither original nor corrected')
 
-    # Page 2: make the duplicate policy explicit and remove the false claim
-    # that every ranked row is a unique film.
+    # Page 21 heading: the list contains ranked category entries, not 647 unique films.
+    page = doc[20]
+    ranking_text = page.get_text().casefold()
+    if 'all 647 films ranked by imdb score' in ranking_text:
+        old = block_rect(page, 'All 647 Films Ranked by IMDB Score')
+        fill = sample_rgb(page, max(int(old.x0 - 2), 0), int((old.y0 + old.y1) / 2))
+        redact(page, [old], fill)
+        heading_rect = fitz.Rect(old.x0, old.y0 - 1, page.rect.width - 35, old.y1 + 1)
+        put(page, heading_rect, 'All 647 Ranked Entries by IMDb Score',
+            font='Times-BoldItalic', size=14.5, color=(245/255, 197/255, 24/255),
+            lineheight=1.0, label='647-entry ranking page heading')
+    elif 'all 647 ranked entries by imdb score' not in ranking_text:
+        raise RuntimeError('647-entry ranking heading is neither original nor corrected')
+
+    # Page 2: make the duplicate policy explicit and remove the false unique-title claim.
     page = doc[1]
-    old = block_rect(page, '647 unique titles')
-    redact(page, [old], (1, 1, 1))
-    about = (
-        'This document contains 647 ranked entries from the movie PDFs in this session. '
-        'After normalizing title, director and year, these entries represent 629 distinct films. '
-        'Eighteen repeat records are retained where a film appears in multiple source categories. '
-        'The earlier ratings PDF covered 218 films; this edition also includes director filmographies from the Masters of Cinema by Genre reference.'
-    )
-    put(page, old, about, font='Times-Roman', size=9.3,
-        color=(13/255, 13/255, 13/255), lineheight=1.08,
-        label='647-entry methodology paragraph')
-    old = block_rect(page, 'only one entry is kept in the combined ranking')
-    redact(page, [old], (1, 1, 1))
-    note = (
-        'Deduplication: 647 ranked entries include 18 cross-category repeats, representing 629 distinct films under the title/director/year rule. '
-        'Repeats remain visible to preserve source-category traceability; see FILM-RATINGS-DEDUPLICATION.md for the audit.'
-    )
-    put(page, old, note, font='Times-Roman', size=9.0,
-        color=(13/255, 13/255, 13/255), lineheight=1.08,
-        label='647-entry duplicate policy')
+    page_text = re.sub(r'\\s+', ' ', page.get_text()).casefold()
+    if '647 unique titles' in page_text:
+        old = block_rect(page, '647 unique titles')
+        redact(page, [old], (1, 1, 1))
+        about = (
+            'This document contains 647 ranked entries from the movie PDFs in this session. '
+            'After normalizing title, director and year, these entries represent 629 distinct films. '
+            'Eighteen repeat records are retained where a film appears in multiple source categories. '
+            'The earlier ratings PDF covered 218 films; this edition also includes director filmographies from the Masters of Cinema by Genre reference.'
+        )
+        put(page, old, about, font='Times-Roman', size=9.3,
+            color=(13/255, 13/255, 13/255), lineheight=1.08,
+            label='647-entry methodology paragraph')
+    elif '629 distinct films' not in page_text:
+        raise RuntimeError('647-entry methodology is neither original nor corrected')
+    page_text = re.sub(r'\\s+', ' ', page.get_text()).casefold()
+    if 'only one entry is kept in the combined ranking' in page_text:
+        old = block_rect(page, 'only one entry is kept in the combined ranking')
+        redact(page, [old], (1, 1, 1))
+        note = (
+            'Deduplication: 647 ranked entries include 18 cross-category repeats, representing 629 distinct films under the title/director/year rule. '
+            'Repeats remain visible to preserve source-category traceability; see FILM-RATINGS-DEDUPLICATION.md for the audit.'
+        )
+        put(page, old, note, font='Times-Roman', size=9.0,
+            color=(13/255, 13/255, 13/255), lineheight=1.08,
+            label='647-entry duplicate policy')
+    elif '18 cross-category repeats' not in page_text:
+        raise RuntimeError('647-entry duplicate policy is neither original nor corrected')
 
     # Every page footer must describe entries and unique films accurately.
     for page_index, page in enumerate(doc):
@@ -395,34 +413,47 @@ def edit_ratings_647() -> None:
                 color=(102/255, 102/255, 102/255), align=fitz.TEXT_ALIGN_CENTER,
                 lineheight=1.0, label=f'ratings footer page {page_index+1}')
 
-    # Recompute the statistics on the 629 distinct films. The 55-row 100% RT
-    # appendix is retained, with its 53-film deduplicated count made explicit.
+    # Recompute unique-film statistics, skipping metrics already corrected.
     page = doc[35]
-    for metric in [
+    metrics = [
         ('Total unique films in this session', '647', 'Unique films after deduplication', '629 / 647 entries', 125, 145),
         ('Average IMDB score', '7.59 / 10', 'Average IMDb score (unique films)', '7.58 / 10', 145, 165),
         ('Average RT Tomatometer', '88%', 'Average RT Tomatometer (unique films)', '88%', 165, 185),
         ('Films rated IMDB 8.5+', '27', 'Unique films rated IMDb 8.5+', '26', 185, 205),
         ('Films rated IMDB 8.0+', '194', 'Unique films rated IMDb 8.0+', '184', 205, 225),
         ('Films with 100% Rotten Tomatoes', '55', 'Unique films with 100% RT', '53', 225, 245),
-    ]:
-        replace_ratings_metric(page, *metric)
-    old = block_rect(page, 'Films with 100% Rotten Tomatoes (55 titles)')
-    redact(page, [old], (1, 1, 1))
-    put(page, old, '100% RT entries (55 rows; 53 unique films)',
-        font='Times-BoldItalic', size=13.5, color=(245/255, 197/255, 24/255),
-        lineheight=1.0, label='100% RT appendix count heading')
+    ]
+    for old_label, old_value, new_label, new_value, y_min, y_max in metrics:
+        stat_text = page.get_text().casefold()
+        if new_label.casefold() in stat_text:
+            continue
+        if old_label.casefold() not in stat_text:
+            raise RuntimeError(f'ratings metric {old_label!r} is neither original nor corrected')
+        replace_ratings_metric(page, old_label, old_value, new_label, new_value, y_min, y_max)
+    stats_text = page.get_text().casefold()
+    if 'films with 100% rotten tomatoes (55 titles)' in stats_text:
+        old = block_rect(page, 'Films with 100% Rotten Tomatoes (55 titles)')
+        redact(page, [old], (1, 1, 1))
+        put(page, old, '100% RT entries (55 rows; 53 unique films)',
+            font='Times-BoldItalic', size=13.5, color=(245/255, 197/255, 24/255),
+            lineheight=1.0, label='100% RT appendix count heading')
+    elif '100% rt entries (55 rows; 53 unique films)' not in stats_text:
+        raise RuntimeError('100% RT appendix heading is neither original nor corrected')
 
     # Final-page tagline.
     page = doc[38]
-    old = block_rect(page, '647 films')
-    redact(page, [old], (1, 1, 1))
-    put(page, old, '647 ranked entries · 629 unique films · rated and ranked',
-        font='Times-Italic', size=10.0, color=(170/255, 170/255, 170/255),
-        align=fitz.TEXT_ALIGN_CENTER, lineheight=1.0,
-        label='647-entry final-page tagline')
-    save_doc(doc, path)
+    final_text = page.get_text().casefold()
+    if '647 films' in final_text:
+        old = block_rect(page, '647 films')
+        redact(page, [old], (1, 1, 1))
+        put(page, old, '647 ranked entries · 629 unique films · rated and ranked',
+            font='Times-Italic', size=10.0, color=(170/255, 170/255, 170/255),
+            align=fitz.TEXT_ALIGN_CENTER, lineheight=1.0,
+            label='647-entry final-page tagline')
+    elif '647 ranked entries' not in final_text:
+        raise RuntimeError('647-entry final tagline is neither original nor corrected')
 
+    save_doc(doc, path)
 
 
 def edit_kids_guide_headings() -> None:
