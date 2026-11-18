@@ -165,3 +165,25 @@ ATH - Pine.txt remains unresolved. Its monthly signal and weekly exit timing, st
 7. Update DOCUMENT-CONTENT-REVIEW.md with per-finding correction commits and validation evidence; update this handoff at every meaningful checkpoint.
 8. Keep TradingView external validation clearly separated from repository static checks.
 
+
+## Continuation checkpoint — 19 November 2026, 00:36 IST
+
+### Source-PDF correction PR preparation
+- A clean branch `source-pdf-corrections-clean` was created from current main commit `6cab6377a5e0234ff0f8a0a7a7c61994b1ad55bf` to avoid merging the stale/diverged 31-commit correction branch wholesale.
+- It contains 10 corrected source PDFs, `tools/correct_source_pdfs.py`, the strict 647-row parser, CSV manifest, JSON audit and deduplication report. The temporary correction workflow is deliberately not included.
+- The final correction workflow run [44377163391](https://github.com/piyushimself/files/actions/runs/44377163391) succeeded and produced artifact `reading-room-corrected-source-pdfs`. The parser verifies 647 rows, 629 unique films, 18 duplicate groups, 18 repeated category records, IMDb mean 7.58, RT mean 88%, 26 IMDb 8.5+, 184 IMDb 8.0+, and 53 unique 100% RT films (55 ranked rows).
+- The parser's normalization was tightened after a failed run: it strips only known trailing year/category/director/“Laputa” labels; other parenthetical text is preserved. The final successful run validates the strict parser.
+- The first toddler-guide heading pass produced replacement question marks because Helvetica did not support the em dash in that insertion. A second pass replaced those with colons; the final page 15 was visually inspected and now renders correctly.
+
+### Open PRs and CI
+- PR #16 `Model spread costs and guard partial exits` is open. It adds per-side spread cost to the fee/slippage/funding model and prevents 100% “partial” exits from leaving zero-quantity legs open. Its full browser QA was still running at checkpoint; poll before merge. The dashboard cost label should also be checked so per-side costs are not described as “per 8h”.
+- PR #17 `Fix mature age-gate handling in mobile browser QA` is open. It addresses seven test failures caused by the mature wrapper modal intercepting Browse collections clicks. Its full Chromium QA was still running; inspect all seven cases and screenshots before merge.
+- Main run [44375319576](https://github.com/piyushimself/files/actions/runs/44375319576) after PR #15 completed successfully including deployment.
+- Main run [44376623677](https://github.com/piyushimself/files/actions/runs/44376623677) is running the updated QA and handoff commit; inspect its final report.
+- The corrected PDFs are not publication-cleared. No licence or ownership evidence has been provided. Keep them withheld.
+
+### Next actions
+1. Poll PR #16 and #17 workflows; inspect browser reports/screenshots. Correct the PR #16 cost-label wording before merge if still inaccurate.
+2. Open a PR from `source-pdf-corrections-clean`; confirm all 10 binary PDFs and audit files are in the diff, no temporary workflow is included, and no rights-sensitive files are added to the Pages artifact.
+3. Inspect all changed PDF pages, not only the sampled pages; keep all originals withheld.
+4. Continue the remaining count, cultural scope, placeholder, quote, URL, table layout, rating provenance, and rights findings.
