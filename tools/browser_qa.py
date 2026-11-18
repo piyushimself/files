@@ -16,7 +16,7 @@ apps=sorted((SITE/"apps").glob("*.html"))
 wrappers=sorted((SITE/"collections").glob("*/index.html"))
 viewports=[("desktop",1440,1000),("tablet",768,1024),("mobile",390,844)]
 issues=[]; screenshots=[]
-stats={"catalog_items":len(items),"apps":len(apps),"wrappers":len(wrappers),"desktop_pages":0,"mobile_pages":0,"iframes_loaded":0,"search_controls_tested":0,"select_controls_tested":0,"filter_controls_tested":0,"tabs_tested":0,"shell_controls_tested":0,"direct_mature_apps_tested":0,"mature_iframe_sync_tested":0,"theme_sync_tested":0,"font_sync_tested":0,"scale_sync_tested":0,"filter_disclosures_tested":0}
+stats={"catalog_items":len(items),"apps":len(apps),"wrappers":len(wrappers),"desktop_pages":0,"mobile_pages":0,"iframes_loaded":0,"search_controls_tested":0,"select_controls_tested":0,"filter_controls_tested":0,"tabs_tested":0,"shell_controls_tested":0,"direct_mature_apps_tested":0,"mature_iframe_sync_tested":0,"theme_sync_tested":0,"font_sync_tested":0,"scale_sync_tested":0,"filter_disclosures_tested":0,"reader_shell_mobile_pages_tested":0,"reader_shell_mobile_controls_tested":0,"reader_nav_menu_tested":0}
 def issue(page,kind,detail): issues.append({"page":page,"kind":kind,"detail":str(detail)[:2000]})
 def watch(page,label):
     page.on("pageerror",lambda e:issue(label,"pageerror",e))
@@ -142,6 +142,37 @@ def main():
                     elif page.locator("#age-gate").count() and page.locator("#age-gate").is_visible():
                         issue(qa_name,"unexpected-age-gate","non-mature collection is incorrectly blocked by an 18+ gate")
                     overflow(page,qa_name+"-"+name)
+                    if name=="mobile":
+                        shell_state=page.locator(".rr-shell-tools").evaluate("""e=>{
+                          const cs=getComputedStyle(e),v=window.innerWidth;
+                          const visible=[...e.children].filter(x=>!x.hidden&&getComputedStyle(x).display!=="none");
+                          const boxes=visible.map(x=>{const r=x.getBoundingClientRect();return {id:x.id||x.className||x.tagName.toLowerCase(),left:Math.round(r.left),right:Math.round(r.right),top:Math.round(r.top),bottom:Math.round(r.bottom)}});
+                          const rows=[...new Set(boxes.map(x=>x.top))];
+                          return {wrap:cs.flexWrap,overflowX:cs.overflowX,client:e.clientWidth,scroll:e.scrollWidth,viewport:v,rows,boxes};
+                        }""")
+                        if shell_state["wrap"]!="wrap" or shell_state["overflowX"] not in ("visible","clip") or shell_state["scroll"]>shell_state["client"]+4 or len(shell_state["rows"])>2 or any(x["left"]<0 or x["right"]>shell_state["viewport"]+2 for x in shell_state["boxes"]):
+                            issue(qa_name,"reader-toolbar-layout",json.dumps(shell_state))
+                        for selector in ("#rr-theme-toggle","#rr-font-family","#rr-text-smaller","#rr-text-larger"):
+                            control=page.locator(selector)
+                            if control.count()!=1 or not control.is_visible():
+                                issue(qa_name,"reader-toolbar-control",f"{selector} must be present and visible on mobile")
+                        for selector in ("#rr-prev","#rr-next"):
+                            control=page.locator(selector)
+                            if control.count() and control.is_visible():
+                                issue(qa_name,"reader-toolbar-duplicate-navigation",f"{selector} should be hidden on mobile")
+                        stats["reader_shell_mobile_pages_tested"]+=1
+                        stats["reader_shell_mobile_controls_tested"]+=len(shell_state["boxes"])
+                        menu=page.locator(".rr-nav-menu > summary")
+                        if menu.count()==1:
+                            menu.click()
+                            links=page.locator("#rr-nav-links a")
+                            if not page.locator(".rr-nav-menu").evaluate("(e)=>e.open") or links.count()!=len(items):
+                                issue(qa_name,"reader-nav-menu",f"mobile collection browser did not expose all {len(items)} links (found {links.count()})")
+                            else:
+                                stats["reader_nav_menu_tested"]+=1
+                            menu.click()
+                        else:
+                            issue(qa_name,"reader-nav-menu","Browse collections control missing")
                     top_fn=f"{page_slug}-{name}.png"
                     page.screenshot(path=str(OUT/top_fn),full_page=False); screenshots.append(top_fn)
                     frame_el=page.locator("iframe").first
