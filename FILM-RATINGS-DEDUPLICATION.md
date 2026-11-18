@@ -54,9 +54,9 @@ The 100% RT appendix still contains **55 ranked rows**, representing **53 distin
 - Machine-readable audit: \`FILM-RATINGS-647-AUDIT.json\`
 - Run: \`python tools/manifest_movie_ratings_647.py complete_movie_ratings_647.pdf --csv FILM-RATINGS-647-MANIFEST.csv --json FILM-RATINGS-647-AUDIT.json\`
 
-The parser uses the PDF's fixed column geometry, validates all ranks 1–647 and required fields, normalizes Unicode/punctuation, removes parenthetical title disambiguators, and groups by normalized title + director + year. It verifies that all repeated rows have matching IMDb and RT values.
+The parser uses the PDF's fixed column geometry, validates all ranks 1–647 and required fields, normalizes Unicode/punctuation, strips a trailing parenthetical only when it is a year, recognized source category, director-name suffix, or the known alternate-title label “Laputa”, and groups by normalized title + normalized director + year. Unrecognized parenthetical title text is preserved. It verifies that all repeated rows have matching IMDb and RT values.
 
-This is a reproducible, conservative duplicate rule, not a global film-database identity resolver. Alternate titles or inconsistent director/year metadata could conceal additional aliases. Therefore **629 is the distinct-film count under this documented rule**, not a claim of globally verified unique works.
+This is a reproducible, rule-based deduplication method, not a global film-database identity resolver. It can still miss aliases that are not encoded in the PDF and should be reviewed before treating 629 as a universal catalogue count. Alternate titles or inconsistent director/year metadata could conceal additional aliases. Therefore **629 is the distinct-film count under this documented rule**, not a claim of globally verified unique works.
 
 ## Visual table verification
 
