@@ -24,7 +24,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install PDF editing dependency
-        run: python -m pip install --disable-pip-version-check pymupdf
+        run: python -m pip install --disable-pip-version-check pymupdf==1.26.7
       - name: Apply reviewed PDF corrections
         run: python tools/correct_source_pdfs.py
       - name: Upload corrected PDFs for visual verification
