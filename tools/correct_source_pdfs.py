@@ -289,7 +289,7 @@ def edit_kids_guides() -> None:
 
 
 
-def edit_kids_guide_claims(filename: str, replacements: list[tuple[str, str]],
+def edit_kids_guide_claim_blocks(filename: str, replacements: list[tuple[str, str]],
                            *, color: tuple[float, float, float], size: float = 7.4) -> None:
     """Soften absolute developmental promises in the page-15 reading tips."""
     path = ROOT / filename
@@ -313,7 +313,7 @@ def edit_kids_guide_claims(filename: str, replacements: list[tuple[str, str]],
 
 
 def edit_kids_guide_claims() -> None:
-    edit_kids_guide_claims(
+    edit_kids_guide_claim_blocks(
         'Three_Year_Old_Reading_Guide (1).pdf',
         [
             ('If your child wants the same book 20 times in a row, that is perfect. Repetition at this age is how vocabulary, memory and security are built.',
@@ -329,7 +329,7 @@ def edit_kids_guide_claims() -> None:
         ],
         color=(102/255, 102/255, 102/255),
     )
-    edit_kids_guide_claims(
+    edit_kids_guide_claim_blocks(
         'World_Stories_3YearOld_Guide.pdf',
         [
             ('If your child wants the same book 15 times in a row — wonderful! Repetition builds vocabulary, memory, and security.',
