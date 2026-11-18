@@ -1,0 +1,372 @@
+//@version=5
+strategy("ATH Monthly Breakout / Weekly Execution Strategy v1",
+     overlay=true,
+     pyramiding=3,
+     initial_capital=30000,
+     default_qty_type=strategy.fixed,
+     default_qty_value=1,
+     commission_type=strategy.commission.percent,
+     commission_value=0.1,
+     slippage=1,
+     process_orders_on_close=true,
+     calc_on_every_tick=false,
+     calc_on_order_fills=false,
+     use_bar_magnifier=true,
+     max_labels_count=500)
+
+// This strategy deliberately runs on a WEEKLY chart.
+// It consumes only the previous, confirmed MONTHLY candle for signals.
+// Therefore monthly signals become actionable on the first weekly bar
+// whose opening time belongs to the next month. Entry is at that weekly
+// bar's close, not retroactively at the earlier monthly wick.
+// Strategy Tester owns account-level P&L, drawdown and return statistics.
+//
+// Backtest defaults: 0.10% commission per order and 1 tick slippage.
+// Change these in Strategy Properties to match the instrument/broker.
+// Bar Magnifier is enabled; review its lower-timeframe coverage before
+// relying on stop/target sequencing. This is not a guarantee of live fills.
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TIMEFRAME GUARD
+// ─────────────────────────────────────────────────────────────────────────────
+chartSeconds = timeframe.in_seconds()
+if na(chartSeconds) or chartSeconds != 604800
+    runtime.error("Apply this strategy to a 1-week (W) chart. Monthly signals are confirmed and weekly exits are evaluated on weekly bars.")
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INPUTS
+// ─────────────────────────────────────────────────────────────────────────────
+gEntry   = "Monthly Entry"
+gRisk    = "Risk and Position Sizing"
+gExit    = "Weekly Exit and Targets"
+gVolume  = "Monthly Volume"
+gTrend   = "Monthly Trend"
+gWatch   = "Watch / Ready"
+
+breakoutMode = input.string("Strict: Close > Open", "Monthly bullish confirmation",
+     options=["Strict: Close > Open", "Relaxed: Close in Top X% of Range", "Relaxed: Close > Prior Month Close"],
+     group=gEntry)
+closeRangePct = input.float(50.0, "Minimum close position in monthly range (%)",
+     minval=1.0, maxval=99.0, step=1.0, group=gEntry,
+     tooltip="50 means the monthly close must be in the upper half of its high-low range.")
+confirmBufferPct = input.float(0.5, "Confirmation buffer above ATH wick (%)",
+     minval=0.0, step=0.1, group=gEntry)
+
+riskPerLegPct = input.float(1.0, "Risk per entry (% of strategy equity)",
+     minval=0.1, maxval=5.0, step=0.1, group=gRisk)
+maxCapitalDeployPct = input.float(80.0, "Maximum deployed capital (%)",
+     minval=10.0, maxval=100.0, step=5.0, group=gRisk)
+maxPyramidLegs = input.int(3, "Maximum open entry legs", minval=1, maxval=3, group=gRisk)
+
+stopTypeInput = input.string("Confirmation Month Low", "Initial stop",
+     options=["Confirmation Month Low", "Monthly ATR"], group=gExit)
+atrLen = input.int(14, "Monthly ATR length", minval=1, group=gExit)
+atrMult = input.float(2.0, "Monthly ATR multiplier", minval=0.1, step=0.1, group=gExit)
+weeklySmaLen = input.int(30, "Weekly SMA exit length", minval=1, group=gExit)
+rr1 = input.float(2.0, "Target 1 R multiple", minval=0.5, step=0.1, group=gExit)
+rr2 = input.float(3.0, "Target 2 R multiple", minval=0.6, step=0.1, group=gExit)
+target1Pct = input.float(50.0, "Position closed at Target 1 (%)",
+     minval=1.0, maxval=99.0, step=1.0, group=gExit)
+
+volAvgLen = input.int(6, "Monthly volume average length", minval=1, group=gVolume)
+volMultiplier = input.float(1.3, "Monthly volume expansion multiplier",
+     minval=0.1, step=0.1, group=gVolume)
+dryUpLookback = input.int(3, "Monthly volume dry-up length", minval=1, group=gVolume)
+
+smaFastLen = input.int(50, "Monthly fast SMA length", minval=1, group=gTrend)
+smaSlowLen = input.int(200, "Monthly slow SMA length", minval=1, group=gTrend)
+
+watchZonePct = input.float(5.0, "WATCH zone below ATH (%)", minval=0.0, group=gWatch)
+readyZonePct = input.float(2.0, "READY zone below ATH (%)", minval=0.0, group=gWatch)
+enableWatch = input.bool(true, "Enable WATCH", group=gWatch)
+enableReady = input.bool(true, "Enable READY", group=gWatch)
+scoreThreshold = input.float(60.0, "Composite score threshold for READY",
+     minval=0.0, maxval=100.0, group=gWatch)
+
+if rr2 <= rr1
+    runtime.error("Target 2 R multiple must be greater than Target 1.")
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PREVIOUS CONFIRMED MONTHLY DATA
+// [1] offsets make lookahead_on safe: no developing monthly candle is used.
+// The values are repeated across weekly bars within the following month.
+// ─────────────────────────────────────────────────────────────────────────────
+[mOpen, mHigh, mLow, mClose, mVolume, mPrevClose, mPrevHigh, mPrevLow,
+ mVolAvg, mVolRecentAvg, mSmaFast, mSmaSlow, mAtr] =
+    request.security(syminfo.tickerid, "M",
+        [open[1], high[1], low[1], close[1], volume[1], close[2], high[2], low[2],
+         ta.sma(volume, volAvgLen)[1], ta.sma(volume, dryUpLookback)[1],
+         ta.sma(close, smaFastLen)[1], ta.sma(close, smaSlowLen)[1], ta.atr(atrLen)[1]],
+        gaps=barmerge.gaps_off, lookahead=barmerge.lookahead_on)
+
+// First weekly bar whose opening timestamp belongs to a new month.
+// The previous month's OHLCV is already final at this point.
+newMonth = ta.change(time("M")) != 0
+
+monthRange = mHigh - mLow
+closePositionPct = monthRange > 0 ? (mClose - mLow) / monthRange * 100.0 : na
+monthlyIsBullish = breakoutMode == "Strict: Close > Open" ? mClose > mOpen :
+     breakoutMode == "Relaxed: Close in Top X% of Range" ? closePositionPct >= closeRangePct :
+     mClose > mPrevClose
+
+volLooksGood = not na(mVolAvg) and mVolume > mVolAvg * volMultiplier
+volDryingUp = not na(mVolRecentAvg) and not na(mVolAvg) and mVolRecentAvg < mVolAvg
+higherHigh = not na(mPrevHigh) and mHigh > mPrevHigh
+higherLow = not na(mPrevLow) and mLow > mPrevLow
+risingLowsInBase = not na(mPrevLow) and mLow > mPrevLow
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MONTHLY ATH / CONSOLIDATION STATE
+// ─────────────────────────────────────────────────────────────────────────────
+var float runningATH = na
+var int consolMonths = 0
+var float consolHigh = na
+var float consolLow = na
+var float pendingLevel = na
+var float[] consolHistoryArr = array.new_float()
+
+priorATH = runningATH
+athSignal = newMonth and not na(priorATH) and mHigh > priorATH and monthlyIsBullish
+
+if newMonth
+    if athSignal
+        if consolMonths > 0
+            array.push(consolHistoryArr, float(consolMonths))
+            if array.size(consolHistoryArr) > 20
+                array.shift(consolHistoryArr)
+        consolMonths := 0
+        consolHigh := na
+        consolLow := na
+    else if not na(priorATH)
+        consolMonths += 1
+        consolHigh := na(consolHigh) ? mHigh : math.max(consolHigh, mHigh)
+        consolLow := na(consolLow) ? mLow : math.min(consolLow, mLow)
+
+    runningATH := na(runningATH) ? mHigh : math.max(runningATH, mHigh)
+
+tightnessPct = not na(consolHigh) and not na(consolLow) and consolHigh > 0 ?
+     (consolHigh - consolLow) / consolHigh * 100.0 : na
+isTightBase = not na(tightnessPct) and tightnessPct <= 20.0
+distanceFromATH = not na(runningATH) and runningATH > 0 ?
+     (runningATH - mClose) / runningATH * 100.0 : na
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SCORING
+// ─────────────────────────────────────────────────────────────────────────────
+f_clamp01(x) =>
+    math.max(0.0, math.min(1.0, x))
+
+f_trendScore(c, smaF, smaS, hh, hl) =>
+    float score = 0.0
+    score += not na(smaF) and c > smaF ? 20.0 : 0.0
+    score += not na(smaF) and not na(smaS) and smaF > smaS ? 20.0 : 0.0
+    score += not na(smaS) and c > smaS ? 20.0 : 0.0
+    score += hh ? 20.0 : 0.0
+    score += hl ? 20.0 : 0.0
+    score
+
+f_consolLengthScore(months, historyArr) =>
+    float score = 0.0
+    if array.size(historyArr) >= 2
+        avgPast = array.sum(historyArr) / array.size(historyArr)
+        ratio = avgPast > 0 ? months / avgPast : (months > 0 ? 2.0 : 0.0)
+        score := ratio >= 1.2 ? 30.0 : ratio >= 0.7 ? 20.0 : ratio >= 0.3 ? 10.0 : 0.0
+    else
+        score := months >= 3 ? 30.0 : months >= 2 ? 20.0 : months >= 1 ? 10.0 : 0.0
+    months >= 9 ? math.min(score, 20.0) : score
+
+f_baseScore(tight, months, historyArr, rising, dryUp) =>
+    lengthScore = f_consolLengthScore(months, historyArr)
+    tightnessScore = na(tight) ? 0.0 : 30.0 * (1.0 - f_clamp01((tight - 20.0) / 20.0))
+    risingScore = rising ? 20.0 : 0.0
+    dryUpScore = dryUp ? 20.0 : 0.0
+    math.min(lengthScore + tightnessScore + risingScore + dryUpScore, 100.0)
+
+f_volumeScore(volCur, volAvg, volMult, dryUp) =>
+    expansionScore = not na(volAvg) and volCur > volAvg * volMult ? 40.0 :
+         not na(volAvg) and volCur > volAvg ? 20.0 : 0.0
+    aboveAvgScore = not na(volAvg) and volCur > volAvg ? 30.0 : 0.0
+    dryUpScore = dryUp ? 30.0 : 0.0
+    math.min(expansionScore + aboveAvgScore + dryUpScore, 100.0)
+
+trendScore = f_trendScore(mClose, mSmaFast, mSmaSlow, higherHigh, higherLow)
+baseScore = f_baseScore(tightnessPct, consolMonths, consolHistoryArr, risingLowsInBase, volDryingUp)
+volumeScore = f_volumeScore(mVolume, mVolAvg, volMultiplier, volDryingUp)
+compositeScore = (trendScore + baseScore + volumeScore) / 3.0
+
+// ─────────────────────────────────────────────────────────────────────────────
+// WATCH / READY
+// ─────────────────────────────────────────────────────────────────────────────
+watchCondition = enableWatch and strategy.opentrades == 0 and not athSignal and
+     not na(distanceFromATH) and distanceFromATH >= 0 and distanceFromATH <= watchZonePct and consolMonths >= 2
+readyCondition = enableReady and strategy.opentrades == 0 and not athSignal and
+     not na(distanceFromATH) and distanceFromATH >= 0 and distanceFromATH <= readyZonePct and
+     isTightBase and volLooksGood and consolMonths >= 3 and compositeScore >= scoreThreshold
+
+watchTriggered = newMonth and watchCondition and not watchCondition[1]
+readyTriggered = newMonth and readyCondition and not readyCondition[1]
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CONFIRMED MONTHLY TRIGGER
+// The signal month arms its high + buffer. A later completed month must
+// trade above it. The strategy enters only if the first weekly close after
+// that confirmation month also remains above the trigger level.
+// ─────────────────────────────────────────────────────────────────────────────
+triggerLevel = pendingLevel
+confirmEntryTrigger = newMonth and not na(triggerLevel) and mHigh > triggerLevel
+
+if newMonth
+    if confirmEntryTrigger
+        pendingLevel := na
+    if athSignal
+        pendingLevel := mHigh * (1.0 + confirmBufferPct / 100.0)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// WEEKLY EXIT + REAL STRATEGY ORDERS
+// ─────────────────────────────────────────────────────────────────────────────
+weeklySMA = ta.sma(close, weeklySmaLen)
+weeklyExit = barstate.isconfirmed and close < weeklySMA and close < open
+
+pointValue = nz(syminfo.pointvalue, 1.0)
+float deployedCapital = 0.0
+if strategy.opentrades > 0
+    for i = 0 to strategy.opentrades - 1
+        deployedCapital += math.abs(strategy.opentrades.size(i)) *
+             strategy.opentrades.entry_price(i) * pointValue
+
+entryPrice = close
+stopPrice = stopTypeInput == "Confirmation Month Low" ? mLow : entryPrice - mAtr * atrMult
+riskPerUnit = not na(stopPrice) and stopPrice < entryPrice ?
+     (entryPrice - stopPrice) * pointValue : na
+riskCash = strategy.equity * riskPerLegPct / 100.0
+qtyByRisk = not na(riskPerUnit) and riskPerUnit > 0 ?
+     math.floor(riskCash / riskPerUnit) : 0.0
+capitalRoom = math.max(strategy.equity * maxCapitalDeployPct / 100.0 - deployedCapital, 0.0)
+qtyByCapital = entryPrice > 0 and pointValue > 0 ?
+     math.floor(capitalRoom / (entryPrice * pointValue)) : 0.0
+entryQty = math.min(qtyByRisk, qtyByCapital)
+
+entrySignal = confirmEntryTrigger and close > triggerLevel and not weeklyExit and
+     strategy.opentrades < maxPyramidLegs and entryQty >= 1
+entryBlocked = confirmEntryTrigger and not entrySignal
+
+if weeklyExit and strategy.position_size > 0
+    strategy.close_all(comment="Red weekly close below weekly SMA")
+
+var int legSequence = 0
+var float lastStop = na
+var float lastTarget1 = na
+var float lastTarget2 = na
+
+if entrySignal
+    legSequence += 1
+    entryId = "L" + str.tostring(legSequence)
+    riskDistance = entryPrice - stopPrice
+    target1 = entryPrice + riskDistance * rr1
+    target2 = entryPrice + riskDistance * rr2
+    strategy.entry(entryId, strategy.long, qty=entryQty, comment="Confirmed monthly breakout")
+    strategy.exit("T1_" + entryId, from_entry=entryId, qty_percent=target1Pct,
+         stop=stopPrice, limit=target1, comment_profit="Target 1", comment_loss="Stop")
+    strategy.exit("T2_" + entryId, from_entry=entryId, qty_percent=100.0 - target1Pct,
+         stop=stopPrice, limit=target2, comment_profit="Target 2", comment_loss="Stop")
+    lastStop := stopPrice
+    lastTarget1 := target1
+    lastTarget2 := target2
+    label.new(bar_index, low, "BUY " + str.tostring(entryQty, "#") +
+         "\nEntry " + str.tostring(entryPrice, "#.##") +
+         "\nSL " + str.tostring(stopPrice, "#.##"),
+         style=label.style_label_up, color=color.new(color.lime, 0),
+         textcolor=color.black, size=size.tiny)
+
+if athSignal
+    label.new(bar_index, high, "MONTHLY ATH\nTrigger " +
+         str.tostring(mHigh * (1.0 + confirmBufferPct / 100.0), "#.##"),
+         style=label.style_label_down, color=color.new(color.fuchsia, 0),
+         textcolor=color.white, size=size.tiny)
+
+if weeklyExit and strategy.position_size > 0
+    label.new(bar_index, high, "WEEKLY SMA EXIT",
+         style=label.style_label_down, color=color.new(color.red, 0),
+         textcolor=color.white, size=size.tiny)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DASHBOARD — Strategy Tester supplies the authoritative account metrics.
+// ─────────────────────────────────────────────────────────────────────────────
+winRate = strategy.closedtrades > 0 ?
+     strategy.wintrades / strategy.closedtrades * 100.0 : na
+statusText = weeklyExit and strategy.position_size > 0 ? "WEEKLY EXIT" :
+     entrySignal ? "BUY" : entryBlocked ? "TRIGGER BLOCKED" :
+     strategy.opentrades > 0 ? "IN TRADE" :
+     not na(pendingLevel) ? "ARMED" : readyCondition ? "READY" :
+     watchCondition ? "WATCH" : "WAIT"
+
+var table dash = table.new(position.top_right, 2, 9,
+     bgcolor=color.new(color.black, 72), border_width=1)
+
+if barstate.islast
+    table.cell(dash, 0, 0, "ATH STRATEGY", text_color=color.white,
+         bgcolor=color.new(color.gray, 35), text_size=size.small)
+    table.cell(dash, 1, 0, statusText, text_color=color.white,
+         bgcolor=color.new(color.gray, 35), text_size=size.small)
+    table.cell(dash, 0, 1, "Monthly ATH distance", text_color=color.silver, text_size=size.small)
+    table.cell(dash, 1, 1, na(distanceFromATH) ? "-" : str.tostring(distanceFromATH, "#.#") + "%",
+         text_color=color.white, text_size=size.small)
+    table.cell(dash, 0, 2, "Months since ATH", text_color=color.silver, text_size=size.small)
+    table.cell(dash, 1, 2, str.tostring(consolMonths), text_color=color.white, text_size=size.small)
+    table.cell(dash, 0, 3, "Trend / Base / Volume", text_color=color.silver, text_size=size.small)
+    table.cell(dash, 1, 3, str.tostring(trendScore, "#") + " / " +
+         str.tostring(baseScore, "#") + " / " + str.tostring(volumeScore, "#"),
+         text_color=color.white, text_size=size.small)
+    table.cell(dash, 0, 4, "Pending trigger", text_color=color.silver, text_size=size.small)
+    table.cell(dash, 1, 4, na(pendingLevel) ? "-" : str.tostring(pendingLevel, "#.##"),
+         text_color=color.fuchsia, text_size=size.small)
+    table.cell(dash, 0, 5, "Open legs", text_color=color.silver, text_size=size.small)
+    table.cell(dash, 1, 5, str.tostring(strategy.opentrades) + " / " + str.tostring(maxPyramidLegs),
+         text_color=color.white, text_size=size.small)
+    table.cell(dash, 0, 6, "Strategy net profit", text_color=color.silver, text_size=size.small)
+    table.cell(dash, 1, 6, str.tostring(strategy.netprofit, "#.##"),
+         text_color=strategy.netprofit >= 0 ? color.lime : color.red, text_size=size.small)
+    table.cell(dash, 0, 7, "Strategy win rate", text_color=color.silver, text_size=size.small)
+    table.cell(dash, 1, 7, na(winRate) ? "-" : str.tostring(winRate, "#.#") + "%",
+         text_color=color.white, text_size=size.small)
+    table.cell(dash, 0, 8, "Weekly SMA", text_color=color.silver, text_size=size.small)
+    table.cell(dash, 1, 8, str.tostring(weeklySMA, "#.##"),
+         text_color=color.aqua, text_size=size.small)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PLOTS AND ALERTS
+// ─────────────────────────────────────────────────────────────────────────────
+plot(runningATH, "Confirmed monthly ATH", color=color.orange, linewidth=2)
+plot(pendingLevel, "Armed monthly confirmation level", color=color.fuchsia,
+     style=plot.style_circles, linewidth=1)
+plot(weeklySMA, "Weekly SMA exit line", color=color.new(color.blue, 15), linewidth=2)
+plot(strategy.position_size > 0 ? lastStop : na, "Most recent leg stop",
+     color=color.new(color.red, 15), style=plot.style_linebr)
+plot(strategy.position_size > 0 ? lastTarget1 : na, "Most recent leg Target 1",
+     color=color.new(color.teal, 20), style=plot.style_linebr)
+plot(strategy.position_size > 0 ? lastTarget2 : na, "Most recent leg Target 2",
+     color=color.new(color.purple, 20), style=plot.style_linebr)
+
+plotshape(athSignal, title="Confirmed monthly ATH signal", style=shape.xcross,
+     location=location.abovebar, color=color.fuchsia, size=size.tiny)
+plotshape(entrySignal, title="Strategy entry", style=shape.triangleup,
+     location=location.belowbar, color=color.lime, size=size.tiny)
+plotshape(weeklyExit and strategy.position_size > 0, title="Weekly SMA exit",
+     style=shape.triangledown, location=location.abovebar, color=color.red, size=size.tiny)
+plotshape(watchTriggered, title="WATCH", style=shape.circle,
+     location=location.belowbar, color=color.yellow, size=size.tiny)
+plotshape(readyTriggered, title="READY", style=shape.diamond,
+     location=location.belowbar, color=color.aqua, size=size.tiny)
+
+alertcondition(athSignal, title="Monthly ATH trigger armed",
+     message="{{ticker}}: Confirmed monthly ATH signal; a later completed month must break the buffered trigger.")
+alertcondition(entrySignal, title="ATH strategy entry",
+     message="{{ticker}}: Confirmed monthly trigger and weekly execution filter passed; Strategy Tester entry submitted.")
+alertcondition(entryBlocked, title="ATH trigger blocked",
+     message="{{ticker}}: Monthly confirmation occurred but the weekly entry, risk size or capital/leg cap blocked the trade.")
+alertcondition(weeklyExit, title="Weekly SMA exit",
+     message="{{ticker}}: Confirmed red weekly close below the weekly SMA; remaining strategy positions are closed.")
+alertcondition(watchTriggered, title="ATH WATCH zone",
+     message="{{ticker}}: Entered WATCH zone based on the previous confirmed monthly candle.")
+alertcondition(readyTriggered, title="ATH READY signal",
+     message="{{ticker}}: READY conditions passed using the previous confirmed monthly candle.")
