@@ -123,6 +123,15 @@ def main():
                     page.wait_for_timeout(1000)
                     if not page.title().strip(): issue(qa_name,"title","missing title")
                     if page.locator("main").count()==0: issue(qa_name,"landmark","main landmark missing")
+                    # Editorial article pages must lead with their title; the contents guide is a compact disclosure after it.
+                    if page.locator(".reading-article").count():
+                        article=page.locator(".reading-article")
+                        if article.locator(".article-toc").count()!=1:
+                            issue(qa_name,"article-toc","article contents disclosure missing or outside the article")
+                        else:
+                            order=article.evaluate("""a=>({title:a.querySelector("h1")?.compareDocumentPosition(a.querySelector(".article-toc"))||0,open:a.querySelector(".article-toc")?.open})""")
+                            if not (order["title"] & 4): issue(qa_name,"article-hierarchy","article title must precede contents guide")
+                            if order["open"]: issue(qa_name,"article-toc-default","contents guide should start collapsed")
                     if item.get("mature"):
                         if page.locator("#age-gate").count()==0 or not page.locator("#age-gate").is_visible(): issue(qa_name,"age-gate","18+ gate missing or hidden")
                         if "noindex" not in (page.locator('meta[name="robots"]').get_attribute("content") or ""): issue(qa_name,"robots","mature page not noindex")
