@@ -213,6 +213,10 @@ def main():
                             if page_slug=="300-animated-films":
                                 shown=frame.locator("#hcount").inner_text().strip() if frame.locator("#hcount").count() else ""
                                 if shown!="296": issue(qa_name,"catalogue-count","animated films title/count must reflect the 296 published records")
+                            if page_slug=="300-animated-films" and name=="mobile":
+                                table_state=frame.evaluate("""()=>{const t=document.querySelector("table");return t?{width:t.getBoundingClientRect().width,viewport:document.documentElement.clientWidth,secondary:getComputedStyle(t.querySelector("tr td:nth-child(4)")||t.querySelector("th:nth-child(4)")).display}:null}""")
+                                if table_state and (table_state["width"]>table_state["viewport"]+4 or table_state["secondary"]!="none"):
+                                    issue(qa_name,"animated-film-mobile-table",json.dumps(table_state))
                             filter_uis=frame.locator("details.rr-filter-disclosure")
                             if filter_uis.count():
                                 for disclosure_index in range(filter_uis.count()):
