@@ -252,3 +252,18 @@ The original root-level HTML sources are preserved byte-for-byte against the mai
 - Qwen_html_20260604_f25nf6z8p.html: quote the malformed author value and close the malformed style element in the generated copy so the app script and markup parse correctly.
 
 The Qwen, Big Library and Complete Film Collection sources are restored to their exact main blobs. Count/markup repairs do not alter the root source uploads.
+
+## 18 November 2026 — post-merge browser regression and mobile navigation
+
+The previous 17 November statements that real-browser validation was unavailable are superseded by the Chromium workflow evidence below.
+
+- Pull request [#12](https://github.com/piyushimself/files/pull/12) removed duplicate Previous/Next shortcuts from the narrow-screen reader toolbar. Its PR workflow [44355644772](https://github.com/piyushimself/files/actions/runs/44355644772) completed successfully on head `8706ae97ddeef1873881c5aa63b0b5f88a39a813`. Build, generated-script validation, document extraction, Chromium QA and artifact upload all passed.
+- The browser report recorded 34 catalogue items, 32 apps, 34 wrappers, 34 desktop pages, 68 mobile page checks, 96 iframe loads, 20 search controls, 14 select controls, 15 filter controls, 3 tabs, 4 shell controls, 7 direct mature-app checks, 21 mature iframe-sync checks, 33 theme-sync checks, 32 font-sync checks, 32 text-scale checks, 63 filter disclosures and **0 automated issues**.
+- The QA artifact was downloaded and its report inspected. Representative mobile screenshots were visually sampled for the homepage, Manga & Comics Archive, 300 Animated Films, Cinematic Canon, Manga 1000 and Big Library. The homepage hierarchy and collection content remained readable in the sampled captures. The collection toolbar uses a horizontally scrollable touch rail; the duplicate Previous/Next shortcuts no longer consume its width. This screenshot sample is not a claim that every screenshot received individual human review.
+- PR #12 was squash-merged to `main` as [`347fc95e5d5610723eef7e4bc56f5f508074d74d`](https://github.com/piyushimself/files/commit/347fc95e5d5610723eef7e4bc56f5f508074d74d).
+- The preceding main-branch run [44356951764](https://github.com/piyushimself/files/actions/runs/44356951764), for document-review commit `3719ade5ba3dab09cc4e66d612dc0eff5d884d8e`, completed successfully, including deployment. The post-merge main run [44357926956](https://github.com/piyushimself/files/actions/runs/44357926956) is the acceptance run for the merged navigation fix; at the time of this update it is still in progress. Do not call the merged commit deployed until that run's deploy job succeeds.
+- The automated Chromium suite is broad smoke, interaction and responsive coverage. It is not an exhaustive human visual review of every page/control, a formal WCAG audit, or screen-reader/keyboard-only certification. Those remain separate acceptance work.
+
+## Outstanding repository-level review item
+
+Pull request [#9](https://github.com/piyushimself/files/pull/9) remains open but is based on an older, diverged branch. Its proposed warm-neutral palette conflicts with the current blue-led design contract in `DESIGN.md`; it must not be merged as-is. Reconcile or close this stale proposal rather than leaving it as an ambiguous candidate for the production design.
