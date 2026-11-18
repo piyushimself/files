@@ -336,7 +336,9 @@ def edit_ratings_647() -> None:
     doc = fitz.open(path)
     cover_text = doc[0].get_text()
     stats_text = doc[35].get_text()
+    ranking_heading_text = doc[20].get_text()
     if ("647 Ranked Entries" in cover_text and
+        "All 647 Ranked Entries by IMDb Score" in ranking_heading_text and
         "629 / 647 entries" in stats_text and
         "100% RT entries (55 rows; 53 unique films)" in stats_text):
         doc.close()
@@ -350,6 +352,16 @@ def edit_ratings_647() -> None:
         font='Times-Italic', size=12.2, color=(221/255, 216/255, 192/255),
         align=fitz.TEXT_ALIGN_CENTER, lineheight=1.0,
         label='647-entry cover subtitle')
+
+    # Page 21 heading: the list contains ranked category entries, not 647 unique films.
+    page = doc[20]
+    old = block_rect(page, 'All 647 Films Ranked by IMDB Score')
+    fill = sample_rgb(page, max(int(old.x0 - 2), 0), int((old.y0 + old.y1) / 2))
+    redact(page, [old], fill)
+    heading_rect = fitz.Rect(old.x0, old.y0 - 1, page.rect.width - 35, old.y1 + 1)
+    put(page, heading_rect, 'All 647 Ranked Entries by IMDb Score',
+        font='Times-BoldItalic', size=14.5, color=(245/255, 197/255, 24/255),
+        lineheight=1.0, label='647-entry ranking page heading')
 
     # Page 2: make the duplicate policy explicit and remove the false claim
     # that every ranked row is a unique film.
