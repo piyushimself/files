@@ -63,6 +63,18 @@ def main():
     expected={x.get("href") for x in items}
     actual={p.relative_to(SITE).as_posix() for p in wrappers}
     if expected!=actual: issue("inventory","wrapper-mismatch",f"catalog-only={sorted(expected-actual)} wrappers-only={sorted(actual-expected)}")
+    # Regression guard: only explicitly mature collections may receive an 18+ gate.
+    expected_mature={
+        "collections/sen-mood-movies/index.html",
+        "collections/manhwa300/index.html",
+        "collections/manhwa-300-filter-app/index.html",
+        "collections/manga-index/index.html",
+        "collections/taboo-comics/index.html",
+        "collections/top500-adult-manga/index.html",
+    }
+    actual_mature={x.get("href") for x in items if x.get("mature")}
+    if actual_mature!=expected_mature:
+        issue("inventory","mature-classification",f"expected={sorted(expected_mature)} actual={sorted(actual_mature)}")
     with sync_playwright() as p:
         browser=p.chromium.launch(headless=True)
         for name,width,height in viewports:
