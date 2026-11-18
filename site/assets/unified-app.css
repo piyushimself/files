@@ -568,3 +568,42 @@ body:has(.c-t) header .ubtn{background:var(--rr-raised)!important;color:var(--rr
   body:has(.hero-vertical) .hero-stats{width:100%!important;max-width:100%!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
   body:has(.hero-vertical) .hero-stat{min-width:0!important;padding:14px 12px!important}
 }
+
+
+/* Manga & Comics Archive: give search its own full-width row, keep source
+   counters readable, and make the multi-option sort strip scroll rather than
+   clipping its labels at phone widths. */
+@media(max-width:768px){
+  body:has(.mc) #masthead .mh-stats-row{
+    box-sizing:border-box!important;display:flex!important;flex-wrap:wrap!important;
+    width:100%!important;max-width:100%!important;overflow:visible!important;
+  }
+  body:has(.mc) #masthead .mh-search{
+    box-sizing:border-box!important;display:flex!important;flex:1 1 100%!important;
+    width:100%!important;max-width:none!important;min-width:0!important;
+    padding:8px 12px!important;border-right:0!important;border-bottom:1px solid #343941!important;
+  }
+  body:has(.mc) #masthead #searchInput{
+    box-sizing:border-box!important;display:block!important;flex:1 1 auto!important;
+    width:100%!important;min-width:0!important;min-height:38px!important;
+  }
+  body:has(.mc) #masthead .mh-stat{
+    box-sizing:border-box!important;flex:1 1 30%!important;min-width:0!important;
+    padding:8px 7px!important;
+  }
+  body:has(.mc) #masthead .mh-stat-n{font-size:18px!important}
+  body:has(.mc) #masthead .mh-stat-l{font-size:8px!important;letter-spacing:.08em!important;text-align:center!important}
+  body:has(.mc) #toolbar{
+    box-sizing:border-box!important;display:flex!important;flex-wrap:wrap!important;
+    gap:7px!important;width:100%!important;max-width:100%!important;padding:8px 10px!important;
+    top:0!important;
+  }
+  body:has(.mc) #toolbar .tb-sort{
+    box-sizing:border-box!important;flex:1 1 100%!important;width:100%!important;
+    max-width:100%!important;min-width:0!important;overflow-x:auto!important;
+    overflow-y:hidden!important;overscroll-behavior-x:contain!important;
+    -webkit-overflow-scrolling:touch!important;scrollbar-width:thin!important;
+  }
+  body:has(.mc) #toolbar .sort-btn{box-sizing:border-box!important;flex:0 0 auto!important;padding:8px 10px!important}
+  body:has(.mc) #toolbar .tb-view{margin-left:0!important;flex:0 0 auto!important}
+}
