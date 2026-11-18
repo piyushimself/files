@@ -200,6 +200,43 @@ def edit_cybersecurity() -> None:
     save_doc(doc, path)
 
 
+def edit_kids_guide(filename: str, neural_needle: str, neural_text: str,
+                    direction_needle: str, direction_text: str,
+                    *, color: tuple[float, float, float], size: float) -> None:
+    path = ROOT / filename
+    doc = fitz.open(path)
+    page = doc[14]
+    for needle, replacement, label in [
+        (neural_needle, neural_text, "reading-frequency evidence wording"),
+        (direction_needle, direction_text, "language-aware reading-direction guidance"),
+    ]:
+        old = block_rect(page, needle)
+        fill = sample_rgb(page, int(old.x0 + 2), int(old.y0 + 2))
+        redact(page, [old], fill)
+        put(page, old, replacement, font='Helvetica-Oblique', size=size,
+            color=color, lineheight=1.08, label=f'{filename} {label}')
+    save_doc(doc, path)
+
+
+def edit_kids_guides() -> None:
+    edit_kids_guide(
+        'Three_Year_Old_Reading_Guide (1).pdf',
+        'Daily reading at age 3 builds more neural pathways',
+        'Short, regular shared-reading sessions can make books part of everyday life. Choose a relaxed rhythm that works for your family.',
+        'Run your finger slowly under words',
+        'If it helps your child follow along, move a finger or bookmark under the words. Follow the script and direction of the language you are reading; pointing is optional.',
+        color=(102/255, 102/255, 102/255), size=7.8,
+    )
+    edit_kids_guide(
+        'World_Stories_3YearOld_Guide.pdf',
+        'Even 10 minutes of daily reading builds more neural pathways',
+        'Short, regular shared reading offers language exposure and a familiar book routine. Longer relaxed sessions are welcome too; choose a rhythm that works for your family.',
+        'Run your finger under words as you read',
+        'If it helps your child follow along, point under the words. Follow the script and direction of the language you are reading; pointing is optional.',
+        color=(26/255, 82/255, 118/255), size=7.8,
+    )
+
+
 def main() -> None:
     edit_masters()
     edit_sensitive()
@@ -210,6 +247,7 @@ def main() -> None:
     edit_ratings()
     edit_encyclopedia()
     edit_cybersecurity()
+    edit_kids_guides()
     print('Applied 7 source-PDF corrections. All files remain withheld pending rights clearance.')
 
 
