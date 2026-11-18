@@ -203,6 +203,10 @@ def main():
                                     screenshots.append(f"{page_slug}-app-initial-{name}.png")
                             except Exception as e:
                                 issue(qa_name,"initial-app-screenshot",e)
+                            if frame.locator(".stat-n").count():
+                                contrast_state=frame.evaluate("""()=>({actual:getComputedStyle(document.querySelector(".stat-n")).color,expected:getComputedStyle(document.documentElement).getPropertyValue("--rr-ink").trim()})""")
+                                if contrast_state["actual"]!=contrast_state["expected"]:
+                                    issue(qa_name,"stat-foreground-contrast",json.dumps(contrast_state))
                             if name=="mobile" and frame.locator(".hero-vertical").count():
                                 if frame.locator(".hero-vertical").evaluate("(e)=>getComputedStyle(e).display")!="none":
                                     issue(qa_name,"mobile-vertical-ornament","decorative vertical caption must be hidden on mobile")
