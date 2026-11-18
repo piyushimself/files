@@ -630,3 +630,23 @@ body:has(.stat-n) .stat-l{color:var(--rr-muted)!important}
   body:has(#hcount) td:nth-child(2){white-space:normal!important;overflow-wrap:anywhere!important}
   body:has(#hcount) td:nth-child(3){white-space:nowrap!important}
 }
+
+
+/* Sensual Mood Cinema was authored as a deliberate near-black editorial
+   experience. Preserve that dark art direction instead of forcing its fixed
+   pale-on-dark row palette onto the library's light canvas. */
+:root:has(body .hero-tag){
+  --rr-canvas:#080810;--rr-surface:#111018;--rr-raised:#1b1722;
+  --rr-ink:#e2d4c8;--rr-muted:#b4a0a6;--rr-accent:#d66b9d;
+  --rr-line:#3d2d3a;--rr-focus:#f4a7ca;
+}
+body:has(.hero-tag){background:#080810!important;color:#e2d4c8!important}
+body:has(.hero-tag) .row-t{color:#cfc0b4!important}
+body:has(.hero-tag) .row-d{color:#b4a0a6!important}
+body:has(.hero-tag) :is(.row-n,.row-y,.count,.hero-tag){color:#b4a0a6!important}
+body:has(.hero-tag) .list-box{background:#111018!important;border-color:#3d2d3a!important}
+body:has(.hero-tag) .row{border-color:#302633!important}
+body:has(.hero-tag) .search-box{background:#14121c!important;color:#e2d4c8!important;border-color:#554052!important}
+body:has(.hero-tag) .tabs{background:#0d0b13!important}
+body:has(.hero-tag) .tab-btn{color:#d3c3ce!important}
+body:has(.hero-tag) .tab-btn.active{color:#fff!important}
