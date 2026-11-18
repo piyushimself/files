@@ -66,6 +66,7 @@ def main():
     # Regression guard: only explicitly mature collections may receive an 18+ gate.
     expected_mature={
         "collections/sen-mood-movies/index.html",
+        "collections/cinematic-database-1/index.html",
         "collections/manhwa300/index.html",
         "collections/manhwa-300-filter-app/index.html",
         "collections/manga-index/index.html",
