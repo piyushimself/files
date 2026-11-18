@@ -68,9 +68,12 @@ def edit_masters() -> None:
     path = ROOT / 'masters_of_e_art_cinema.pdf'
     doc = fitz.open(path)
     page = doc[9]
-    print(f'DEBUG masters path={path.resolve()} size={path.stat().st_size} pages={len(doc)}')
-    print(f'DEBUG masters page10 text={page.get_text()[:900]!r}')
-    print(f'DEBUG masters search={page.search_for("Jane Campion")!r}')
+    page_text = re.sub(r'\s+', ' ', page.get_text()).casefold()
+    if "jane campion was the first woman to win the palme d'or" in page_text:
+        doc.close()
+        return
+    if "jane campion is the only woman to have won the palme" not in page_text:
+        raise RuntimeError("Campion paragraph is neither original nor corrected; inspect the source page before editing")
     old = block_rect(page, 'Jane Campion is the only woman to have won the Palme')
     corrected = (
         "Jane Campion was the first woman to win the Palme d'Or at Cannes, for The Piano (1993). "
@@ -91,6 +94,12 @@ def edit_sensitive() -> None:
     path = ROOT / 'sensitive_cinema.pdf'
     doc = fitz.open(path)
     page = doc[23]
+    page_text = re.sub(r'\s+', ' ', page.get_text()).casefold()
+    if "violence is not proof of love" in page_text:
+        doc.close()
+        return
+    if "love that contains violence is still love" not in page_text:
+        raise RuntimeError("Sensitive Cinema wording is neither original nor corrected")
     old = block_rect(page, 'WHAT IT TEACHES\nLove that contains violence')
     redact(page, [old], (12/255, 12/255, 12/255))
     heading = fitz.Rect(old.x0, old.y0, old.x1, old.y0 + 10.2)
@@ -108,6 +117,12 @@ def edit_anime_quote(filename: str, page_index: int, tagline: str, size: float) 
     path = ROOT / filename
     doc = fitz.open(path)
     page = doc[page_index]
+    page_text = re.sub(r'\s+', ' ', page.get_text()).casefold()
+    if tagline.casefold() in page_text:
+        doc.close()
+        return
+    if "anime was a mistake" not in page_text or "hayao miyazaki (misquoted" not in page_text:
+        raise RuntimeError(f"{filename}: quote block is neither original nor corrected")
     quote = block_rect(page, '“Anime was a mistake.”')
     attribution = block_rect(page, 'Hayao Miyazaki (misquoted')
     rect = union([quote, attribution])
@@ -129,6 +144,11 @@ def edit_ratings() -> None:
     path = ROOT / 'complete_movie_ratings.pdf'
     doc = fitz.open(path)
     page = doc[0]
+    if ("98 Essential Films" in page.get_text() and
+        "33 Erotic Art Films" in doc[5].get_text() and
+        "87 Anime Movies" in doc[6].get_text()):
+        doc.close()
+        return
     old = block_rect(page, '218 unique films')
     redact(page, [old], (1, 1, 1))
     put(page, old,
@@ -153,6 +173,10 @@ def edit_ratings() -> None:
 def edit_encyclopedia() -> None:
     path = ROOT / 'complete_movie_encyclopedia.pdf'
     doc = fitz.open(path)
+    if ("Streaming entries in this edition are historical editorial notes" in doc[1].get_text() and
+        "Streaming availability is time-sensitive" in doc[54].get_text()):
+        doc.close()
+        return
     page = doc[1]
     a = block_rect(page, 'Streaming availability reflects the Indian market as of 2025')
     b = block_rect(page, 'MUBI operates a rotating library')
@@ -181,6 +205,10 @@ def edit_encyclopedia() -> None:
 def edit_cybersecurity() -> None:
     path = ROOT / 'Cybersecurity_Stories_For_Your_Teams.pdf'
     doc = fitz.open(path)
+    if ("Do not use one generic clock" in doc[14].get_text() and
+        "There is no universal 72-hour response window" in doc[16].get_text()):
+        doc.close()
+        return
     bg = (246/255, 242/255, 235/255)
     heading_color = (107/255, 114/255, 128/255)
     body_color = (28/255, 28/255, 28/255)
@@ -228,6 +256,11 @@ def edit_kids_guide(filename: str, neural_needle: str, neural_text: str,
         (neural_needle, neural_text, "reading-frequency evidence wording"),
         (direction_needle, direction_text, "language-aware reading-direction guidance"),
     ]:
+        page_text = re.sub(r'\s+', ' ', page.get_text()).casefold()
+        if re.sub(r'\s+', ' ', replacement).casefold() in page_text:
+            continue
+        if re.sub(r'\s+', ' ', needle).casefold() not in page_text:
+            raise RuntimeError(f"{filename}: {label} is neither original nor corrected")
         old = block_rect(page, needle)
         fill = sample_rgb(page, int(old.x0 + 2), int(old.y0 + 2))
         redact(page, [old], fill)
