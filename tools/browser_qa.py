@@ -177,8 +177,13 @@ def main():
                                         issue(qa_name,"filters-close","filter disclosure did not close")
                                     stats["filter_disclosures_tested"]+=1
                             else:
-                                possible=frame.locator(".controls-wrap,.filter-panel,.filters-panel,.filter-container,.filter-section,.filter-wrap,.filter-bar,.filters,.toolbar,.controls")
-                                if possible.count():
+                                possible=frame.evaluate("""() => [...document.querySelectorAll(".controls-wrap,.filter-panel,.filters-panel,.filter-container,.filter-section,.filter-wrap,.filter-bar,.filters,.toolbar,.controls")].some(el => {
+                                  const controls=el.querySelectorAll('input:not([type="hidden"]),select,textarea').length;
+                                  const cls=String(el.className||"").toLowerCase();
+                                  const words=(el.innerText||"").toLowerCase();
+                                  return controls>0 && (/filter|controls-wrap|toolbar/.test(cls) || (words.match(/search|filter|country|category|curriculum|status|genre|year|sort|watched|unwatched/g)||[]).length>=2);
+                                })""")
+                                if possible:
                                     issue(qa_name,"filters-disclosure-missing","filter-like controls exist but disclosure was not installed")
                             frame_stage="check iframe responsive overflow"
                             overflow(frame,qa_name+"-iframe-"+name)
