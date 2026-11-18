@@ -364,7 +364,7 @@ def edit_ratings_647() -> None:
 
     # Page 2: make the duplicate policy explicit and remove the false unique-title claim.
     page = doc[1]
-    page_text = re.sub(r'\\s+', ' ', page.get_text()).casefold()
+    page_text = re.sub(r'\s+', ' ', page.get_text()).casefold()
     if '647 unique titles' in page_text:
         old = block_rect(page, '647 unique titles')
         redact(page, [old], (1, 1, 1))
@@ -379,7 +379,7 @@ def edit_ratings_647() -> None:
             label='647-entry methodology paragraph')
     elif '629 distinct films' not in page_text:
         raise RuntimeError('647-entry methodology is neither original nor corrected')
-    page_text = re.sub(r'\\s+', ' ', page.get_text()).casefold()
+    page_text = re.sub(r'\s+', ' ', page.get_text()).casefold()
     if 'only one entry is kept in the combined ranking' in page_text:
         old = block_rect(page, 'only one entry is kept in the combined ranking')
         redact(page, [old], (1, 1, 1))
@@ -488,6 +488,63 @@ def edit_kids_guide_headings() -> None:
 
 
 
+def fix_kids_guide_visual_layout() -> None:
+    """Keep the two-digit tip number on one line and remove unsupported footer glyphs."""
+    fixes = [
+        ('Three_Year_Old_Reading_Guide (1).pdf', fitz.Rect(51.4803, 631.9756, 72.7402, 659.9756)),
+        ('World_Stories_3YearOld_Guide.pdf', fitz.Rect(63.5276, 659.6315, 83.3701, 693.6315)),
+    ]
+    for filename, badge in fixes:
+        path = ROOT / filename
+        doc = fitz.open(path)
+        page = doc[14]
+        digit_rects = []
+        already_fixed = False
+        for block in page.get_text('dict')['blocks']:
+            for line in block.get('lines', []):
+                for span in line.get('spans', []):
+                    rect = fitz.Rect(span['bbox'])
+                    if badge.contains(rect) and span['text'].strip() == '10':
+                        already_fixed = True
+                    elif badge.contains(rect) and span['text'].strip() in {'1', '0'}:
+                        digit_rects.append(rect)
+        if not already_fixed:
+            if len(digit_rects) < 2:
+                doc.close()
+                raise RuntimeError(f'{filename}: expected a stacked 1/0 badge or a single 10')
+            old = union(digit_rects)
+            fill = sample_rgb(page, int(badge.x0 + 2), int(badge.y0 + 2))
+            redact(page, [old + (-1, -1, 1, 1)], fill)
+            number_rect = fitz.Rect(badge.x0 + 1, badge.y0 + 5, badge.x1 - 1, badge.y1 - 3)
+            put(page, number_rect, '10', font='Helvetica-Bold', size=8.5,
+                color=(1, 1, 1), align=fitz.TEXT_ALIGN_CENTER, lineheight=1.0,
+                label=f'{filename} tip 10 badge')
+            save_doc(doc, path)
+        else:
+            doc.close()
+
+    # The final panel in the first guide contains two unsupported symbol glyphs.
+    path = ROOT / 'Three_Year_Old_Reading_Guide (1).pdf'
+    doc = fitz.open(path)
+    page = doc[14]
+    footer = []
+    for block in page.get_text('dict')['blocks']:
+        for line in block.get('lines', []):
+            for span in line.get('spans', []):
+                if 'Happy reading.' in span['text']:
+                    footer.append(fitz.Rect(span['bbox']))
+    if len(footer) != 1:
+        doc.close()
+        raise RuntimeError(f'{path.name}: expected one final Happy reading sentence')
+    sentence = footer[0]
+    glyph_rect = fitz.Rect(sentence.x1 + 1, sentence.y0 - 2,
+                           min(sentence.x1 + 43, page.rect.width - 20), sentence.y1 + 2)
+    # Sample the teal panel margin, away from both text and missing-glyph boxes.
+    panel_fill = sample_rgb(page, 48, int((sentence.y0 + sentence.y1) / 2))
+    page.draw_rect(glyph_rect, color=None, fill=panel_fill, overlay=True)
+    save_doc(doc, path)
+
+
 def main() -> None:
     edit_masters()
     edit_sensitive()
@@ -501,6 +558,7 @@ def main() -> None:
     edit_cybersecurity()
     edit_kids_guides()
     edit_kids_guide_headings()
+    fix_kids_guide_visual_layout()
     print('Applied and verified source-PDF corrections. All originals remain withheld pending rights clearance.')
 
 
