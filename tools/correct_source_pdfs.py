@@ -431,17 +431,21 @@ def edit_kids_guide_headings() -> None:
     doc = fitz.open(path)
     page = doc[14]
     replacements = [
-        ('Read Every Day — 10 Minutes Beats 1 Hour on Weekends',
-         'Read Every Day — Choose a Rhythm That Works'),
-        ('Point as You Read — Build Left-to-Right Habit',
-         'Point as You Read — Follow the Language Direction'),
+        (['Read Every Day — 10 Minutes Beats 1 Hour on Weekends',
+          'Read Every Day ? Choose a Rhythm That Works'],
+         'Read Every Day: Choose a Rhythm That Works'),
+        (['Point as You Read — Build Left-to-Right Habit',
+          'Point as You Read ? Follow the Language Direction'],
+         'Point as You Read: Follow the Language Direction'),
     ]
-    for old_text, new_text in replacements:
-        page_text = re.sub(r'\s+', ' ', page.get_text())
-        if new_text.casefold() in page_text.casefold():
+    for old_candidates, new_text in replacements:
+        page_text = re.sub(r'\\s+', ' ', page.get_text()).casefold()
+        if new_text.casefold() in page_text:
             continue
-        if old_text.casefold() not in page_text.casefold():
-            raise RuntimeError(f'Expected heading {old_text!r} was not found')
+        old_text = next((candidate for candidate in old_candidates
+                         if candidate.casefold() in page_text), None)
+        if old_text is None:
+            raise RuntimeError(f'Expected one of {old_candidates!r} was not found')
         old = find_span_rect(page, old_text)
         fill = sample_rgb(page, max(int(old.x0 - 2), 0), int((old.y0 + old.y1) / 2))
         redact(page, [old], fill)
