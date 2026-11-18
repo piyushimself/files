@@ -650,3 +650,16 @@ body:has(.hero-tag) .search-box{background:#14121c!important;color:#e2d4c8!impor
 body:has(.hero-tag) .tabs{background:#0d0b13!important}
 body:has(.hero-tag) .tab-btn{color:#d3c3ce!important}
 body:has(.hero-tag) .tab-btn.active{color:#fff!important}
+
+
+/* Four Arcs is designed as a dark literary atlas. Retain its original ink
+   canvas and muted text scale; the generic light palette made its large
+   statistics and violet arc title nearly disappear. */
+:root:has(body .arc-title){
+  --rr-canvas:#09090d;--rr-surface:#111118;--rr-raised:#18181f;
+  --rr-ink:#e8e8f0;--rr-muted:#a0a0b8;--rr-accent:#c87941;
+  --rr-line:#383846;--rr-focus:#b78bc9;
+}
+body:has(.arc-title){background:#09090d!important;color:#e8e8f0!important}
+body:has(.arc-title) .hero-title{color:#e8e8f0!important}
+body:has(.arc-title) .hero-eyebrow,body:has(.arc-title) .arc-steps{color:#a0a0b8!important}
