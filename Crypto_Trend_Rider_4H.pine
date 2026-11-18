@@ -525,7 +525,7 @@ if barstate.islast
     f_row(infoTable, 4, "ADX", str.tostring(adxValue, "#.#") + (adxStrong ? " (strong)" : " (weak)"), adxStrong ? color.lime : color.gray)
     f_row(infoTable, 5, "Dist. to Trailing Stop", str.tostring(distToStopPct, "#.#") + "%", distToStopPct > 0 ? color.lime : color.red)
     f_row(infoTable, 6, "Recommendation", recCategory + " - " + recReason, statusColor)
-    f_row(infoTable, 7, "Fee / slip / spread / funding per 8h", str.tostring(feePctPerSide, "#.###") + "% / " + str.tostring(slippagePctPerSide, "#.###") + "% / " + str.tostring(spreadPctPerSide, "#.###") + "% / " + str.tostring(fundingPctPer8h, "#.###") + "%", color.silver)
+    f_row(infoTable, 7, "Fee/slip/spread per side; funding per 8h", str.tostring(feePctPerSide, "#.###") + "% / " + str.tostring(slippagePctPerSide, "#.###") + "% / " + str.tostring(spreadPctPerSide, "#.###") + "% / " + str.tostring(fundingPctPer8h, "#.###") + "%", color.silver)
 
     f_header(infoTable, 8, "OPEN LEGS", str.tostring(openLegCount) + " / " + str.tostring(maxPyramidLegs), openLegCount > 0 ? color.lime : color.silver)
 
