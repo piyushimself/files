@@ -272,3 +272,97 @@ body .sr-only,body .visually-hidden{position:absolute!important;width:1px!import
     max-width:100%!important;
   }
 }
+
+/* Shared accessible disclosure for large collection filter panels. */
+.rr-filter-disclosure{position:relative;z-index:95;width:min(100%,1800px);margin:0 auto .8rem;padding:0 clamp(.65rem,1.5vw,1.25rem);color:var(--rr-ink);font-family:var(--rr-font)}
+.rr-filter-summary{box-sizing:border-box;display:flex;align-items:center;gap:.65rem;min-height:42px;padding:.55rem .8rem;list-style:none;cursor:pointer;border:1px solid var(--rr-line);border-radius:8px;background:var(--rr-surface);color:var(--rr-ink);font-size:.88rem;font-weight:650;letter-spacing:.01em}
+.rr-filter-summary::-webkit-details-marker{display:none}
+.rr-filter-summary:hover{border-color:var(--rr-accent);color:var(--rr-accent)}
+.rr-filter-summary:focus-visible{outline:3px solid var(--rr-focus);outline-offset:3px}
+.rr-filter-label{font-weight:700}
+.rr-filter-hint{margin-left:auto;color:var(--rr-muted);font-size:.78rem;font-weight:500}
+.rr-filter-chevron{width:.55rem;height:.55rem;flex:0 0 .55rem;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);transition:transform .16s ease;margin:0 .2rem .22rem}
+.rr-filter-disclosure[open]>.rr-filter-summary .rr-filter-chevron{transform:rotate(225deg);margin-bottom:-.22rem}
+.rr-filter-disclosure> :not(summary){box-sizing:border-box}
+.rr-filter-disclosure[open]>:not(summary){max-width:100%}
+body .rr-filter-disclosure> :is(.controls-wrap,.filter-panel,.filters-panel,.filter-container,.filter-section,.filter-wrap,.filter-bar,.filters,.toolbar,.controls){position:static!important;top:auto!important;z-index:auto!important;width:100%!important;max-width:100%!important;margin:.55rem 0 0!important;box-shadow:none!important}
+body .rr-filter-disclosure[open]>:is(.controls-wrap,.filter-panel,.filters-panel,.filter-container,.filter-section,.filter-wrap,.filter-bar,.filters,.toolbar,.controls){border:1px solid var(--rr-line)!important;border-radius:8px!important}
+@media(max-width:700px){.rr-filter-disclosure{padding:0 .65rem;margin-bottom:.55rem}.rr-filter-summary{min-height:40px;padding:.5rem .7rem}.rr-filter-hint{font-size:.72rem}}
+@media(prefers-reduced-motion:reduce){.rr-filter-chevron{transition:none}}
+
+/* Explicit filter-panel layout support for collections with legacy IDs/classes. */
+body .rr-filter-disclosure> :is(.arc-filters,.filter-bar,#filters){box-sizing:border-box!important;position:static!important;top:auto!important;z-index:auto!important;width:100%!important;max-width:100%!important;margin:.55rem 0 0!important;box-shadow:none!important}
+body .rr-filter-disclosure[open]> :is(.arc-filters,.filter-bar,#filters){border:1px solid var(--rr-line)!important;border-radius:8px!important}
+
+/* Manhwa and other legacy apps use a dedicated controls-section wrapper. */
+body .rr-filter-disclosure> .controls-section{box-sizing:border-box!important;position:static!important;top:auto!important;z-index:auto!important;width:100%!important;max-width:100%!important;margin:.55rem 0 0!important;box-shadow:none!important}
+body .rr-filter-disclosure[open]> .controls-section{border:1px solid var(--rr-line)!important;border-radius:8px!important}
+
+
+/* Grand Library: keep its category tabs inside the mobile iframe viewport.
+   The original .ntab row has intrinsic-width flex children; allow the row to
+   wrap instead of extending the document by a few pixels on narrow screens. */
+@media(max-width:600px){
+  body *:has(> .ntab){
+    box-sizing:border-box!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    flex-wrap:wrap!important;
+    gap:6px!important;
+  }
+  body .ntab{
+    box-sizing:border-box!important;
+    flex:0 1 auto!important;
+    min-width:0!important;
+    max-width:100%!important;
+    white-space:normal!important;
+  }
+  body .ntab .tcnt{flex:0 0 auto!important;white-space:nowrap!important}
+}
+
+
+/* Grand Library mobile: its filter-group flex row and native select retain
+   desktop intrinsic widths. Stack the filter controls inside the available
+   content width; keep the category tabs independently horizontally scrollable. */
+@media(max-width:600px){
+  body #filters{
+    box-sizing:border-box!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    flex-wrap:nowrap!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    gap:8px!important;
+  }
+  body #filters>.fg,body #filters .fg{
+    box-sizing:border-box!important;
+    display:flex!important;
+    flex:0 1 auto!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    flex-wrap:nowrap!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+  }
+  body #filters select.fs,body #filters #fg{
+    box-sizing:border-box!important;
+    display:block!important;
+    flex:0 1 auto!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+  }
+  body #filters .tp-tabs{
+    box-sizing:border-box!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    overflow-x:auto!important;
+    overscroll-behavior-x:contain;
+  }
+}

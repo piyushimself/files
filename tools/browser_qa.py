@@ -16,7 +16,7 @@ apps=sorted((SITE/"apps").glob("*.html"))
 wrappers=sorted((SITE/"collections").glob("*/index.html"))
 viewports=[("desktop",1440,1000),("tablet",768,1024),("mobile",390,844)]
 issues=[]; screenshots=[]
-stats={"catalog_items":len(items),"apps":len(apps),"wrappers":len(wrappers),"desktop_pages":0,"mobile_pages":0,"iframes_loaded":0,"search_controls_tested":0,"select_controls_tested":0,"filter_controls_tested":0,"tabs_tested":0,"shell_controls_tested":0,"direct_mature_apps_tested":0,"mature_iframe_sync_tested":0,"theme_sync_tested":0,"font_sync_tested":0,"scale_sync_tested":0}
+stats={"catalog_items":len(items),"apps":len(apps),"wrappers":len(wrappers),"desktop_pages":0,"mobile_pages":0,"iframes_loaded":0,"search_controls_tested":0,"select_controls_tested":0,"filter_controls_tested":0,"tabs_tested":0,"shell_controls_tested":0,"direct_mature_apps_tested":0,"mature_iframe_sync_tested":0,"theme_sync_tested":0,"font_sync_tested":0,"scale_sync_tested":0,"filter_disclosures_tested":0}
 def issue(page,kind,detail): issues.append({"page":page,"kind":kind,"detail":str(detail)[:2000]})
 def watch(page,label):
     page.on("pageerror",lambda e:issue(label,"pageerror",e))
@@ -102,6 +102,9 @@ def main():
                 page_slug=Path(item.get("href","")).parent.name or slug(title)
                 qa_name=f"{title} [{page_slug}]"
                 page=ctx.new_page(); page.set_default_timeout(8000); watch(page,qa_name+"-"+name)
+                # Each collection must start with the default collapsed state. The shared
+                # preference is intentionally persisted, so isolate QA pages from earlier tests.
+                page.add_init_script("try{localStorage.removeItem('rr-filters-open')}catch(e){}")
                 try:
                     r=page.goto(BASE+item.get("href",""),wait_until="domcontentloaded",timeout=30000)
                     if not r or r.status>=400: issue(qa_name,"http",r.status if r else "no response")
@@ -158,19 +161,56 @@ def main():
                             frame_title=frame_el.evaluate("(f)=>f.contentDocument?.title||''")
                             if not frame_title.strip(): issue(qa_name,"iframe-title","embedded app title missing")
                             stats["iframes_loaded"]+=1
+                            app_gate=frame.locator("#rr-app-age-gate")
+                            if item.get("mature") and app_gate.count() and app_gate.is_visible():
+                                wrapper_gate=page.locator("#age-confirm")
+                                if wrapper_gate.count() and wrapper_gate.is_visible():
+                                    wrapper_gate.click()
+                                    page.wait_for_timeout(180)
+                            filter_uis=frame.locator("details.rr-filter-disclosure")
+                            if filter_uis.count():
+                                for disclosure_index in range(filter_uis.count()):
+                                    filter_ui=filter_uis.nth(disclosure_index)
+                                    if filter_ui.evaluate("(e)=>e.open"):
+                                        issue(qa_name,"filters-default-open",f"filter disclosure {disclosure_index+1} should start collapsed")
+                                        continue
+                                    summary=filter_ui.locator(":scope > summary")
+                                    panel=filter_ui.locator(":scope > :not(summary)")
+                                    before=panel.locator("input,select,textarea,button").count()
+                                    summary.click()
+                                    if not filter_ui.evaluate("(e)=>e.open"):
+                                        issue(qa_name,"filters-open",f"filter disclosure {disclosure_index+1} did not open")
+                                    after=panel.locator("input,select,textarea,button").count()
+                                    if before!=after:
+                                        issue(qa_name,"filters-state",f"opening filter disclosure {disclosure_index+1} changed filter controls")
+                                    summary.click()
+                                    if filter_ui.evaluate("(e)=>e.open"):
+                                        issue(qa_name,"filters-close",f"filter disclosure {disclosure_index+1} did not close")
+                                    summary.click()
+                                    if not filter_ui.evaluate("(e)=>e.open"):
+                                        issue(qa_name,"filters-reopen",f"filter disclosure {disclosure_index+1} did not reopen for control testing")
+                                    # Keep it open so later search/select checks exercise visible controls.
+                                    stats["filter_disclosures_tested"]+=1
+                            else:
+                                possible=frame.evaluate("""() => [...document.querySelectorAll("#filters,.arc-filters,.controls-wrap,.filter-panel,.filters-panel,.filter-container,.filter-section,.filter-wrap,.filter-bar,.filters,.toolbar,.controls,[class*=filter],[id*=filter],[class*=search],[id*=search]")].some(el => {
+                                  const controls=el.querySelectorAll('input:not([type="hidden"]),select,textarea').length;
+                                  const cls=String(el.className||"").toLowerCase();
+                                  const words=(el.innerText||"").toLowerCase();
+                                  return controls>0 && (/filter|controls-wrap|toolbar/.test(cls) || (words.match(/search|filter|country|category|curriculum|status|genre|year|sort|watched|unwatched/g)||[]).length>=2);
+                                })""")
+                                if possible:
+                                    issue(qa_name,"filters-disclosure-missing","filter-like controls exist but disclosure was not installed")
                             frame_stage="check iframe responsive overflow"
                             overflow(frame,qa_name+"-iframe-"+name)
                             if name!="desktop": mobile_tabs(frame,qa_name+"-iframe-"+name)
                             if item.get("mature") and frame:
-                                frame_stage="synchronize mature-content gate"
-                                app_gate=frame.locator("#rr-app-age-gate")
-                                if app_gate.count()==0 or not app_gate.is_visible():
+                                frame_stage="verify mature-content gate synchronization"
+                                if app_gate.count()==0:
                                     issue(qa_name,"direct-app-age-gate","mature iframe did not show its own 18+ gate")
+                                elif not app_gate.is_visible():
+                                    stats["mature_iframe_sync_tested"]+=1
                                 else:
-                                    page.locator("#age-confirm").click()
-                                    page.wait_for_timeout(180)
-                                    if app_gate.is_visible(): issue(qa_name,"age-gate-sync","wrapper confirmation did not dismiss iframe gate")
-                                    else: stats["mature_iframe_sync_tested"]+=1
+                                    issue(qa_name,"age-gate-sync","wrapper confirmation did not dismiss iframe gate")
                             app_fn=f"{page_slug}-app-{name}.png"
                             if frame:
                                 try:
