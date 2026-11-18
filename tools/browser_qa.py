@@ -102,6 +102,9 @@ def main():
                 page_slug=Path(item.get("href","")).parent.name or slug(title)
                 qa_name=f"{title} [{page_slug}]"
                 page=ctx.new_page(); page.set_default_timeout(8000); watch(page,qa_name+"-"+name)
+                # Each collection must start with the default collapsed state. The shared
+                # preference is intentionally persisted, so isolate QA pages from earlier tests.
+                page.add_init_script("try{localStorage.removeItem('rr-filters-open')}catch(e){}")
                 try:
                     r=page.goto(BASE+item.get("href",""),wait_until="domcontentloaded",timeout=30000)
                     if not r or r.status>=400: issue(qa_name,"http",r.status if r else "no response")
