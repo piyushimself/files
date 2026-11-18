@@ -155,6 +155,11 @@ def enhance_app(path, category_name):
         malformed=re.search(r"</\s*thead\s*>\s*(?=<body\b)",text,re.I)
         if malformed:
             text=text[:malformed.start()]+"</style>"+text[malformed.end():]
+    # The source advertises 300 animated films but the rendered catalogue contains 296.
+    # Correct the generated copy and its public title rather than publishing an inflated count.
+    if path.name == "300-animated-films.html":
+        text=text.replace("300 Essential Animated Films","296 Essential Animated Films")
+        text=text.replace('<span id="hcount">300</span>', '<span id="hcount">296</span>')
     # Correct verified catalogue-count mismatches only in generated copies.
     # Keep the original root-level HTML uploads byte-for-byte unchanged.
     if path.name == "big-library.html":
@@ -401,6 +406,7 @@ def main():
             if name in seen: name += "-"+hashlib.sha1(p.name.encode()).hexdigest()[:6]
             seen.add(name)
             title=title_from_html(source,p.name)
+            if p.name == "300_animated_films.html": title="296 Essential Animated Films"
             # Classify from the collection identity, never incidental words in a large dataset.
             mature=bool(MATURE.search(p.name) or MATURE.search(title))
             interactive=bool(re.search(r"<script\b|<(?:button|input|select|textarea|canvas)\b|\son(?:click|change|submit)\s*=",source,re.I))
