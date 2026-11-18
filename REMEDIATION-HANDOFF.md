@@ -253,3 +253,10 @@ Not complete. PR #17's QA is green but post-merge deployment still needs verific
 - Main deployment after PR #17 is confirmed by run [44380872713](https://github.com/piyushimself/files/actions/runs/44380872713): build and deploy succeeded. The post-merge browser artifact (ID 14463562848) reports zero issues across 34 desktop pages, 68 mobile pages, 96 iframe loads, 204 reader controls and 34 reader navigation menus. Independent live HTTP verification remains unavailable in this environment due outbound DNS/network restrictions.
 - PR [#18](https://github.com/piyushimself/files/pull/18) still needs a fresh full PR workflow after the branch refresh and final report updates, then merge and post-merge deployment verification.
 - The repository remains far from full remediation: the source-document review still lists unresolved count/scope and metadata issues, unverified resource links, remaining layout/editorial checks, missing rating provenance, and absent rights evidence. Pine TradingView validation remains external. Do not notify completion.
+
+
+## PR consolidation — 19 November 2026, 01:10 IST
+
+- PR #18 was closed as superseded after its source-correction branch was refreshed and the final PDF visual defects were fixed.
+- The same reviewed tree is now submitted as PR [#19](https://github.com/piyushimself/files/pull/19) from `source-pdf-corrections-final`, based on main commit `1903c3787156523193380affa23b13ed4c6d2e11`.
+- PR #19 must complete a fresh full Chromium/build run on its exact head before merge. The prior PR #18 run #252 predates the final toddler-guide PDF commits and cannot substitute for the new PR check.
