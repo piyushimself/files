@@ -195,3 +195,14 @@ A fresh extraction of `asian_books_curriculum.pdf` confirmed the placeholder iss
 PR [#20](https://github.com/piyushimself/files/pull/20) was merged as `02141201fbe55ef4a1e1306ab91adc8a3f82f1d0` after exact-head workflow [#272](https://github.com/piyushimself/files/actions/runs/44434546875) passed. The source now applies the configurable per-side spread estimate to entry, partial-exit and final-exit notional, caps the partial target at 99% so a nonzero leg remains, and labels per-side trading costs separately from 8-hour funding. Static assertions cover each of the three spread-cost paths. Chromium QA recorded 34 desktop pages, 68 mobile page checks and zero automated issues.
 
 This does not compile the Pine source in TradingView, convert the indicator into a Strategy Tester strategy, validate order sequencing, or calibrate fees/spread/slippage/funding to an exchange. The displayed trade simulation remains unvalidated performance data; external TradingView and venue-specific tests are still required.
+
+
+## Latest correction and CI checkpoint — 19 November 2026
+
+PR #19 was merged as `0699b3a10090ddb9c018ba37116078597d8b0ccd` after exact-head workflow [#299](https://github.com/piyushimself/files/actions/runs/44436114541) passed. Its corrected-source-PDF validator, build, generated-app checks, Pine static checks and Chromium suite passed. The browser report records 34 desktop pages, 68 mobile checks, 96 iframe loads and zero automated issues. The deploy job was skipped on the PR event.
+
+The corrected-PDF artifact includes the 43-PDF review set. Selected changed pages from the ten corrected PDFs were rendered and visually inspected; this does not constitute page-by-page review of all 43 PDFs or all 3 DOCX files. All 49 source artifacts (48 unique documents after one exact duplicate PDF pair) remain withheld from Pages and are not rights-cleared.
+
+Main workflow [#283](https://github.com/piyushimself/files/actions/runs/44435251703) completed successfully, including Pages deployment, for the preceding main commit `02141201fbe55ef4a1e1306ab91adc8a3f82f1d0`. It predates PR #19's merge; a fresh main run for `0699b3a10090ddb9c018ba37116078597d8b0ccd` is required to confirm deployment of these corrections.
+
+The following remain unresolved: Asian-books scope decision; Cinema 900 and other collection-count reconciliation; resource URL/licence checks; bibliography, quotation and metadata attribution; rating-source URLs/as-of dates; remaining document page/layout/OCR and factual review; ownership/republication evidence; and TradingView/venue-specific Pine validation. See `REMEDIATION-STATUS.md` for the consolidated acceptance ledger.
