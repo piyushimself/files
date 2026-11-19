@@ -2,18 +2,18 @@ name: Build and deploy Reading Room
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - 'source-pdf-corrections-*'
   pull_request:
     branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: reading-room-${{ github.ref }}-${{ github.sha }}
+  group: reading-room-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -42,6 +42,8 @@ jobs:
         run: python tools/validate_site.py
       - name: Validate Pine Script safety invariants
         run: python tools/validate_pine_static.py
+      - name: Validate corrected source PDF findings
+        run: python tools/validate_source_pdf_corrections.py
       - name: Extract redacted source documents for review
         continue-on-error: true
         run: python tools/document_review_extract.py
@@ -91,6 +93,9 @@ jobs:
           path: site
   deploy:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: \${{ steps.deployment.outputs.page_url }}

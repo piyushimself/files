@@ -1,9 +1,21 @@
 # Page-by-page editorial and publishing audit
 
-Audit branch: `site-build`  
-Base reviewed: `main` at `48bb7c7d156cdb1763c99048d68083d4e05566e8`  
+Audit branch: `source-pdf-corrections-final` (PR #19)  
+Base reviewed: `main` at `1903c3787156523193380affa23b13ed4c6d2e11`; candidate source-correction head `6a69e153b952d69944441c1641906197d362dfe9`  
 Status: **in progress — not a 100% sign-off**
 
+## Regression snapshot — 19 November 2026
+
+The exact PR #19 head `6a69e153b952d69944441c1641906197d362dfe9` passed workflow [#256](https://github.com/piyushimself/files/actions/runs/44383657448) on 18 November 2026. Its Chromium report records:
+
+- 34/34 desktop collection pages and 68 mobile page checks;
+- 96 iframe loads; 20 search, 14 select and 15 filter controls; 3 tabs and 4 shell controls;
+- 7 direct mature-app gate checks and 21 mature iframe-sync checks;
+- 34 reader menus, 204 mobile reader controls and 63 filter disclosures;
+- 33 theme, 32 font and 32 scale synchronisation checks; and
+- **0 automated issues**.
+
+The artifact's wrapper screenshots were assembled into contact sheets and visually swept for all 34 collection pages at desktop, tablet and mobile widths. This catches obvious page-level clipping, empty wrappers and layout outliers, but it is not a pixel-by-pixel review of every embedded app screenshot or every individual control. Automated Chromium coverage is not a formal WCAG audit, screen-reader certification, exhaustive keyboard-only test, or a full factual/editorial review. Those acceptance items remain open below. PR #19 is still a pull request; its deploy job is skipped by design. The latest deployed `main` commit remains `1903c3787156523193380affa23b13ed4c6d2e11`, whose main workflow #251 passed deployment.
 ## What has actually been inspected
 
 The following checks were performed against source HTML:
@@ -67,7 +79,7 @@ A document's filename is not proof of its contents or publication rights. No wit
 
 ## Document review limitations
 
-The 43 PDFs, 3 DOCX, 1 TXT and 1 Pine source have not yet all been inspected page by page in this pass. The GitHub text-file API cannot decode their binary contents as UTF-8; the extraction pipeline can scan/extract text during CI, but a successful scan does not establish copyright permission or human-reviewed content quality. These files remain withheld until the exact content is accessible and reviewed.
+The 43 PDFs, 3 DOCX files, 1 legacy TXT file and 2 Pine scripts (49 source artifacts, 48 unique source documents after the exact duplicate PDF pair) have not yet all been inspected page by page in this pass. The GitHub text-file API cannot decode their binary contents as UTF-8; the extraction pipeline can scan/extract text during CI, but a successful scan does not establish copyright permission or human-reviewed content quality. These files remain withheld until the exact content is accessible and reviewed.
 
 ## Remaining acceptance checks
 
@@ -267,3 +279,25 @@ The previous 17 November statements that real-browser validation was unavailable
 ## Outstanding repository-level review item
 
 Pull request [#9](https://github.com/piyushimself/files/pull/9) was closed as superseded on 18 November. Its warm-neutral/terracotta proposal conflicted with the blue-led design contract in `DESIGN.md`, and its branch was diverged from current `main`. The historical diff remains available, but it is not a production candidate.
+
+
+## Catalogue metadata defect found in current QA artifact — 19 November 2026
+
+Review of PR #19 workflow #271 artifacts found two stale strings in the generated homepage search catalogue even though the embedded app screenshots showed the corrected runtime data:
+
+- The Complete Film Collection catalogue card still said **1,619 Films** while the generated app correctly showed 1,629 records.
+- Big Library catalogue search text retained the source placeholder **Showing 0 of 0** while the rendered app showed 98 of 4,942 in its default section.
+
+The generated build now corrects the film collection catalogue title/search text and replaces the Big Library placeholder in search metadata. `tools/validate_site.py` asserts both conditions so the mismatch cannot silently return. Root-level uploaded HTML sources remain unchanged. The exact-head workflow after this correction must pass before accepting it; PR #19 remains unmerged until then.
+
+
+A follow-up check also found that the 296-film correction was applied to the visible app and wrapper title but the homepage search index still contained the source labels “300 Essential Animated Films” and “Films: 300”. The generated search metadata is now normalized to 296 and the site validator asserts the title and search text agree. The original root-level upload is unchanged.
+
+
+## Latest regression and catalogue metadata review — 19 November 2026
+
+The exact PR #19 head before this documentation refresh passed workflow [#271](https://github.com/piyushimself/files/actions/runs/44429510208). The report records 34/34 desktop wrappers, 68 mobile page checks, 96 iframe loads, 204 mobile reader controls, 34 reader menus, 7 direct mature-app gate tests and **0 automated issues**. Wrapper screenshots for all 34 pages were visually swept in desktop/tablet/mobile contact sheets; app screenshot contact sheets were also reviewed. Individual controls, screen-reader behavior, formal contrast and keyboard-only completeness remain outside that evidence.
+
+During artifact review, three stale homepage catalogue/search strings were found even though the rendered apps showed corrected data: Complete Film Collection still had a 1,619 catalogue title against 1,629 app records; the animated-film search text still said 300 against 296; and Big Library search text retained “Showing 0 of 0” against the rendered 98 of 4,942. The PR #19 generated build now normalizes those values and `tools/validate_site.py` asserts them. The root HTML uploads remain unchanged.
+
+PR #20 merged as `02141201fbe55ef4a1e1306ab91adc8a3f82f1d0`; its exact-head workflow #272 passed static Pine checks and the same desktop/mobile Chromium suite. Main workflow #283 is the post-merge build/deploy gate for that commit and must be checked separately. PR #19's next exact-head workflow must be used as its merge gate after this documentation update.

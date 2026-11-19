@@ -1,0 +1,648 @@
+rank,pdf_page,title,director,year,source_category,imdb_score,rotten_tomatoes_pct,canonical_rank,duplicate_group,is_repeat_record
+1,21,The Godfather,Francis Ford Coppola,1972,Crime,9.2,97%,1,,false
+2,21,The Godfather Part II,Francis Ford Coppola,1974,Crime,9.0,97%,2,,false
+3,21,The Lord of the Rings: Return of the King,Peter Jackson,2003,Fantasy,9.0,93%,3,,false
+4,21,Shoah,Claude Lanzmann,1985,Essential,8.8,99%,4,,false
+5,21,The Good the Bad and the Ugly,Sergio Leone,1966,Epic,8.8,97%,5,,false
+6,21,The Lord of the Rings: Two Towers,Peter Jackson,2002,Fantasy,8.8,95%,6,,false
+7,21,The Lord of the Rings: Fellowship,Peter Jackson,2001,Fantasy,8.8,91%,7,,false
+8,21,Fight Club,David Fincher,1999,Essential,8.8,79%,8,,false
+9,21,The Human Condition (trilogy),Masaki Kobayashi,1959,Essential,8.7,100%,9,,false
+10,21,Goodfellas,Martin Scorsese,1990,Crime,8.7,96%,10,,false
+11,21,One Flew Over the Cuckoo's Nest,Milos Forman,1975,Black Comedy,8.7,84%,11,,false
+12,21,Seven Samurai,Akira Kurosawa,1954,Action,8.6,100%,12,,false
+13,21,Spirited Away,Hayao Miyazaki,2001,Anime,8.6,97%,13,,false
+14,21,Terminator 2: Judgment Day,James Cameron,1991,Action,8.6,93%,14,,false
+15,21,Se7en,David Fincher,1995,Mystery,8.6,80%,15,,false
+16,21,Grave of the Fireflies,Isao Takahata,1988,Essential,8.5,100%,16,D16,false
+17,21,Grave of the Fireflies (anime),Isao Takahata,1988,Anime,8.5,100%,16,D16,true
+18,21,Parasite,Bong Joon-ho,2019,Essential,8.5,99%,18,,false
+19,21,Rear Window,Alfred Hitchcock,1954,Mystery,8.5,98%,19,,false
+20,21,Alien (1979),Ridley Scott,1979,Sci-Fi,8.5,98%,20,,false
+21,21,Psycho,Alfred Hitchcock,1960,Essential,8.5,97%,21,,false
+22,21,The First Slam Dunk,Takehiko Inoue,2022,Anime,8.5,97%,22,,false
+23,21,Once Upon a Time in the West,Sergio Leone,1968,Epic,8.5,95%,23,,false
+24,21,The Pianist,Roman Polanski,2002,Film Noir,8.5,95%,24,,false
+25,21,Dune: Part Two,Denis Villeneuve,2024,Sci-Fi,8.5,93%,25,,false
+26,21,The Departed,Martin Scorsese,2006,Crime,8.5,91%,26,,false
+27,21,Gladiator,Ridley Scott,2000,Sci-Fi,8.5,77%,27,,false
+28,21,Man with a Movie Camera,Dziga Vertov,1929,Essential,8.4,100%,28,,false
+29,21,Witness for the Prosecution,Billy Wilder,1957,Film Noir,8.4,100%,29,,false
+30,21,Pather Panchali,Satyajit Ray,1955,World Cinema,8.4,100%,30,,false
+31,21,The World of Apu,Satyajit Ray,1959,World Cinema,8.4,100%,31,,false
+32,21,Apocalypse Now,Francis Ford Coppola,1979,Essential,8.4,99%,32,D31,false
+33,21,Apocalypse Now (war),Francis Ford Coppola,1979,War,8.4,99%,32,D31,true
+34,21,Sunset Boulevard,Billy Wilder,1950,Essential,8.4,98%,34,,false
+35,21,Aliens,James Cameron,1986,Action,8.4,98%,35,,false
+36,21,Dr. Strangelove,Stanley Kubrick,1964,Black Comedy,8.4,98%,36,,false
+37,21,Come and See,Elem Klimov,1985,Essential,8.4,97%,37,D35,false
+38,21,Your Name (Kimi no Na wa),Makoto Shinkai,2016,Anime,8.4,97%,38,,false
+39,21,Amadeus,Milos Forman,1984,Black Comedy,8.4,97%,39,,false
+40,21,Come and See (war),Elem Klimov,1985,War,8.4,97%,37,D35,true
+41,21,Violet Evergarden: The Movie,Taichi Ishidate,2020,Anime,8.4,96%,41,,false
+42,21,Paths of Glory,Stanley Kubrick,1957,War,8.4,95%,42,,false
+43,22,Princess Mononoke,Hayao Miyazaki,1997,Anime,8.4,92%,43,,false
+44,22,Once Upon a Time in America,Sergio Leone,1984,Epic,8.4,87%,44,,false
+45,22,The Shining,Stanley Kubrick,1980,Black Comedy,8.4,84%,45,,false
+46,22,Oldboy,Park Chan-wook,2003,Essential,8.4,82%,46,,false
+47,22,Braveheart,Mel Gibson,1995,Epic,8.4,77%,47,,false
+48,22,Ordet (The Word),Carl Theodor Dreyer,1955,Essential,8.3,100%,48,,false
+49,22,Charulata,Satyajit Ray,1964,World Cinema,8.3,100%,49,,false
+50,22,Bicycle Thieves,Vittorio De Sica,1948,Essential,8.3,99%,50,,false
+51,22,Citizen Kane,Orson Welles,1941,Essential,8.3,99%,51,,false
+52,22,M,Fritz Lang,1931,Essential,8.3,99%,52,,false
+53,22,In This Corner of the World,Sunao Katabuchi,2016,Anime,8.3,99%,53,,false
+54,22,Ikiru (To Live),Akira Kurosawa,1952,Essential,8.3,98%,54,,false
+55,22,Lawrence of Arabia,David Lean,1962,Epic,8.3,98%,55,,false
+56,22,Double Indemnity,Billy Wilder,1944,Film Noir,8.3,98%,56,,false
+57,22,Nights of Cabiria,Federico Fellini,1957,Essential,8.3,97%,57,,false
+58,22,Metropolis (1927),Fritz Lang,1927,Film Noir,8.3,97%,58,,false
+59,22,North by Northwest,Alfred Hitchcock,1959,Mystery,8.3,97%,59,,false
+60,22,Full Metal Jacket,Stanley Kubrick,1987,Black Comedy,8.3,95%,60,,false
+61,22,Eternal Sunshine of the Spotless Mind,Michel Gondry,2004,Essential,8.3,93%,61,,false
+62,22,The Apartment,Billy Wilder,1960,Film Noir,8.3,93%,62,,false
+63,22,2001: A Space Odyssey,Stanley Kubrick,1968,Essential,8.3,92%,63,,false
+64,22,Incendies,Denis Villeneuve,2010,Sci-Fi,8.3,92%,64,,false
+65,22,Evangelion 3.0+1.0 Thrice Upon a Time,Hideaki Anno,2021,Anime,8.3,89%,65,,false
+66,22,A Clockwork Orange,Stanley Kubrick,1971,Black Comedy,8.3,88%,66,,false
+67,22,Heat (1995),Michael Mann,1995,Crime,8.3,86%,67,,false
+68,22,Tokyo Story,Yasujiro Ozu,1953,Essential,8.2,100%,68,,false
+69,22,What's Opera Doc?,Chuck Jones,1957,Animation,8.2,100%,69,,false
+70,22,Army of Shadows,Jean-Pierre Melville,1969,Crime,8.2,100%,70,,false
+71,22,Late Spring,Yasujiro Ozu,1949,Drama,8.2,100%,71,,false
+72,22,Aparajito,Satyajit Ray,1956,World Cinema,8.2,100%,72,,false
+73,22,Chinatown,Roman Polanski,1974,Essential,8.2,99%,73,,false
+74,22,Rashomon,Akira Kurosawa,1950,Essential,8.2,98%,74,,false
+75,22,Sans Soleil,Chris Marker,1983,Essential,8.2,98%,75,,false
+76,22,Yi Yi (A One and a Two),Edward Yang,2000,Essential,8.2,98%,76,,false
+77,22,Satantango,Bela Tarr,1994,Essential,8.2,97%,77,,false
+78,22,Taxi Driver,Martin Scorsese,1976,Essential,8.2,97%,78,,false
+79,22,To Live (Zhang),Zhang Yimou,1994,Martial Arts,8.2,97%,79,,false
+80,22,Ran,Akira Kurosawa,1985,Essential,8.2,96%,80,,false
+81,22,Scenes from a Marriage,Ingmar Bergman,1973,Essential,8.2,96%,81,,false
+82,22,Yojimbo,Akira Kurosawa,1961,Action,8.2,96%,82,,false
+83,22,Unforgiven,Clint Eastwood,1992,Western,8.2,96%,83,,false
+84,22,Pan's Labyrinth,Guillermo del Toro,2006,Essential,8.2,95%,84,,false
+85,22,How the Grinch Stole Christmas,Chuck Jones,1966,Animation,8.2,95%,85,,false
+86,22,Some Like It Hot,Billy Wilder,1959,Film Noir,8.2,95%,86,,false
+87,22,My Neighbor Totoro,Hayao Miyazaki,1988,Anime,8.2,94%,87,,false
+88,22,For a Few Dollars More,Sergio Leone,1965,Epic,8.2,94%,88,,false
+89,23,Howl's Moving Castle,Hayao Miyazaki,2004,Anime,8.2,87%,89,,false
+90,23,The Thing (1982),John Carpenter,1982,Horror,8.2,85%,90,,false
+91,23,Hacksaw Ridge,Mel Gibson,2016,Epic,8.2,84%,91,,false
+92,23,Casino (1995),Martin Scorsese,1995,Crime,8.2,81%,92,,false
+93,23,Gran Torino,Clint Eastwood,2008,Western,8.2,81%,93,,false
+94,23,Andrei Rublev,Andrei Tarkovsky,1966,Essential,8.1,100%,94,,false
+95,23,Land of Silence and Darkness,Werner Herzog,1971,Essential,8.1,100%,95,,false
+96,23,Mirror (Zerkalo),Andrei Tarkovsky,1975,Essential,8.1,100%,96,,false
+97,23,Stalker,Andrei Tarkovsky,1979,Essential,8.1,100%,97,,false
+98,23,Wild Strawberries,Ingmar Bergman,1957,Essential,8.1,100%,98,,false
+99,23,The Tale of Princess Kaguya,Isao Takahata,2013,Anime,8.1,100%,99,D96,false
+100,23,The Terminator,James Cameron,1984,Action,8.1,100%,100,,false
+101,23,The Tale of Princess Kaguya (Takahata),Isao Takahata,2013,Animation,8.1,100%,99,D96,true
+102,23,Duck Amuck,Chuck Jones,1953,Animation,8.1,100%,102,,false
+103,23,Early Summer,Yasujiro Ozu,1951,Drama,8.1,100%,103,,false
+104,23,Late Autumn (1960),Yasujiro Ozu,1960,Drama,8.1,100%,104,,false
+105,23,An Autumn Afternoon,Yasujiro Ozu,1962,Drama,8.1,100%,105,,false
+106,23,Before Sunrise,Richard Linklater,1995,Romance,8.1,100%,106,,false
+107,23,The Man Who Shot Liberty Valance,John Ford,1962,Western,8.1,100%,107,,false
+108,23,The Music Room,Satyajit Ray,1958,World Cinema,8.1,100%,108,,false
+109,23,Four Hundred Blows,Francois Truffaut,1959,Essential,8.1,99%,109,,false
+110,23,The General,Buster Keaton,1926,Essential,8.1,99%,110,,false
+111,23,Trois Couleurs: Rouge (Red),Krzysztof Kieslowski,1994,Erotic Art,8.1,99%,111,,false
+112,23,Ace in the Hole,Billy Wilder,1951,Film Noir,8.1,99%,112,,false
+113,23,Raise the Red Lantern,Zhang Yimou,1991,Martial Arts,8.1,99%,113,,false
+114,23,Strangers on a Train,Alfred Hitchcock,1951,Mystery,8.1,99%,114,,false
+115,23,The Battle of Algiers,Gillo Pontecorvo,1966,Essential,8.1,98%,115,,false
+116,23,Umberto D.,Vittorio De Sica,1952,Essential,8.1,98%,116,,false
+117,23,Portrait of a Lady on Fire,Celine Sciamma,2019,Erotic Art,8.1,98%,117,,false
+118,23,Au Hasard Balthazar,Robert Bresson,1966,Essential,8.1,97%,118,,false
+119,23,"Rome, Open City",Roberto Rossellini,1945,Essential,8.1,97%,119,,false
+120,23,The Iron Giant,Brad Bird,1999,Anime,8.1,97%,120,,false
+121,23,Mad Max: Fury Road,George Miller,2015,Action,8.1,97%,121,,false
+122,23,Le Samourai,Jean-Pierre Melville,1967,Crime,8.1,97%,122,,false
+123,23,La Jetee,Chris Marker,1962,Documentary,8.1,97%,123,,false
+124,23,Autumn Sonata,Ingmar Bergman,1978,Drama,8.1,97%,124,,false
+125,23,Chungking Express,Wong Kar-wai,1994,Romance,8.1,97%,125,,false
+126,23,Solaris (1972),Andrei Tarkovsky,1972,Sci-Fi,8.1,97%,126,,false
+127,23,Fanny and Alexander,Ingmar Bergman,1982,Essential,8.1,95%,127,,false
+128,23,The Seventh Seal,Ingmar Bergman,1957,Essential,8.1,95%,128,D124,false
+129,23,The Handmaiden (Ah-ga-ssi),Park Chan-wook,2016,Erotic Art,8.1,95%,129,,false
+130,23,A Silent Voice,Naoko Yamada,2016,Anime,8.1,95%,130,,false
+131,23,Barry Lyndon,Stanley Kubrick,1975,Black Comedy,8.1,95%,131,,false
+132,23,The Seventh Seal (Bergman),Ingmar Bergman,1957,Drama,8.1,95%,128,D124,true
+133,23,The Bridge on the River Kwai,David Lean,1957,Epic,8.1,95%,133,,false
+134,23,Before Sunset,Richard Linklater,2004,Romance,8.1,95%,134,,false
+135,24,Memories of Murder,Bong Joon-ho,2003,Black Comedy,8.1,94%,135,,false
+136,24,In the Mood for Love,Wong Kar-wai,2000,Essential,8.1,93%,136,,false
+137,24,Million Dollar Baby,Clint Eastwood,2004,Western,8.1,91%,137,,false
+138,24,Millennium Actress,Satoshi Kon,2001,Anime,8.1,90%,138,D133,false
+139,24,Millennium Actress (Kon),Satoshi Kon,2001,Animation,8.1,90%,138,D133,true
+140,24,Persona,Ingmar Bergman,1966,Essential,8.1,89%,140,,false
+141,24,Nausicaa of the Valley of the Wind,Hayao Miyazaki,1984,Anime,8.1,89%,141,D135,false
+142,24,Nausicaa of the Valley of the Wind (Miyazaki),Hayao Miyazaki,1984,Animation,8.1,89%,141,D135,true
+143,24,Platoon,Oliver Stone,1986,Biographical,8.1,89%,143,,false
+144,24,Blade Runner,Ridley Scott,1982,Sci-Fi,8.1,89%,144,,false
+145,24,Gone Girl,David Fincher,2014,Mystery,8.1,87%,145,,false
+146,24,Perfect Blue,Satoshi Kon,1997,Anime,8.1,82%,146,D139,false
+147,24,Perfect Blue (Kon),Satoshi Kon,1997,Animation,8.1,82%,146,D139,true
+148,24,Prisoners (2013),Denis Villeneuve,2013,Sci-Fi,8.1,81%,148,,false
+149,24,Close-Up,Abbas Kiarostami,1990,Essential,8.0,100%,149,,false
+150,24,Ivan's Childhood,Andrei Tarkovsky,1962,Biographical,8.0,100%,150,,false
+151,24,The Sacrifice,Andrei Tarkovsky,1986,Biographical,8.0,100%,151,,false
+152,24,The Shop Around the Corner,Ernst Lubitsch,1940,Romance,8.0,100%,152,,false
+153,24,Where Is the Friend's Home?,Abbas Kiarostami,1987,World Cinema,8.0,100%,153,,false
+154,24,Devi (1960),Satyajit Ray,1960,World Cinema,8.0,100%,154,,false
+155,24,The Searchers,John Ford,1956,Western,8.0,99%,155,,false
+156,24,Jaws,Steven Spielberg,1975,Essential,8.0,98%,156,,false
+157,24,Kes,Ken Loach,1969,Essential,8.0,98%,157,,false
+158,24,Spirit of the Beehive,Victor Erice,1973,Essential,8.0,98%,158,,false
+159,24,Wings of Desire,Wim Wenders,1987,Essential,8.0,98%,159,,false
+160,24,Le Cercle Rouge,Jean-Pierre Melville,1970,Crime,8.0,98%,160,,false
+161,24,Titicut Follies,Frederick Wiseman,1967,Documentary,8.0,98%,161,,false
+162,24,The Thin Blue Line,Errol Morris,1988,Documentary,8.0,98%,162,,false
+163,24,The Fog of War,Errol Morris,2003,Documentary,8.0,98%,163,,false
+164,24,Rosemary's Baby,Roman Polanski,1968,Film Noir,8.0,98%,164,,false
+165,24,Talk to Her,Pedro Almodovar,2002,World Cinema,8.0,98%,165,,false
+166,24,The Conformist,Bernardo Bertolucci,1970,Erotic Directors,8.0,98%,166,,false
+167,24,Los Olvidados,Luis Bunuel,1950,Essential,8.0,97%,167,,false
+168,24,Castle in the Sky (Laputa),Hayao Miyazaki,1986,Anime,8.0,97%,168,D160,false
+169,24,Castle in the Sky,Hayao Miyazaki,1986,Animation,8.0,97%,168,D160,true
+170,24,Through a Glass Darkly,Ingmar Bergman,1961,Drama,8.0,97%,170,,false
+171,24,A Woman Under the Influence,John Cassavetes,1974,Drama,8.0,97%,171,,false
+172,24,A Fistful of Dollars,Sergio Leone,1964,Epic,8.0,97%,172,,false
+173,24,To Be or Not to Be,Ernst Lubitsch,1942,Romance,8.0,97%,173,,false
+174,24,The Discreet Charm of the Bourgeoisie,Luis Bunuel,1972,Essential,8.0,96%,174,,false
+175,24,Viridiana,Luis Bunuel,1961,Essential,8.0,96%,175,,false
+176,24,Ghost in the Shell,Mamoru Oshii,1995,Anime,8.0,96%,176,,false
+177,24,Sanjuro,Akira Kurosawa,1962,Action,8.0,96%,177,,false
+178,24,The Gospel According to St. Matthew,Pier Paolo Pasolini,1964,Erotic Directors,8.0,96%,178,,false
+179,24,Sword of the Stranger,Masahiro Ando,2007,Anime,8.0,95%,179,,false
+180,25,Kagemusha,Akira Kurosawa,1980,Action,8.0,94%,180,,false
+181,25,Amores Perros,Alejandro G. Inarritu,2000,Essential,8.0,93%,181,,false
+182,25,Tokyo Godfathers,Satoshi Kon,2003,Anime,8.0,91%,182,D173,false
+183,25,Wolf Children,Mamoru Hosoda,2012,Anime,8.0,91%,183,,false
+184,25,Tokyo Godfathers (Kon),Satoshi Kon,2003,Animation,8.0,91%,182,D173,true
+185,25,Poor Things,Yorgos Lanthimos,2023,Black Comedy,8.0,91%,185,,false
+186,25,The Martian,Ridley Scott,2015,Sci-Fi,8.0,91%,186,,false
+187,25,The Ballad of Narayama,Shohei Imamura,1983,Erotic Directors,8.0,91%,187,,false
+188,25,Akira,Katsuhiro Otomo,1988,Anime,8.0,90%,188,,false
+189,25,Blade Runner 2049,Denis Villeneuve,2017,Sci-Fi,8.0,87%,189,,false
+190,25,Dogville,Lars von Trier,2003,Essential,8.0,86%,190,,false
+191,25,Joint Security Area,Park Chan-wook,2000,Mystery,8.0,86%,191,,false
+192,25,JFK,Oliver Stone,1991,Biographical,8.0,84%,192,,false
+193,25,Dune (2021),Denis Villeneuve,2021,Sci-Fi,8.0,83%,193,,false
+194,25,Dancer in the Dark,Lars von Trier,2000,Essential,8.0,68%,194,,false
+195,25,The Lost Weekend,Billy Wilder,1945,Film Noir,7.9,100%,195,,false
+196,25,Kiki's Delivery Service,Hayao Miyazaki,1989,Animation,7.9,98%,196,,false
+197,25,Breathless (A Bout de Souffle),Jean-Luc Godard,1960,Avant-Garde,7.9,98%,197,,false
+198,25,Badlands,Terrence Malick,1973,Biographical,7.9,98%,198,,false
+199,25,Before Midnight,Richard Linklater,2013,Romance,7.9,98%,199,,false
+200,25,Boyhood,Richard Linklater,2014,Romance,7.9,98%,200,,false
+201,25,"Crouching Tiger, Hidden Dragon",Ang Lee,2000,Essential,7.9,97%,201,,false
+202,25,Belle de Jour,Luis Bunuel,1967,Erotic Art,7.9,97%,202,,false
+203,25,Lupin III: The Castle of Cagliostro,Hayao Miyazaki,1979,Anime,7.9,97%,203,,false
+204,25,Secrets and Lies,Mike Leigh,1996,Drama,7.9,97%,204,,false
+205,25,The Insider,Michael Mann,1999,Crime,7.9,96%,205,,false
+206,25,All About My Mother,Pedro Almodovar,1999,World Cinema,7.9,96%,206,,false
+207,25,The White Ribbon,Michael Haneke,2009,Erotic Directors,7.9,96%,207,,false
+208,25,Demon Slayer: Mugen Train,Haruo Sotozaki,2020,Anime,7.9,95%,208,,false
+209,25,Hero (2002),Zhang Yimou,2002,Martial Arts,7.9,95%,209,,false
+210,25,I Daniel Blake,Ken Loach,2016,Social Realism,7.9,95%,210,,false
+211,25,The Outlaw Josey Wales,Clint Eastwood,1976,Western,7.9,95%,211,,false
+212,25,Rope,Alfred Hitchcock,1948,Mystery,7.9,94%,212,,false
+213,25,Arrival (2016),Denis Villeneuve,2016,Sci-Fi,7.9,94%,213,,false
+214,25,Hiroshima Mon Amour,Alain Resnais,1959,Essential,7.9,93%,214,,false
+215,25,Z,Costa-Gavras,1969,Essential,7.9,93%,215,,false
+216,25,Amour (2012),Michael Haneke,2012,Erotic Directors,7.9,93%,216,,false
+217,25,Vertigo,Alfred Hitchcock,1958,Essential,7.9,92%,217,,false
+218,25,"Josee, the Tiger and the Fish",Kotaro Tamura,2020,Anime,7.9,92%,218,,false
+219,25,All That Jazz,Bob Fosse,1979,Musical,7.9,91%,219,,false
+220,25,Letters from Iwo Jima,Clint Eastwood,2006,Western,7.9,91%,220,,false
+221,25,I Want to Eat Your Pancreas,Shinichiro Ueda,2018,Anime,7.9,90%,221,,false
+222,25,Titanic,James Cameron,1997,Action,7.9,87%,222,,false
+223,25,Mystic River,Clint Eastwood,2003,Western,7.9,87%,223,,false
+224,25,Life of Pi,Ang Lee,2012,Erotic Directors,7.9,87%,224,,false
+225,25,Mulholland Drive,David Lynch,2001,Essential,7.9,84%,225,,false
+226,26,Jujutsu Kaisen 0,Sung Hoo Park,2021,Anime,7.9,84%,226,,false
+227,26,Avatar,James Cameron,2009,Action,7.9,82%,227,,false
+228,26,Doctor Zhivago,David Lean,1965,Epic,7.9,82%,228,,false
+229,26,Meshes of the Afternoon,Maya Deren,1943,Avant-Garde,7.8,100%,229,,false
+230,26,Nostalghia,Andrei Tarkovsky,1983,Biographical,7.8,100%,230,,false
+231,26,High School (1968),Frederick Wiseman,1968,Documentary,7.8,100%,231,,false
+232,26,Frankenstein (1931),James Whale,1931,Horror,7.8,100%,232,,false
+233,26,Cathy Come Home,Ken Loach,1966,Social Realism,7.8,100%,233,,false
+234,26,Stagecoach,John Ford,1939,Western,7.8,100%,234,,false
+235,26,And Life Goes On,Abbas Kiarostami,1992,World Cinema,7.8,100%,235,,false
+236,26,Bride of Frankenstein,James Whale,1935,Horror,7.8,99%,236,,false
+237,26,Days of Heaven,Terrence Malick,1978,Biographical,7.8,98%,237,,false
+238,26,The Conversation,Francis Ford Coppola,1974,Crime,7.8,98%,238,,false
+239,26,Grizzly Man,Werner Herzog,2005,Documentary,7.8,98%,239,,false
+240,26,Shadow of a Doubt,Alfred Hitchcock,1943,Mystery,7.8,98%,240,,false
+241,26,Ninotchka,Ernst Lubitsch,1939,Romance,7.8,98%,241,,false
+242,26,L'Avventura,Michelangelo Antonioni,1960,Essential,7.8,97%,242,,false
+243,26,Liz and the Blue Bird,Naoko Yamada,2018,Anime,7.8,97%,243,,false
+244,26,A Touch of Zen,King Hu,1971,Martial Arts,7.8,97%,244,,false
+245,26,Drunken Master II,Jackie Chan,1994,Martial Arts,7.8,97%,245,,false
+246,26,Shoeshine,Vittorio De Sica,1946,Social Realism,7.8,97%,246,,false
+247,26,Days of Being Wild,Wong Kar-wai,1990,World Cinema,7.8,97%,247,,false
+248,26,I Am Cuba (Soy Cuba),Mikhail Kalatozov,1964,Essential,7.8,96%,248,,false
+249,26,Jules and Jim,Francois Truffaut,1962,Essential,7.8,96%,249,,false
+250,26,Taipei Story,Edward Yang,1985,Essential,7.8,96%,250,,false
+251,26,Hard Boiled,John Woo,1992,Action,7.8,96%,251,,false
+252,26,Cabaret (1972),Bob Fosse,1972,Musical,7.8,96%,252,,false
+253,26,The Umbrellas of Cherbourg,Jacques Demy,1964,Musical,7.8,96%,253,,false
+254,26,The Social Network,David Fincher,2010,Mystery,7.8,96%,254,,false
+255,26,Happy Together (1997),Wong Kar-wai,1997,Romance,7.8,96%,255,,false
+256,26,Jeanne Dielman,Chantal Akerman,1975,Essential,7.8,95%,256,,false
+257,26,The Magdalene Sisters,Peter Mullan,2002,Erotic Art,7.8,95%,257,,false
+258,26,Lolita (1962),Stanley Kubrick,1962,Black Comedy,7.8,95%,258,,false
+259,26,Mother (2009),Bong Joon-ho,2009,Black Comedy,7.8,95%,259,,false
+260,26,The Irishman,Martin Scorsese,2019,Crime,7.8,95%,260,,false
+261,26,Lilya 4-Ever,Lukas Moodysson,2002,Erotic Art,7.8,94%,261,,false
+262,26,Black Rain (Imamura),Shohei Imamura,1989,Erotic Directors,7.8,93%,262,,false
+263,26,The Garden of the Finzi-Continis,Vittorio De Sica,1971,Social Realism,7.8,92%,263,,false
+264,26,Mephisto,Istvan Szabo,1981,Essential,7.8,91%,264,,false
+265,26,Barefoot Gen,Mori Masaki,1983,Anime,7.8,88%,265,,false
+266,26,Colorful (2010),Keiichi Hara,2010,Anime,7.8,88%,266,,false
+267,26,The Wind Rises,Hayao Miyazaki,2013,Anime,7.8,88%,267,,false
+268,26,The Girl with the Dragon Tattoo,David Fincher,2011,Mystery,7.8,88%,268,,false
+269,26,Black Book (2006),Paul Verhoeven,2006,Erotic Directors,7.8,88%,269,,false
+270,26,Evangelion 1.11 / 2.22 (Rebuild),Hideaki Anno,2007,Anime,7.8,87%,270,,false
+271,26,Interstella 5555,Kazuhisa Takenouchi,2003,Anime,7.8,87%,271,,false
+272,27,Breaking the Waves,Lars von Trier,1996,Erotic Directors,7.8,81%,272,,false
+273,27,Redline,Takeshi Koike,2009,Anime,7.8,80%,273,,false
+274,27,Apocalypto,Mel Gibson,2006,Epic,7.8,65%,274,,false
+275,27,The Girl Who Leapt Through Time,Mamoru Hosoda,2006,Anime,7.7,100%,275,,false
+276,27,Trouble in Paradise,Ernst Lubitsch,1932,Romance,7.7,100%,276,,false
+277,27,Xiao Wu,Jia Zhangke,1997,Social Realism,7.7,100%,277,,false
+278,27,Cleo from 5 to 7,Agnes Varda,1962,Essential,7.7,98%,278,,false
+279,27,Sense and Sensibility,Ang Lee,1995,Erotic Directors,7.7,98%,279,,false
+280,27,Nashville,Robert Altman,1975,Essential,7.7,97%,280,,false
+281,27,Platform (Zhantai),Jia Zhangke,2000,Essential,7.7,97%,281,,false
+282,27,Naked (1993),Mike Leigh,1993,Erotic Art,7.7,97%,282,D272,false
+283,27,Contempt (Le Mepris),Jean-Luc Godard,1963,Avant-Garde,7.7,97%,283,,false
+284,27,Naked (Mike Leigh),Mike Leigh,1993,Drama,7.7,97%,282,D272,true
+285,27,Repulsion,Roman Polanski,1965,Film Noir,7.7,97%,285,,false
+286,27,The Invisible Man (1933),James Whale,1933,Horror,7.7,97%,286,,false
+287,27,Red Sorghum,Zhang Yimou,1987,Martial Arts,7.7,97%,287,,false
+288,27,Meet Me in St. Louis,Vincente Minnelli,1944,Musical,7.7,97%,288,,false
+289,27,An Angel at My Table,Jane Campion,1990,World Cinema,7.7,97%,289,,false
+290,27,Death by Hanging,Nagisa Oshima,1968,Erotic Directors,7.7,97%,290,,false
+291,27,Fitzcarraldo,Werner Herzog,1982,Essential,7.7,96%,291,,false
+292,27,Mind Game,Masaaki Yuasa,2004,Anime,7.7,96%,292,,false
+293,27,Halloween (1978),John Carpenter,1978,Horror,7.7,96%,293,,false
+294,27,Police Story (1985),Jackie Chan,1985,Martial Arts,7.7,96%,294,,false
+295,27,Still Life,Jia Zhangke,2006,Social Realism,7.7,96%,295,,false
+296,27,The Firemen's Ball,Milos Forman,1967,Essential,7.7,95%,296,,false
+297,27,Only Yesterday,Isao Takahata,1991,Anime,7.7,95%,297,D286,false
+298,27,Only Yesterday (Takahata),Isao Takahata,1991,Animation,7.7,95%,297,D286,true
+299,27,The Birds (1963),Alfred Hitchcock,1963,Mystery,7.7,95%,299,,false
+300,27,Land and Freedom,Ken Loach,1995,Social Realism,7.7,95%,300,,false
+301,27,My Darling Clementine,John Ford,1946,Western,7.7,95%,301,,false
+302,27,Taste of Cherry,Abbas Kiarostami,1997,World Cinema,7.7,95%,302,,false
+303,27,The Garden of Words,Makoto Shinkai,2013,Anime,7.7,93%,303,,false
+304,27,The Insect Woman,Shohei Imamura,1963,Erotic Directors,7.7,93%,304,,false
+305,27,Damnation (Kahrozat),Bela Tarr,1988,Essential,7.7,92%,305,,false
+306,27,Ponyo,Hayao Miyazaki,2008,Anime,7.7,91%,306,,false
+307,27,Summer Wars,Mamoru Hosoda,2009,Anime,7.7,91%,307,,false
+308,27,When Marnie Was There,Hiromasa Yonebayashi,2014,Anime,7.7,91%,308,,false
+309,27,Lenny (1974),Bob Fosse,1974,Musical,7.7,91%,309,,false
+310,27,Blue Is the Warmest Colour,Abdellatif Kechiche,2013,Essential,7.7,90%,310,,false
+311,27,Night on the Galactic Railroad,Gisaburo Sugii,1985,Anime,7.7,90%,311,,false
+312,27,Zodiac,David Fincher,2007,Essential,7.7,89%,312,,false
+313,27,The Last Emperor,Bernardo Bertolucci,1987,Epic,7.7,89%,313,,false
+314,27,Macross: Do You Remember Love?,Shoji Kawamori,1984,Anime,7.7,88%,314,,false
+315,27,Brokeback Mountain,Ang Lee,2005,Essential,7.7,87%,315,,false
+316,27,La Pianiste (The Piano Teacher),Michael Haneke,2001,Erotic Art,7.7,87%,316,,false
+317,27,The Boy and the Beast,Mamoru Hosoda,2015,Anime,7.7,87%,317,,false
+318,28,Mobile Suit Gundam: Char's Counterattack,Yoshiyuki Tomino,1988,Anime,7.7,85%,318,,false
+319,28,The Tenant,Roman Polanski,1976,Film Noir,7.7,84%,319,,false
+320,28,Paprika,Satoshi Kon,2006,Anime,7.7,83%,320,D308,false
+321,28,Paprika (Kon),Satoshi Kon,2006,Animation,7.7,83%,320,D308,true
+322,28,Fallen Angels (1995),Wong Kar-wai,1995,Romance,7.7,82%,322,,false
+323,28,1900 (Novecento),Bernardo Bertolucci,1976,Epic,7.7,80%,323,,false
+324,28,Waking Life,Richard Linklater,2001,Romance,7.7,80%,324,,false
+325,28,Black Hawk Down,Ridley Scott,2001,Sci-Fi,7.7,76%,325,,false
+326,28,The Game (1997),David Fincher,1997,Mystery,7.7,75%,326,,false
+327,28,The Road Warrior (Mad Max 2),George Miller,1981,Action,7.6,100%,327,,false
+328,28,Through the Olive Trees,Abbas Kiarostami,1994,World Cinema,7.6,100%,328,,false
+329,28,The Wedding Banquet,Ang Lee,1993,Erotic Directors,7.6,99%,329,,false
+330,28,Gates of Heaven,Errol Morris,1978,Documentary,7.6,98%,330,,false
+331,28,The Big Heat,Fritz Lang,1953,Film Noir,7.6,98%,331,,false
+332,28,"The Night Is Short, Walk On Girl",Masaaki Yuasa,2017,Anime,7.6,97%,332,,false
+333,28,The Boy and the Heron,Hayao Miyazaki,2023,Animation,7.6,97%,333,,false
+334,28,Knife in the Water,Roman Polanski,1962,Film Noir,7.6,97%,334,,false
+335,28,My Name Is Joe,Ken Loach,1998,Social Realism,7.6,97%,335,,false
+336,28,The Wind That Shakes the Barley,Ken Loach,2006,Social Realism,7.6,97%,336,,false
+337,28,The Killer (1989),John Woo,1989,Action,7.6,96%,337,,false
+338,28,Soldier of Orange,Paul Verhoeven,1977,Erotic Directors,7.6,96%,338,,false
+339,28,The Secret World of Arrietty,Hiromasa Yonebayashi,2010,Anime,7.6,95%,339,,false
+340,28,The Summit of the Gods,Patrick Imbert,2021,Anime,7.6,95%,340,,false
+341,28,Love Streams,John Cassavetes,1984,Drama,7.6,95%,341,,false
+342,28,Women on the Verge of a Nervous Breakdown,Pedro Almodovar,1988,World Cinema,7.6,95%,342,,false
+343,28,Le Doulos,Jean-Pierre Melville,1963,Crime,7.6,93%,343,,false
+344,28,Le Deuxieme Souffle,Jean-Pierre Melville,1966,Crime,7.6,93%,344,,false
+345,28,Opening Night,John Cassavetes,1977,Drama,7.6,93%,345,,false
+346,28,The Young Girls of Rochefort,Jacques Demy,1967,Musical,7.6,93%,346,,false
+347,28,Dazed and Confused,Richard Linklater,1993,Romance,7.6,93%,347,,false
+348,28,Sicario (2015),Denis Villeneuve,2015,Sci-Fi,7.6,93%,348,,false
+349,28,The Wind Will Carry Us,Abbas Kiarostami,1999,World Cinema,7.6,93%,349,,false
+350,28,Angel's Egg,Mamoru Oshii,1985,Anime,7.6,92%,350,,false
+351,28,Two Women,Vittorio De Sica,1960,Social Realism,7.6,92%,351,,false
+352,28,Sorry We Missed You,Ken Loach,2019,Social Realism,7.6,91%,352,,false
+353,28,Giovanni's Island,Mizuho Nishikubo,2014,Anime,7.6,90%,353,,false
+354,28,Maquia: When the Promised Flower Blooms,Mari Okada,2018,Anime,7.6,90%,354,,false
+355,28,Volver,Pedro Almodovar,2006,World Cinema,7.6,90%,355,,false
+356,28,Accattone,Pier Paolo Pasolini,1961,Erotic Directors,7.6,90%,356,,false
+357,28,Ai No Corrida (In the Realm of the Senses),Nagisa Oshima,1976,Essential,7.6,88%,357,,false
+358,28,Bullet in the Head,John Woo,1990,Action,7.6,88%,358,,false
+359,28,The Last of the Mohicans,Michael Mann,1992,Crime,7.6,88%,359,,false
+360,28,Intentions of Murder,Shohei Imamura,1964,Erotic Directors,7.6,88%,360,,false
+361,29,Anthem of the Heart,Tatsuyuki Nagai,2015,Anime,7.6,87%,361,,false
+362,29,House of Flying Daggers,Zhang Yimou,2004,Martial Arts,7.6,87%,362,,false
+363,29,The Eel (1997),Shohei Imamura,1997,Erotic Directors,7.6,87%,363,,false
+364,29,Collateral,Michael Mann,2004,Crime,7.6,86%,364,,false
+365,29,Sympathy for Mr. Vengeance,Park Chan-wook,2002,Mystery,7.6,82%,365,,false
+366,29,The Thin Red Line,Terrence Malick,1998,Biographical,7.6,79%,366,,false
+367,29,The Skin I Live In,Pedro Almodovar,2011,World Cinema,7.6,79%,367,,false
+368,29,Duck You Sucker!,Sergio Leone,1971,Epic,7.6,78%,368,,false
+369,29,The Abyss,James Cameron,1989,Action,7.6,68%,369,,false
+370,29,Mothlight,Stan Brakhage,1963,Avant-Garde,7.5,100%,370,,false
+371,29,Beau Travail,Claire Denis,1999,Erotic Art,7.5,98%,371,,false
+372,29,Inu-Oh,Masaaki Yuasa,2021,Anime,7.5,97%,372,,false
+373,29,Fast Cheap and Out of Control,Errol Morris,1997,Documentary,7.5,97%,373,,false
+374,29,The Band Wagon,Vincente Minnelli,1953,Musical,7.5,97%,374,,false
+375,29,Miracle in Milan,Vittorio De Sica,1951,Social Realism,7.5,97%,375,,false
+376,29,The Turin Horse,Bela Tarr,2011,Essential,7.5,96%,376,,false
+377,29,Ju Dou,Zhang Yimou,1990,Martial Arts,7.5,96%,377,,false
+378,29,Raining Stones,Ken Loach,1993,Social Realism,7.5,96%,378,,false
+379,29,Pain and Glory,Pedro Almodovar,2019,World Cinema,7.5,96%,379,,false
+380,29,Thief (1981),Michael Mann,1981,Crime,7.5,95%,380,,false
+381,29,Into the Abyss,Werner Herzog,2011,Documentary,7.5,95%,381,,false
+382,29,High Hopes,Mike Leigh,1988,Drama,7.5,95%,382,,false
+383,29,The Favourite,Yorgos Lanthimos,2018,Black Comedy,7.5,94%,383,,false
+384,29,Bob le Flambeur,Jean-Pierre Melville,1956,Crime,7.5,94%,384,,false
+385,29,Faces (1968),John Cassavetes,1968,Drama,7.5,94%,385,,false
+386,29,Another Year,Mike Leigh,2010,Drama,7.5,94%,386,,false
+387,29,The Fly (1986),David Cronenberg,1986,Horror,7.5,93%,387,,false
+388,29,Drunken Master,Jackie Chan,1978,Martial Arts,7.5,93%,388,,false
+389,29,Project A (1983),Jackie Chan,1983,Martial Arts,7.5,93%,389,,false
+390,29,Bay of Angels,Jacques Demy,1963,Musical,7.5,93%,390,,false
+391,29,The Piano,Jane Campion,1993,Essential,7.5,92%,391,D378,false
+392,29,The Piano (Campion),Jane Campion,1993,Erotic Directors,7.5,92%,391,D378,true
+393,29,Blow-Up,Michelangelo Antonioni,1966,Essential,7.5,91%,393,,false
+394,29,Lady Vengeance,Park Chan-wook,2005,Mystery,7.5,91%,394,,false
+395,29,A Passage to India,David Lean,1984,Epic,7.5,90%,395,,false
+396,29,"Lust, Caution (Se, Jie)",Ang Lee,2007,Erotic Art,7.5,89%,396,,false
+397,29,Weathering with You,Makoto Shinkai,2019,Anime,7.5,89%,397,,false
+398,29,What Have I Done to Deserve This?,Pedro Almodovar,1984,World Cinema,7.5,89%,398,,false
+399,29,Boy (1969),Nagisa Oshima,1969,Erotic Directors,7.5,89%,399,,false
+400,29,A Better Tomorrow,John Woo,1986,Action,7.5,88%,400,,false
+401,29,Noi Albinoi,Dagur Kari,2003,Erotic Art,7.5,87%,401,,false
+402,29,A History of Violence,David Cronenberg,2005,War,7.5,87%,402,,false
+403,29,2046 (2004),Wong Kar-wai,2004,Romance,7.5,86%,403,,false
+404,29,My Hero Academia: Two Heroes,Kenji Nagasaki,2018,Anime,7.5,85%,404,,false
+405,29,The Pornographers (Imamura),Shohei Imamura,1966,Essential,7.5,83%,405,,false
+406,29,Dragon Ball Super: Broly,Tatsuya Nagamine,2018,Anime,7.5,83%,406,,false
+407,30,Bad Education (2004),Pedro Almodovar,2004,World Cinema,7.5,81%,407,,false
+408,30,Betty Blue (37.2 le matin),Jean-Jacques Beineix,1986,Erotic Art,7.5,80%,408,,false
+409,30,Red Cliff,John Woo,2008,Action,7.5,80%,409,,false
+410,30,Funny Games,Michael Haneke,1997,Essential,7.5,79%,410,,false
+411,30,5 Centimeters Per Second,Makoto Shinkai,2007,Anime,7.5,75%,411,,false
+412,30,Eyes Wide Shut,Stanley Kubrick,1999,Essential,7.5,74%,412,,false
+413,30,Okko's Inn,Kitaro Kosaka,2018,Anime,7.4,100%,413,,false
+414,30,Dog Star Man,Stan Brakhage,1964,Avant-Garde,7.4,100%,414,,false
+415,30,Moonlight,Barry Jenkins,2016,Essential,7.4,98%,415,,false
+416,30,Decision to Leave,Park Chan-wook,2022,Mystery,7.4,97%,416,,false
+417,30,Dogtooth (Kynodontas),Yorgos Lanthimos,2009,Essential,7.4,96%,417,,false
+418,30,A Sixth Part of the World,Dziga Vertov,1926,Avant-Garde,7.4,95%,418,,false
+419,30,Dead Ringers,David Cronenberg,1988,Horror,7.4,94%,419,,false
+420,30,Lu Over the Wall,Masaaki Yuasa,2017,Anime,7.4,93%,420,,false
+421,30,Scarlet Street,Fritz Lang,1945,Film Noir,7.4,93%,421,,false
+422,30,The Story of Qiu Ju,Zhang Yimou,1992,Martial Arts,7.4,93%,422,,false
+423,30,Patlabor: The Movie,Mamoru Oshii,1989,Anime,7.4,91%,423,,false
+424,30,Ride Your Wave,Masaaki Yuasa,2019,Anime,7.4,91%,424,,false
+425,30,The Cat Returns,Hiroyuki Morita,2002,Anime,7.4,91%,425,,false
+426,30,Happy-Go-Lucky,Mike Leigh,2008,Drama,7.4,91%,426,,false
+427,30,The Devil's Backbone,Guillermo del Toro,2001,Fantasy,7.4,91%,427,,false
+428,30,Cave of Forgotten Dreams,Werner Herzog,2010,Documentary,7.4,90%,428,,false
+429,30,Penguin Highway,Hiroyasu Ishida,2018,Anime,7.4,89%,429,,false
+430,30,Heavenly Creatures,Peter Jackson,1994,Fantasy,7.4,89%,430,,false
+431,30,Vortex (2021),Gaspar Noe,2021,Erotic Directors,7.4,89%,431,,false
+432,30,In Vanda's Room,Pedro Costa,2000,Essential,7.4,88%,432,,false
+433,30,Black Peter,Milos Forman,1964,Black Comedy,7.4,88%,433,,false
+434,30,Snake in the Eagle's Shadow,Jackie Chan,1978,Martial Arts,7.4,88%,434,,false
+435,30,Ten (2002),Abbas Kiarostami,2002,World Cinema,7.4,88%,435,,false
+436,30,Cruel Story of Youth,Nagisa Oshima,1960,Erotic Directors,7.4,88%,436,,false
+437,30,Teorema (1968),Pier Paolo Pasolini,1968,Erotic Directors,7.4,88%,437,,false
+438,30,Pom Poko,Isao Takahata,1994,Anime,7.4,87%,438,D424,false
+439,30,Pom Poko (Takahata),Isao Takahata,1994,Animation,7.4,87%,438,D424,true
+440,30,The World (2004),Jia Zhangke,2004,Social Realism,7.4,87%,440,,false
+441,30,Europa (Zentropa),Lars von Trier,1991,Essential,7.4,86%,441,,false
+442,30,She Wore a Yellow Ribbon,John Ford,1949,Western,7.4,86%,442,,false
+443,30,The Chess Players,Satyajit Ray,1977,World Cinema,7.4,86%,443,,false
+444,30,Arabian Nights (1974),Pier Paolo Pasolini,1974,Erotic Directors,7.4,86%,444,,false
+445,30,Thirst (2009),Park Chan-wook,2009,Mystery,7.4,85%,445,,false
+446,30,The Big Red One,Sam Fuller,1980,War,7.4,83%,446,,false
+447,30,Empire of Passion,Nagisa Oshima,1978,Erotic Directors,7.4,83%,447,,false
+448,30,Thelma & Louise,Ridley Scott,1991,Sci-Fi,7.4,82%,448,,false
+449,30,Memories,Koji Morimoto / Otomo,1995,Anime,7.4,78%,449,,false
+450,30,Labyrinth,Jim Henson,1986,Fantasy,7.4,73%,450,,false
+451,30,At Berkeley,Frederick Wiseman,2013,Documentary,7.3,100%,451,,false
+452,30,Bleak Moments,Mike Leigh,1971,Drama,7.3,100%,452,,false
+453,31,The Old Dark House,James Whale,1932,Horror,7.3,100%,453,,false
+454,31,35 Shots of Rum,Claire Denis,2008,Erotic Directors,7.3,97%,454,,false
+455,31,Far from Heaven,Todd Haynes,2002,Biographical,7.3,96%,455,,false
+456,31,Mean Streets,Martin Scorsese,1973,Crime,7.3,96%,456,,false
+457,31,Ash Is Purest White,Jia Zhangke,2018,Social Realism,7.3,96%,457,,false
+458,31,Cache (Hidden),Michael Haneke,2005,Essential,7.3,95%,458,,false
+459,31,George Washington,David Gordon Green,2000,Essential,7.3,93%,459,,false
+460,31,Body Heat,Lawrence Kasdan,1981,Erotic Art,7.3,93%,460,,false
+461,31,Donkey Skin (1970),Jacques Demy,1970,Musical,7.3,93%,461,,false
+462,31,The Shape of Water,Guillermo del Toro,2017,Fantasy,7.3,92%,462,,false
+463,31,Hereditary,Ari Aster,2018,Horror,7.3,92%,463,,false
+464,31,Weekend (1967),Jean-Luc Godard,1967,Avant-Garde,7.3,91%,464,,false
+465,31,Life is Sweet,Mike Leigh,1990,Drama,7.3,91%,465,,false
+466,31,The Dead Zone,David Cronenberg,1983,Horror,7.3,91%,466,,false
+467,31,Riff-Raff (1991),Ken Loach,1991,Social Realism,7.3,91%,467,,false
+468,31,Certified Copy,Abbas Kiarostami,2010,World Cinema,7.3,91%,468,,false
+469,31,Goodbye Dragon Inn,Tsai Ming-liang,2003,Essential,7.3,90%,469,,false
+470,31,Shadow (2018),Zhang Yimou,2018,Martial Arts,7.3,90%,470,,false
+471,31,Shadows (1959),John Cassavetes,1959,Drama,7.3,87%,471,,false
+472,31,Okja,Bong Joon-ho,2017,Black Comedy,7.3,86%,472,,false
+473,31,Promare,Hiroyuki Imaishi,2019,Anime,7.3,85%,473,,false
+474,31,The Decameron (1971),Pier Paolo Pasolini,1971,Erotic Directors,7.3,85%,474,,false
+475,31,Napping Princess,Kenji Kamiyama,2017,Anime,7.3,83%,475,,false
+476,31,My Neighbor the Yamadas,Isao Takahata,1999,Anime,7.3,82%,476,,false
+477,31,My Neighbors the Yamadas,Isao Takahata,1999,Animation,7.3,82%,477,,false
+478,31,Irreversible,Gaspar Noe,2002,Erotic Art,7.3,81%,478,,false
+479,31,One Piece Film: Red,Goro Taniguchi,2022,Anime,7.3,80%,479,,false
+480,31,Tess,Roman Polanski,1979,Film Noir,7.3,80%,480,,false
+481,31,Turkish Delight,Paul Verhoeven,1973,Erotic Directors,7.3,79%,481,,false
+482,31,El Topo,Alejandro Jodorowsky,1970,Essential,7.3,78%,482,,false
+483,31,Pale Rider,Clint Eastwood,1985,Western,7.3,77%,483,,false
+484,31,The Place Promised in Our Early Days,Makoto Shinkai,2004,Anime,7.3,75%,484,,false
+485,31,"The Tunnel to Summer, the Exit of Goodbyes",Tomohisa Taguchi,2022,Anime,7.3,75%,485,,false
+486,31,Enter the Void,Gaspar Noe,2009,Erotic Directors,7.3,74%,486,,false
+487,31,Belle,Mamoru Hosoda,2021,Anime,7.3,72%,487,,false
+488,31,American Sniper,Clint Eastwood,2014,Western,7.3,72%,488,,false
+489,31,Seul Contre Tous,Gaspar Noe,1998,Erotic Directors,7.3,71%,489,,false
+490,31,High Plains Drifter,Clint Eastwood,1973,Western,7.3,65%,490,,false
+491,31,Snowden,Oliver Stone,2016,Biographical,7.3,62%,491,,false
+492,31,Mr. Turner,Mike Leigh,2014,Drama,7.2,98%,492,,false
+493,31,A Touch of Sin,Jia Zhangke,2013,Social Realism,7.2,96%,493,,false
+494,31,Carol,Todd Haynes,2015,Erotic Art,7.2,93%,494,,false
+495,31,Face/Off,John Woo,1997,Action,7.2,93%,495,,false
+496,31,Manhunter,Michael Mann,1986,Crime,7.2,91%,496,,false
+497,31,Unknown Pleasures,Jia Zhangke,2002,Social Realism,7.2,91%,497,,false
+498,32,The Steel Helmet,Sam Fuller,1951,War,7.2,91%,498,,false
+499,32,White Material,Claire Denis,2009,Erotic Directors,7.2,91%,499,,false
+500,32,Bound,The Wachowskis,1996,Erotic Art,7.2,90%,500,,false
+501,32,Belladonna of Sadness,Eiichi Yamamoto,1973,Anime,7.2,90%,501,,false
+502,32,Patema Inverted,Yasuhiro Yoshiura,2013,Anime,7.2,90%,502,,false
+503,32,Dragon Inn (1967),King Hu,1967,Martial Arts,7.2,90%,503,,false
+504,32,Law of Desire,Pedro Almodovar,1987,World Cinema,7.2,90%,504,,false
+505,32,Born on the Fourth of July,Oliver Stone,1989,Biographical,7.2,87%,505,,false
+506,32,The People vs. Larry Flynt,Milos Forman,1996,Black Comedy,7.2,87%,506,,false
+507,32,An American in Paris,Vincente Minnelli,1951,Musical,7.2,86%,507,,false
+508,32,King Kong (2005),Peter Jackson,2005,Fantasy,7.2,84%,508,,false
+509,32,The Woman in the Window,Fritz Lang,1944,Film Noir,7.2,83%,509,,false
+510,32,Children Who Chase Lost Voices,Makoto Shinkai,2011,Anime,7.2,82%,510,,false
+511,32,As Tears Go By,Wong Kar-wai,1988,World Cinema,7.2,82%,511,,false
+512,32,Standard Operating Procedure,Errol Morris,2008,Documentary,7.2,80%,512,,false
+513,32,The Dark Crystal,Jim Henson,1982,Fantasy,7.2,79%,513,,false
+514,32,Melancholia,Lars von Trier,2011,Erotic Directors,7.2,79%,514,,false
+515,32,Shame (2011),Steve McQueen,2011,Erotic Art,7.2,78%,515,,false
+516,32,The Killing of a Chinese Bookie,John Cassavetes,1976,Drama,7.2,78%,516,,false
+517,32,Neon Genesis Evangelion: Death and Rebirth,Hideaki Anno,1997,Anime,7.2,72%,517,,false
+518,32,The House That Jack Built,Lars von Trier,2018,Erotic Directors,7.2,72%,518,,false
+519,32,Wild at Heart,David Lynch,1990,Erotic Art,7.2,71%,519,,false
+520,32,True Lies,James Cameron,1994,Action,7.2,71%,520,,false
+521,32,In the Mouth of Madness,John Carpenter,1994,Horror,7.2,66%,521,,false
+522,32,Crash (1996),David Cronenberg,1996,Erotic Art,7.2,62%,522,,false
+523,32,The Passion of the Christ,Mel Gibson,2004,Epic,7.2,49%,523,,false
+524,32,Monrovia Indiana,Frederick Wiseman,2018,Documentary,7.1,97%,524,,false
+525,32,Mirai,Mamoru Hosoda,2018,Anime,7.1,95%,525,,false
+526,32,Snowpiercer,Bong Joon-ho,2013,Black Comedy,7.1,95%,526,,false
+527,32,Come Drink with Me,King Hu,1966,Martial Arts,7.1,93%,527,,false
+528,32,Slacker (1990),Richard Linklater,1990,Romance,7.1,92%,528,,false
+529,32,Holy Motors,Leos Carax,2012,Essential,7.1,89%,529,,false
+530,32,The Lobster,Yorgos Lanthimos,2015,Black Comedy,7.1,89%,530,,false
+531,32,Elle,Paul Verhoeven,2016,Erotic Art,7.1,88%,531,,false
+532,32,Therese and Isabelle,Radley Metzger,1968,Erotic Art,7.1,88%,532,,false
+533,32,Children of the Sea,Ayumu Watanabe,2019,Anime,7.1,86%,533,,false
+534,32,Star 80,Bob Fosse,1983,Musical,7.1,86%,534,,false
+535,32,Merry Christmas Mr. Lawrence,Nagisa Oshima,1983,Erotic Directors,7.1,84%,535,,false
+536,32,Miss Hokusai,Keiichi Hara,2015,Anime,7.1,83%,536,,false
+537,32,Midsommar,Ari Aster,2019,Horror,7.1,83%,537,,false
+538,32,The Unknown Known,Errol Morris,2013,Documentary,7.1,82%,538,,false
+539,32,Flavors of Youth,Yoshitaka Takeuchi,2018,Anime,7.1,80%,539,,false
+540,32,Nightmare Alley,Guillermo del Toro,2021,Fantasy,7.1,80%,540,,false
+541,32,Rumble Fish,Francis Ford Coppola,1983,Crime,7.1,78%,541,,false
+542,32,Last Tango in Paris,Bernardo Bertolucci,1972,Essential,7.1,75%,542,,false
+543,33,Tie Me Up! Tie Me Down!,Pedro Almodovar,1989,World Cinema,7.1,73%,543,,false
+544,33,The Dreamers,Bernardo Bertolucci,2003,Erotic Art,7.1,70%,544,,false
+545,33,May December,Todd Haynes,2023,Biographical,7.0,93%,545,,false
+546,33,The Host,Bong Joon-ho,2006,Black Comedy,7.0,93%,546,,false
+547,33,Cronos,Guillermo del Toro,1993,Fantasy,7.0,91%,547,,false
+548,33,Mountains May Depart,Jia Zhangke,2015,Social Realism,7.0,91%,548,,false
+549,33,Chocolat (1988),Claire Denis,1988,Erotic Directors,7.0,90%,549,,false
+550,33,Videodrome,David Cronenberg,1983,Horror,7.0,87%,550,,false
+551,33,Naked Lunch (1991),David Cronenberg,1991,Horror,7.0,85%,551,,false
+552,33,Porcile (Pigsty),Pier Paolo Pasolini,1969,Erotic Art,7.0,83%,552,,false
+553,33,Metropolis (2001),Rintaro,2001,Anime,7.0,82%,553,,false
+554,33,Hair,Milos Forman,1979,Black Comedy,7.0,82%,554,,false
+555,33,I'm Not There,Todd Haynes,2007,Biographical,7.0,81%,555,,false
+556,33,Killing of a Sacred Deer,Yorgos Lanthimos,2017,Essential,7.0,79%,556,,false
+557,33,Blame (Culpa),Amat Escalante,2010,Erotic Art,7.0,77%,557,,false
+558,33,Dragon Ball Z: Battle of Gods,Masahiro Hosoda,2013,Anime,7.0,75%,558,,false
+559,33,Nixon,Oliver Stone,1995,Biographical,7.0,74%,559,,false
+560,33,Nymphomaniac Vol. I & II,Lars von Trier,2013,Essential,7.0,72%,560,,false
+561,33,Short Bus,John Cameron Mitchell,2006,Erotic Art,7.0,70%,561,,false
+562,33,The Power of the Dog,Jane Campion,2021,World Cinema,6.9,94%,562,,false
+563,33,Last Summer (2023),Catherine Breillat,2023,Erotic Directors,6.9,92%,563,,false
+564,33,Enemy (2013),Denis Villeneuve,2013,Sci-Fi,6.9,90%,564,,false
+565,33,Climax (2018),Gaspar Noe,2018,Erotic Directors,6.9,90%,565,,false
+566,33,The Killer (2023),David Fincher,2023,Mystery,6.9,87%,566,,false
+567,33,Like Someone in Love,Abbas Kiarostami,2012,World Cinema,6.9,83%,567,,false
+568,33,The Deer King,Masashi Ando,2021,Anime,6.9,82%,568,,false
+569,33,Gigi (1958),Vincente Minnelli,1958,Musical,6.9,82%,569,,false
+570,33,Hellboy,Guillermo del Toro,2004,Fantasy,6.9,81%,570,,false
+571,33,Pretty Baby,Louis Malle,1978,Erotic Art,6.9,78%,571,,false
+572,33,Velvet Goldmine,Todd Haynes,1998,Biographical,6.9,77%,572,,false
+573,33,Swimming Pool,Francois Ozon,2003,Erotic Art,6.9,73%,573,,false
+574,33,Spetters,Paul Verhoeven,1980,Erotic Directors,6.9,72%,574,,false
+575,33,Basic Instinct,Paul Verhoeven,1992,Erotic Art,6.9,54%,575,,false
+576,33,The Night Porter,Liliana Cavani,1974,Erotic Art,6.9,40%,576,,false
+577,33,Mad Max,George Miller,1979,Action,6.8,95%,577,,false
+578,33,Poor Cow,Ken Loach,1967,Social Realism,6.8,88%,578,,false
+579,33,The Tree of Life,Terrence Malick,2011,Essential,6.8,84%,579,,false
+580,33,Sweetie,Jane Campion,1989,World Cinema,6.8,84%,580,D565,false
+581,33,Sweetie (Campion),Jane Campion,1989,Erotic Directors,6.8,84%,580,D565,true
+582,33,Fat Girl (A ma soeur!),Catherine Breillat,2001,Essential,6.8,82%,582,,false
+583,33,A Ma Soeur! (Fat Girl),Catherine Breillat,2001,Erotic Art,6.8,82%,583,,false
+584,33,Happy End (2017),Michael Haneke,2017,Erotic Directors,6.8,80%,584,,false
+585,33,The Fog,John Carpenter,1980,Horror,6.8,78%,585,,false
+586,33,Panic Room,David Fincher,2002,Mystery,6.8,77%,586,,false
+587,33,The Last Mistress,Catherine Breillat,2007,Erotic Directors,6.8,75%,587,,false
+588,33,Secretary,Steven Shainberg,2002,Erotic Art,6.8,73%,588,,false
+589,34,eXistenZ,David Cronenberg,1999,Horror,6.8,73%,589,,false
+590,34,Drifting Home,Hiroyasu Ishida,2022,Anime,6.8,72%,590,,false
+591,34,Stoker (2013),Park Chan-wook,2013,Mystery,6.8,72%,591,,false
+592,34,Three Thousand Years of Longing,George Miller,2022,Action,6.8,71%,592,,false
+593,34,Ali (2001),Michael Mann,2001,Crime,6.8,67%,593,,false
+594,34,Christine (1983),John Carpenter,1983,Horror,6.8,62%,594,,false
+595,34,Miami Vice (2006),Michael Mann,2006,Crime,6.7,80%,595,,false
+596,34,A Whisker Away,Junichi Sato,2020,Anime,6.7,72%,596,,false
+597,34,The New World,Terrence Malick,2005,Biographical,6.7,71%,597,,false
+598,34,Portrait of a Lady (1996),Jane Campion,1996,World Cinema,6.7,66%,598,,false
+599,34,Intimacy,Patrice Chereau,2001,Erotic Art,6.7,64%,599,,false
+600,34,The Sheltering Sky,Bernardo Bertolucci,1990,Erotic Directors,6.7,58%,600,,false
+601,34,My Blueberry Nights,Wong Kar-wai,2007,World Cinema,6.7,57%,601,,false
+602,34,Goodbye to Language,Jean-Luc Godard,2014,Avant-Garde,6.6,83%,602,,false
+603,34,Labyrinth of Passion,Pedro Almodovar,1982,Erotic Directors,6.6,76%,603,,false
+604,34,In My Skin (Dans ma peau),Marina de Van,2002,Erotic Art,6.6,72%,604,,false
+605,34,Crimson Peak,Guillermo del Toro,2015,Fantasy,6.6,72%,605,,false
+606,34,Cheyenne Autumn,John Ford,1964,Western,6.6,72%,606,,false
+607,34,Damage,Louis Malle,1992,Erotic Art,6.6,71%,607,,false
+608,34,Shivers (1975),David Cronenberg,1975,Horror,6.6,70%,608,,false
+609,34,Ferrari,Michael Mann,2023,Crime,6.6,68%,609,,false
+610,34,Antichrist,Lars von Trier,2009,Erotic Art,6.6,67%,610,D594,false
+611,34,Antichrist (von Trier),Lars von Trier,2009,Erotic Directors,6.6,67%,610,D594,true
+612,34,The Lover (L'Amant),Jean-Jacques Annaud,1992,Erotic Art,6.6,51%,612,,false
+613,34,The Grandmaster,Wong Kar-wai,2013,Romance,6.5,85%,613,,false
+614,34,Crimes of the Future (2022),David Cronenberg,2022,Horror,6.5,81%,614,,false
+615,34,Henry & June,Philip Kaufman,1990,Erotic Art,6.5,60%,615,,false
+616,34,Fireworks (2017),Akiyuki Shinbo,2017,Anime,6.5,56%,616,,false
+617,34,The Killer Inside Me,Michael Winterbottom,2010,Erotic Art,6.5,53%,617,,false
+618,34,The Image Book,Jean-Luc Godard,2018,Avant-Garde,6.4,83%,618,,false
+619,34,Sex Is Comedy,Catherine Breillat,2002,Erotic Directors,6.4,67%,619,,false
+620,34,Trouble Every Day,Claire Denis,2001,Erotic Directors,6.4,61%,620,,false
+621,34,Under the Skin,Jonathan Glazer,2013,Essential,6.3,85%,621,,false
+622,34,Maps to the Stars,David Cronenberg,2014,Erotic Art,6.3,63%,622,,false
+623,34,Napoleon (2023),Ridley Scott,2023,Sci-Fi,6.3,59%,623,,false
+624,34,Palindromes,Todd Solondz,2004,Erotic Art,6.3,58%,624,,false
+625,34,Dune (1984),David Lynch,1984,Essential,6.3,57%,625,,false
+626,34,Little Buddha,Bernardo Bertolucci,1993,Erotic Directors,6.3,51%,626,,false
+627,34,Bubble,Tetsuro Araki,2022,Anime,6.3,48%,627,,false
+628,34,Beau Is Afraid,Ari Aster,2023,Horror,6.2,64%,628,,false
+629,34,Romance (1999),Catherine Breillat,1999,Erotic Art,6.2,55%,629,D612,false
+630,34,Romance (Breillat),Catherine Breillat,1999,Erotic Directors,6.2,55%,629,D612,true
+631,34,Eros,Wong Kar-wai / Soderbergh / Antonioni,2004,Erotic Art,6.2,40%,631,,false
+632,34,Mad Max Beyond Thunderdome,George Miller,1985,Action,6.1,81%,632,,false
+633,34,Salo or the 120 Days of Sodom,Pier Paolo Pasolini,1975,Essential,6.1,76%,633,,false
+634,35,Mission: Impossible II,John Woo,2000,Action,6.1,57%,634,,false
+635,35,Love (2015),Gaspar Noe,2015,Essential,6.1,50%,635,,false
+636,35,La Luna,Bernardo Bertolucci,1979,Erotic Directors,6.0,47%,636,,false
+637,35,Twentynine Palms,Bruno Dumont,2003,Erotic Art,5.9,65%,637,,false
+638,35,Female Perversions,Susan Streitfeld,1996,Erotic Art,5.9,62%,638,,false
+639,35,In the Cut,Jane Campion,2003,World Cinema,5.9,53%,639,,false
+640,35,Lie with Me,Clement Virgo,2005,Erotic Art,5.9,45%,640,,false
+641,35,Caligula,Tinto Brass,1979,Erotic Art,5.9,17%,641,,false
+642,35,Pornography: A Thriller,David Kittredge,2009,Erotic Art,5.8,45%,642,,false
+643,35,Emmanuelle,Just Jaeckin,1974,Erotic Art,5.7,55%,643,,false
+644,35,The Story of O,Just Jaeckin,1975,Erotic Art,5.7,36%,644,,false
+645,35,9 Songs,Michael Winterbottom,2004,Erotic Art,5.4,55%,645,,false
+646,35,Anatomy of Hell,Catherine Breillat,2004,Erotic Directors,4.8,28%,646,,false
+647,35,Showgirls,Paul Verhoeven,1995,Erotic Directors,4.5,44%,647,,false
