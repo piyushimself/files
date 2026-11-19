@@ -79,7 +79,7 @@ A document's filename is not proof of its contents or publication rights. No wit
 
 ## Document review limitations
 
-The 43 PDFs, 3 DOCX, 1 TXT and 1 Pine source have not yet all been inspected page by page in this pass. The GitHub text-file API cannot decode their binary contents as UTF-8; the extraction pipeline can scan/extract text during CI, but a successful scan does not establish copyright permission or human-reviewed content quality. These files remain withheld until the exact content is accessible and reviewed.
+The 43 PDFs, 3 DOCX files, 1 legacy TXT file and 2 Pine scripts (49 source artifacts, 48 unique source documents after the exact duplicate PDF pair) have not yet all been inspected page by page in this pass. The GitHub text-file API cannot decode their binary contents as UTF-8; the extraction pipeline can scan/extract text during CI, but a successful scan does not establish copyright permission or human-reviewed content quality. These files remain withheld until the exact content is accessible and reviewed.
 
 ## Remaining acceptance checks
 
