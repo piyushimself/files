@@ -36,11 +36,11 @@ PR #12, “Fix mobile collection navigation overflow”, was merged:
 
 ## Source-document inventory and review
 
-- 48 source files extracted: 43 PDFs, 3 DOCX, 1 TXT, 1 Pine file.
-- One exact duplicate PDF pair: All_Film_Collections_Combined_compressed.pdf and All_Film_Collections_Combined_compressed (1).pdf. 47 unique source docs.
-- Extracted text review artifact has 48 docs, no extraction errors; OCR needed for Aag_Ki_Kavitayen.pdf pages 27 and 90 and 1000_Creative_Educational_Cultural_Links.pdf page 82.
+- 49 source artifacts: 43 PDFs, 3 DOCX, 1 TXT and 2 Pine scripts. One byte-identical PDF pair leaves 48 unique source documents.
+- Exact duplicate PDF pair: All_Film_Collections_Combined_compressed.pdf and All_Film_Collections_Combined_compressed (1).pdf. The corrected 647-row audit is now tracked separately in `FILM-RATINGS-647-MANIFEST.csv` and `FILM-RATINGS-647-AUDIT.json`.
+- The latest extraction workflow processed 49 source artifacts. OCR is still required for Aag_Ki_Kavitayen.pdf pages 27 and 90 and 1000_Creative_Educational_Cultural_Links.pdf page 82; verify those image pages before accepting the extracted text.
 - Pattern scan found no common sensitive-data matches, but this is not proof of absence.
-- All 48 original files remain withheld from the Pages build; none is cleared for publication. Rights/licensing/ownership remain unproven. Never publish poems, descriptions, quotes, or other substantial third-party material without documented permission/licence.
+- All 49 source artifacts remain withheld from the Pages build; none is cleared for publication. Rights/licensing/ownership remain unproven. Never publish poems, descriptions, quotes, or other substantial third-party material without documented permission/licence.
 - Current editorial review: DOCUMENT-CONTENT-REVIEW.md
   https://github.com/piyushimself/files/blob/main/DOCUMENT-CONTENT-REVIEW.md
 - Latest known blob SHA before handoff commit: 6c845462fb05042faef8a28097ac28437d84acee. Fetch fresh before updating.
@@ -56,7 +56,7 @@ PR #12, “Fix mobile collection navigation overflow”, was merged:
    - 300_Films_Filmography.pdf: 298 extracted entry lines though numbering reaches 300; repair names/diacritics.
    - Cinema 900: cover says 100 x 3 = 300 while body says 300 x 3 = 900; regional subtotals support 900. library-3 reports 835 for corresponding collection; reconcile dedupe policy.
    - complete_movie_ratings.pdf: actual section counts 98 + 33 + 87 = 218, but labels imply 100 + 50 + 100.
-   - complete_movie_ratings_647.pdf: named sections total 238 (100 + 50 + 88); claimed 647 unique needs a reproducible manifest and reconciliation with library-3's 649.
+   - complete_movie_ratings_647.pdf: 647 ranked category rows resolve to 629 distinct films under the explicit title/director/year rule, with 18 cross-category repeat groups. The manifest/parser/audit are included in PR #19; rating-source URLs and as-of dates remain missing. Reconcile its relationship to library-3's 649 records.
    - complete_movie_encyclopedia.pdf: 647 vs library-3's 649; streaming verification statement dated 2025 is stale in 2026.
 2. Factual/editorial:
    - asian_books_curriculum.pdf contains “Not Asian — replace with …” placeholder and non-Asian entries in Asian list.
@@ -125,7 +125,7 @@ PR [#14](https://github.com/piyushimself/files/pull/14) contains a proposed corr
 
 A static CI invariant check was added. It is not a Pine compiler or Strategy Tester run. TradingView compile/backtest and actual exchange-cost calibration remain external acceptance steps. PR #14 workflow is queued/running; poll the check run before deciding whether to merge.
 
-ATH - Pine.txt remains unresolved. Its monthly signal and weekly exit timing, stop/target semantics, and account-level metrics need a coherent execution model; no speculative code edit has been made. Keep both Pine sources withheld.
+The former ATH indicator has been replaced by `ATH_Weekly_Confirmed_Strategy.pine` in merged PR #15; `ATH - Pine.txt` is now a deprecation notice. The replacement uses weekly execution and real Strategy Tester orders, but TradingView compilation/backtesting, symbol-specific fill review and cost calibration remain external. Keep both Pine scripts and the deprecated text source withheld until validation.
 
 ## Next actions from this checkpoint
 
