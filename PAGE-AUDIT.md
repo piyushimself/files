@@ -1,8 +1,16 @@
 # Page-by-page editorial and publishing audit
 
 Audit branch: `main`  
-Base reviewed: `main` at `0699b3a10090ddb9c018ba37116078597d8b0ccd` (PR #19 merge commit)  
+Base reviewed: `main` at `0bbe318ae4341aa16393ff95d9dd24452bed46d7` (latest status/documentation commit)  
 Status: **in progress — not a 100% sign-off**
+
+## Latest main-branch regression snapshot — 19 November 2026, 08:48 IST
+
+Main workflow [#305](https://github.com/piyushimself/files/actions/runs/44442583472) passed for exact main commit `0bbe318ae4341aa16393ff95d9dd24452bed46d7`, including build and Pages deployment. Its browser artifact [14492822395](https://github.com/piyushimself/files/actions/runs/44442583472) reports 34 desktop pages, 68 mobile checks, 96 iframe loads, 204 mobile reader controls, 34 reader menus, 63 filter disclosures, 33 theme-sync, 32 font-sync, 32 text-scale checks and zero automated issues. It also records 20 search, 14 select, 15 filter, 3 tab, 4 shell, 7 direct mature-gate and 21 mature iframe-sync checks.
+
+I downloaded the artifact and inspected its report. Contact sheets were swept for all 34 wrapper pages at desktop/tablet/mobile and 33 app captures at desktop/mobile. The Pages artifact [14492268281](https://github.com/piyushimself/files/actions/runs/44442583472) was inspected: no PDF, DOCX or Pine source files are present; `robots.txt` is the only `.txt` file. This confirms the latest main deployment job and source exclusion from the Pages artifact, not independent live HTTP reachability. The external fetcher cannot access the Pages hostname from this runtime.
+
+The 11 manual acceptance items below remain open or only partially evidenced. The latest automation does not replace exhaustive control/state testing, keyboard-only and screen-reader review, formal contrast/WCAG measurement, reduced-motion testing, or page-by-page review of all source documents.
 
 ## Latest regression snapshot — 19 November 2026
 
@@ -11,7 +19,7 @@ Status: **in progress — not a 100% sign-off**
 - The corrected-source-PDF artifact was inspected. Selected changed pages across the ten corrected PDFs were rendered and visually checked; not every page of every source document has been reviewed.
 - Main workflow [#283](https://github.com/piyushimself/files/actions/runs/44435251703) passed build, Chromium QA and GitHub Pages deployment for the earlier main commit `02141201fbe55ef4a1e1306ab91adc8a3f82f1d0`. It is not deployment evidence for the later PR #19 merge commit `0699b3a10090ddb9c018ba37116078597d8b0ccd`.
 - The Pages artifact from PR #19 contains 34 published HTML collections and no PDF/DOCX/Pine source files. The repository remains public; omission from Pages does not make root-level files private.
-- A new main-branch workflow and deployment for `0699b3a10090ddb9c018ba37116078597d8b0ccd` must pass before the merged source corrections can be called deployed. Independent live HTTP verification remains unconfirmed because this runtime could not resolve the Pages hostname.
+- Main workflow #305 now confirms the build, browser QA and Pages deployment for the current main commit `0bbe318ae4341aa16393ff95d9dd24452bed46d7`. Independent live HTTP verification remains unconfirmed because this runtime's web fetcher cannot access the Pages hostname.
 
 Automated Chromium coverage is not a formal WCAG audit, screen-reader certification, exhaustive keyboard-only test, reduced-motion verification, or full factual/editorial review. The 11 manual acceptance items below remain open and must be completed or individually dispositioned with evidence or a specific blocker.
 
