@@ -448,6 +448,8 @@ def main():
                 kind="Interactive HTML"
                 search_text=searchable_text(source)
                 # Keep homepage search metadata aligned with verified generated-copy corrections.
+                if p.name == "300_animated_films.html":
+                    search_text=search_text.replace("300 Essential Animated Films", "296 Essential Animated Films").replace("Films: 300", "Films: 296")
                 if p.name == "film_collection_v8.html": search_text=search_text.replace("1,619", "1,629")
                 if p.name == "Big_library.html": search_text=search_text.replace("Showing 0 of 0", "Showing 98 of 4,942")
                 description="Open the preserved original interactive collection."
