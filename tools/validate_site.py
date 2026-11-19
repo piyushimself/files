@@ -85,6 +85,20 @@ def main() -> int:
     if len(items) != len(wrappers):
         failures.append(f"catalog has {len(items)} entries but {len(wrappers)} collection wrappers exist")
 
+    # Keep search/catalogue metadata aligned with the corrected generated app copies.
+    by_href = {item.get("href"): item for item in items}
+    film_item = by_href.get("collections/film-collection-v8/index.html")
+    if film_item:
+        if film_item.get("title") != "The Complete Film Collection — 1,629 Films":
+            failures.append("film collection catalogue title must report the verified 1,629 records")
+        if "1,619" in film_item.get("searchText", ""):
+            failures.append("film collection catalogue search text still contains the stale 1,619 count")
+    big_library_item = by_href.get("collections/big-library/index.html")
+    if big_library_item:
+        big_search = big_library_item.get("searchText", "")
+        if "Showing 0 of 0" in big_search or "Showing 98 of 4,942" not in big_search:
+            failures.append("Big Library catalogue search text must not expose the stale 0-of-0 placeholder")
+
     home_js = (SITE / "assets" / "reading-room.js").read_text(encoding="utf-8")
     category_match = re.search(r"const categoryOrder=(\[[^;]+\]);", home_js)
     if not category_match:
