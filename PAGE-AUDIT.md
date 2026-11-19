@@ -1,9 +1,21 @@
 # Page-by-page editorial and publishing audit
 
-Audit branch: `site-build`  
-Base reviewed: `main` at `48bb7c7d156cdb1763c99048d68083d4e05566e8`  
+Audit branch: `source-pdf-corrections-final` (PR #19)  
+Base reviewed: `main` at `1903c3787156523193380affa23b13ed4c6d2e11`; candidate source-correction head `6a69e153b952d69944441c1641906197d362dfe9`  
 Status: **in progress — not a 100% sign-off**
 
+## Regression snapshot — 19 November 2026
+
+The exact PR #19 head `6a69e153b952d69944441c1641906197d362dfe9` passed workflow [#256](https://github.com/piyushimself/files/actions/runs/44383657448) on 18 November 2026. Its Chromium report records:
+
+- 34/34 desktop collection pages and 68 mobile page checks;
+- 96 iframe loads; 20 search, 14 select and 15 filter controls; 3 tabs and 4 shell controls;
+- 7 direct mature-app gate checks and 21 mature iframe-sync checks;
+- 34 reader menus, 204 mobile reader controls and 63 filter disclosures;
+- 33 theme, 32 font and 32 scale synchronisation checks; and
+- **0 automated issues**.
+
+The artifact's wrapper screenshots were assembled into contact sheets and visually swept for all 34 collection pages at desktop, tablet and mobile widths. This catches obvious page-level clipping, empty wrappers and layout outliers, but it is not a pixel-by-pixel review of every embedded app screenshot or every individual control. Automated Chromium coverage is not a formal WCAG audit, screen-reader certification, exhaustive keyboard-only test, or a full factual/editorial review. Those acceptance items remain open below. PR #19 is still a pull request; its deploy job is skipped by design. The latest deployed `main` commit remains `1903c3787156523193380affa23b13ed4c6d2e11`, whose main workflow #251 passed deployment.
 ## What has actually been inspected
 
 The following checks were performed against source HTML:
