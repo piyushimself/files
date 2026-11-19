@@ -1,17 +1,17 @@
 # Reading Room remediation — current status
 
 **Status: IN PROGRESS — not a completion certificate.**  
-**Last verified:** 19 November 2026, approximately 07:38 IST  
+**Last verified:** 19 November 2026, 08:48 IST  
 **Repository:** [piyushimself/files](https://github.com/piyushimself/files)  
 **Published site:** https://piyushimself.github.io/files/
 
 ## Current repository state
 
-- Current `main` after the source-correction merge: `0699b3a10090ddb9c018ba37116078597d8b0ccd`.
+- Current `main`: `0bbe318ae4341aa16393ff95d9dd24452bed46d7` (latest status/documentation commit).
 - PR [#19](https://github.com/piyushimself/files/pull/19) was squash-merged as this commit. It applies ten narrowly scoped source-PDF corrections, adds the reproducible 647-row film manifest/audit and validator, reconciles the source inventory, fixes three generated homepage catalogue/search metadata mismatches, and refreshes the review documentation.
 - PR [#20](https://github.com/piyushimself/files/pull/20) was merged earlier as `02141201fbe55ef4a1e1306ab91adc8a3f82f1d0`. It adds per-side spread-cost estimates to entry, partial-exit and final-exit legs and caps partial allocation below 100%. PR #16 was closed as superseded.
 - PR [#17] age-gate QA fix is included in main at `1903c3787156523193380affa23b13ed4c6d2e11`.
-- No open pull requests were present immediately after PR #19 merged.
+- No open pull requests are currently reported by GitHub.
 
 ## Latest CI and browser evidence
 
@@ -31,11 +31,23 @@ The browser report recorded:
 
 The latest browser artifact was downloaded. Contact sheets covering all 34 wrapper pages at desktop, tablet and mobile sizes, plus the 33 available app-mobile captures, were visually swept. This is a page-level visual sweep, not a pixel-level review of every control or every state. The corrected-source-PDF artifact was also inspected; selected changed pages in the ten corrected PDFs were rendered and visually checked. It does not mean every page of every source PDF has been reviewed.
 
-### Main-branch deployment before PR #19
+### Latest main-branch regression and deployment
 
-[Main workflow #283](https://github.com/piyushimself/files/actions/runs/44435251703), for commit `02141201fbe55ef4a1e1306ab91adc8a3f82f1d0`, completed successfully, including its GitHub Pages deployment. Its Chromium report recorded the same 34 desktop / 68 mobile / 96 iframe coverage and zero automated issues.
+[Main workflow #305](https://github.com/piyushimself/files/actions/runs/44442583472), for `main` commit `0bbe318ae4341aa16393ff95d9dd24452bed46d7`, completed successfully on 19 November 2026. Both jobs passed: build and GitHub Pages deployment. The build ran generated-app validation, Pine static invariants, corrected-source-PDF validation, redacted extraction, and real-browser Chromium QA.
 
-**Important:** PR #19 merged after workflow #283. A fresh main-branch build, regression run and Pages deployment for `0699b3a10090ddb9c018ba37116078597d8b0ccd` had not yet appeared in the run list at this checkpoint. Do not claim the PR #19 merge is deployed until that new main run completes successfully.
+The #305 browser report (artifact [14492822395](https://github.com/piyushimself/files/actions/runs/44442583472)) records:
+- 34 desktop collection pages, 68 mobile page checks and 96 iframe loads;
+- 20 search, 14 select, 15 filter, 3 tab and 4 shell controls tested;
+- 7 direct mature-app gates and 21 mature iframe-sync checks;
+- 34 reader menus, 204 mobile reader controls and 63 filter disclosures;
+- 33 theme, 32 font and 32 text-scale synchronization checks; and
+- **zero automated issues** across 337 screenshots.
+
+I downloaded the latest QA artifact and inspected its report. Contact sheets were visually swept for all 34 wrapper pages at desktop, tablet and mobile widths, and for 33 app captures at desktop and mobile widths. This is broad page-level visual evidence, not pixel-by-pixel review of every state or exhaustive testing of every bespoke control.
+
+The matching Pages artifact [14492268281](https://github.com/piyushimself/files/actions/runs/44442583472) was downloaded and inspected. It contains the generated site; no PDF, DOCX or Pine source files are present, and `robots.txt` is the only `.txt` file. Source documents remain withheld from Pages.
+
+The latest main deployment is therefore confirmed by GitHub Actions for `0bbe318ae4341aa16393ff95d9dd24452bed46d7`. An independent fetch of the published URL still cannot be completed from this runtime: the web fetcher reports the Pages URL is inaccessible. This is an environment/network limitation, not proof of an outage.
 
 ### Artifact publication check
 
@@ -131,11 +143,11 @@ The wrapper screenshot contact sheets have been reviewed across desktop/tablet/m
 
 ### Independent live-site check
 
-A direct request from this runtime could not resolve `piyushimself.github.io`. Verify the merged site from an independent network after the new main deployment. The DNS failure here is not proof of an outage.
+GitHub Actions confirms the latest Pages deployment in workflow #305 for main commit `0bbe318ae4341aa16393ff95d9dd24452bed46d7`. A separate live HTTP fetch remains unverified: the web fetcher cannot access the Pages URL from this runtime. This does not prove the site is down; verify from an independent network if live reachability is a required sign-off item.
 
 ## Next acceptance work
 
-1. Confirm the fresh main workflow for `0699b3a10090ddb9c018ba37116078597d8b0ccd` passes build, Chromium QA and Pages deployment; inspect its artifacts and verify the live site independently.
+1. Workflow #305 now confirms the main build, Chromium QA and Pages deployment for `0bbe318ae4341aa16393ff95d9dd24452bed46d7`; verify the published URL from an independent network if possible.
 2. Continue objective count reconciliation and correct source documents where the evidence is sufficient; preserve explicit uncertainty where it is not.
 3. Obtain the Asian-books scope decision and Cinema 900 deduplication rule before rewriting those works.
 4. Complete the remaining page-by-page interaction, visual and accessibility checks; disposition every one of the 11 manual acceptance items with evidence or a specific blocker.
@@ -143,4 +155,4 @@ A direct request from this runtime could not resolve `piyushimself.github.io`. V
 6. Obtain rights/ownership evidence or keep sources withheld and make an informed decision about public-repository exposure.
 7. Complete external TradingView and venue-specific validation or document each exact dependency and the limits on any performance claims.
 
-**Completion rule:** do not mark this project complete until every actionable finding is corrected and validated or individually documented as blocked by concrete evidence, permissions, an owner decision or an external dependency; the final main-branch regression and deployment are confirmed; the manual acceptance list is fully dispositioned; and this status report is synchronized with the final evidence.
+**Completion rule:** do not mark this project complete until every actionable finding is corrected and validated or individually documented as blocked by concrete evidence, permissions, an owner decision or an external dependency; the final main-branch regression and deployment are confirmed; the manual acceptance list is fully dispositioned; and this status report is synchronized with the final evidence. Workflow #305 closes the previously pending post-PR #19 main build/deployment gate, but it does not close the remaining editorial, rights, accessibility or external TradingView findings.
