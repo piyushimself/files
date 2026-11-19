@@ -313,3 +313,15 @@ PR #20 merged as `02141201fbe55ef4a1e1306ab91adc8a3f82f1d0`; its exact-head work
 ## Latest main regression snapshot — 19 November 2026, 09:40 IST
 
 Main workflow [#309](https://github.com/piyushimself/files/actions/runs/44450778850) passed build and GitHub Pages deployment for main commit `53d14aee33383421e640af3b59126ca6a2f47edb`. Browser artifact [14494544620](https://github.com/piyushimself/files/actions/runs/44450778850) reports 34 catalog items, 32 apps, 34 desktop pages, 68 mobile checks, 96 iframe loads, 204 mobile reader controls, 34 reader menus, 63 filter disclosures, 33 theme-sync, 32 font-sync, 32 text-scale and zero automated issues. The report was downloaded and inspected. This is automated regression evidence; it does not close the 11 manual acceptance items or the remaining editorial, source-document, accessibility and rights review. Run #300 was cancelled during OCR setup before build/QA and is superseded by #309.
+
+
+## Follow-up main verification — 19 November 2026, 10:00 IST
+
+- Current main: `8c279d771b1b4a59ca81a10f5a8c0aa9d3c7f40c`.
+- Main workflow [#312](https://github.com/piyushimself/files/actions/runs/44456566278) completed successfully for this exact SHA. Build and Pages deploy both succeeded; generated-app checks, Pine static invariants, corrected-source-PDF validator, redacted extraction and Chromium desktop/mobile QA passed.
+- Browser artifact [14498832464](https://github.com/piyushimself/files/actions/runs/44456566278) was downloaded and inspected. It reports 34 catalogue items, 32 apps, 34 desktop wrappers, 68 mobile checks, 96 iframe loads, 20 search, 14 select, 15 filter, 3 tabs, 4 shell controls, 7 direct mature gates, 21 mature iframe-sync checks, 33 theme-sync, 32 font-sync, 32 text-scale, 63 filter disclosures, 204 mobile reader controls, 34 reader menus and zero automated issues.
+- Pages artifact [14498473147](https://github.com/piyushimself/files/actions/runs/44456566278) was downloaded and inspected: 123 tar entries, 69 HTML files; no PDF, DOCX or Pine source files. Only one .txt file is present (robots.txt).
+- Redacted extraction artifact [14498725745](https://github.com/piyushimself/files/actions/runs/44456566278) was inspected: 49 source artifacts processed, one exact duplicate group, zero extraction errors. This confirms extraction only; it does not establish content correctness, visual completeness or publication rights.
+- No open PRs are currently reported. No additional source-document finding has been closed by this run. Independent live HTTP reachability remains unverified from this runtime.
+
+**Status remains IN PROGRESS.** All outstanding content/count, rights, accessibility/manual acceptance and TradingView/venue validation items remain as previously listed.
