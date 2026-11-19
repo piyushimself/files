@@ -163,7 +163,7 @@ A high-confidence correction pass has been applied to the following source PDFs.
 - Parenthetical title suffixes are stripped only when they are a year, a recognized source category, a director-name suffix, or the known alternate-title label “Laputa”. Other parenthetical title text is preserved.
 - This rule is reproducible but is not a global film-database identity resolver. Rating sources and as-of dates remain missing.
 
-The corrections and audit are on branch `source-pdf-corrections-clean` and are being submitted for review. The source PDFs remain excluded from the public Pages site until rights/ownership evidence is established.
+The corrections and audit are on branch `source-pdf-corrections-final` in PR #19 and remain subject to the limitations documented below. The source PDFs remain excluded from the public Pages site until rights/ownership evidence is established.
 
 
 ## Additional visual QA findings and correction — 19 November 2026
@@ -188,3 +188,10 @@ The repository root contains 49 source artifacts for this review: 43 PDFs, 3 DOC
 ### Asian-books curriculum follow-up — 19 November 2026
 
 A fresh extraction of `asian_books_curriculum.pdf` confirmed the placeholder issue is broader than the single example previously recorded: 25 literal “Placeholder” markers and 40 “Not Asian” statements appear in the extracted text. These counts are text-marker counts, not counts of unique invalid books; several are paired replacement instructions and some describe intentionally retained comparative works. Pages with explicit placeholder markers are 3–16, 24 and 27. The content owner/editor must decide whether the intended scope is a comparative Asian/world curriculum or a strict Asian-literature curriculum before a safe rewrite can be made. Until that editorial intent is established, the PDF remains withheld and the issue is actionable but not safely auto-resolvable.
+
+
+## Crypto Trend Rider cost-accounting follow-up — 19 November 2026
+
+PR [#20](https://github.com/piyushimself/files/pull/20) was merged as `02141201fbe55ef4a1e1306ab91adc8a3f82f1d0` after exact-head workflow [#272](https://github.com/piyushimself/files/actions/runs/44434546875) passed. The source now applies the configurable per-side spread estimate to entry, partial-exit and final-exit notional, caps the partial target at 99% so a nonzero leg remains, and labels per-side trading costs separately from 8-hour funding. Static assertions cover each of the three spread-cost paths. Chromium QA recorded 34 desktop pages, 68 mobile page checks and zero automated issues.
+
+This does not compile the Pine source in TradingView, convert the indicator into a Strategy Tester strategy, validate order sequencing, or calibrate fees/spread/slippage/funding to an exchange. The displayed trade simulation remains unvalidated performance data; external TradingView and venue-specific tests are still required.
