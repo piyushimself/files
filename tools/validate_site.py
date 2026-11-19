@@ -87,6 +87,11 @@ def main() -> int:
 
     # Keep search/catalogue metadata aligned with the corrected generated app copies.
     by_href = {item.get("href"): item for item in items}
+    animated_item = by_href.get("collections/300-animated-films/index.html")
+    if animated_item:
+        animated_search = animated_item.get("searchText", "")
+        if animated_item.get("title") != "296 Essential Animated Films" or "300 Essential Animated Films" in animated_search or "Films: 300" in animated_search:
+            failures.append("animated-film catalogue metadata must consistently report 296 records")
     film_item = by_href.get("collections/film-collection-v8/index.html")
     if film_item:
         if film_item.get("title") != "The Complete Film Collection — 1,629 Films":
