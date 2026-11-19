@@ -1,6 +1,6 @@
 # Reading Room remediation handoff
 
-Last updated: 2026-11-19 07:38 IST (Asia/Kolkata)
+Last updated: 2026-11-19 08:48 IST (Asia/Kolkata)
 
 This file is the durable continuation point for the ongoing Reading Room remediation in this repository. Read it before doing work in a new chat. Then inspect live GitHub state because workflow/PR statuses may have changed since this checkpoint.
 
@@ -375,3 +375,20 @@ No other source-document findings have been closed by this documentation update.
 - A direct live-site request from this runtime failed DNS resolution. This is not evidence of an outage; independently verify after the new main deployment.
 
 **Status: IN PROGRESS.** See [REMEDIATION-STATUS.md](REMEDIATION-STATUS.md) for the current acceptance ledger. Do not send a completion notification until all remaining findings are corrected or individually evidence-blocked, and the post-merge deployment and all required acceptance checks are complete.
+
+
+## Latest main deployment and regression checkpoint — 19 November 2026, 08:48 IST
+
+This section supersedes older checkpoint notes that said a fresh main deployment after PR #19 was still pending.
+
+- Current `main`: `0bbe318ae4341aa16393ff95d9dd24452bed46d7` — “Expand Reading Room status with remaining per-file findings”.
+- There are no open pull requests in the current GitHub open-PR listing. PR #19 and PR #20 are merged; PR #16 is closed as superseded.
+- Main workflow [#305](https://github.com/piyushimself/files/actions/runs/44442583472) completed successfully for the exact current main SHA. Build and deploy jobs both succeeded. The build passed generated-app validation, Pine static invariants, corrected-PDF validation, redacted document extraction and Chromium QA.
+- Browser artifact ID `14492822395`: 34 desktop wrappers, 68 mobile page checks, 96 iframe loads, 20 search, 14 select, 15 filter, 3 tabs, 4 shell controls, 7 direct mature gates, 21 mature iframe-sync checks, 34 reader menus, 204 mobile reader controls, 63 filter disclosures, 33 theme-sync, 32 font-sync, 32 text-scale checks, zero automated issues; 337 screenshots.
+- The latest QA artifact was downloaded. Contact sheets were inspected for all 34 wrappers at desktop/tablet/mobile and 33 app captures at desktop/mobile. This is broad page-level visual review, not exhaustive pixel/control-state or accessibility certification.
+- Pages artifact ID `14492268281` was downloaded and its tar contents inspected. No PDF, DOCX or Pine source files are included; `robots.txt` is the only `.txt` file. The 50 withheld items remain withheld.
+- A separate live-site fetch remains unavailable from this runtime: the web fetcher cannot access `https://piyushimself.github.io/files/`. GitHub Actions deployment success is confirmed, but independent live HTTP reachability is not.
+- The project remains **IN PROGRESS**. The detailed remaining findings in `REMEDIATION-STATUS.md` and `DOCUMENT-CONTENT-REVIEW.md` are still actionable: count/scope discrepancies, Asian-books editorial scope, Cinema 900 reconciliation, resource/licence/attribution checks, ratings provenance, remaining source-page and factual review, 11 manual page/accessibility acceptance items, rights/ownership evidence and TradingView/venue validation.
+- Do not claim completion from workflow #305. It closes the post-PR #19 main deployment gate only.
+
+Next: continue the objective source corrections and evidence gathering, update the manual acceptance matrix with per-item outcomes, keep source files withheld until rights are established, and preserve exact external TradingView/venue limitations.
