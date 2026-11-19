@@ -80,6 +80,29 @@ PR #20's spread-cost correction is covered by static assertions for entry, parti
 - Ratings provenance remains unresolved: source URLs and collection/as-of dates are not documented. Do not present the figures as current or independently sourced until this is fixed.
 - Remaining PDF/DOCX pages, OCR output, table/column alignment, glyphs and source-to-output completeness have not all received page-by-page human inspection.
 
+
+### Additional per-file editorial findings still open
+
+The full per-file inventory in `DOCUMENT-CONTENT-REVIEW.md` remains the authoritative detailed register. In addition to the count and scope issues above, these are still actionable and must not be treated as cleared:
+
+- `1000_Creative_Educational_Cultural_Links.pdf`: verify every resource URL and access/licence claim; remove or qualify the unsupported “verified/safe” framing.
+- `1000_Google_Searches_Grand_Curiosity_Atlas.pdf`: revise language that exoticises or essentialises living communities and source factual framing.
+- `100_essential_films.pdf`, `500_Films_500_Music_Global_Guide.pdf`, `500_Manga_Movies.pdf`, `50_e_art_films.pdf` and `Bold_Cinema_Collection.pdf`: verify selection criteria, descriptions, attribution, mature-content handling and any time-sensitive availability claims.
+- `200_prompts_emotion_wonder_v2.pdf`: add appropriate content notes and distinguish reflection prompts from therapeutic advice.
+- `200_prompts_mind_detox_v2.pdf` and `200_thinkers_quiet_mind_v2.pdf`: remove implied treatment/cure language, add non-therapy boundaries, and source-check psychological claims and thinker attributions.
+- `A_Filmmakers_Reading_List.pdf` and `A_Life_Worth_Living_500_Suggestions.docx`: verify titles, editions, translations, identity/name variants and attributions; distinguish subjective recommendations from facts.
+- `Aag_Ki_Kavitayen.pdf` and `All_Film_Collections_Combined_compressed.pdf` (plus its exact duplicate): high rights risk due to poems and extensive third-party descriptions; explicit permission/licence evidence is missing.
+- `Cybersecurity_Storytelling_Movies.pdf`: source cost/impact claims and label film-to-security mappings as analogies, not technical controls.
+- `Films_That_Open_New_Human_Domains.pdf`: separate subjective interpretations from factual statements and establish rights for descriptions.
+- `Free_Art_Resource_Library.docx`: repair the missing URL and verify every resource link, licence and time-sensitive audience claim.
+- `Global_Kids_Books_Complete_Guide.pdf` and `Global_Kids_Reading_Guide_FINAL (1).pdf`: reconcile the substantial overlap, inspect column/table layout, establish a canonical version, count titles and verify age suitability and metadata.
+- `Personal_Reference_Film_Books_Art.pdf`: visually resolve the rating-glyph extraction issue, then verify mature labels and rights.
+- `Reading_Course_Emotions_Wonder.pdf`: reframe guaranteed transformation promises as intentions and verify bibliographic details.
+- `Three_Year_Old_Reading_Guide (1).pdf` and `World_Stories_3YearOld_Guide.pdf`: the shared unsupported neuroscience and universal reading-direction claims and the page-15 layout defects were corrected; other developmental claims, age suitability, bibliographies, remaining layouts and consolidation still need review.
+- `asian_cinema_curriculum.pdf`: verify country/region classifications, titles, directors and cultural framing; source factual claims.
+
+These items are open work, not all permission-blocked. Rights-dependent publication remains blocked until ownership/licence evidence is supplied. Editorially ambiguous items require a documented scope decision. Do not relabel an unresolved content-quality issue as a rights blocker merely because the source is withheld.
+
 ### Page, interaction and accessibility acceptance
 
 `PAGE-AUDIT.md` still has 11 unchecked manual acceptance items. The Chromium suite is broad automated smoke, responsive, console and selected-control coverage, but it does not certify:
