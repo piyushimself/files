@@ -169,3 +169,15 @@ GitHub Actions confirms the latest Pages deployment in workflow #305 for main co
 - Independent live HTTP reachability remains unverified from this runtime. GitHub Pages deployment success is confirmed; external DNS/fetch limitations do not prove the site is down.
 
 **Status remains IN PROGRESS.** The unresolved count/scope, link/licence/attribution, ratings provenance, page-by-page source review, 11 manual acceptance items, rights/ownership, and TradingView/venue-validation items listed above remain open or blocked. Do not claim 100% completion.
+
+
+## Follow-up main verification — 19 November 2026, 10:00 IST
+
+- Current main: `8c279d771b1b4a59ca81a10f5a8c0aa9d3c7f40c`.
+- Main workflow [#312](https://github.com/piyushimself/files/actions/runs/44456566278) completed successfully for this exact SHA. Build and Pages deploy both succeeded; generated-app checks, Pine static invariants, corrected-source-PDF validator, redacted extraction and Chromium desktop/mobile QA passed.
+- Browser artifact [14498832464](https://github.com/piyushimself/files/actions/runs/44456566278) was downloaded and inspected. It reports 34 catalogue items, 32 apps, 34 desktop wrappers, 68 mobile checks, 96 iframe loads, 20 search, 14 select, 15 filter, 3 tabs, 4 shell controls, 7 direct mature gates, 21 mature iframe-sync checks, 33 theme-sync, 32 font-sync, 32 text-scale, 63 filter disclosures, 204 mobile reader controls, 34 reader menus and zero automated issues.
+- Pages artifact [14498473147](https://github.com/piyushimself/files/actions/runs/44456566278) was downloaded and inspected: 123 tar entries, 69 HTML files; no PDF, DOCX or Pine source files. Only one .txt file is present (robots.txt).
+- Redacted extraction artifact [14498725745](https://github.com/piyushimself/files/actions/runs/44456566278) was inspected: 49 source artifacts processed, one exact duplicate group, zero extraction errors. This confirms extraction only; it does not establish content correctness, visual completeness or publication rights.
+- No open PRs are currently reported. No additional source-document finding has been closed by this run. Independent live HTTP reachability remains unverified from this runtime.
+
+**Status remains IN PROGRESS.** All outstanding content/count, rights, accessibility/manual acceptance and TradingView/venue validation items remain as previously listed.
