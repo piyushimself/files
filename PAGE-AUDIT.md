@@ -1,21 +1,20 @@
 # Page-by-page editorial and publishing audit
 
-Audit branch: `source-pdf-corrections-final` (PR #19)  
-Base reviewed: `main` at `1903c3787156523193380affa23b13ed4c6d2e11`; candidate source-correction head `6a69e153b952d69944441c1641906197d362dfe9`  
+Audit branch: `main`  
+Base reviewed: `main` at `0699b3a10090ddb9c018ba37116078597d8b0ccd` (PR #19 merge commit)  
 Status: **in progress — not a 100% sign-off**
 
-## Regression snapshot — 19 November 2026
+## Latest regression snapshot — 19 November 2026
 
-The exact PR #19 head `6a69e153b952d69944441c1641906197d362dfe9` passed workflow [#256](https://github.com/piyushimself/files/actions/runs/44383657448) on 18 November 2026. Its Chromium report records:
+- PR #19 exact head `0f3bc8f57e0a0381397a5b8ce6f1d477e2102e0e` passed [workflow #299](https://github.com/piyushimself/files/actions/runs/44436114541). The report records 34 desktop collection pages, 68 mobile checks, 96 iframe loads, 204 mobile reader controls, 34 reader menus, 7 direct mature-app gates, 63 filter disclosures and **zero automated issues**.
+- The artifact's 34 wrapper pages were visually swept in contact sheets at desktop, tablet and mobile widths; the 33 app-mobile screenshots were also swept. This catches page-level outliers but is not a pixel-level review of every app state or control.
+- The corrected-source-PDF artifact was inspected. Selected changed pages across the ten corrected PDFs were rendered and visually checked; not every page of every source document has been reviewed.
+- Main workflow [#283](https://github.com/piyushimself/files/actions/runs/44435251703) passed build, Chromium QA and GitHub Pages deployment for the earlier main commit `02141201fbe55ef4a1e1306ab91adc8a3f82f1d0`. It is not deployment evidence for the later PR #19 merge commit `0699b3a10090ddb9c018ba37116078597d8b0ccd`.
+- The Pages artifact from PR #19 contains 34 published HTML collections and no PDF/DOCX/Pine source files. The repository remains public; omission from Pages does not make root-level files private.
+- A new main-branch workflow and deployment for `0699b3a10090ddb9c018ba37116078597d8b0ccd` must pass before the merged source corrections can be called deployed. Independent live HTTP verification remains unconfirmed because this runtime could not resolve the Pages hostname.
 
-- 34/34 desktop collection pages and 68 mobile page checks;
-- 96 iframe loads; 20 search, 14 select and 15 filter controls; 3 tabs and 4 shell controls;
-- 7 direct mature-app gate checks and 21 mature iframe-sync checks;
-- 34 reader menus, 204 mobile reader controls and 63 filter disclosures;
-- 33 theme, 32 font and 32 scale synchronisation checks; and
-- **0 automated issues**.
+Automated Chromium coverage is not a formal WCAG audit, screen-reader certification, exhaustive keyboard-only test, reduced-motion verification, or full factual/editorial review. The 11 manual acceptance items below remain open and must be completed or individually dispositioned with evidence or a specific blocker.
 
-The artifact's wrapper screenshots were assembled into contact sheets and visually swept for all 34 collection pages at desktop, tablet and mobile widths. This catches obvious page-level clipping, empty wrappers and layout outliers, but it is not a pixel-by-pixel review of every embedded app screenshot or every individual control. Automated Chromium coverage is not a formal WCAG audit, screen-reader certification, exhaustive keyboard-only test, or a full factual/editorial review. Those acceptance items remain open below. PR #19 is still a pull request; its deploy job is skipped by design. The latest deployed `main` commit remains `1903c3787156523193380affa23b13ed4c6d2e11`, whose main workflow #251 passed deployment.
 ## What has actually been inspected
 
 The following checks were performed against source HTML:
