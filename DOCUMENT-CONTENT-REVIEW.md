@@ -4,16 +4,16 @@
 
 ## Scope and method
 
-- 48 source files were extracted: 43 PDFs, 3 DOCX files, 1 TXT file and 1 Pine Script file.
-- One exact duplicate PDF pair was identified, leaving **47 unique source documents**: 42 unique PDFs, 3 DOCX, 1 TXT and 1 Pine file.
+- 49 source files are present: 43 PDFs, 3 DOCX files, 1 TXT file and 2 Pine Script files.
+- One exact duplicate PDF pair was identified, leaving **48 unique source documents**: 42 unique PDFs, 3 DOCX, 1 TXT and 2 Pine files.
 - The 574-page combined-film PDF is a duplicate of its (1) copy; both remain withheld, and the unique content needs to be reviewed only once.
-- Text extraction completed for all 48 files with no extraction errors. OCR was used on three low-text pages. The extracted text was reviewed for structure, count consistency, sample content, sensitive themes, attribution and obvious editorial problems.
+- Text extraction completed for all 49 source files with no extraction errors. OCR was used on three low-text pages. The extracted text was reviewed for structure, count consistency, sample content, sensitive themes, attribution and obvious editorial problems.
 - This is a substantive editorial triage, not a line-by-line fact-check of every book, film, author, rating or URL. Visual inspection is still required for PDFs whose column/table layouts produce garbled text extraction.
 - The extraction detected no common contact or credential patterns. That is not a complete privacy review.
 
 ## Rights decision
 
-**All 48 original files remain withheld. No document is approved for publication.**
+**All 49 source files remain withheld. No document is approved for publication.**
 
 The text scan did not establish a publication licence or ownership for any of these files. Mentions of Creative Commons, public domain, authors, publishers or ISBNs inside a document are not proof that the document itself is licensed for republication. Absence of a copyright notice is also not permission.
 
@@ -40,7 +40,8 @@ Several files contain substantial third-party material: poems, film descriptions
 | 500_Films_500_Music_Global_Guide.pdf | The 500-film/500-music structure is present. Quotes and descriptive claims need attribution; selection criteria and rights for descriptions are unclear. | Withhold; rights and attribution review. |
 | 500_Manga_Movies.pdf | A manga-adaptation film list with mature titles/themes. Entry descriptions and title counts need a complete audit. | Withhold; rights review and mature-content label required. |
 | 50_e_art_films.pdf | An explicitly erotic/art-cinema guide. Its distinction between erotic art cinema and pornography is an editorial claim, not a self-evident fact. | Withhold; 18+ label, fact-check and rights review. |
-| ATH - Pine.txt | Static review found a major timeframe mismatch: monthly breakout logic is chart-timeframe logic, while the weekly exit is requested from a monthly chart. Lower-timeframe request.security returns do not provide a full weekly event stream to monthly logic; the exit can miss intra-month weekly signals and reports monthly close rather than the actual weekly exit close. Stop/target levels are displayed and used for sizing, but are not enforced as stop/target exits. Portfolio return/CAGR compounds each leg's percentage return without weighting by deployed capital; drawdown is not a true account-equity drawdown. It is an indicator, not a TradingView strategy backtest, and was not compiled/backtested in TradingView. | Withhold from “tested strategy” claims; redesign timeframe handling and metrics, then compile/backtest. |
+| ATH - Pine.txt | This file is now a deprecation notice for the former monthly indicator. The retired implementation had chart-timeframe-dependent monthly signals, an unreliable weekly exit stream, displayed but unenforced stop/target levels, and invalid account-level return/drawdown calculations. Its executable predecessor remains in Git history. | Keep deprecated and withheld; do not describe it as a tested strategy. Use the weekly replacement only after external TradingView validation. |
+| ATH_Weekly_Confirmed_Strategy.pine | Replacement Strategy Tester strategy introduced in PR #15. It requires a weekly chart, reads only the previous confirmed monthly candle, evaluates exits on confirmed weekly bars, submits actual `strategy.entry`/`strategy.exit` orders, sizes from strategy equity, and caps open legs/deployed capital. Static source checks pass, but it has not been compiled or backtested in TradingView. | Withhold from performance/live-use claims until TradingView compilation, symbol-specific backtests, Bar Magnifier/order-sequencing review, quantity/point-value checks and broker-cost/fill calibration are completed. |
 | A_Filmmakers_Reading_List.pdf | A curated reading list. Statements about which works are influential or widely cited need references; titles/authors and edition details need checking. | Withhold; source-check and rights review. |
 | A_Life_Worth_Living_500_Suggestions.docx | A 500-item life/reading/art list. There are duplicate identity/name references (e.g. Meera Bai/Mirabai) and translation/attribution issues that need checking; some recommendations are subjective but written as definitive. | Withhold; deduplicate and verify translations/attributions. |
 | Aag_Ki_Kavitayen.pdf | A 100-poem Hindi compilation containing poems attributed to modern and well-known poets. Full poems are likely protected literary works; no permission evidence was found. | **High rights risk — keep withheld unless explicit permission/licence is documented.** |
@@ -76,7 +77,7 @@ Several files contain substantial third-party material: poems, film descriptions
 
 ## Pine Script review notes
 
-Both Pine files were inspected statically, not executed or compiled in TradingView.
+The two `.pine` scripts and legacy `ATH - Pine.txt` were inspected statically; none was compiled or backtested in TradingView.
 
 ### ATH - Pine.txt
 
@@ -131,11 +132,13 @@ The source revision in [PR #14](https://github.com/piyushimself/files/pull/14) n
 - adds configurable fee, slippage and funding-cost estimates; and
 - labels drawdown as closed-leg drawdown rather than implying mark-to-market account drawdown.
 
-A CI static-invariant check was added for these source properties. **This is not a Pine compiler or Strategy Tester result.** The revision remains an indicator-based simulation. TradingView compilation/backtesting and exchange-specific cost calibration are external acceptance steps; until those are completed, do not present the displayed results as validated strategy performance.
+A CI static-invariant check was added for these source properties. **This is not a Pine compiler or Strategy Tester result.** The revision remains an indicator-based simulation. PR #16 proposes a per-side spread-cost estimate and caps the partial target at 99%; its current branch is diverged/dirty, and the last passing workflow tested an older SHA, not the current head. A refreshed branch and fresh CI run are required before accepting that follow-up. TradingView compilation/backtesting and exchange-specific fee, spread, slippage and funding calibration remain external acceptance steps; do not present displayed results as validated strategy performance.
 
-### ATH - Pine.txt — still unresolved
+### ATH weekly replacement — code correction merged; external validation pending
 
-No source change is claimed for ATH in this pass. Its monthly signal logic, weekly exit stream, stop/target semantics and account-level performance metrics require a coherent timeframe/execution redesign. A safe change cannot be inferred from the current indicator without deciding how monthly entries are timestamped relative to weekly events and what fill priority applies when multiple levels are crossed inside one month. Keep the file withheld and do not claim a backtest.
+PR #15 replaced the former indicator with `ATH_Weekly_Confirmed_Strategy.pine` and changed `ATH - Pine.txt` into a deprecation notice. The replacement requires a weekly chart, consumes the prior confirmed monthly candle, advances monthly state on the first weekly bar of a new month, and submits Strategy Tester entry/stop/limit orders. It delegates account-level P&L and drawdown to TradingView Strategy Tester rather than compounding per-leg percentages.
+
+Repository CI checks static source invariants only. No TradingView compiler result, Strategy Tester report, symbol-specific historical backtest, Bar Magnifier sequencing review, or broker/exchange cost calibration is available. These are explicit external dependencies. The strategy must not be described as compiled, backtested, profitable, or live-ready until those tests are performed on the intended symbols and venue settings.
 
 ## Source-PDF correction pass — corrected files, not publication-cleared
 
@@ -175,3 +178,8 @@ The first direct high-resolution review of the corrected-PDF artifact found layo
 The correction script's two page-2 whitespace-normalization expressions were also corrected from a literal backslash-s match to actual whitespace matching. This improves its repeat-run checks.
 
 This closes only the newly discovered page-15 layout findings. Other developmental claims, bibliography/metadata, cultural scope, all remaining page layouts, rating provenance and rights clearance remain open as listed elsewhere in this review. All source PDFs remain withheld from GitHub Pages.
+
+
+## Inventory reconciliation — 19 November 2026
+
+The repository root contains 49 source artifacts for this review: 43 PDFs, 3 DOCX files, 1 legacy `.txt` file and 2 `.pine` scripts. The two combined-film PDFs are byte-identical, so the inventory represents 48 unique source documents after that one duplicate pair. `top500_manga.html` is a separate byte-identical HTML alias of `top500_adult_manga.html`; it is handled by the generated-site publishing review, not counted as a PDF/DOCX/TXT/Pine source document. The publishing report's 50 withheld items includes this duplicate HTML alias as well as the 49 source artifacts. No source is approved for publication.
