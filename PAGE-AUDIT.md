@@ -292,3 +292,12 @@ The generated build now corrects the film collection catalogue title/search text
 
 
 A follow-up check also found that the 296-film correction was applied to the visible app and wrapper title but the homepage search index still contained the source labels “300 Essential Animated Films” and “Films: 300”. The generated search metadata is now normalized to 296 and the site validator asserts the title and search text agree. The original root-level upload is unchanged.
+
+
+## Latest regression and catalogue metadata review — 19 November 2026
+
+The exact PR #19 head before this documentation refresh passed workflow [#271](https://github.com/piyushimself/files/actions/runs/44429510208). The report records 34/34 desktop wrappers, 68 mobile page checks, 96 iframe loads, 204 mobile reader controls, 34 reader menus, 7 direct mature-app gate tests and **0 automated issues**. Wrapper screenshots for all 34 pages were visually swept in desktop/tablet/mobile contact sheets; app screenshot contact sheets were also reviewed. Individual controls, screen-reader behavior, formal contrast and keyboard-only completeness remain outside that evidence.
+
+During artifact review, three stale homepage catalogue/search strings were found even though the rendered apps showed corrected data: Complete Film Collection still had a 1,619 catalogue title against 1,629 app records; the animated-film search text still said 300 against 296; and Big Library search text retained “Showing 0 of 0” against the rendered 98 of 4,942. The PR #19 generated build now normalizes those values and `tools/validate_site.py` asserts them. The root HTML uploads remain unchanged.
+
+PR #20 merged as `02141201fbe55ef4a1e1306ab91adc8a3f82f1d0`; its exact-head workflow #272 passed static Pine checks and the same desktop/mobile Chromium suite. Main workflow #283 is the post-merge build/deploy gate for that commit and must be checked separately. PR #19's next exact-head workflow must be used as its merge gate after this documentation update.
