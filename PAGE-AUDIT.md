@@ -1,10 +1,22 @@
 # Page-by-page editorial and publishing audit
 
 Audit branch: `main`  
-Base reviewed: `main` at `0bbe318ae4341aa16393ff95d9dd24452bed46d7` (latest status/documentation commit)  
+Base reviewed: `main` at `b6d68eff58469c7adda14cc9edee3ed04ef01101` (latest documentation commit; workflow #315 passed)  
 Status: **in progress — not a 100% sign-off**
 
-## Latest main-branch regression snapshot — 19 November 2026, 08:48 IST
+
+## Latest main-branch regression snapshot — 19 November 2026, 12:48 IST
+
+Main workflow [#315](https://github.com/piyushimself/files/actions/runs/44458475169) passed for exact main commit `b6d68eff58469c7adda14cc9edee3ed04ef01101`. Build and GitHub Pages deployment both succeeded; the deployment log confirms the same Pages build version. The preceding #312-verified commit was `8c279d771b1b4a59ca81a10f5a8c0aa9d3c7f40c`; the three commits since then changed only this audit, the handoff and the status report.
+
+Browser artifact [14497854888](https://github.com/piyushimself/files/actions/runs/44458475169) reports 34 desktop pages, 68 mobile checks, 96 iframe loads, 20 search, 14 select, 15 filter, 3 tabs, 4 shell controls, 7 direct mature gates, 21 mature iframe-sync checks, 33 theme-sync, 32 font-sync, 32 text-scale, 63 filter disclosures, 204 mobile reader controls, 34 reader menus and zero automated issues. The 337-screenshot artifact was downloaded; contact sheets were inspected for all 34 wrapper desktop/mobile captures, 33 app-mobile captures and 32 app-initial-mobile captures. Representative full-size mobile pages were also inspected. This does not replace exhaustive control-state testing or formal accessibility review.
+
+Pages artifact [14498089145](https://github.com/piyushimself/files/actions/runs/44458475169) was inspected: 123 tar entries, 69 HTML files, no PDF/DOCX/Pine source files, and `robots.txt` as the only text file. Redacted document-review artifact [14498613806](https://github.com/piyushimself/files/actions/runs/44458475169) reports 49 source artifacts, one exact duplicate group, zero extraction errors and OCR on three pages (1000 Creative Links p.82; Aag Ki Kavitayen pp.27 and 90). The source-PDF visual-review upload step was skipped in #315, so no new PDF page-level visual acceptance is claimed.
+
+All 11 manual acceptance items below remain unchecked. The 34 desktop / 68 mobile automated checks and screenshot sweep are not a formal WCAG contrast audit, screen-reader or keyboard-only certification, reduced-motion review, or page-by-page factual/editorial review of every source document. Rights/ownership, source-content, catalogue reconciliation and external TradingView/venue validation remain open as recorded below.
+
+
+## Earlier main-branch regression snapshot — 19 November 2026, 08:48 IST
 
 Main workflow [#305](https://github.com/piyushimself/files/actions/runs/44442583472) passed for exact main commit `0bbe318ae4341aa16393ff95d9dd24452bed46d7`, including build and Pages deployment. Its browser artifact [14492822395](https://github.com/piyushimself/files/actions/runs/44442583472) reports 34 desktop pages, 68 mobile checks, 96 iframe loads, 204 mobile reader controls, 34 reader menus, 63 filter disclosures, 33 theme-sync, 32 font-sync, 32 text-scale checks and zero automated issues. It also records 20 search, 14 select, 15 filter, 3 tab, 4 shell, 7 direct mature-gate and 21 mature iframe-sync checks.
 
