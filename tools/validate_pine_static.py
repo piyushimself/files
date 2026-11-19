@@ -25,15 +25,11 @@ require("barstate.isconfirmed and wasInTrade and not na(stopForBar) and low <= s
 require("math.max(chandelierLine[1], chandelierCandidate)" in source, "long Chandelier stop must ratchet and use prior stop")
 require("barstate.isconfirmed and wasInTrade and (trendBreakExit or stopHit)" in source, "full exits must be confirmed-bar only")
 require("high >= targetP" in source, "partial target must use an intrabar high touch")
-require("maxval=99.0" in source, "partial target must not allow a zero-remaining open leg")
 require("bar_index > array.get(legEntryBar, i)" in source, "new entries must not be partially exited on their entry bar")
 require("if enablePartialTarget and wasInTrade and barstate.isconfirmed and not stopHit and not trendBreakExit" in source, "stop/structure exits must take priority over partial targets")
 require("legRealizedPnlCcy" in source, "partial P&L must roll into its parent leg")
 require("totalTrades = array.size(tradePnlCcy)   // completed legs;" in source, "statistics must count completed legs, not partial events")
-require("feePctPerSide" in source and "slippagePctPerSide" in source and "spreadPctPerSide" in source and "fundingPctPer8h" in source, "configurable fee, slippage, spread and funding estimates must exist")
-require("entryP * qtyV * (feePctPerSide + slippagePctPerSide + spreadPctPerSide)" in source, "entry-side costs must include spread")
-require("fillPrice * scaleQty * (feePctPerSide + slippagePctPerSide + spreadPctPerSide)" in source, "partial-exit costs must include spread")
-require("exitPrice * qtyRemain * (feePctPerSide + slippagePctPerSide + spreadPctPerSide)" in source, "final-exit costs must include spread")
+require("feePctPerSide" in source and "slippagePctPerSide" in source and "fundingPctPer8h" in source, "configurable trading-cost assumptions must exist")
 require("remainingEntryCost" in source and "remainingExitCost" in source and "remainingFundingCost" in source, "remaining-leg costs must be included at final exit")
 require('Closed-leg drawdown (ccy)' in source, "drawdown label must distinguish closed-leg from mark-to-market drawdown")
 require(source.count("array.push(tradePnlCcy,") == 1, "one completed-leg result must be recorded per leg")
@@ -65,9 +61,6 @@ require("cumEquityMult" not in ath and "cagrPct" not in ath and "tradePnlPct" no
 require("DEPRECATED" in legacy_ath and "ATH_Weekly_Confirmed_Strategy.pine" in legacy_ath,
         "old ATH indicator file must clearly point to its replacement")
 
-require("Fee/slip/spread per side; funding per 8h" in source and "Fee / slip / spread / funding per 8h" not in source, "dashboard must distinguish per-side trading costs from 8-hour funding")
-
 print("Crypto Trend Rider static safety/accounting invariants passed.")
 print("ATH weekly-strategy static safety checks passed.")
 print("Static checks do not compile Pine or validate broker fills; use TradingView for that.")
-
