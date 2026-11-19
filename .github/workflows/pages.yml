@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: reading-room-${{ github.ref }}-${{ github.sha }}
+  group: reading-room-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
