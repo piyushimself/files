@@ -1,6 +1,6 @@
 # Reading Room remediation handoff
 
-Last updated: 2026-11-19 (Asia/Kolkata)
+Last updated: 2026-11-19 07:38 IST (Asia/Kolkata)
 
 This file is the durable continuation point for the ongoing Reading Room remediation in this repository. Read it before doing work in a new chat. Then inspect live GitHub state because workflow/PR statuses may have changed since this checkpoint.
 
@@ -358,3 +358,20 @@ The latest PR #19 head before this final handoff update is `766bd1f9cd0983bf4cff
 Main workflow [#283](https://github.com/piyushimself/files/actions/runs/44435251703) for PR #20's merge commit `02141201fbe55ef4a1e1306ab91adc8a3f82f1d0` has passed build, generated-script and Pine static checks; it is still running Chromium setup/QA and has not yet established post-merge deployment success.
 
 No other source-document findings have been closed by this documentation update. The Cinema 900 cover/count issue, Asian-books editorial decision, remaining count reconciliations, link/licence verification, attribution/bibliography, rating provenance, unreviewed PDF pages and manual accessibility checks remain outstanding.
+
+
+## Latest automation checkpoint — 19 November 2026, 07:38 IST
+
+- PR #19 was merged after exact-head workflow [#299](https://github.com/piyushimself/files/actions/runs/44436114541) passed on head `0f3bc8f57e0a0381397a5b8ce6f1d477e2102e0e`. Merge commit: `0699b3a10090ddb9c018ba37116078597d8b0ccd`.
+- PR #19's workflow #299 passed build, generated-app validation, Pine static checks, corrected-source-PDF validation, Chromium desktop/mobile QA and artifact upload. Its deploy job was skipped as expected for a pull request.
+- The #299 browser report: 34 desktop pages, 68 mobile checks, 96 iframe loads, 204 mobile reader controls, 34 reader menus, 7 direct mature-app gate checks, 63 filter disclosures and zero automated issues. Contact sheets for all 34 wrapper pages at desktop/tablet/mobile and the 33 app-mobile captures were visually swept. This is not a per-control, keyboard-only, screen-reader or formal WCAG sign-off.
+- The #299 Pages artifact was inspected: 34 published HTML collections, 123 entries, no PDF/DOCX/Pine/source-document files; `robots.txt` was the only .txt match. The publishing review lists 50 withheld items (49 source artifacts plus one duplicate HTML alias).
+- Main workflow [#283](https://github.com/piyushimself/files/actions/runs/44435251703) for PR #20 commit `02141201fbe55ef4a1e1306ab91adc8a3f82f1d0` completed successfully, including Chromium QA and Pages deployment. Its browser report has the same 34 desktop / 68 mobile / 96 iframe coverage and zero automated issues.
+- **The merge commit `0699b3a10090ddb9c018ba37116078597d8b0ccd` still needs its own fresh main workflow, regression artifact inspection and Pages deployment confirmation.** Do not treat #283 as deployment evidence for the later PR #19 merge.
+- PR #20 is merged as `02141201fbe55ef4a1e1306ab91adc8a3f82f1d0`; PR #16 is closed as superseded. No open PRs were present after PR #19 merged.
+- The corrected-PDF artifact was inspected. Selected changed pages across the ten corrected PDFs were rendered and visually checked; this is not a full page-by-page review of every source document.
+- The source inventory is 49 artifacts (43 PDFs, 3 DOCX, 1 TXT, 2 Pine) and 48 unique documents after one exact duplicate PDF pair. All source files remain withheld from Pages, but the repository is public and root-level originals/history remain accessible.
+- Outstanding findings remain: Asian-books scope decision; Cinema 900 cover/count and 835-vs-900 reconciliation; fictional-books, inspiration, writing-prompt and filmography count discrepancies; 647/649 encyclopedia reconciliation; resource links/licences, bibliography/attribution, rating source URLs/as-of dates; remaining PDF/OCR/layout and factual review; 11 manual page/accessibility acceptance items; rights/ownership; and TradingView/venue-specific validation.
+- A direct live-site request from this runtime failed DNS resolution. This is not evidence of an outage; independently verify after the new main deployment.
+
+**Status: IN PROGRESS.** See [REMEDIATION-STATUS.md](REMEDIATION-STATUS.md) for the current acceptance ledger. Do not send a completion notification until all remaining findings are corrected or individually evidence-blocked, and the post-merge deployment and all required acceptance checks are complete.
