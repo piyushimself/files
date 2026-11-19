@@ -289,3 +289,6 @@ Review of PR #19 workflow #271 artifacts found two stale strings in the generate
 - Big Library catalogue search text retained the source placeholder **Showing 0 of 0** while the rendered app showed 98 of 4,942 in its default section.
 
 The generated build now corrects the film collection catalogue title/search text and replaces the Big Library placeholder in search metadata. `tools/validate_site.py` asserts both conditions so the mismatch cannot silently return. Root-level uploaded HTML sources remain unchanged. The exact-head workflow after this correction must pass before accepting it; PR #19 remains unmerged until then.
+
+
+A follow-up check also found that the 296-film correction was applied to the visible app and wrapper title but the homepage search index still contained the source labels “300 Essential Animated Films” and “Films: 300”. The generated search metadata is now normalized to 296 and the site validator asserts the title and search text agree. The original root-level upload is unchanged.
