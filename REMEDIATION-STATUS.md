@@ -1,19 +1,30 @@
 # Reading Room remediation — current status
 
 **Status: IN PROGRESS — not a completion certificate.**  
-**Last verified:** 19 November 2026, 09:40 IST  
+**Last verified:** 19 November 2026, 12:48 IST  
 **Repository:** [piyushimself/files](https://github.com/piyushimself/files)  
 **Published site:** https://piyushimself.github.io/files/
 
 ## Current repository state
 
-- Current `main`: `0bbe318ae4341aa16393ff95d9dd24452bed46d7` (latest status/documentation commit).
-- PR [#19](https://github.com/piyushimself/files/pull/19) was squash-merged as this commit. It applies ten narrowly scoped source-PDF corrections, adds the reproducible 647-row film manifest/audit and validator, reconciles the source inventory, fixes three generated homepage catalogue/search metadata mismatches, and refreshes the review documentation.
+- Current `main`: `b6d68eff58469c7adda14cc9edee3ed04ef01101` (latest documentation commit; main workflow #315 passed for this exact SHA).
+- PR [#19](https://github.com/piyushimself/files/pull/19) was squash-merged as `0699b3a10090ddb9c018ba37116078597d8b0ccd`. It applies ten narrowly scoped source-PDF corrections, adds the reproducible 647-row film manifest/audit and validator, reconciles the source inventory, fixes three generated homepage catalogue/search metadata mismatches, and refreshes the review documentation. Later documentation-only commits brought `main` to `b6d68eff58469c7adda14cc9edee3ed04ef01101`.
 - PR [#20](https://github.com/piyushimself/files/pull/20) was merged earlier as `02141201fbe55ef4a1e1306ab91adc8a3f82f1d0`. It adds per-side spread-cost estimates to entry, partial-exit and final-exit legs and caps partial allocation below 100%. PR #16 was closed as superseded.
 - PR [#17] age-gate QA fix is included in main at `1903c3787156523193380affa23b13ed4c6d2e11`.
 - No open pull requests are currently reported by GitHub.
 
 ## Latest CI and browser evidence
+
+### Latest main-branch regression and deployment — workflow #315 (19 November 2026, 12:48 IST)
+
+- Current `main`: `b6d68eff58469c7adda14cc9edee3ed04ef01101`. A compare against the preceding #312-verified commit `8c279d771b1b4a59ca81a10f5a8c0aa9d3c7f40c` shows three documentation-only commits touching `PAGE-AUDIT.md`, `REMEDIATION-HANDOFF.md` and `REMEDIATION-STATUS.md`; no application/source-code changes were introduced after that checkpoint.
+- Main workflow [#315](https://github.com/piyushimself/files/actions/runs/44458475169) completed successfully for the exact `b6d68eff58469c7adda14cc9edee3ed04ef01101`. The build and deploy jobs both succeeded. The build log checked out this SHA; the deploy log created a Pages deployment for the same SHA and reported success.
+- Browser QA artifact [14497854888](https://github.com/piyushimself/files/actions/runs/44458475169) was downloaded and inspected. Its report records 34 desktop pages, 68 mobile page checks, 96 iframe loads, 20 search controls, 14 select controls, 15 filter controls, 3 tabs, 4 shell controls, 7 direct mature-app gates, 21 mature iframe-sync checks, 33 theme-sync, 32 font-sync, 32 text-scale, 63 filter disclosures, 204 mobile reader controls, 34 reader menus and **zero automated issues**. The ZIP contains 337 screenshots. Contact sheets were inspected for all 34 wrapper desktop/mobile captures, 33 app-mobile captures and 32 app-initial-mobile captures; representative full-size mobile captures were also inspected. This remains automated plus broad visual regression evidence, not exhaustive per-control or accessibility certification.
+- Pages artifact [14498089145](https://github.com/piyushimself/files/actions/runs/44458475169) was downloaded and inspected. Its tar contains 123 entries and 69 HTML files; no PDF, DOCX or Pine source files are present. `robots.txt` is the only text file.
+- Redacted document-review artifact [14498613806](https://github.com/piyushimself/files/actions/runs/44458475169) was inspected. It records 49 source artifacts, one exact duplicate group and zero extraction errors. OCR was applied to page 82 of `1000_Creative_Educational_Cultural_Links.pdf` and pages 27 and 90 of `Aag_Ki_Kavitayen.pdf`, with no OCR errors. This is extraction evidence only; it does not establish factual correctness, page-layout completeness or publication rights.
+- The build step “Upload temporary source PDFs for visual review” was skipped. Therefore #315 produced no fresh source-PDF visual-review artifact and closes no additional PDF page-inspection findings.
+- GitHub reports no open PRs. PR #19 and #20 are merged; PR #16 is closed as superseded. Independent live-site HTTP reachability remains unverified from this runtime; the GitHub Pages deployment itself is confirmed.
+- **Status remains IN PROGRESS.** The unresolved content/count, editorial, link/licence/attribution, ratings-provenance, full source-page review, 11 manual page/accessibility acceptance items, rights/ownership and TradingView/venue-validation findings remain open or dependent on owner evidence/decisions/external validation.
 
 ### PR #19 exact-head validation
 
@@ -31,7 +42,7 @@ The browser report recorded:
 
 The latest browser artifact was downloaded. Contact sheets covering all 34 wrapper pages at desktop, tablet and mobile sizes, plus the 33 available app-mobile captures, were visually swept. This is a page-level visual sweep, not a pixel-level review of every control or every state. The corrected-source-PDF artifact was also inspected; selected changed pages in the ten corrected PDFs were rendered and visually checked. It does not mean every page of every source PDF has been reviewed.
 
-### Latest main-branch regression and deployment
+### Earlier main-branch regression and deployment (#305)
 
 [Main workflow #305](https://github.com/piyushimself/files/actions/runs/44442583472), for `main` commit `0bbe318ae4341aa16393ff95d9dd24452bed46d7`, completed successfully on 19 November 2026. Both jobs passed: build and GitHub Pages deployment. The build ran generated-app validation, Pine static invariants, corrected-source-PDF validation, redacted extraction, and real-browser Chromium QA.
 
@@ -47,7 +58,7 @@ I downloaded the latest QA artifact and inspected its report. Contact sheets wer
 
 The matching Pages artifact [14492268281](https://github.com/piyushimself/files/actions/runs/44442583472) was downloaded and inspected. It contains the generated site; no PDF, DOCX or Pine source files are present, and `robots.txt` is the only `.txt` file. Source documents remain withheld from Pages.
 
-The latest main deployment is therefore confirmed by GitHub Actions for `0bbe318ae4341aa16393ff95d9dd24452bed46d7`. An independent fetch of the published URL still cannot be completed from this runtime: the web fetcher reports the Pages URL is inaccessible. This is an environment/network limitation, not proof of an outage.
+At that checkpoint, the main deployment was confirmed by GitHub Actions for `0bbe318ae4341aa16393ff95d9dd24452bed46d7`. An independent fetch of the published URL still cannot be completed from this runtime: the web fetcher reports the Pages URL is inaccessible. This is an environment/network limitation, not proof of an outage.
 
 ### Artifact publication check
 
