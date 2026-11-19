@@ -1,6 +1,6 @@
 # Reading Room remediation handoff
 
-Last updated: 2026-11-19 08:48 IST (Asia/Kolkata)
+Last updated: 2026-11-19 12:48 IST (Asia/Kolkata)
 
 This file is the durable continuation point for the ongoing Reading Room remediation in this repository. Read it before doing work in a new chat. Then inspect live GitHub state because workflow/PR statuses may have changed since this checkpoint.
 
@@ -415,3 +415,15 @@ Next: continue the objective source corrections and evidence gathering, update t
 - No open PRs are currently reported. No additional source-document finding has been closed by this run. Independent live HTTP reachability remains unverified from this runtime.
 
 **Status remains IN PROGRESS.** All outstanding content/count, rights, accessibility/manual acceptance and TradingView/venue validation items remain as previously listed.
+
+## Latest main verification — 19 November 2026, 12:48 IST
+
+- Current main: `b6d68eff58469c7adda14cc9edee3ed04ef01101`. The three commits after the #312 checkpoint are documentation-only changes to the status report, page audit and this handoff; no app/source code changed after #312.
+- Main workflow [#315](https://github.com/piyushimself/files/actions/runs/44458475169) passed build and Pages deployment for this exact SHA. The build log checked out `b6d68eff58469c7adda14cc9edee3ed04ef01101`; the deploy log created and reported success for the Pages deployment of the same SHA.
+- Browser artifact [14497854888](https://github.com/piyushimself/files/actions/runs/44458475169) was downloaded and inspected: 34 desktop pages, 68 mobile checks, 96 iframe loads, 20 search, 14 select, 15 filter, 3 tabs, 4 shell controls, 7 direct mature gates, 21 mature iframe-sync checks, 33 theme-sync, 32 font-sync, 32 text-scale, 63 filter disclosures, 204 mobile reader controls, 34 reader menus, zero automated issues and 337 screenshots. Contact sheets were swept for 34 wrapper desktop/mobile captures, 33 app-mobile captures and 32 app-initial-mobile captures; representative full-size mobile screenshots were inspected.
+- Pages artifact [14498089145](https://github.com/piyushimself/files/actions/runs/44458475169) was inspected: 123 tar entries, 69 HTML files, no PDF/DOCX/Pine source files; `robots.txt` is the only text file.
+- Redacted extraction artifact [14498613806](https://github.com/piyushimself/files/actions/runs/44458475169) reports 49 source artifacts, one exact duplicate group, zero extraction errors and OCR on 1000 Creative Links p.82 and Aag Ki Kavitayen pp.27/90, with no OCR errors. Extraction is not editorial or rights clearance.
+- The #315 step that uploads temporary source PDFs for visual review was skipped; no new source-PDF visual review is claimed.
+- No open PRs are reported. PR #19 and #20 are merged; PR #16 is closed as superseded. The independent live-site HTTP check remains unavailable from this runtime; Pages deployment is confirmed by GitHub Actions.
+- Status remains **IN PROGRESS**. The source-content/count and editorial findings, unverified links/licences/attribution/ratings provenance, remaining document-page review, 11 manual page/accessibility acceptance items, rights/ownership and external TradingView/venue validation remain unresolved or dependent on owner evidence/decisions/external validation. Do not mark complete from #315.
+
