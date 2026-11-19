@@ -69,9 +69,12 @@ def audit_accessibility(target,label,findings):
             const labelled=e.getAttribute('aria-labelledby');
             if(labelled&&labelled.split(/\\s+/).some(id=>document.getElementById(id)?.textContent?.trim())) return true;
             if(e.labels&&[...e.labels].some(l=>l.textContent.trim())) return true;
-            if((e.innerText||e.textContent||'').trim()) return true;
             if((e.getAttribute('title')||'').trim()) return true;
-            if((e.getAttribute('alt')||'').trim()) return true;
+            // Placeholder participates in accessible-name computation for supported form controls.
+            // It is not a substitute for a persistent visible label in the UI.
+            if((e.getAttribute('placeholder')||'').trim()) return true;
+            if(e.tagName==='INPUT'&&e.type==='image'&&(e.getAttribute('alt')||'').trim()) return true;
+            if((e.innerText||e.textContent||'').trim()) return true;
             return false;
           };
           const controls=[...document.querySelectorAll('button,input:not([type=hidden]),select,textarea,[role=button],[role=link]')].filter(visible);
