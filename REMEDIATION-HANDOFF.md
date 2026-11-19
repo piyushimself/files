@@ -333,3 +333,17 @@ Do not mark complete until PR #19 and #20 are validated/merged with post-merge d
 7. Independent live HTTP verification of `https://piyushimself.github.io/files/` failed with a DNS resolution error in this runtime. This does not prove the site is down; verify from an independent network. GitHub Pages deployment job evidence remains separate.
 
 Do not mark the remediation complete until every remaining finding is corrected or individually evidence-blocked, the newest exact-head and post-merge main regression/deployment checks pass, the manual page/accessibility acceptance items are resolved or explicitly dispositioned, and the final status report is synchronized.
+
+
+## Final checkpoint for this continuation — 19 November 2026, 06:38 IST
+
+- The latest PR #19 branch head before this handoff commit is `65944ce3b4288b8c0540c5408b9645b2f6459dc5`. Exact-head PR workflow [#289](https://github.com/piyushimself/files/actions/runs/44435563042) is pending; push workflow #290 is queued. This handoff update will create one final branch head and supersede those runs. Use the newest PR event workflow for the resulting live PR head as the merge gate.
+- PR #19 includes the ten high-confidence corrected PDFs, 647-row manifest/parser/audit, source-PDF correction validator, source inventory correction, latest QA/handoff updates, and generated catalogue metadata fixes for 296 animated films, 1,629 Complete Film Collection records and Big Library's 98-of-4,942 default state.
+- PR #19 is reported mergeable/clean. Do not merge until the newest exact-head PR workflow passes and its browser/source/Pages artifacts are inspected. After merge, verify a fresh main workflow and deployment.
+- PR #20 is merged as `02141201fbe55ef4a1e1306ab91adc8a3f82f1d0`; PR #16 is closed as superseded. Main workflow #283 has passed build, generated-script validation and Pine static validation and is running Chromium QA; confirm its final QA and deploy result.
+- The corrected PDFs and audit are not publication-cleared. All source documents remain withheld. The repository remains public; root-level source files are still accessible.
+- The PAGE-AUDIT inventory now states 49 source artifacts (43 PDFs, 3 DOCX, 1 TXT, 2 Pine scripts), 48 unique source documents after the duplicate PDF pair. Eleven manual acceptance items remain unchecked.
+- The Asian-books curriculum scope decision, Cinema 900 cover/count and 835-vs-900 reconciliation, other collection count discrepancies, unverified links/licences, bibliography/attribution, rating provenance/as-of dates, remaining PDF layout/OCR review and broad editorial review remain open. Rights evidence and TradingView/venue validation remain blockers as documented.
+- A direct live-site request from this runtime failed due DNS resolution. That is not evidence of an outage; independent network verification is still required.
+
+**Status: IN PROGRESS.** This handoff is the current continuation record, not a completion certificate. Do not notify the user of completion until every remaining finding is corrected or individually evidence-blocked, all final main-branch regression/deployment checks pass, the page/accessibility acceptance items are dispositioned, and the status report is synchronized.
