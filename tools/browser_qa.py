@@ -15,7 +15,7 @@ items=json.loads((SITE/"data/catalog.json").read_text(encoding="utf-8")).get("it
 apps=sorted((SITE/"apps").glob("*.html"))
 wrappers=sorted((SITE/"collections").glob("*/index.html"))
 viewports=[("desktop",1440,1000),("tablet",768,1024),("mobile",390,844)]
-issues=[]; screenshots=[]
+issues=[]; screenshots=[]; accessibility_findings=[]
 stats={"catalog_items":len(items),"apps":len(apps),"wrappers":len(wrappers),"desktop_pages":0,"mobile_pages":0,"iframes_loaded":0,"search_controls_tested":0,"select_controls_tested":0,"filter_controls_tested":0,"tabs_tested":0,"shell_controls_tested":0,"direct_mature_apps_tested":0,"mature_iframe_sync_tested":0,"theme_sync_tested":0,"font_sync_tested":0,"scale_sync_tested":0,"filter_disclosures_tested":0,"reader_shell_mobile_pages_tested":0,"reader_shell_mobile_controls_tested":0,"reader_nav_menu_tested":0}
 def issue(page,kind,detail): issues.append({"page":page,"kind":kind,"detail":str(detail)[:2000]})
 def watch(page,label):
@@ -57,6 +57,36 @@ def mobile_tabs(target,label):
                 issue(label,"mobile-tab-layout",json.dumps({**result,"oversized":bad}))
     except Exception as e:
         issue(label,"mobile-tab-layout-check",e)
+
+def audit_accessibility(target,label,findings):
+    """Collect preliminary semantic/accessibility warnings without claiming WCAG conformance."""
+    try:
+        result=target.evaluate("""() => {
+          const visible=e=>{const r=e.getBoundingClientRect(),s=getComputedStyle(e);return r.width>0&&r.height>0&&s.visibility!=='hidden'&&s.display!=='none'};
+          const name=e=>{
+            const aria=e.getAttribute('aria-label');
+            if(aria&&aria.trim()) return true;
+            const labelled=e.getAttribute('aria-labelledby');
+            if(labelled&&labelled.split(/\\s+/).some(id=>document.getElementById(id)?.textContent?.trim())) return true;
+            if(e.labels&&[...e.labels].some(l=>l.textContent.trim())) return true;
+            if((e.innerText||e.textContent||'').trim()) return true;
+            if((e.getAttribute('title')||'').trim()) return true;
+            if((e.getAttribute('alt')||'').trim()) return true;
+            return false;
+          };
+          const controls=[...document.querySelectorAll('button,input:not([type=hidden]),select,textarea,[role=button],[role=link]')].filter(visible);
+          const unnamed=controls.filter(e=>!name(e)).slice(0,20).map(e=>({tag:e.tagName.toLowerCase(),type:e.getAttribute('type'),id:e.id,role:e.getAttribute('role')}));
+          const links=[...document.querySelectorAll('a[href]')].filter(visible).filter(e=>!name(e)).slice(0,20).map(e=>({href:e.getAttribute('href'),id:e.id}));
+          const images=[...document.querySelectorAll('img')].filter(visible).filter(e=>!e.hasAttribute('alt')).slice(0,20).map(e=>({src:e.getAttribute('src'),id:e.id}));
+          const frames=[...document.querySelectorAll('iframe')].filter(e=>!((e.getAttribute('title')||'').trim())).slice(0,10).map(e=>({src:e.getAttribute('src'),id:e.id}));
+          return {unnamed_controls:unnamed,unnamed_links:links,images_missing_alt:images,iframes_missing_title:frames};
+        }""")
+        for kind,entries in result.items():
+            for entry in entries:
+                findings.append({"page":label,"kind":kind,"detail":entry})
+    except Exception as e:
+        findings.append({"page":label,"kind":"accessibility-audit-error","detail":str(e)[:500]})
+
 def main():
     if (len(items),len(wrappers),len(apps))!=(34,34,32):
         issue("inventory","counts",f"Expected 34/34/32; found {len(items)}/{len(wrappers)}/{len(apps)}")
@@ -127,6 +157,7 @@ def main():
                     page.wait_for_timeout(1000)
                     if not page.title().strip(): issue(qa_name,"title","missing title")
                     if page.locator("main").count()==0: issue(qa_name,"landmark","main landmark missing")
+                    audit_accessibility(page,qa_name+"-wrapper-"+name,accessibility_findings)
                     # Editorial article pages must lead with their title; the contents guide is a compact disclosure after it.
                     if page.locator(".reading-article").count():
                         article=page.locator(".reading-article")
@@ -238,6 +269,7 @@ def main():
                             frame_title=frame_el.evaluate("(f)=>f.contentDocument?.title||''")
                             if not frame_title.strip(): issue(qa_name,"iframe-title","embedded app title missing")
                             stats["iframes_loaded"]+=1
+                            audit_accessibility(frame,qa_name+"-app-"+name,accessibility_findings)
                             app_gate=frame.locator("#rr-app-age-gate")
                             if item.get("mature") and app_gate.count() and app_gate.is_visible():
                                 wrapper_gate=page.locator("#age-confirm")
@@ -461,12 +493,12 @@ def main():
             else: stats["mobile_pages"]+=len(items)
             home.close(); ctx.close()
         browser.close()
-    report={"stats":stats,"issue_count":len(issues),"issues":issues,"screenshots":screenshots}
+    report={"stats":stats,"issue_count":len(issues),"issues":issues,"accessibility_findings_count":len(accessibility_findings),"accessibility_findings":accessibility_findings,"screenshots":screenshots}
     (OUT/"report.json").write_text(json.dumps(report,indent=2),encoding="utf-8")
     lines=["# Chromium browser QA report",""]+[f"- {k.replace('_',' ').title()}: {v}" for k,v in stats.items()]+[f"- Issues: {len(issues)}",""]
     if issues: lines+=["## Findings",""]+[f"- **{x['page']}** — {x['kind']}: {x['detail']}" for x in issues]
     else: lines+=["All automated Chromium smoke, interaction, responsive and console checks passed."]
-    lines+=["","Screenshots are included in this workflow artifact."]
+    lines+=["","## Preliminary accessibility warnings","",f"- Potential semantic/name/alternative-text warnings: {len(accessibility_findings)}","- These warnings are triage signals, not WCAG conformance results or proof of a user-impacting defect. Each item requires contextual review.",""]+[f"- **{x['page']}** — {x['kind']}: {json.dumps(x['detail'],ensure_ascii=False)}" for x in accessibility_findings[:250]]+["","Screenshots are included in this workflow artifact."]
     (OUT/"report.md").write_text("\n".join(lines)+"\n",encoding="utf-8")
     print("\n".join(lines))
     return 1 if issues else 0
