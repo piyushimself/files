@@ -279,3 +279,13 @@ The previous 17 November statements that real-browser validation was unavailable
 ## Outstanding repository-level review item
 
 Pull request [#9](https://github.com/piyushimself/files/pull/9) was closed as superseded on 18 November. Its warm-neutral/terracotta proposal conflicted with the blue-led design contract in `DESIGN.md`, and its branch was diverged from current `main`. The historical diff remains available, but it is not a production candidate.
+
+
+## Catalogue metadata defect found in current QA artifact — 19 November 2026
+
+Review of PR #19 workflow #271 artifacts found two stale strings in the generated homepage search catalogue even though the embedded app screenshots showed the corrected runtime data:
+
+- The Complete Film Collection catalogue card still said **1,619 Films** while the generated app correctly showed 1,629 records.
+- Big Library catalogue search text retained the source placeholder **Showing 0 of 0** while the rendered app showed 98 of 4,942 in its default section.
+
+The generated build now corrects the film collection catalogue title/search text and replaces the Big Library placeholder in search metadata. `tools/validate_site.py` asserts both conditions so the mismatch cannot silently return. Root-level uploaded HTML sources remain unchanged. The exact-head workflow after this correction must pass before accepting it; PR #19 remains unmerged until then.
