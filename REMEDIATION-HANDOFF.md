@@ -1,6 +1,6 @@
 # Reading Room remediation handoff
 
-Last updated: 2026-11-18 (Asia/Kolkata)
+Last updated: 2026-11-19 05:51 IST (Asia/Kolkata)
 
 This file is the durable continuation point for the ongoing Reading Room remediation in this repository. Read it before doing work in a new chat. Then inspect live GitHub state because workflow/PR statuses may have changed since this checkpoint.
 
@@ -260,3 +260,25 @@ Not complete. PR #17's QA is green but post-merge deployment still needs verific
 - PR #18 was closed as superseded after its source-correction branch was refreshed and the final PDF visual defects were fixed.
 - The same reviewed tree is now submitted as PR [#19](https://github.com/piyushimself/files/pull/19) from `source-pdf-corrections-final`, based on main commit `1903c3787156523193380affa23b13ed4c6d2e11`.
 - PR #19 must complete a fresh full Chromium/build run on its exact head before merge. The prior PR #18 run #252 predates the final toddler-guide PDF commits and cannot substitute for the new PR check.
+
+
+## Continuation checkpoint — 19 November 2026, 05:51 IST
+
+### Live repository state
+- `main` remains at `1903c3787156523193380affa23b13ed4c6d2e11`. Main workflow [#251](https://github.com/piyushimself/files/actions/runs/44380872713) passed build, Chromium QA and Pages deployment.
+- PR [#19](https://github.com/piyushimself/files/pull/19) head `6a69e153b952d69944441c1641906197d362dfe9` is open, clean and mergeable. Exact-head workflow [#256](https://github.com/piyushimself/files/actions/runs/44383657448) passed build, generated-app validation, Pine static invariants, corrected-PDF validation and Chromium QA. Browser artifact ID `14465365791`; source-PDF visual-review artifact ID `14463084897`; redacted document review artifact ID `14463584936`; Pages artifact ID `14465355787`. PR deploy job was skipped as expected.
+- The #256 Chromium report records 34 desktop pages, 68 mobile checks, 96 iframe loads, 204 mobile reader controls, 34 reader menus, 7 direct mature-app gate checks, 21 mature iframe sync checks and zero automated issues. Wrapper screenshots for all 34 pages at desktop/tablet/mobile were reviewed as contact sheets; individual app screenshots and every control have not all received manual visual review.
+- The corrected source-PDF artifact was inspected as a contact sheet of the documented modified pages. The ten high-confidence corrections are visually plausible/readable; this does not constitute a complete page-by-page review of every source PDF or rights clearance.
+- PR [#16](https://github.com/piyushimself/files/pull/16) remains open at `bc42f2cfa4a3eb82c371a1e5678235771b4fe6f1`, seven commits ahead/two behind current main and reported dirty/not mergeable. Its passing workflow #245 tested older SHA `d17224f32f30cc57c4c238ac2a02bd51d1c147a6`, not the current head. Refresh/rebuild the change on current main and run a new workflow before accepting it.
+- The root inventory is 49 source artifacts: 43 PDFs, 3 DOCX, 1 TXT and 2 Pine scripts. One exact duplicate PDF pair leaves 48 unique source documents. The generated publishing report counts 50 withheld items because it also includes a duplicate HTML alias. The previous 48-file/one-Pine inventory statement has been corrected in `DOCUMENT-CONTENT-REVIEW.md` on this branch.
+
+### Current remaining work
+1. The source inventory, ATH replacement review and latest regression snapshot have been updated in this PR branch. These documentation changes trigger a new workflow; merge PR #19 only after the new exact-head workflow succeeds, then verify post-merge main deployment and artifacts.
+2. Rebuild PR #16's spread-cost and partial-target hardening on a clean branch from updated main, update its documentation, run fresh CI, then merge only if clean.
+3. Continue unresolved source-document work in `DOCUMENT-CONTENT-REVIEW.md`: Asian-books placeholders/classification; count reconciliation for fictional books, inspirations, writing prompts, filmography and Cinema 900; verify resource URLs/licence claims; inspect remaining PDF tables, bibliography and rating glyphs; establish rating-source URLs/as-of dates.
+4. Keep the source-PDF inventory accurate and all originals withheld. Ownership/republication permission has not been established. The repository is public; withholding from Pages does not make root files private. Do not change repository visibility or rewrite history without informed confirmation.
+5. Continue page-level editorial/visual review and keyboard, screen-reader, contrast and reduced-motion checks. Chromium automation is not exhaustive acceptance.
+6. TradingView compilation, symbol-specific backtests, Bar Magnifier/order sequencing and venue-specific fee/spread/slippage/funding calibration remain external validation dependencies for both Pine scripts. No performance/live-readiness claims.
+7. Independent live HTTP verification of `https://piyushimself.github.io/files/` has not been established in this runtime. GitHub Pages deployment job #251 succeeded; that is not a separate external reachability check.
+
+Do not mark the remediation complete until all actionable findings are corrected and validated or individually documented as blocked with evidence, the site regression evidence is current, the remaining acceptance limitations are explicit, and the final report/handoff is synchronized.
