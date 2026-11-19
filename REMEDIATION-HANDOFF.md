@@ -1,6 +1,6 @@
 # Reading Room remediation handoff
 
-Last updated: 2026-11-19 05:51 IST (Asia/Kolkata)
+Last updated: 2026-11-19 (Asia/Kolkata)
 
 This file is the durable continuation point for the ongoing Reading Room remediation in this repository. Read it before doing work in a new chat. Then inspect live GitHub state because workflow/PR statuses may have changed since this checkpoint.
 
@@ -282,3 +282,25 @@ Not complete. PR #17's QA is green but post-merge deployment still needs verific
 7. Independent live HTTP verification of `https://piyushimself.github.io/files/` has not been established in this runtime. GitHub Pages deployment job #251 succeeded; that is not a separate external reachability check.
 
 Do not mark the remediation complete until all actionable findings are corrected and validated or individually documented as blocked with evidence, the site regression evidence is current, the remaining acceptance limitations are explicit, and the final report/handoff is synchronized.
+
+
+## Continuation checkpoint — 19 November 2026, after refreshed Pine PR and inventory audit
+
+### Latest PR and workflow state
+- PR [#19](https://github.com/piyushimself/files/pull/19) is open and reported mergeable. Current head: `7242ce8c53deea353d1406aaf3f81490a0856b3a`. Exact-head workflow [#268](https://github.com/piyushimself/files/actions/runs/44429410787) is queued; push workflow #267 is also in progress. Earlier exact-head run #256 passed, but it does not validate the later documentation/workflow commits. Do not merge until #268 passes and its current browser/source artifacts are inspected.
+- PR [#20](https://github.com/piyushimself/files/pull/20) is the clean refresh of the spread-cost/partial-exit hardening. Its current head is `a1f808afb06454acdcc20a3678608520e99f3f8a`; workflow [#263](https://github.com/piyushimself/files/actions/runs/44428949496) is in progress. It adds a per-side spread estimate to entry/partial/final exit costs, caps partial target at 99%, corrects the dashboard cost label and extends static assertions. TradingView compilation/backtesting remains external.
+- PR #16 is now superseded by PR #20 but remains open/dirty. Close #16 only after #20's exact-head CI passes; do not merge the stale branch.
+- The PR #19 branch now uses a same-ref concurrency group so later pushes supersede earlier builds. Older runs created before that change may still finish; only exact-head #268 is the merge gate.
+
+### New document audit evidence
+- The extraction manifest confirms 49 source artifacts (43 PDFs, 3 DOCX, 1 TXT, 2 Pine scripts), one exact duplicate PDF pair, and zero extraction errors. OCR pages are Aag_Ki_Kavitayen.pdf 27 and 90, and 1000_Creative_Educational_Cultural_Links.pdf 82.
+- `asian_books_curriculum.pdf` contains at least 25 literal placeholder markers and 40 “Not Asian” statements. The markers are not unique invalid-title counts: some are replacement instructions, while other global works are intentionally described as irreplaceable. The document needs an explicit editorial decision between comparative Asian/world literature and strict Asian-only scope before a safe rewrite.
+- `PAGE-AUDIT.md` still has 11 unchecked manual acceptance items. Automated Chromium QA has passed on the earlier #256 head, and wrapper screenshot contact sheets were swept at desktop/tablet/mobile; this is not exhaustive app/control review, keyboard-only or screen-reader certification, or a formal contrast audit.
+
+### Acceptance status
+- `main` remains `1903c3787156523193380affa23b13ed4c6d2e11`; main workflow #251 build and Pages deployment succeeded.
+- Independent live HTTP verification still fails at DNS resolution in this runtime. This is an environment limitation, not proof the site is down.
+- Rights/ownership/republication evidence remains absent. All source artifacts remain withheld from Pages, but the public repository exposes root-level files; do not change visibility or rewrite history without informed confirmation.
+- Remaining source work includes other count/scope discrepancies, link/licence verification, bibliography and attribution review, remaining PDF table/layout checks, rating provenance/as-of dates and complete editorial review. Pine validation on intended symbols/venues remains external.
+
+Do not mark complete until PR #19 and #20 are validated/merged with post-merge deployment evidence, all actionable content and page findings are corrected or individually evidence-blocked, the 11 manual acceptance items are resolved or explicitly documented as blocked, and the final report is synchronized.
