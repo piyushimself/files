@@ -426,6 +426,7 @@ def main():
             seen.add(name)
             title=title_from_html(source,p.name)
             if p.name == "300_animated_films.html": title="296 Essential Animated Films"
+            if p.name == "film_collection_v8.html": title="The Complete Film Collection — 1,629 Films"
             # Classify from the collection identity, never incidental words in a large dataset.
             mature=bool(MATURE.search(p.name) or MATURE.search(title))
             interactive=bool(re.search(r"<script\b|<(?:button|input|select|textarea|canvas)\b|\son(?:click|change|submit)\s*=",source,re.I))
@@ -446,6 +447,9 @@ def main():
                 href=write_wrapper(name,title,app_name,mature,category(p.name))
                 kind="Interactive HTML"
                 search_text=searchable_text(source)
+                # Keep homepage search metadata aligned with verified generated-copy corrections.
+                if p.name == "film_collection_v8.html": search_text=search_text.replace("1,619", "1,629")
+                if p.name == "Big_library.html": search_text=search_text.replace("Showing 0 of 0", "Showing 98 of 4,942")
                 description="Open the preserved original interactive collection."
             else:
                 href,search_text=write_article(name,title,source,mature,category(p.name))
