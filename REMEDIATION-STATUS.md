@@ -1,7 +1,7 @@
 # Reading Room remediation — current status
 
 **Status: IN PROGRESS — not a completion certificate.**  
-**Last verified:** 19 November 2026, 08:48 IST  
+**Last verified:** 19 November 2026, 09:40 IST  
 **Repository:** [piyushimself/files](https://github.com/piyushimself/files)  
 **Published site:** https://piyushimself.github.io/files/
 
@@ -156,3 +156,16 @@ GitHub Actions confirms the latest Pages deployment in workflow #305 for main co
 7. Complete external TradingView and venue-specific validation or document each exact dependency and the limits on any performance claims.
 
 **Completion rule:** do not mark this project complete until every actionable finding is corrected and validated or individually documented as blocked by concrete evidence, permissions, an owner decision or an external dependency; the final main-branch regression and deployment are confirmed; the manual acceptance list is fully dispositioned; and this status report is synchronized with the final evidence. Workflow #305 closes the previously pending post-PR #19 main build/deployment gate, but it does not close the remaining editorial, rights, accessibility or external TradingView findings.
+
+
+## Latest main regression and deployment — 19 November 2026, 09:40 IST
+
+- Current main: `53d14aee33383421e640af3b59126ca6a2f47edb` (commit: “Record latest main deployment in document review”).
+- Main workflow [#309](https://github.com/piyushimself/files/actions/runs/44450778850) completed successfully. Build and GitHub Pages deploy both succeeded; generated app validation, Pine static invariants, corrected-PDF validation, redacted extraction, and Chromium QA all passed.
+- Browser artifact [14494544620](https://github.com/piyushimself/files/actions/runs/44450778850) was downloaded and its report inspected: 34 catalog items, 32 apps, 34 desktop pages, 68 mobile checks, 96 iframe loads, 20 search, 14 select, 15 filter, 3 tab, 4 shell controls, 7 direct mature gates, 21 mature iframe-sync checks, 33 theme-sync, 32 font-sync, 32 text-scale, 63 filter disclosures, 204 mobile reader controls, 34 reader-menu checks, and zero automated issues. Screenshots for desktop/tablet/mobile and app initial/interaction states are included. This report is automated evidence, not an accessibility certification or exhaustive content review.
+- The Pages artifact was generated and deployment succeeded. The Pages artifact from this run has not yet been downloaded/inspected in this checkpoint; the previous verified Pages artifact (#305) excluded source PDFs, DOCX and Pine files.
+- Run #300 was cancelled during OCR setup before build/QA; it is superseded by successful run #309 and is not a failed test.
+- There are no open PRs at this check. No new source-document findings are closed by this deployment.
+- Independent live HTTP reachability remains unverified from this runtime. GitHub Pages deployment success is confirmed; external DNS/fetch limitations do not prove the site is down.
+
+**Status remains IN PROGRESS.** The unresolved count/scope, link/licence/attribution, ratings provenance, page-by-page source review, 11 manual acceptance items, rights/ownership, and TradingView/venue-validation items listed above remain open or blocked. Do not claim 100% completion.
