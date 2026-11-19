@@ -272,7 +272,7 @@ if enablePartialTarget and wasInTrade and barstate.isconfirmed and not stopHit a
                 scaleQty  = math.min(qtyOrig * partialPct / 100.0, qtyRemain)
                 fillPrice = open > targetP ? open : targetP
                 entryCost = array.get(legEntryCostCcy, i) * scaleQty / qtyOrig
-                exitCost  = fillPrice * scaleQty * (feePctPerSide + slippagePctPerSide) / 100.0
+                exitCost  = fillPrice * scaleQty * (feePctPerSide + slippagePctPerSide + spreadPctPerSide) / 100.0
                 heldMs    = math.max(time_close - array.get(legEntryTime, i), 0)
                 fundingIntervals = math.floor(heldMs / 28800000.0)
                 fundingCost = entryP * scaleQty * fundingPctPer8h / 100.0 * fundingIntervals
@@ -305,7 +305,7 @@ if sellSignal
         qtyOrig   = array.get(legQtyOriginal, i)
         qtyRemain = array.get(legQtyRemaining, i)
         remainingEntryCost = array.get(legEntryCostCcy, i) * qtyRemain / qtyOrig
-        remainingExitCost  = exitPrice * qtyRemain * (feePctPerSide + slippagePctPerSide) / 100.0
+        remainingExitCost  = exitPrice * qtyRemain * (feePctPerSide + slippagePctPerSide + spreadPctPerSide) / 100.0
         heldMs = math.max(time_close - array.get(legEntryTime, i), 0)
         fundingIntervals = math.floor(heldMs / 28800000.0)
         remainingFundingCost = entryP * qtyRemain * fundingPctPer8h / 100.0 * fundingIntervals
