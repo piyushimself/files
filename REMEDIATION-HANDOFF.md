@@ -392,3 +392,14 @@ This section supersedes older checkpoint notes that said a fresh main deployment
 - Do not claim completion from workflow #305. It closes the post-PR #19 main deployment gate only.
 
 Next: continue the objective source corrections and evidence gathering, update the manual acceptance matrix with per-item outcomes, keep source files withheld until rights are established, and preserve exact external TradingView/venue limitations.
+
+## Continuation checkpoint — 19 November 2026, 09:40 IST
+
+- Current main SHA: `53d14aee33383421e640af3b59126ca6a2f47edb`.
+- Main workflow [#309](https://github.com/piyushimself/files/actions/runs/44450778850) passed build, generated-app validation, Pine static invariants, corrected-source-PDF validation, redacted extraction, Chromium browser QA, and Pages deployment.
+- Browser QA artifact [14494544620] was downloaded and report inspected: 34 catalogue items, 32 apps, 34 desktop pages, 68 mobile checks, 96 iframe loads, 20 search, 14 select, 15 filter, 3 tabs, 4 shell controls, 7 direct mature gates, 21 mature iframe-sync, 33 theme-sync, 32 font-sync, 32 scale-sync, 63 filter disclosures, 204 mobile reader controls, 34 reader menus, zero automated issues. Screenshots include desktop/tablet/mobile and app states. This is not formal WCAG, screen-reader or keyboard-only sign-off.
+- GitHub Pages deployment job succeeded for this exact main SHA. The Pages artifact for #309 is available (ID 14494998543) but has not yet been downloaded and inspected. Prior Pages artifact #305 was inspected and contained no source PDF/DOCX/Pine files.
+- Run #300 was cancelled during OCR setup before build/QA; newer run #309 passed and supersedes it.
+- No open PRs were reported at this check.
+- Independent live-site HTTP reachability is still not verified from this runtime. Deployment success is not the same as an independent browser/network check.
+- All previously listed open content, source-document, rights, page/accessibility, and TradingView/venue-validation items remain open. Status: **IN PROGRESS**.
