@@ -347,3 +347,14 @@ Do not mark the remediation complete until every remaining finding is corrected 
 - A direct live-site request from this runtime failed due DNS resolution. That is not evidence of an outage; independent network verification is still required.
 
 **Status: IN PROGRESS.** This handoff is the current continuation record, not a completion certificate. Do not notify the user of completion until every remaining finding is corrected or individually evidence-blocked, all final main-branch regression/deployment checks pass, the page/accessibility acceptance items are dispositioned, and the status report is synchronized.
+
+
+## Follow-up documentation checkpoint — 19 November 2026, 06:40 IST
+
+The per-file review table has now been reconciled with the corrections already present in PR #19 and the merged PR #20. It distinguishes corrected findings from remaining restrictions for the Campion claim, Sensitive Cinema framing, Miyazaki attribution, both ratings PDFs, the stale streaming disclaimer, cybersecurity timelines, toddler-guide science/layout, and Crypto Trend Rider spread accounting. Remaining rights, rating provenance, cultural scope and broader content/layout reviews are still open.
+
+The latest PR #19 head before this final handoff update is `766bd1f9cd0983bf4cff96d7561e8c006fc5af53`; exact-head PR workflow [#294](https://github.com/piyushimself/files/actions/runs/44435801050) is pending. This handoff update will produce the next branch head; use the newest PR event workflow for the live head, not #294, as the final merge gate. The PR is reported mergeable and clean.
+
+Main workflow [#283](https://github.com/piyushimself/files/actions/runs/44435251703) for PR #20's merge commit `02141201fbe55ef4a1e1306ab91adc8a3f82f1d0` has passed build, generated-script and Pine static checks; it is still running Chromium setup/QA and has not yet established post-merge deployment success.
+
+No other source-document findings have been closed by this documentation update. The Cinema 900 cover/count issue, Asian-books editorial decision, remaining count reconciliations, link/licence verification, attribution/bibliography, rating provenance, unreviewed PDF pages and manual accessibility checks remain outstanding.
