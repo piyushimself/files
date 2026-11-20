@@ -152,10 +152,10 @@ def add_accessible_names(text):
         tag=match.group(0)
         ident=re.search(r'\\bid=["\\\']([^"\\\']+)["\\\']',tag,re.I)
         if not ident or ident.group(1) not in names: return tag
-        if re.search(r'\\baria-label\\s*=',tag,re.I): return tag
+        if re.search(r'\baria-label\s*=',tag,re.I): return tag
         label=html.escape(names[ident.group(1)],quote=True)
         return tag[:-1]+f' aria-label="{label}">'
-    return re.sub(r'<(?:input|textarea|select)\\b[^>]*>',patch,text,flags=re.I)
+    return re.sub(r'<(?:input|textarea|select)\b[^>]*>',patch,text,flags=re.I)
 
 def enhance_app(path, category_name):
     text=path.read_text(encoding="utf-8")
