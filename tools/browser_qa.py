@@ -216,7 +216,7 @@ def main():
                 try:
                     r=page.goto(BASE+item.get("href",""),wait_until="domcontentloaded",timeout=30000)
                     if not r or r.status>=400: issue(qa_name,"http",r.status if r else "no response")
-                    settle_visual_state(page,qa_name+\"-wrapper-\"+name)
+                    settle_visual_state(page,qa_name+"-wrapper-"+name)
                     if not page.title().strip(): issue(qa_name,"title","missing title")
                     if page.locator("main").count()==0: issue(qa_name,"landmark","main landmark missing")
                     audit_accessibility(page,qa_name+"-wrapper-"+name,accessibility_findings)
