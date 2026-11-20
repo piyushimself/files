@@ -150,7 +150,7 @@ def add_accessible_names(text):
     }
     def patch(match):
         tag=match.group(0)
-        ident=re.search(r'\\bid=["\\\']([^"\\\']+)["\\\']',tag,re.I)
+        ident=re.search(r'id=["\\']([^"\\']+)["\\']',tag,re.I)
         if not ident or ident.group(1) not in names: return tag
         if re.search(r'\baria-label\s*=',tag,re.I): return tag
         label=html.escape(names[ident.group(1)],quote=True)
