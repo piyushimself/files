@@ -140,8 +140,26 @@ def scan_bytes(data):
     return [label for label,rx in SECRET_PATTERNS if rx.search(data)]
 def shell_header(title):
     return """<header class="rr-shell-header"><a class="rr-shell-brand" href="../../index.html">THE READING ROOM <small>PERSONAL LIBRARY</small></a><nav class="rr-shell-tools" aria-label="Library navigation"><a href="../../index.html">Home</a><details class="rr-nav-menu"><summary>Browse collections</summary><div class="rr-nav-panel"><label class="sr-only" for="rr-nav-search">Search collections</label><input id="rr-nav-search" type="search" placeholder="Find a collection…"><nav id="rr-nav-links" class="rr-nav-links" aria-label="All collections"></nav></div></details><a id="rr-prev" href="#" hidden>← Previous</a><a id="rr-next" href="#" hidden>Next →</a><button id="rr-theme-toggle" type="button">Dark mode</button><label class="rr-font-label" for="rr-font-family">Font</label><select id="rr-font-family" aria-label="Reader font"><option value="system">System</option><option value="serif">Serif</option><option value="mono">Mono</option></select><button id="rr-text-smaller" type="button" aria-label="Decrease text size">A−</button><button id="rr-text-larger" type="button" aria-label="Increase text size">A+</button></nav></header>"""
+def add_accessible_names(text):
+    """Add stable accessible names to known unlabeled controls in generated app copies."""
+    names={
+      "searchInput":"Search this collection","search":"Search this collection","q":"Search this collection",
+      "si":"Search this collection","searchBox":"Search entries",
+      "f_yearFrom":"Year from","f_yearTo":"Year to","yearFrom":"Year from","yearTo":"Year to",
+      "threadInput":"Thread name","dateInput":"Choose date for today's weave","editor":"Text editor"
+    }
+    def patch(match):
+        tag=match.group(0)
+        ident=re.search(r'\\bid=["\\\']([^"\\\']+)["\\\']',tag,re.I)
+        if not ident or ident.group(1) not in names: return tag
+        if re.search(r'\\baria-label\\s*=',tag,re.I): return tag
+        label=html.escape(names[ident.group(1)],quote=True)
+        return tag[:-1]+f' aria-label="{label}">'
+    return re.sub(r'<(?:input|textarea|select)\\b[^>]*>',patch,text,flags=re.I)
+
 def enhance_app(path, category_name):
     text=path.read_text(encoding="utf-8")
+    text=add_accessible_names(text)
     # Repair one malformed author string in the imported Qwen manga data, only in the generated copy.
     text=text.replace('author: Ryousuke Takeuchi & Takeshi Obata",', 'author: "Ryousuke Takeuchi & Takeshi Obata",')
     # Repair the known unquoted author value in the generated copy only.
