@@ -7,7 +7,7 @@
 
 ## Latest verified main state — 21 November 2026
 
-- Current `main` commit: `0bb979ecaeac463f0fdb4805ad9b8f1e394b0a28` (PR [#25](https://github.com/piyushimself/files/pull/25), squash-merged).
+- Application/deployment checkpoint: `0bb979ecaeac463f0fdb4805ad9b8f1e394b0a28` (PR [#25](https://github.com/piyushimself/files/pull/25), squash-merged). The status-document refresh is commit `a385b394ca0dacb82e8ab4819455eca210e26686` on `main` (documentation-only); its follow-up workflow #335 is pending.
 - PR #25 adds accessible names to the known unlabeled input, textarea and select controls in generated app copies. The original root-level source HTML files are not changed by this patch.
 - Exact-head PR workflow [#333](https://github.com/piyushimself/files/actions/runs/44787046143) passed on `1701041da7e033d7519eeaade9f0d7af64241ca8`. Build succeeded; deploy was correctly skipped for the pull-request event.
 - Post-merge main workflow [#334](https://github.com/piyushimself/files/actions/runs/44875546466) passed for the exact merge commit `0bb979ecaeac463f0fdb4805ad9b8f1e394b0a28`. Both build and GitHub Pages deploy jobs succeeded.
