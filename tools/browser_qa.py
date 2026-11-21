@@ -37,6 +37,65 @@ def overflow(target,label):
         }""")
         if x["s"]>x["w"]+4: issue(label,"horizontal-overflow",json.dumps(x))
     except Exception as e: issue(label,"layout-check",e)
+def settle_visual_state(target,label):
+    """Wait for fonts and finite CSS/Web Animations before visual evidence is captured."""
+    try:
+        target.evaluate("""async () => {
+          if (document.fonts?.ready) {
+            await Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,2500))]);
+          }
+          const finite=document.getAnimations({subtree:true}).filter(a=>{
+            const timing=a.effect?.getTiming();
+            return a.playState==='running' && timing && timing.iterations!==Infinity;
+          });
+          await Promise.race([
+            Promise.all(finite.map(a=>a.finished.catch(()=>{}))),
+            new Promise(r=>setTimeout(r,4000))
+          ]);
+          await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+        }""")
+    except Exception as e:
+        issue(label,"visual-settle",e)
+
+def capture_iframe_visual_states(page,frame_el,frame,page_slug,viewport,label):
+    """Capture stable top/middle/bottom views after triggering scroll-reveal content."""
+    try:
+        positions=frame.evaluate("""() => {
+          const h=Math.max(document.documentElement.scrollHeight,document.body?.scrollHeight||0);
+          const vh=window.innerHeight||600, end=Math.max(0,h-vh);
+          return [...new Set([0,Math.round(end/2),end])];
+        }""")
+        # Trigger IntersectionObserver-based reveals throughout long editorial apps.
+        frame.evaluate("""async () => {
+          const h=Math.max(document.documentElement.scrollHeight,document.body?.scrollHeight||0);
+          const step=Math.max(240,Math.floor((window.innerHeight||600)*.8));
+          for(let y=0;y<h;y+=step){
+            window.scrollTo(0,y);
+            await new Promise(r=>setTimeout(r,55));
+          }
+          window.scrollTo(0,0);
+          await new Promise(r=>setTimeout(r,100));
+        }""")
+        settle_visual_state(frame,label)
+        positions=frame.evaluate("""() => {
+          const h=Math.max(document.documentElement.scrollHeight,document.body?.scrollHeight||0);
+          const vh=window.innerHeight||600, end=Math.max(0,h-vh);
+          return [...new Set([0,Math.round(end/2),end])];
+        }""")
+        names=("top","middle","bottom")
+        for name,y in zip(names,positions):
+            frame.evaluate("(y)=>window.scrollTo(0,y)",y)
+            frame.wait_for_timeout(120)
+            settle_visual_state(frame,label)
+            box=frame_el.bounding_box()
+            if box and box["width"]>0 and box["height"]>0:
+                filename=f"{page_slug}-visual-{name}-{viewport}.jpg"
+                page.screenshot(path=str(OUT/filename),clip=box,type="jpeg",quality=78)
+                screenshots.append(filename)
+        frame.evaluate("()=>window.scrollTo(0,0)")
+    except Exception as e:
+        issue(label,"visual-scroll-capture",e)
+
 def mobile_tabs(target,label):
     """Check that legacy category navigation stays compact and scrollable on narrow screens."""
     try:
@@ -157,7 +216,7 @@ def main():
                 try:
                     r=page.goto(BASE+item.get("href",""),wait_until="domcontentloaded",timeout=30000)
                     if not r or r.status>=400: issue(qa_name,"http",r.status if r else "no response")
-                    page.wait_for_timeout(1000)
+                    settle_visual_state(page,qa_name+"-wrapper-"+name)
                     if not page.title().strip(): issue(qa_name,"title","missing title")
                     if page.locator("main").count()==0: issue(qa_name,"landmark","main landmark missing")
                     audit_accessibility(page,qa_name+"-wrapper-"+name,accessibility_findings)
@@ -283,7 +342,8 @@ def main():
                                 archive=frame.evaluate("""()=>{const e=document.querySelector("#toolbar .tb-sort");return {search:document.querySelector(".mh-search")?.getBoundingClientRect().width||0,viewport:document.documentElement.clientWidth,sort:e?.getBoundingClientRect().width||0,sortScroll:e?.scrollWidth||0,sortClient:e?.clientWidth||0,overflow:e?getComputedStyle(e).overflowX:"visible"}}""")
                                 if archive["search"]<archive["viewport"]*.8 or archive["sort"]>archive["viewport"]+4 or (archive["sortScroll"]>archive["sortClient"]+2 and archive["overflow"] not in ("auto","scroll")):
                                     issue(qa_name,"manga-archive-mobile-toolbar",json.dumps(archive))
-                            # Capture the untouched initial app state before exercising/opening disclosures.
+                            # Capture only after fonts, finite animations and scroll-reveal content settle.
+                            settle_visual_state(frame,qa_name+"-app-"+name)
                             try:
                                 initial_box=frame_el.bounding_box()
                                 if initial_box and initial_box["width"]>0 and initial_box["height"]>0:
@@ -291,6 +351,11 @@ def main():
                                     screenshots.append(f"{page_slug}-app-initial-{name}.png")
                             except Exception as e:
                                 issue(qa_name,"initial-app-screenshot",e)
+                            # Three stable viewport captures per app on desktop and mobile expose
+                            # top-, middle- and end-of-document layout defects that a first-fold
+                            # screenshot cannot reveal. Tablet remains covered by wrapper screenshots.
+                            if name in ("desktop","mobile"):
+                                capture_iframe_visual_states(page,frame_el,frame,page_slug,name,qa_name+"-app-"+name)
                             if frame.locator(".arc-title").count():
                                 arcs=frame.evaluate("""()=>({background:getComputedStyle(document.body).backgroundColor,title:getComputedStyle(document.querySelector(".hero-title")).color,arc:getComputedStyle(document.querySelector(".arc-title")).color})""")
                                 if arcs["background"]!="rgb(9, 9, 13)" or arcs["title"]!="rgb(232, 232, 240)":
