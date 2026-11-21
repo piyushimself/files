@@ -1,6 +1,29 @@
 # Reading Room remediation — current status
 
 **Status: IN PROGRESS — not a completion certificate.**  
+**Last verified:** 21 November 2026, 12:05 IST  
+**Repository:** [piyushimself/files](https://github.com/piyushimself/files)  
+**Published site:** https://piyushimself.github.io/files/
+
+## Latest verified main state — 21 November 2026
+
+- Current `main` commit: `0bb979ecaeac463f0fdb4805ad9b8f1e394b0a28` (PR [#25](https://github.com/piyushimself/files/pull/25), squash-merged).
+- PR #25 adds accessible names to the known unlabeled input, textarea and select controls in generated app copies. The original root-level source HTML files are not changed by this patch.
+- Exact-head PR workflow [#333](https://github.com/piyushimself/files/actions/runs/44787046143) passed on `1701041da7e033d7519eeaade9f0d7af64241ca8`. Build succeeded; deploy was correctly skipped for the pull-request event.
+- Post-merge main workflow [#334](https://github.com/piyushimself/files/actions/runs/44875546466) passed for the exact merge commit `0bb979ecaeac463f0fdb4805ad9b8f1e394b0a28`. Both build and GitHub Pages deploy jobs succeeded.
+- Browser QA artifact [14696205084](https://github.com/piyushimself/files/actions/runs/44875546466) was downloaded and inspected. It reports 34 catalogue items, 32 apps, 34 wrappers, 34 desktop pages, 68 mobile page checks, 96 iframe loads, 20 search controls, 14 select controls, 15 filter controls, 3 tabs, 4 shell controls, 7 direct mature-app gates, 21 mature iframe-sync checks, 33 theme-sync, 32 font-sync, 32 text-scale, 63 filter disclosures, 204 mobile reader controls and 34 reader menus. It reports **0 automated issues and 0 preliminary accessibility warnings**.
+- The #334 result supersedes the earlier #325 warning inventory of 93 repeated capture-level warnings. The zero-warning result is scoped to the current automated scanner and known controls; it is not a WCAG audit, screen-reader certification or proof that every interactive element is accessible.
+- The PR #25 run artifact also reported zero warnings, and the post-merge #334 run independently confirms the fix survived merge and deployment.
+- The Pages deployment is confirmed by the successful deploy job. Independent external HTTP reachability from this runtime remains unverified.
+- The latest redacted document-review artifact is available in run #334 (artifact [14696115498](https://github.com/piyushimself/files/actions/runs/44875546466)); this artifact is extraction/triage evidence, not full human content review or rights clearance.
+
+**Current disposition: IN PROGRESS.** The accessible-name remediation is merged, the main build and deployment passed, and the current automated browser report is clean. The remaining content, source-document, rights, manual accessibility and TradingView validation work below is still open unless explicitly closed by newer evidence.
+
+---
+
+# Reading Room remediation — current status
+
+**Status: IN PROGRESS — not a completion certificate.**  
 **Last verified:** 19 November 2026, 12:48 IST  
 **Repository:** [piyushimself/files](https://github.com/piyushimself/files)  
 **Published site:** https://piyushimself.github.io/files/
