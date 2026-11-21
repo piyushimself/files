@@ -427,3 +427,27 @@ Next: continue the objective source corrections and evidence gathering, update t
 - No open PRs are reported. PR #19 and #20 are merged; PR #16 is closed as superseded. The independent live-site HTTP check remains unavailable from this runtime; Pages deployment is confirmed by GitHub Actions.
 - Status remains **IN PROGRESS**. The source-content/count and editorial findings, unverified links/licences/attribution/ratings provenance, remaining document-page review, 11 manual page/accessibility acceptance items, rights/ownership and external TradingView/venue validation remain unresolved or dependent on owner evidence/decisions/external validation. Do not mark complete from #315.
 
+
+
+## Continuation checkpoint — 19 November 2026, 14:15 IST
+
+### Merged work and deployment
+- PR #21 (preliminary accessibility QA and The Loom date-picker accessible name) is merged as `52fcc6033f31b562bd87d851c832f779a9e4c52c`. Exact-head PR workflow #322 passed with 34 collection pages, 32 apps, 96 iframe loads, 0 functional issues and 0 preliminary accessibility findings. This is not a formal WCAG audit.
+- The first post-PR #21 main run #323 was cancelled when a newer main commit arrived. Do not treat cancellation as a deployment failure or success; the newer main run is the active gate.
+- PR #22 (documentation of verified source-PDF visual/count findings) passed exact-head workflow #324 and was squash-merged as `e0c00b55504efecfa5d91e1c8486f03ef7a90b03`.
+- Main run #325, [44540106449](https://github.com/piyushimself/files/actions/runs/44540106449), is the current build/QA/deployment gate for that commit. At checkpoint it is running real-browser QA; deploy has not yet been confirmed.
+
+### Global Kids Books PDF layout — reopened and corrected in preview
+- A visual review of the previously generated correction bundle found that `Global_Kids_Books_Complete_Guide.pdf` was still clipped on pages 4–5. The earlier correction bundle therefore did not fix this defect.
+- A full 30-page drawing-bounds audit found horizontal overflow on pages 4–12 and 14–28: x=-73.46 to x=668.74 points on an A4 page only 595.28 points wide.
+- A vector-preserving correction expands all 30 pages to a consistent 743.2 pt width, preserving vector/text content and size. The post-fix bounds check reports zero overflow pages. Text extraction rises from 34,670 to 44,308 characters because previously clipped text becomes visible. A 30-page contact sheet and full-size pages 4–6 were inspected.
+- Residual issue: some two-digit row numbers wrap vertically in the narrow numbering column. Do not mark the PDF fully layout-corrected until this is fixed and the complete document is visually rechecked.
+- PR #23, [https://github.com/piyushimself/files/pull/23](https://github.com/piyushimself/files/pull/23), adds the correction script and updates the review record. Its workflow #326 / [44541172091](https://github.com/piyushimself/files/actions/runs/44541172091) was running at checkpoint. The corrected PDF preview is generated locally, not committed as a binary source replacement in this PR.
+- All source PDFs remain withheld from GitHub Pages. The layout correction does not establish rights, resolve the 600+ inventory count, reconcile the near-duplicate FINAL guide, or source the developmental claims.
+
+### Immediate next actions
+1. Poll main run #325; inspect browser QA report and screenshots, then confirm whether its deploy job succeeds. If it is superseded/cancelled, follow the newest main run.
+2. Poll PR #23 run #326; inspect exact-head checks. Review the script and diff; do not merge until CI passes.
+3. Fix the two-digit numbering column in the Global Kids Books PDF; visually inspect the full 30-page output after the final change. Keep the preview separate until the corrected PDF and its generator/validation are accepted.
+4. Continue per-document source corrections and factual/rights review. Do not mark the 600+ inventory or rights as resolved.
+5. Continue page-by-page UI and accessibility manual acceptance; automated browser QA is not full WCAG or exhaustive manual testing.
