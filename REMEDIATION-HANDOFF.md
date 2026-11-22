@@ -437,17 +437,17 @@ Next: continue the objective source corrections and evidence gathering, update t
 - PR #22 (documentation of verified source-PDF visual/count findings) passed exact-head workflow #324 and was squash-merged as `e0c00b55504efecfa5d91e1c8486f03ef7a90b03`.
 - Main run #325, [44540106449](https://github.com/piyushimself/files/actions/runs/44540106449), is the current build/QA/deployment gate for that commit. At checkpoint it is running real-browser QA; deploy has not yet been confirmed.
 
-### Global Kids Books PDF layout — reopened and corrected in preview
-- A visual review of the previously generated correction bundle found that `Global_Kids_Books_Complete_Guide.pdf` was still clipped on pages 4–5. The earlier correction bundle therefore did not fix this defect.
-- A full 30-page drawing-bounds audit found horizontal overflow on pages 4–12 and 14–28: x=-73.46 to x=668.74 points on an A4 page only 595.28 points wide.
-- A vector-preserving correction expands all 30 pages to a consistent 743.2 pt width, preserving vector/text content and size. The post-fix bounds check reports zero overflow pages. Text extraction rises from 34,670 to 44,308 characters because previously clipped text becomes visible. A 30-page contact sheet and full-size pages 4–6 were inspected.
-- Residual issue: some two-digit row numbers wrap vertically in the narrow numbering column. Do not mark the PDF fully layout-corrected until this is fixed and the complete document is visually rechecked.
-- PR #23, [https://github.com/piyushimself/files/pull/23](https://github.com/piyushimself/files/pull/23), adds the correction script and updates the review record. Its workflow #326 / [44541172091](https://github.com/piyushimself/files/actions/runs/44541172091) was running at checkpoint. The corrected PDF preview is generated locally, not committed as a binary source replacement in this PR.
-- All source PDFs remain withheld from GitHub Pages. The layout correction does not establish rights, resolve the 600+ inventory count, reconcile the near-duplicate FINAL guide, or source the developmental claims.
+### Global Kids Books PDF layout — final generated correction in PR review (22 November 2026)
+- The source PDF has 30 pages. A full drawing-bounds audit found horizontal overflow on pages 4–12 and 14–28: x=-73.46 to x=668.74 points on A4 pages only 595.28 points wide.
+- The source also contains a genuinely blank page 13 (no text, vector drawings, images, annotations or page content). The generated output removes this empty page; it does not remove any content-bearing page.
+- The generator expands all pages to a consistent 743.2 pt canvas without scaling or rasterizing vector/text content. It repairs 11 two-digit row numbers that previously wrapped vertically in the narrow first column, removing the original stacked glyphs from the text layer and reinserting the numbers horizontally over the correct alternating row background.
+- Local validation reports a 29-page output, zero horizontal-overflow pages, 11 repaired number cells, zero remaining stacked-number pairs, and text extraction increasing from 34,670 to 44,394 characters. The complete 29-page contact sheet and full-size renders of all six affected pages were inspected.
+- Latest generator commit: `cd11cf83a4e468cb060de8e0829b80feeb19de8a`. Documentation update commit: `5cfb3c557e2d8265884fe772e5f913779628c1b5`. Exact-head workflow #344 / [45007404965](https://github.com/piyushimself/files/actions/runs/45007404965) is the latest CI gate; do not merge or replace the source PDF until it passes and the final artifacts are inspected.
+- The corrected PDF remains a separate generated output; the original source file is not overwritten. All source PDFs remain withheld from GitHub Pages. This layout correction does not establish rights, resolve the 600+ inventory count, reconcile the near-duplicate FINAL guide, or source the developmental claims.
 
 ### Immediate next actions
-1. Poll main run #325; inspect browser QA report and screenshots, then confirm whether its deploy job succeeds. If it is superseded/cancelled, follow the newest main run.
-2. Poll PR #23 run #326; inspect exact-head checks. Review the script and diff; do not merge until CI passes.
-3. Fix the two-digit numbering column in the Global Kids Books PDF; visually inspect the full 30-page output after the final change. Keep the preview separate until the corrected PDF and its generator/validation are accepted.
-4. Continue per-document source corrections and factual/rights review. Do not mark the 600+ inventory or rights as resolved.
-5. Continue page-by-page UI and accessibility manual acceptance; automated browser QA is not full WCAG or exhaustive manual testing.
+1. Poll PR #23 exact-head workflow #344; inspect the final generator, corrected output and artifact evidence. Merge only if the latest run passes and the 29-page result is verified.
+2. Verify post-merge main build and Pages deployment for PR #24 and the latest remediation-status updates; workflow #337 passed its exact PR head, but main deployment is a separate gate.
+3. Continue objective source-document count, bibliography, quotation, link, licensing and content checks. Do not mark the 600+ inventory, near-duplicate guide reconciliation or rights as resolved.
+4. Continue page-by-page keyboard, screen-reader, contrast and interaction acceptance; the expanded Chromium visual sweep is not exhaustive manual QA or WCAG certification.
+5. Continue external TradingView and venue-specific validation; static Pine checks do not establish compilation or strategy performance.
