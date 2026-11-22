@@ -5,6 +5,7 @@ import csv
 import json
 import os
 import sys
+import tempfile
 from pathlib import Path
 import fitz
 
@@ -131,7 +132,33 @@ def main() -> None:
     if (stats["ranked_entries"], stats["unique_films_under_title_director_year_rule"], stats["duplicate_groups"]) != (647, 629, 18):
         raise AssertionError(f"unexpected audit summary: {stats}")
 
-    print("Source-PDF correction checks passed: corrected claims, page text, toddler-guide layout, 647-row manifest and JSON audit match.")
+    # Exercise the Global Kids Books generator against the actual source PDF in CI.
+    # The output is temporary: the original uploaded PDF is never overwritten.
+    from fix_global_kids_guide_layout import fix_layout
+    with tempfile.TemporaryDirectory(prefix="global-kids-layout-") as temp_dir:
+        generated = Path(temp_dir) / "Global_Kids_Books_Complete_Guide_corrected.pdf"
+        layout = fix_layout(ROOT / "Global_Kids_Books_Complete_Guide.pdf", generated)
+        expected_layout = {
+            "pages": 29,
+            "page_width_pt": 743.2,
+            "text_characters_before": 34670,
+            "text_characters_after": 44394,
+            "overflow_pages_after_fix": 0,
+            "repaired_two_digit_number_cells": 11,
+            "remaining_wrapped_number_pairs": 0,
+            "blank_pages_removed": 1,
+        }
+        for key, expected in expected_layout.items():
+            if layout.get(key) != expected:
+                raise AssertionError(f"Global Kids Books layout {key}: {layout.get(key)!r} != {expected!r}")
+        corrected = fitz.open(generated)
+        try:
+            if len(corrected) != 29 or any(not page.get_text().strip() for page in corrected):
+                raise AssertionError("Global Kids Books corrected output has a blank or missing page")
+        finally:
+            corrected.close()
+
+    print("Source-PDF correction checks passed: corrected claims, page text, toddler-guide layout, 647-row manifest, JSON audit and Global Kids Books generated layout match.")
 
 if __name__ == "__main__":
     main()
