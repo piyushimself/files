@@ -427,3 +427,27 @@ Next: continue the objective source corrections and evidence gathering, update t
 - No open PRs are reported. PR #19 and #20 are merged; PR #16 is closed as superseded. The independent live-site HTTP check remains unavailable from this runtime; Pages deployment is confirmed by GitHub Actions.
 - Status remains **IN PROGRESS**. The source-content/count and editorial findings, unverified links/licences/attribution/ratings provenance, remaining document-page review, 11 manual page/accessibility acceptance items, rights/ownership and external TradingView/venue validation remain unresolved or dependent on owner evidence/decisions/external validation. Do not mark complete from #315.
 
+
+
+## Continuation checkpoint — 19 November 2026, 14:15 IST
+
+### Merged work and deployment
+- PR #21 (preliminary accessibility QA and The Loom date-picker accessible name) is merged as `52fcc6033f31b562bd87d851c832f779a9e4c52c`. Exact-head PR workflow #322 passed with 34 collection pages, 32 apps, 96 iframe loads, 0 functional issues and 0 preliminary accessibility findings. This is not a formal WCAG audit.
+- The first post-PR #21 main run #323 was cancelled when a newer main commit arrived. Do not treat cancellation as a deployment failure or success; the newer main run is the active gate.
+- PR #22 (documentation of verified source-PDF visual/count findings) passed exact-head workflow #324 and was squash-merged as `e0c00b55504efecfa5d91e1c8486f03ef7a90b03`.
+- Main run #325, [44540106449](https://github.com/piyushimself/files/actions/runs/44540106449), is the current build/QA/deployment gate for that commit. At checkpoint it is running real-browser QA; deploy has not yet been confirmed.
+
+### Global Kids Books PDF layout — final generated correction in PR review (22 November 2026)
+- The source PDF has 30 pages. A full drawing-bounds audit found horizontal overflow on pages 4–12 and 14–28: x=-73.46 to x=668.74 points on A4 pages only 595.28 points wide.
+- The source also contains a genuinely blank page 13 (no text, vector drawings, images, annotations or page content). The generated output removes this empty page; it does not remove any content-bearing page.
+- The generator expands all pages to a consistent 743.2 pt canvas without scaling or rasterizing vector/text content. It repairs 11 two-digit row numbers that previously wrapped vertically in the narrow first column, removing the original stacked glyphs from the text layer and reinserting the numbers horizontally over the correct alternating row background.
+- Local validation reports a 29-page output, zero horizontal-overflow pages, 11 repaired number cells, zero remaining stacked-number pairs, and text extraction increasing from 34,670 to 44,394 characters. The complete 29-page contact sheet and full-size renders of all six affected pages were inspected.
+- Latest generator commit: `cd11cf83a4e468cb060de8e0829b80feeb19de8a`. Documentation update commit: `5cfb3c557e2d8265884fe772e5f913779628c1b5`. Exact-head workflow #344 / [45007404965](https://github.com/piyushimself/files/actions/runs/45007404965) is the latest CI gate; do not merge or replace the source PDF until it passes and the final artifacts are inspected.
+- The corrected PDF remains a separate generated output; the original source file is not overwritten. All source PDFs remain withheld from GitHub Pages. This layout correction does not establish rights, resolve the 600+ inventory count, reconcile the near-duplicate FINAL guide, or source the developmental claims.
+
+### Immediate next actions
+1. Poll PR #23 exact-head workflow #344; inspect the final generator, corrected output and artifact evidence. Merge only if the latest run passes and the 29-page result is verified.
+2. Verify post-merge main build and Pages deployment for PR #24 and the latest remediation-status updates; workflow #337 passed its exact PR head, but main deployment is a separate gate.
+3. Continue objective source-document count, bibliography, quotation, link, licensing and content checks. Do not mark the 600+ inventory, near-duplicate guide reconciliation or rights as resolved.
+4. Continue page-by-page keyboard, screen-reader, contrast and interaction acceptance; the expanded Chromium visual sweep is not exhaustive manual QA or WCAG certification.
+5. Continue external TradingView and venue-specific validation; static Pine checks do not establish compilation or strategy performance.
