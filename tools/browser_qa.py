@@ -70,10 +70,10 @@ def capture_iframe_visual_states(page,frame_el,frame,page_slug,viewport,label):
           const h=Math.max(document.documentElement.scrollHeight,document.body?.scrollHeight||0);
           const step=Math.max(240,Math.floor((window.innerHeight||600)*.8));
           for(let y=0;y<h;y+=step){
-            window.scrollTo(0,y);
+            window.scroll({top:y,behavior:'instant'});
             await new Promise(r=>setTimeout(r,55));
           }
-          window.scrollTo(0,0);
+          window.scroll({top:0,behavior:'instant'});
           await new Promise(r=>setTimeout(r,100));
         }""")
         settle_visual_state(frame,label)
@@ -84,7 +84,7 @@ def capture_iframe_visual_states(page,frame_el,frame,page_slug,viewport,label):
         }""")
         names=("top","middle","bottom")
         for name,y in zip(names,positions):
-            frame.evaluate("(y)=>window.scrollTo(0,y)",y)
+            frame.evaluate("(y)=>window.scroll({top:y,behavior:'instant'})",y)
             frame.wait_for_timeout(120)
             settle_visual_state(frame,label)
             box=frame_el.bounding_box()
@@ -92,7 +92,7 @@ def capture_iframe_visual_states(page,frame_el,frame,page_slug,viewport,label):
                 filename=f"{page_slug}-visual-{name}-{viewport}.jpg"
                 page.screenshot(path=str(OUT/filename),clip=box,type="jpeg",quality=78)
                 screenshots.append(filename)
-        frame.evaluate("()=>window.scrollTo(0,0)")
+        frame.evaluate("()=>window.scroll({top:0,behavior:'instant'})")
     except Exception as e:
         issue(label,"visual-scroll-capture",e)
 
