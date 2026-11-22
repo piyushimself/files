@@ -20,6 +20,64 @@ def visible_bounds(page: fitz.Page) -> tuple[float, float] | None:
     return min(box[0] for box in boxes), max(box[2] for box in boxes)
 
 
+def repair_wrapped_row_numbers(page: fitz.Page) -> int:
+    """Replace vertically wrapped two-digit row numbers in the first table column."""
+    spans = []
+    for block in page.get_text("dict")["blocks"]:
+        for line in block.get("lines", []):
+            for span in line["spans"]:
+                x0, y0, x1, y1 = span["bbox"]
+                value = span["text"].strip()
+                if x0 < 16 and y0 > 230 and len(value) == 1 and value.isdigit():
+                    spans.append((value, x0, y0, x1, y1, span["color"]))
+    spans.sort(key=lambda item: item[2])
+
+    repairs = []
+    for first, second in zip(spans, spans[1:]):
+        if (first[0] != "1" or abs(first[1] - second[1]) >= 0.6
+                or not second[0].isdigit() or not 10 < second[2] - first[2] < 14):
+            continue
+        midpoint = (first[2] + second[4]) / 2
+        background = (1.0, 1.0, 1.0)
+        for drawing in page.get_drawings():
+            rect = drawing["rect"]
+            if (drawing.get("fill") and rect.x0 <= first[1] <= rect.x1
+                    and rect.y0 <= midpoint <= rect.y1):
+                background = drawing["fill"]
+                break
+
+        # Stay inside the narrow number cell and preserve its borders/row fill.
+        patch = fitz.Rect(first[1] - 1.7, first[2] - 1.0,
+                          first[1] + 9.5, second[4] + 1.0)
+        page.add_redact_annot(patch, fill=background, cross_out=False)
+        repairs.append((first[0] + second[0], first[1], first[2]))
+
+    if repairs:
+        # Remove the original stacked glyphs from the text layer, not just visually cover them.
+        page.apply_redactions(images=0, graphics=0)
+        for number, x0, y0 in repairs:
+            page.insert_text((x0, y0 + 9.6), number, fontname="helv",
+                             fontsize=8.5, color=(68 / 255, 68 / 255, 68 / 255),
+                             overlay=True)
+    return len(repairs)
+
+
+def count_wrapped_row_number_pairs(page: fitz.Page) -> int:
+    """Count residual stacked digit pairs after repair."""
+    spans = []
+    for block in page.get_text("dict")["blocks"]:
+        for line in block.get("lines", []):
+            for span in line["spans"]:
+                x0, y0, _, _ = span["bbox"]
+                value = span["text"].strip()
+                if x0 < 16 and y0 > 230 and len(value) == 1 and value.isdigit():
+                    spans.append((value, x0, y0))
+    spans.sort(key=lambda item: item[2])
+    return sum(1 for first, second in zip(spans, spans[1:])
+               if first[0] == "1" and abs(first[1] - second[1]) < 0.6
+               and second[0].isdigit() and 10 < second[2] - first[2] < 14)
+
+
 def fix_layout(source: Path, output: Path) -> dict[str, int | float]:
     if source.resolve() == output.resolve():
         raise ValueError("Output must be separate; source is never overwritten")
@@ -43,6 +101,12 @@ def fix_layout(source: Path, output: Path) -> dict[str, int | float]:
     for page in doc:
         old = page.mediabox
         page.set_mediabox(fitz.Rect(left, old.y0, right, old.y1))
+
+    repaired_number_cells = sum(repair_wrapped_row_numbers(page) for page in doc)
+    remaining_number_pairs = sum(count_wrapped_row_number_pairs(page) for page in doc)
+    if remaining_number_pairs:
+        doc.close()
+        raise RuntimeError(f"Two-digit row numbers still wrap vertically: {remaining_number_pairs}")
 
     violations = []
     for index, page in enumerate(doc, start=1):
@@ -69,6 +133,8 @@ def fix_layout(source: Path, output: Path) -> dict[str, int | float]:
         "text_characters_before": before_chars,
         "text_characters_after": after_chars,
         "overflow_pages_after_fix": 0,
+        "repaired_two_digit_number_cells": repaired_number_cells,
+        "remaining_wrapped_number_pairs": remaining_number_pairs,
     }
 
 
