@@ -108,6 +108,16 @@ def fix_layout(source: Path, output: Path) -> dict[str, int | float]:
         doc.close()
         raise RuntimeError(f"Two-digit row numbers still wrap vertically: {remaining_number_pairs}")
 
+    # Remove only truly empty pages (no text, vector drawings, images or annotations).
+    blank_page_indexes = []
+    for index, page in enumerate(doc):
+        if (not page.get_text().strip() and not page.get_drawings()
+                and not page.get_images(full=True) and page.first_annot is None
+                and not page.get_bboxlog()):
+            blank_page_indexes.append(index)
+    for index in reversed(blank_page_indexes):
+        doc.delete_page(index)
+
     violations = []
     for index, page in enumerate(doc, start=1):
         box = visible_bounds(page)
@@ -135,6 +145,7 @@ def fix_layout(source: Path, output: Path) -> dict[str, int | float]:
         "overflow_pages_after_fix": 0,
         "repaired_two_digit_number_cells": repaired_number_cells,
         "remaining_wrapped_number_pairs": remaining_number_pairs,
+        "blank_pages_removed": len(blank_page_indexes),
     }
 
 
