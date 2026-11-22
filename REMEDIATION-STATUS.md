@@ -1,9 +1,23 @@
 # Reading Room remediation — current status
 
 **Status: IN PROGRESS — not a completion certificate.**  
-**Last verified:** 21 November 2026, 12:05 IST  
+**Last verified:** 22 November 2026, 14:40 IST  
 **Repository:** [piyushimself/files](https://github.com/piyushimself/files)  
 **Published site:** https://piyushimself.github.io/files/
+
+## Current continuation checkpoint — 22 November 2026, 14:40 IST
+
+- Latest verified `main` tip at this checkpoint: `d00eb07878629f6dd8f9febe64407d73194f8de1`. Main workflow [#336](https://github.com/piyushimself/files/actions/runs/44876681553) passed for this exact documentation-refresh commit. Earlier application merge [#334](https://github.com/piyushimself/files/actions/runs/44875546466) passed both build and Pages deployment for `0bb979ecaeac463f0fdb4805ad9b8f1e394b0a28`.
+- PR [#25](https://github.com/piyushimself/files/pull/25) is merged. Its generated-copy accessible-name patch passed exact-head workflow #333; post-merge main workflow #334 passed and its browser report recorded zero automated issues and zero preliminary accessibility warnings. These are scanner/smoke-test results, not WCAG certification.
+- PR [#23](https://github.com/piyushimself/files/pull/23), “Correct Global Kids Books PDF table overflow,” remains open. Exact-head workflow [#327](https://github.com/piyushimself/files/actions/runs/44541273591) passed. The proposed vector-preserving 30-page canvas expansion exposes previously clipped table content, but the review record explicitly identifies a residual defect: some two-digit row numbers wrap vertically in the narrow numbering column. Do not merge or mark the PDF layout complete until that defect is fixed and the final full document is re-rendered and inspected. The 600+ count, overlap with the FINAL guide, developmental claims and rights remain separate open findings.
+- PR [#24](https://github.com/piyushimself/files/pull/24), “Expand Reading Room visual QA beyond the first viewport,” remains open. Its earlier run [#329](https://github.com/piyushimself/files/actions/runs/44712128531) failed because the QA harness called `window.scrollTo`, which collided with a collection's own `scrollTo(id)` function and attempted `scrollIntoView` on a missing element. The harness now uses `window.scroll({top, behavior:'instant'})` for its visual-state captures. The fix is commit `c977e0f625034447250e1ce33eb0cdf5efd83828`; exact-head workflow [#337](https://github.com/piyushimself/files/actions/runs/45006315949) is running. Do not merge until this run passes and the top/middle/bottom screenshots are inspected.
+- The #337 source-PDF visual-review artifact [14747414613](https://github.com/piyushimself/files/actions/runs/45006315949) contains 43 PDFs. A direct render of page 4 of `Global_Kids_Books_Complete_Guide.pdf` from this source artifact confirms the original A4 source still clips the Author column at the left edge and extends the table beyond the right edge. This is the uncorrected source artifact, not proof that PR #23's separate corrected preview has been accepted.
+- No new source-document content, licensing, bibliographic, count or editorial issue is closed by workflow #337's extraction artifacts. The detailed per-file findings and acceptance criteria below remain open.
+- **Open PRs at this checkpoint:** #23 and #24. PR #25 is merged. Keep this ledger synchronized after each material change and after every main-branch CI/deployment result.
+
+**Current disposition: IN PROGRESS.** Do not call the Reading Room complete based on a successful build or automated browser report alone.
+
+---
 
 ## Latest verified main state — 21 November 2026
 
