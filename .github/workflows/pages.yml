@@ -44,6 +44,14 @@ jobs:
         run: python tools/validate_pine_static.py
       - name: Validate corrected source PDF findings
         run: python tools/validate_source_pdf_corrections.py
+      - name: Upload corrected source PDF preview
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reading-room-corrected-source-pdf-previews
+          path: ${{ runner.temp }}/reading-room-corrected-source-pdfs/*.pdf
+          if-no-files-found: error
+          retention-days: 14
       - name: Extract redacted source documents for review
         continue-on-error: true
         run: python tools/document_review_extract.py
