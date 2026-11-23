@@ -1,21 +1,61 @@
 # Reading Room remediation — current status
 
 **Status: IN PROGRESS — not a completion certificate.**  
-**Last verified:** 22 November 2026, 14:40 IST  
+**Last verified:** 23 November 2026, 12:30 IST (Asia/Kolkata)  
 **Repository:** [piyushimself/files](https://github.com/piyushimself/files)  
 **Published site:** https://piyushimself.github.io/files/
 
-## Current continuation checkpoint — 22 November 2026, 14:40 IST
+## Current verified checkpoint — 23 November 2026, 12:30 IST
 
-- Latest verified `main` tip at this checkpoint: `d00eb07878629f6dd8f9febe64407d73194f8de1`. Main workflow [#336](https://github.com/piyushimself/files/actions/runs/44876681553) passed for this exact documentation-refresh commit. Earlier application merge [#334](https://github.com/piyushimself/files/actions/runs/44875546466) passed both build and Pages deployment for `0bb979ecaeac463f0fdb4805ad9b8f1e394b0a28`.
-- PR [#25](https://github.com/piyushimself/files/pull/25) is merged. Its generated-copy accessible-name patch passed exact-head workflow #333; post-merge main workflow #334 passed and its browser report recorded zero automated issues and zero preliminary accessibility warnings. These are scanner/smoke-test results, not WCAG certification.
-- PR [#23](https://github.com/piyushimself/files/pull/23), “Correct Global Kids Books PDF table overflow,” remains open. Original exact-head workflow [#327](https://github.com/piyushimself/files/actions/runs/44541273591) passed for the initial canvas-expansion version. A later review found 11 two-digit row numbers still stacked vertically and one truly blank source page (page 13). The latest generator commit is `cd11cf83a4e468cb060de8e0829b80feeb19de8a`; it repairs the 11 number cells, removes the old stacked glyphs from the text layer, and removes only the truly empty page. Local validation of the generated output reports 29 pages (from 30), zero horizontal-overflow pages, 11 repaired number cells, zero remaining stacked-number pairs, 44,394 extracted characters and a consistent 743.2 pt page width. The full 29-page contact sheet and full-size renders of all six affected pages were inspected. The documentation follow-up commit is `5cfb3c557e2d8265884fe772e5f913779628c1b5`; exact-head workflow [#344](https://github.com/piyushimself/files/actions/runs/45007404965) is pending. The prior generator workflow [#341](https://github.com/piyushimself/files/actions/runs/45007112747) is still running; do not merge or replace the source PDF until the latest exact-head workflow passes and its artifacts are inspected. The 600+ count, overlap with the FINAL guide, developmental claims and rights remain separate open findings.
-- PR [#24](https://github.com/piyushimself/files/pull/24), “Expand Reading Room visual QA beyond the first viewport,” is merged as `40d65514b0c3ba6841918caeef79440a6fc82384`. Its earlier run [#329](https://github.com/piyushimself/files/actions/runs/44712128531) failed because the QA harness called `window.scrollTo`, which collided with a collection's own `scrollTo(id)` function and attempted `scrollIntoView` on a missing element. The harness now uses `window.scroll({top, behavior:'instant'})` for visual-state captures. Exact-head workflow [#337](https://github.com/piyushimself/files/actions/runs/45006315949) passed on `c977e0f625034447250e1ce33eb0cdf5efd83828`. Its browser report records 34 catalogue items, 32 apps, 34 wrappers, 34 desktop pages, 68 mobile checks, 96 iframe loads, zero functional/console issues and zero preliminary accessibility warnings. It produced 188 app top/middle/bottom screenshots across desktop and mobile (some app captures are not applicable where the app frame is absent); six contact sheets were reviewed. This broad visual sweep is not exhaustive per-control review or WCAG certification. The post-merge main build/deployment gate is still required.
-- The #337 source-PDF visual-review artifact [14747414613](https://github.com/piyushimself/files/actions/runs/45006315949) contains 43 PDFs. A direct render of page 4 of `Global_Kids_Books_Complete_Guide.pdf` from this source artifact confirms the original A4 source still clips the Author column at the left edge and extends the table beyond the right edge. This is the uncorrected source artifact, not proof that PR #23's separate corrected preview has been accepted.
-- No new source-document content, licensing, bibliographic, count or editorial issue is closed by workflow #337's extraction artifacts. The detailed per-file findings and acceptance criteria below remain open.
-- **Open PRs at this checkpoint:** #23 and #24. PR #25 is merged. Keep this ledger synchronized after each material change and after every main-branch CI/deployment result.
+### Repository, PR and deployment state
+- Latest verified `main` tip: `386618942e54979ecf8cd389153f34e5ef4d3841` (22 November 2026, 13:36 UTC). The latest 20 commit records contain no newer commit.
+- PRs [#23](https://github.com/piyushimself/files/pull/23), [#24](https://github.com/piyushimself/files/pull/24) and [#25](https://github.com/piyushimself/files/pull/25) are merged. No other open PR was returned at this checkpoint.
+- PR [#26](https://github.com/piyushimself/files/pull/26), “Fix mobile animated-film ranks and exclude internal review report,” is open from `fix/mobile-rank-wrap-and-private-review-report`, head `87996ccbcdf8e7e45abf2c0a0c6d7fd1ebfe61d1`. Its exact-head workflow has not yet appeared; do not treat the branch changes as validated or merged.
+- Main workflow [#348](https://github.com/piyushimself/files/actions/runs/45028369149) completed successfully for the exact main SHA above. The build job checked out that SHA, built 34 HTML collections and completed browser QA; the deploy job created the Pages deployment for the same SHA and reported success. Build and deploy jobs both succeeded.
+- Workflow #348 artifacts: redacted document review [14756906047](https://github.com/piyushimself/files/actions/runs/45028369149), browser QA [14756822179](https://github.com/piyushimself/files/actions/runs/45028369149), and Pages [14756203809](https://github.com/piyushimself/files/actions/runs/45028369149).
 
-**Current disposition: IN PROGRESS.** Do not call the Reading Room complete based on a successful build or automated browser report alone.
+### Browser regression and reproduced mobile defect
+- Browser report: 34 desktop collection pages, 68 mobile page checks, 96 iframe loads, 20 search controls, 14 select controls, 15 filter controls, 3 tabs, 4 shell controls, 7 direct mature-app gates, 21 mature iframe-sync checks, 33 theme-sync checks, 32 font-sync checks, 32 text-scale checks, 63 filter disclosures and 204 mobile reader-shell controls. It reports zero automated issues and zero preliminary accessibility warnings.
+- I downloaded and inspected the actual #348 screenshot `300-animated-films-visual-middle-mobile.jpg`. Ranks 10, 11, 12 and subsequent two-digit entries still wrap into separate vertical digits. The deployed generated app uses a 28px first grid column and `overflow-wrap:anywhere`; the screenshot is direct evidence that the existing responsive rule is insufficient.
+- PR #26 increases the rank column to 48px and applies `white-space:nowrap`, `overflow-wrap:normal` and `word-break:keep-all` to the rank cell. This is a proposed fix only until its fresh Chromium artifact is inspected.
+- Zero automated issues and zero preliminary accessibility warnings do not override this reproduced visual defect and are not WCAG certification.
+
+### Public publishing exposure
+- I downloaded and inspected the #348 Pages artifact. It contains 69 HTML files and no PDF, DOCX or Pine source files, but it still contains `review-report.html`.
+- That page is labelled “Internal publishing record” and lists 50 withheld filenames and review reasons. `noindex,nofollow` is not access control.
+- PR #26 removes any stale generated `review-report.html` from the Pages output while retaining the detailed `PUBLISHING-REVIEW.md` at the repository root. The Pages artifact from the PR must be inspected to confirm the file is absent.
+
+### Global Kids Books correction
+- PR #23 is merged. Its exact-head workflow #347 passed, and main workflow #348 passed the corrected-PDF validator.
+- The separate generated output validates at 29 pages, 743.2 pt page width, 11 repaired number cells, zero remaining stacked-number pairs, zero horizontal-overflow pages and 44,394 extracted characters. The 29-page contact sheet and full-size renders of affected pages were inspected.
+- The validator creates the corrected PDF in a temporary directory and deletes it after validation; no durable corrected-PDF artifact is retained. The original source remains unchanged and withheld from Pages.
+- Editorial findings remain open: eight age-band counts total 317 rather than the “600+” cover claim; substantial overlap with the FINAL guide; uncited/overgeneralised developmental claims; age suitability, metadata and canonical-version decisions.
+
+### Source-document review and remaining findings
+- Redacted review artifact #14756906047 contains 49 source-document review copies, one exact duplicate group, and no extraction errors. It is an extraction/editorial-triage artifact, not a line-by-line fact-check, rights clearance or page-by-page visual acceptance.
+- `asian_books_curriculum.pdf`: 25 literal placeholder markers and 40 “Not Asian” statements. The intended comparative-vs-Asian-only scope and the repeated/comparator entries require an editorial decision.
+- `cinema_900 (1).pdf`: cover says 100 × 3 = 300 while the body says 300 × 3 = 900; `library-3.pdf` reports 835 for the corresponding collection. The deduplication policy is unsettled.
+- Other count issues remain in fictional books (36 sections vs 26 on the cover; 857 unique title lines from 1,000 slots), inspirations (1,001), writing prompts (835), 2,000 inspirations (1,462), Frida film list (220 numbered / 218 unique) and filmography (298 extracted entries despite numbering to 300), plus 647/649 encyclopedia reconciliation.
+- `Personal_Reference_Film_Books_Art.pdf` still has visible square placeholder glyphs after rating values. Rating source URLs and collection/as-of dates are missing.
+- Resource URLs, licence statements, bibliographies, quotations, attribution, author/edition metadata, selection rationales, age suitability and other per-file factual/editorial checks remain incomplete.
+- All 49 source artifacts remain withheld. Ownership/licence evidence is not present; this is a genuine permissions blocker for republication, not a reason to label unrelated count or editorial defects as blocked.
+- Pine/TradingView compilation and venue-specific validation are external tasks and are not being used as a release gate for this personal-use Reading Room site.
+
+### Manual acceptance
+- `PAGE-AUDIT.md` still contains 11 unchecked manual acceptance items. Automated Chromium coverage does not complete per-control/per-filter review, keyboard-only testing, screen-reader testing, measured contrast/WCAG review, reduced-motion testing, every-page typography/sticky-header checks or complete source-to-output semantic review.
+
+### Next acceptance gates
+1. Inspect PR #26's exact-head workflow and fresh desktop/mobile screenshots; verify two-digit ranks remain on one line at phone widths.
+2. Inspect the PR Pages artifact and confirm `review-report.html` is absent; then merge only after the exact-head evidence passes.
+3. Run and inspect a fresh main build/browser regression/Pages deployment after merge.
+4. Repair and visually validate the Personal Reference rating glyphs in a separate generated correction without altering the original upload.
+5. Resolve or individually disposition all remaining count, scope, factual, editorial, link, attribution and metadata findings; do not misclassify owner/editor decisions as rights blockers.
+6. Complete or explicitly disposition all 11 manual acceptance items with evidence or a specific genuine blocker.
+7. Keep this report, `PAGE-AUDIT.md`, `REMEDIATION-HANDOFF.md` and `DOCUMENT-CONTENT-REVIEW.md` synchronized with the final verified main SHA, workflow artifacts and deployment.
+
+**Completion rule:** do not mark complete until every actionable finding is corrected and validated or individually documented as blocked by concrete evidence, permissions or an external dependency; the final desktop/mobile regression and deployment are confirmed; all 11 manual acceptance items are passed or specifically dispositioned; and this report reflects the verified release. The historical checkpoints below are retained for traceability and are superseded by this section.
+
+---
 
 ---
 
