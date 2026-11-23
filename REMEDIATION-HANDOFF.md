@@ -1,27 +1,23 @@
 # Reading Room remediation handoff
 
-Last updated: 2026-11-23 12:30 IST (Asia/Kolkata)
+Last updated: 2026-11-23 13:49 IST (Asia/Kolkata)
 
-This file is the durable continuation point for the ongoing Reading Room remediation in this repository. Read it before doing work in a new chat. Then inspect live GitHub state because workflow/PR statuses may have changed since this checkpoint.
+This file is the durable continuation point for the ongoing Reading Room remediation. Read it before continuing, then inspect live GitHub state because PRs and workflow runs may have changed since this checkpoint.
 
-# Reading Room remediation handoff
-
-Last updated: 2026-11-23 12:30 IST (Asia/Kolkata)
-
-This file is the durable continuation point for the ongoing Reading Room remediation in this repository. Read it before doing work in a new chat. Then inspect live GitHub state because workflow/PR statuses may have changed since this checkpoint.
-
-## Current verified continuation state — 23 November 2026, 12:30 IST
+## Current verified continuation state — 23 November 2026, 13:49 IST
 
 - Repository: `piyushimself/files`; default branch `main`; latest verified main SHA `386618942e54979ecf8cd389153f34e5ef4d3841`.
-- Main workflow [#348](https://github.com/piyushimself/files/actions/runs/45028369149) succeeded for that exact SHA. Build and Pages deployment both passed; the deployment log confirms the exact Pages build version.
-- PRs #23, #24 and #25 are merged. PR [#26](https://github.com/piyushimself/files/pull/26) is open from `fix/mobile-rank-wrap-and-private-review-report`, head `87996ccbcdf8e7e45abf2c0a0c6d7fd1ebfe61d1`. Its exact-head workflow/artifacts must be inspected before merging.
-- Latest #348 browser artifact [14756822179](https://github.com/piyushimself/files/actions/runs/45028369149) reports 34 desktop pages, 68 mobile checks, 96 iframe loads, 204 mobile reader-shell controls, zero automated issues and zero preliminary accessibility warnings. Actual screenshot inspection still shows two-digit numbers wrapping vertically on the 300 Animated Films mobile middle capture.
-- PR #26 changes the generated mobile table to a 48px rank column with no-wrap rules and removes stale `review-report.html` from the Pages output. Its Pages artifact must confirm that the internal report is absent.
-- Latest #348 Pages artifact [14756203809](https://github.com/piyushimself/files/actions/runs/45028369149) still includes `review-report.html` with 50 withheld filenames/reasons. This is not access-controlled by `noindex,nofollow`.
-- Global Kids Books correction in PR #23 is merged and validated; corrected output is 29 pages, 743.2 pt wide, 11 number cells repaired, zero overflow and zero stacked-number pairs. The corrected PDF is generated in a temporary directory and is not retained. The 317-vs-600+ count, overlap, age suitability and developmental claims remain open.
-- The redacted source review artifact #14756906047 covers 49 source files with one duplicate group and zero extraction errors; it is triage, not rights clearance or full fact-checking. All source documents remain withheld pending permissions/content review.
-- Open content findings: Asian-books scope/placeholders; Cinema 900 count policy; other catalogue-count discrepancies; Personal Reference rating glyphs; URLs/licences, bibliography, quotations, attribution, metadata and age suitability. `PAGE-AUDIT.md` retains 11 unchecked manual acceptance items.
-- Immediate sequence: inspect PR #26 exact-head workflow and screenshots; verify the Pages artifact omits `review-report.html`; merge only if those checks pass; then verify a fresh main deployment. Continue editorial/manual acceptance separately. Never push directly to `main`; preserve originals and use branches/PRs.
+- Main workflow [#348](https://github.com/piyushimself/files/actions/runs/45028369149) succeeded for that exact SHA; build and Pages deployment both passed.
+- PRs #23, #24 and #25 are merged. PR [#26](https://github.com/piyushimself/files/pull/26) is open at exact head `35f11f2eb7a9fa47703f0ee787cbe08e09ca71bd`.
+- Exact-head workflow [#351](https://github.com/piyushimself/files/actions/runs/45128647522) passed the build and Chromium desktop/mobile suite. The deploy job was skipped because this is a PR event. Its browser artifact is [14797316190](https://github.com/piyushimself/files/actions/runs/45128647522); Pages preview artifact is [14797710582](https://github.com/piyushimself/files/actions/runs/45128647522).
+- I inspected the actual 300 Animated Films top/middle/bottom mobile screenshots and middle desktop screenshot from #351. Two-digit ranks 10–16 remain on one line in the PR preview. The previous vertical-digit defect is corrected in this branch; production still needs post-merge verification.
+- I extracted the #351 Pages preview. It contains 68 HTML files and no `review-report.html`; the internal withheld-file inventory is no longer generated into the Pages output. Verify the same after main deployment.
+- PR #26 also refreshes the four remediation documents. A documentation-only follow-up is being added so the report reflects exact head #351, artifact IDs, screenshot inspection and the fact that deployment is still pending.
+- PR #23's Global Kids Books generated correction is merged and validated: 29 pages, 743.2 pt width, 11 repaired row numbers, zero overflow/stacked pairs. The corrected PDF is temporary and not retained; the original source remains unchanged.
+- Remaining findings include Asian-books scope/placeholders; Cinema 900 and other catalogue-count reconciliations; Global Kids Books 317-vs-600+ count, overlap and developmental claims; Personal Reference rating glyphs; links, bibliographies, quotations, attribution, metadata and age suitability. All 11 manual acceptance items remain unchecked.
+- The source-document review artifact [14796513134](https://github.com/piyushimself/files/actions/runs/45128647522) processed 49 files with one duplicate group and no extraction errors. It is not full fact-checking or visual acceptance. Source files remain withheld; permission evidence is absent. Do not treat rights as a blocker for unrelated editorial/layout fixes.
+- Per the user's personal-use scope, external TradingView compilation and venue-specific Pine validation are not release gates for this Reading Room site.
+- Immediate sequence: finish the documentation refresh; inspect the new exact-head workflow; merge PR #26 only if it passes; verify a fresh main deployment and production artifacts; then continue remaining editorial/manual acceptance. Never push directly to `main`; preserve originals and use branches/PRs.
 
 ## User's standing instruction
 
