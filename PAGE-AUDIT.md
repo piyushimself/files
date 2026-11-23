@@ -1,14 +1,15 @@
 # Page-by-page editorial and publishing audit
 
-## Current checkpoint — 23 November 2026, 12:30 IST
-- Latest verified main: `386618942e54979ecf8cd389153f34e5ef4d3841`; main workflow [#348](https://github.com/piyushimself/files/actions/runs/45028369149) built and deployed this exact SHA successfully.
-- Browser artifact [14756822179](https://github.com/piyushimself/files/actions/runs/45028369149) reports 34 desktop pages, 68 mobile checks, 96 iframe loads, 204 mobile reader-shell controls, zero automated issues and zero preliminary accessibility warnings. This is not a formal accessibility audit.
-- Full-size screenshot inspection reproduced a mobile defect on `300-animated-films-visual-middle-mobile.jpg`: two-digit ranks wrap vertically. PR [#26](https://github.com/piyushimself/files/pull/26) proposes a 48px rank column plus no-wrap rules; exact-head visual validation is pending.
-- The #348 Pages artifact [14756203809](https://github.com/piyushimself/files/actions/runs/45028369149) contains 69 HTML files and still includes `review-report.html`, an internal publishing record listing 50 withheld filenames and reasons. PR #26 removes it from the generated Pages output; verify the next Pages artifact.
+## Current checkpoint — 23 November 2026, 13:49 IST
+- Latest verified `main`: `386618942e54979ecf8cd389153f34e5ef4d3841`; main workflow [#348](https://github.com/piyushimself/files/actions/runs/45028369149) built and deployed that exact SHA successfully.
+- PR [#26](https://github.com/piyushimself/files/pull/26) remains open at head `35f11f2eb7a9fa47703f0ee787cbe08e09ca71bd`. Exact-head workflow [#351](https://github.com/piyushimself/files/actions/runs/45128647522) passed its build and Chromium QA; deployment was skipped as expected for a PR event.
+- Browser artifact [14797316190](https://github.com/piyushimself/files/actions/runs/45128647522) reports 34 desktop pages, 68 mobile checks, 96 iframe loads, 204 mobile reader-shell controls, zero automated issues and zero preliminary accessibility findings.
+- I opened the actual 300 Animated Films top/middle/bottom mobile screenshots and middle desktop screenshot. Two-digit ranks 10–16 now stay on one line in the PR preview; the previous mobile rank-wrap finding is corrected in this branch. Production acceptance still requires post-merge verification.
+- The #351 Pages preview artifact [14797710582](https://github.com/piyushimself/files/actions/runs/45128647522) contains 68 HTML files and no `review-report.html`. The previous #348 main Pages artifact contained that internal publishing record. Confirm the exclusion again in the post-merge production artifact.
 - Global Kids Books PDF layout correction is merged in PR #23 and validated by exact-head #347 plus main #348. The generated output is 29 pages, 743.2 pt wide, with 11 repaired rank cells and zero overflow/stacked-number pairs; the corrected PDF is not retained after temporary validation. Count/overlap/developmental-claim findings remain open.
-- The source-document review artifact #14756906047 processed 49 source artifacts with one duplicate group and zero extraction errors. This does not establish full editorial accuracy, rights or page-by-page visual acceptance.
+- The #351 source-document review artifact [14796513134](https://github.com/piyushimself/files/actions/runs/45128647522) processed 49 source artifacts with one duplicate group and zero extraction errors. This does not establish full editorial accuracy, rights or page-by-page visual acceptance.
 - All 11 manual acceptance items below remain unchecked. Keyboard-only, screen-reader, measured contrast, reduced-motion, per-control and full source-to-output checks remain outstanding.
-- Do not sign off from a successful build or a clean automated scanner. Inspect PR #26's fresh mobile screenshot and Pages artifact, then run final main desktop/mobile regression and deployment after merge.
+- Next: refresh documentation to this exact #351 evidence, rerun exact-head CI, merge only if it passes, then verify a fresh main deployment and continue the remaining source-document/manual acceptance.
 
 Historical regression snapshots below are retained as evidence from their original dates; they do not describe the current main checkpoint.
 
