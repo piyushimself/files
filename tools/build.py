@@ -277,8 +277,9 @@ header p,.status-bar,.rank,.meta,.excerpt,.modal .subtitle,.empty{color:var(--rr
  .table-wrap table{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;table-layout:auto!important}
  .table-wrap colgroup,.table-wrap thead{display:none!important}
  .table-wrap tbody{display:block!important;width:100%!important;min-width:0!important}
- .table-wrap tbody tr{display:grid!important;grid-template-columns:28px minmax(0,1fr) 42px!important;gap:8px!important;align-items:start!important;width:100%!important;min-width:0!important;padding:8px 2px!important}
+ .table-wrap tbody tr{display:grid!important;grid-template-columns:48px minmax(0,1fr) 46px!important;gap:8px!important;align-items:start!important;width:100%!important;min-width:0!important;padding:8px 2px!important}
  .table-wrap tbody td{display:block!important;width:auto!important;min-width:0!important;max-width:100%!important;padding:6px 2px!important;overflow-wrap:anywhere!important}
+ .table-wrap tbody td.num{box-sizing:border-box!important;width:48px!important;min-width:48px!important;white-space:nowrap!important;overflow-wrap:normal!important;word-break:keep-all!important;text-align:center!important;font-variant-numeric:tabular-nums!important}
  .table-wrap tbody td:nth-child(n+4){display:none!important}
  .table-wrap tbody td:nth-child(2){font-size:14px!important;line-height:1.35!important}
  .table-wrap tbody td:nth-child(3){font-size:12px!important;text-align:right!important}
@@ -499,8 +500,8 @@ def main():
         ""
     ]
     REPORT.write_text("\n".join(report),encoding="utf-8")
-    report_html="<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><meta name='robots' content='noindex,nofollow'><title>Publishing review — The Reading Room</title><link rel='stylesheet' href='assets/reading-room.css'></head><body><main class='intro'><p class='kicker'>Internal publishing record</p><h1>Content review<br><em>and exclusions.</em></h1><p class='intro-copy'>Build date: "+date.today().isoformat()+"</p><p>Published HTML collections: <strong>"+str(len(items))+"</strong></p><p>Withheld source files: <strong>"+str(len(withheld))+"</strong></p><ul>"+''.join("<li><strong>"+html.escape(x['file'])+"</strong> — "+html.escape(x['reason'])+"</li>" for x in withheld)+"</ul><p>Matched sensitive values are never included in this report. Original source files remain unchanged.</p><a href='./'>Return to the library</a></main></body></html>"
-    (SITE/"review-report.html").write_text(report_html,encoding="utf-8")
+    # Keep the detailed publishing review in the repository root only; never publish its withheld-file inventory.
+    (SITE/"review-report.html").unlink(missing_ok=True)
     (SITE/"robots.txt").write_text("User-agent: *\nAllow: /\nSitemap: https://piyushimself.github.io/files/sitemap.xml\n",encoding="utf-8")
     urls=["https://piyushimself.github.io/files/","https://piyushimself.github.io/files/404.html"]+[f"https://piyushimself.github.io/files/{x['href']}" for x in items if not x["mature"]]
     (SITE/"sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join(f"<url><loc>{html.escape(u)}</loc></url>" for u in urls)+"</urlset>",encoding="utf-8")
