@@ -1,5 +1,18 @@
 # Page-by-page editorial and publishing audit
 
+## Current checkpoint — 23 November 2026, 12:30 IST
+- Latest verified main: `386618942e54979ecf8cd389153f34e5ef4d3841`; main workflow [#348](https://github.com/piyushimself/files/actions/runs/45028369149) built and deployed this exact SHA successfully.
+- Browser artifact [14756822179](https://github.com/piyushimself/files/actions/runs/45028369149) reports 34 desktop pages, 68 mobile checks, 96 iframe loads, 204 mobile reader-shell controls, zero automated issues and zero preliminary accessibility warnings. This is not a formal accessibility audit.
+- Full-size screenshot inspection reproduced a mobile defect on `300-animated-films-visual-middle-mobile.jpg`: two-digit ranks wrap vertically. PR [#26](https://github.com/piyushimself/files/pull/26) proposes a 48px rank column plus no-wrap rules; exact-head visual validation is pending.
+- The #348 Pages artifact [14756203809](https://github.com/piyushimself/files/actions/runs/45028369149) contains 69 HTML files and still includes `review-report.html`, an internal publishing record listing 50 withheld filenames and reasons. PR #26 removes it from the generated Pages output; verify the next Pages artifact.
+- Global Kids Books PDF layout correction is merged in PR #23 and validated by exact-head #347 plus main #348. The generated output is 29 pages, 743.2 pt wide, with 11 repaired rank cells and zero overflow/stacked-number pairs; the corrected PDF is not retained after temporary validation. Count/overlap/developmental-claim findings remain open.
+- The source-document review artifact #14756906047 processed 49 source artifacts with one duplicate group and zero extraction errors. This does not establish full editorial accuracy, rights or page-by-page visual acceptance.
+- All 11 manual acceptance items below remain unchecked. Keyboard-only, screen-reader, measured contrast, reduced-motion, per-control and full source-to-output checks remain outstanding.
+- Do not sign off from a successful build or a clean automated scanner. Inspect PR #26's fresh mobile screenshot and Pages artifact, then run final main desktop/mobile regression and deployment after merge.
+
+Historical regression snapshots below are retained as evidence from their original dates; they do not describe the current main checkpoint.
+
+
 Audit branch: `main`  
 Base reviewed: `main` at `b6d68eff58469c7adda14cc9edee3ed04ef01101` (latest documentation commit; workflow #315 passed)  
 Status: **in progress — not a 100% sign-off**
