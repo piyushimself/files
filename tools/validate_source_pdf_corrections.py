@@ -132,6 +132,35 @@ def main() -> None:
     if (stats["ranked_entries"], stats["unique_films_under_title_director_year_rule"], stats["duplicate_groups"]) != (647, 629, 18):
         raise AssertionError(f"unexpected audit summary: {stats}")
 
+    # Produce a separate, downloadable correction for the visible rating-glyph defect.
+    # The uploaded source PDF remains unchanged.
+    from fix_personal_reference_rating_glyphs import fix as fix_rating_glyphs
+    corrected_dir = Path(os.environ.get("RUNNER_TEMP", tempfile.gettempdir())) / "reading-room-corrected-source-pdfs"
+    corrected_pdf = corrected_dir / "Personal_Reference_Film_Books_Art_corrected.pdf"
+    replacements = fix_rating_glyphs(ROOT / "Personal_Reference_Film_Books_Art.pdf", corrected_pdf)
+    if replacements != 117:
+        raise AssertionError(f"Personal Reference glyph replacements: {replacements} != 117")
+    corrected_ratings = fitz.open(corrected_pdf)
+    try:
+        if len(corrected_ratings) != 20:
+            raise AssertionError(f"Personal Reference page count changed: {len(corrected_ratings)} != 20")
+        dingbats = [
+            (page_number, span["text"])
+            for page_number, page in enumerate(corrected_ratings, 1)
+            for block in page.get_text("dict")["blocks"]
+            for line in block.get("lines", [])
+            for span in line.get("spans", [])
+            if span.get("font") == "ZapfDingbats"
+        ]
+        if dingbats:
+            raise AssertionError(f"Personal Reference still contains ZapfDingbats: {dingbats[:10]}")
+        if "7.9/10" not in corrected_ratings[2].get_text() or "83%" not in corrected_ratings[2].get_text():
+            raise AssertionError("Personal Reference film rating values were not preserved")
+        if "4.3/5" not in corrected_ratings[13].get_text() or "96 pages" not in corrected_ratings[13].get_text():
+            raise AssertionError("Personal Reference book rating/page values were not preserved")
+    finally:
+        corrected_ratings.close()
+
     # Exercise the Global Kids Books generator against the actual source PDF in CI.
     # The output is temporary: the original uploaded PDF is never overwritten.
     from fix_global_kids_guide_layout import fix_layout
@@ -158,7 +187,7 @@ def main() -> None:
         finally:
             corrected.close()
 
-    print("Source-PDF correction checks passed: corrected claims, page text, toddler-guide layout, 647-row manifest, JSON audit and Global Kids Books generated layout match.")
+    print("Source-PDF correction checks passed: corrected claims, page text, toddler-guide layout, 647-row manifest, JSON audit, Personal Reference vector-glyph correction and Global Kids Books generated layout match.")
 
 if __name__ == "__main__":
     main()
