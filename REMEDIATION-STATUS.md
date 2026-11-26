@@ -1,59 +1,64 @@
 # Reading Room remediation — current status
 
 **Status: IN PROGRESS — not a completion certificate.**  
-**Last verified:** 27 November 2026, 00:17 IST (Asia/Kolkata)
+**Last verified:** 27 November 2026, 00:45 IST (Asia/Kolkata)
 **Repository:** [piyushimself/files](https://github.com/piyushimself/files)  
 **Published site:** https://piyushimself.github.io/files/
 
-## Current verified checkpoint — 27 November 2026, 00:17 IST (Asia/Kolkata)
+## Current verified checkpoint — 27 November 2026, 00:45 IST (Asia/Kolkata)
 
 ### Repository, pull requests and workflows
-- Default branch `main` remains at [`d146196bf3490ca4fff0a982dcd2ec6c669e0c0e`](https://github.com/piyushimself/files/commit/d146196bf3490ca4fff0a982dcd2ec6c669e0c0e), committed 26 November at 09:44:31 UTC. No newer main commit or workflow run was returned at this checkpoint.
-- PR [#28](https://github.com/piyushimself/files/pull/28) is **open**, not merged, at head `712a60fb50065f354cf77f131589fd2c29b8f0f9` on `remediation/stop-public-source-review-artifacts-2026-11-26`. It has no submitted reviews or inline review threads.
-- Exact-head workflow [#357 / run 45848514609](https://github.com/piyushimself/files/actions/runs/45848514609) completed successfully for that head: build and Chromium desktop/mobile QA passed; deployment was skipped because this was a pull-request run.
-- Main workflow [#356 / run 45794785456](https://github.com/piyushimself/files/actions/runs/45794785456) passed build and Pages deployment for the exact main SHA. Its deployment log records the same Pages build version and reports success.
+- Default branch `main` remains at [`d146196bf3490ca4fff0a982dcd2ec6c669e0c0e`](https://github.com/piyushimself/files/commit/d146196bf3490ca4fff0a982dcd2ec6c669e0c0e). Its latest confirmed production workflow is #356 / run [45794785456](https://github.com/piyushimself/files/actions/runs/45794785456), successful for that exact SHA.
+- PR [#28](https://github.com/piyushimself/files/pull/28) remains **open**, not merged, on `remediation/stop-public-source-review-artifacts-2026-11-26` at head `51e66759a535ac1df92b1b22c5c5abb76f968e7b`, based on the current main SHA. It has no submitted reviews or PR comments.
+- Exact-head workflow #358 / run [45879246095](https://github.com/piyushimself/files/actions/runs/45879246095) completed successfully for `51e66759a535ac1df92b1b22c5c5abb76f968e7b`: build and Chromium desktop/mobile QA passed; deployment was skipped as expected for a pull-request event.
+- The #358 build job passed the site build, generated-app validation, Pine static checks, corrected-source-PDF validation and browser QA. Its job log also exposed a source-review inventory (see the workflow-log finding below).
 
-### PR #28 browser and Pages preview evidence
-- Browser QA artifact [15134060952](https://github.com/piyushimself/files/actions/runs/45848514609) contains 528 files. Its report records 34 desktop pages, 68 mobile checks, 96 iframe loads, 20 search controls, 14 select controls, 15 filter controls, 63 filter disclosures, 204 mobile reader controls, and 0 automated issues / 0 preliminary accessibility findings.
-- The report and actual screenshots were downloaded. The homepage desktop and mobile captures are readable. The 300 Animated Films middle desktop/mobile captures were inspected; mobile ranks 10–16 remain on one line. This is automated plus sampled visual regression, not full manual accessibility or editorial acceptance.
-- Pages preview artifact [15134215945](https://github.com/piyushimself/files/actions/runs/45848514609) contains 122 archive entries / 68 HTML files, with no source PDFs, DOCX, Pine files or internal publishing report.
-- The same PR run also uploaded corrected Personal Reference PDF artifact [15132451495](https://github.com/piyushimself/files/actions/runs/45848514609). It is a source-derived document and is **not rights-cleared for public distribution**. This follow-up removes that upload from future workflow runs; the already-uploaded artifact remains downloadable until its automatic expiry at 2026-12-10 15:24:54 UTC (20:54:54 IST). The PDF was previously inspected, but its availability as a public workflow artifact is a separate unresolved distribution issue.
+### PR #28 exact-head browser and Pages artifacts
+- Browser QA artifact [15145778767](https://github.com/piyushimself/files/actions/runs/45879246095) contains 528 files. The report records 34 desktop pages, 68 mobile checks, 96 iframe loads, 20 search controls, 14 select controls, 15 filter controls, 3 tabs, 4 shell controls, 7 direct mature-app gates, 21 mature iframe-sync checks, 33 theme-sync, 32 font-sync, 32 text-scale, 63 filter disclosures, 204 mobile reader-shell controls and 34 reader menus. It reports zero automated issues and zero preliminary accessibility warnings.
+- The artifact ZIP was downloaded and inspected. It contains no PDF, DOCX, Pine, TXT, extracted source-text, manifest, summary, README, `PUBLISHING-REVIEW.md` or `review-report.html`. The `site/data/catalog.json` file is the generated public-site catalogue/search data, not a source-document extract.
+- Actual screenshots were inspected: homepage desktop/mobile are readable; 300 Animated Films middle desktop/mobile captures are readable; ranks 10–16 stay on one line on mobile. This is sampled visual confirmation plus automated regression, not exhaustive human review of all pages or formal accessibility certification.
+- Pages preview artifact [15145898662](https://github.com/piyushimself/files/actions/runs/45879246095) was downloaded and inspected: 122 archive entries, 68 HTML files, and `robots.txt` as the only `.txt` file. No source PDFs, DOCX, Pine files or internal reports are present.
+- Run #358 produced exactly these two artifacts (browser QA and Pages). No corrected source-derived PDF preview was uploaded. The corrected Personal Reference PDF validation remains an ephemeral build check; the previous public PDF previews are still retained separately until expiry.
 
-### Existing public workflow artifacts that cannot be removed by this follow-up
-- Main run #356 uploaded artifact [15103848500](https://github.com/piyushimself/files/actions/runs/45794785456), containing 52 entries: 49 extracted source-text files, a manifest, summary and README. The ZIP was downloaded and inspected: 5,457,766 extracted characters, 915,683 words, one exact duplicate group and zero extraction errors. All 49 manifest records have empty `redactions` maps (zero recorded redaction events); the README/summary call the copies redacted, but the manifest does not evidence any redaction. Do not describe this artifact as a verified sanitized copy. It remains downloadable until 2026-11-27 09:46:13 UTC (15:16:13 IST).
-- Main browser QA artifact [15105410621](https://github.com/piyushimself/files/actions/runs/45794785456) contains generated `PUBLISHING-REVIEW.md` (5,433 bytes; 50 withheld-item entries). It remains downloadable until 2026-12-10 09:56:13 UTC (15:26:13 IST).
-- Main corrected-PDF preview artifact [15104820560](https://github.com/piyushimself/files/actions/runs/45794785456) remains downloadable until 2026-12-10 09:46:04 UTC (15:16:04 IST).
-- PR #28 corrected-PDF preview artifact [15132451495] remains downloadable until 2026-12-10 15:24:54 UTC (20:54:54 IST).
-- No artifact-deletion action is available through the connected GitHub integration in this runtime. These already-created artifacts therefore remain accessible until GitHub's recorded expiry unless the repository owner deletes them through GitHub's Actions interface. The new workflow change prevents recurrence; it does not retroactively revoke existing artifact downloads.
-- `PUBLISHING-REVIEW.md` is **not** present as a tracked file at the repository root: a direct contents lookup returned 404. It was generated in the old build workspace and included in the old browser QA ZIP. Do not conflate that artifact copy with a root-level tracked file.
+### Newly found workflow-log exposure and corrective action
+- Although run #358 uploaded no source-review files, its public Actions log still ran `tools/document_review_extract.py` and printed a per-file inventory for all 49 source artifacts: filenames, page/line counts, word counts, OCR-page counts, rights-marker categories and redaction counts. The log did not contain the extracted document body text, but this inventory is internal review metadata and should not be emitted by a public workflow.
+- The same log reports zero redaction events for each file; do not describe this run as proof that extracted content was redacted. The extraction step is not required to build or test the public site.
+- This follow-up removes the document-extraction step from the public Actions workflow entirely. The script remains available for private/local review. The next exact-head run must pass and its logs must confirm that no per-file source-review inventory is emitted.
 
-### Workflow-artifact safety change in PR #28
-- The current `main` workflow still uploads extracted source text, PR-only original source PDFs, the generated publishing inventory in the browser QA ZIP, and a corrected source-derived PDF preview. These uploads can recur until PR #28 is merged and a fresh main run verifies the new workflow.
-- The PR #28 workflow removes uploads of extracted source text, PR-only source PDFs, the publishing inventory and the corrected source-derived PDF preview. Extraction and PDF correction validation remain local to the ephemeral runner; browser QA screenshots/report and the generated Pages artifact remain.
-- The branch's updated workflow is not yet merged or production-verified. The current PR workflow run #357 predates this additional documentation/workflow correction, so a new exact-head run must pass and its artifacts must be inspected.
+### Existing public workflow artifacts and expiry
+- Main run #356 artifact [15103848500](https://github.com/piyushimself/files/actions/runs/45794785456) contains 49 extracted source-text files, a manifest, summary and README (5,457,766 characters / 915,683 words). All 49 manifest `redactions` maps are empty. It is not a verified sanitized copy. It remains downloadable until **27 November 2026, 09:46:13 UTC (15:16:13 IST)**; at this 00:45 IST checkpoint it has not yet expired.
+- Main browser QA artifact [15105410621](https://github.com/piyushimself/files/actions/runs/45794785456) contains generated `PUBLISHING-REVIEW.md` and expires **10 December 2026, 09:56:13 UTC (15:26:13 IST)**.
+- Main corrected-PDF preview [15104820560](https://github.com/piyushimself/files/actions/runs/45794785456) expires **10 December 2026, 09:46:04 UTC (15:16:04 IST)**. PR #28's earlier corrected-PDF preview [15132451495](https://github.com/piyushimself/files/actions/runs/45848514609) expires **10 December 2026, 15:24:54 UTC (20:54:54 IST)**.
+- New #358 Pages artifact [15145898662] expires **27 November 2026, 19:00:57 UTC (28 November, 00:30:57 IST)**. New #358 browser artifact [15145778767] expires **10 December 2026, 19:00:53 UTC (11 December, 00:30:53 IST)**.
+- The connected GitHub integration exposes no workflow-artifact deletion operation. Existing artifacts remain downloadable until their recorded expiry unless the repository owner deletes them through GitHub Actions. The new workflow change prevents future recurrence; it does not revoke old artifacts.
+- `PUBLISHING-REVIEW.md` is not a tracked repository-root file (direct contents lookup returned 404); it was generated in the old build workspace and included in the old #356 browser ZIP.
 
-### Production site and deployment
-- The latest confirmed production deployment is still main workflow #356 for SHA `d146196...`; its Pages archive [15104822142](https://github.com/piyushimself/files/actions/runs/45794785456) contains 122 entries / 68 HTML files and excludes source PDFs, DOCX, Pine files and internal review reports.
-- GitHub's deployment record confirms success for the exact main SHA. An independent live-site HTTP fetch has not been confirmed in this runtime; do not claim independent reachability.
+### Production deployment
+- Production remains on the successful main workflow #356 for SHA `d146196...`; the #358 PR run did not deploy.
+- The main Pages artifact [15104822142](https://github.com/piyushimself/files/actions/runs/45794785456) contains 122 entries / 68 HTML files and excludes source PDFs, DOCX, Pine files and internal reports.
+- GitHub's deployment log confirms success for the exact main SHA. Independent live-site HTTP reachability remains unconfirmed in this runtime.
 
 ### Editorial findings and manual acceptance still open
-- Asian-books curriculum: 25 placeholder markers and 40 “Not Asian” statements; comparative-vs-Asian-only scope and repeated/comparator entries still need an editorial decision.
-- Cinema 900: cover/body 300-versus-900 contradiction and the 835-entry `library-3` comparison still need a documented deduplication rule.
-- Global Kids Books: eight age-band counts total 317 rather than “600+”; roughly 55% overlap with the FINAL guide; developmental claims, age suitability, metadata and canonical-version decision remain open. Its generated layout correction is validated separately.
+- Asian-books curriculum: 25 placeholder markers and 40 “Not Asian” statements; comparative-vs-Asian-only scope and repeated/comparator entries need an editorial decision.
+- Cinema 900: cover/body 300-versus-900 contradiction and the 835-entry `library-3` comparison need a documented deduplication rule.
+- Global Kids Books: eight age-band counts total 317 rather than “600+”; roughly 55% overlap with the FINAL guide; developmental claims, age suitability, metadata and canonical-version decision remain open. Its layout correction is separately validated.
 - Other count/scope issues remain across fictional books, inspirations, writing prompts, Frida film list, filmography and ratings/encyclopedia collections. Resource URLs, bibliographies, quotations, attribution, author/edition metadata, age suitability, selection rationale and rating provenance are not fully reconciled.
 - All 11 manual acceptance items remain unchecked/incomplete: (1) full page-by-page desktop/mobile human review; (2) all control/interaction states; (3) theme, font and text-scale behavior; (4) sticky-header behavior; (5) measured contrast; (6) keyboard, screen-reader and reduced-motion acceptance; (7) full PDF/DOCX/image-only-page/OCR inspection; (8) source-to-output completeness; (9) links, console and sitemap; (10) catalogue reconciliation; and (11) missing-title/H1 fallback review.
-- All 49 source artifacts remain withheld from Pages because publication permission evidence has not been established. The repository itself is public, so the originals remain accessible in GitHub. Do not change repository visibility or rewrite history without the user's specific informed confirmation. This is a republication/visibility blocker, not a reason to mark unrelated editorial findings as corrected.
+- All 49 original source artifacts remain withheld from Pages because publication permission evidence has not been established. The repository itself is public, so the originals remain accessible in GitHub. Do not change repository visibility or rewrite history without the user's specific informed confirmation. This is a republication/visibility blocker, not a reason to mark unrelated editorial findings complete.
 - **Status: IN PROGRESS — not a completion certificate.**
 
 ### Next acceptance gates
-1. Pass the new exact-head workflow after this update; inspect every artifact and verify that no source-derived PDFs, extracted text, or publishing inventory are uploaded.
-2. Allow existing public artifacts to expire or have the repository owner delete them through GitHub; verify the exposed source-review artifact is no longer downloadable after expiry.
-3. Complete or individually evidence-disposition all 11 manual acceptance items.
-4. Resolve or explicitly disposition each remaining editorial finding.
-5. Merge only after review of the updated diff and exact-head artifacts; then require a fresh main workflow, production browser regression and Pages deployment.
-6. Update this status after the post-merge main run.
+1. Pass the new exact-head workflow after removing the public extraction step; inspect all artifacts and logs.
+2. Verify that the #356 extracted-source artifact is no longer downloadable after its 27 November 09:46:13 UTC expiry (or document owner deletion if performed sooner).
+3. Allow the older QA/PDF artifacts to expire or have the repository owner delete them; verify their unavailability.
+4. Complete or individually evidence-disposition all 11 manual acceptance items.
+5. Resolve or explicitly disposition every remaining editorial finding and permission-dependent publication decision.
+6. Merge only after exact-head review; then require a fresh main workflow, production browser regression and Pages deployment.
+7. Update this report after the post-merge main run.
 
-Historical checkpoints below are retained for audit history; this checkpoint supersedes their repository and workflow state.
+Historical checkpoints below are retained for traceability and are superseded by this section.
+
+
 
 ## Historical checkpoint — 21 November 2026
 

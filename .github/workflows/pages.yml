@@ -44,11 +44,9 @@ jobs:
         run: python tools/validate_pine_static.py
       - name: Validate corrected source PDF findings
         run: python tools/validate_source_pdf_corrections.py
-      # The corrected PDF is source-derived and not rights-cleared. Keep it
-      # only on the ephemeral runner for validation; do not publish an artifact.
-      - name: Extract redacted source documents for review
-        continue-on-error: true
-        run: python tools/document_review_extract.py
+      # Do not extract source documents in public Actions: even an inventory
+      # printed to logs exposes internal review metadata. Run this tool only
+      # in a private/local review environment.
       # Extracted source text stays on the ephemeral runner. Do not upload it:
       # this repository is public and Actions artifacts are downloadable by readers.
       # Original source PDFs are already tracked in the public repository.

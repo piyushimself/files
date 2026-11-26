@@ -1,25 +1,23 @@
 # Reading Room remediation handoff
 
-Last updated: 2026-11-27 00:17 IST (Asia/Kolkata)
+Last updated: 2026-11-27 00:45 IST (Asia/Kolkata)
 
 This file is the durable continuation point for the ongoing Reading Room remediation. Read it before continuing, then inspect live GitHub state because PRs and workflow runs may have changed since this checkpoint.
 
-## Current verified continuation state — 27 November 2026, 00:17 IST (Asia/Kolkata)
+## Current verified continuation state — 27 November 2026, 00:45 IST (Asia/Kolkata)
 
 - Repository: `piyushimself/files`; default branch `main`; latest main SHA [`d146196bf3490ca4fff0a982dcd2ec6c669e0c0e`](https://github.com/piyushimself/files/commit/d146196bf3490ca4fff0a982dcd2ec6c669e0c0e).
-- PR [#28](https://github.com/piyushimself/files/pull/28) remains open at head `712a60fb50065f354cf77f131589fd2c29b8f0f9`. Exact-head workflow #357 passed build and Chromium desktop/mobile QA; deployment was skipped because it is a PR run. No review submissions or inline review threads exist.
-- PR #28 browser artifact [15134060952] reports 34 desktop pages, 68 mobile checks, 96 iframe loads, 204 mobile reader controls, zero automated issues and zero preliminary accessibility warnings. Homepage desktop/mobile and 300 Animated Films middle desktop/mobile screenshots were inspected; the homepage is readable and ranks 10–16 stay on one line on mobile.
-- PR #28 Pages preview [15134215945] contains 122 archive entries / 68 HTML files, no source PDFs/DOCX/Pine files and no internal publishing report.
-- The PR also uploaded corrected Personal Reference PDF artifact [15132451495]. This source-derived PDF is not rights-cleared; it remains downloadable until 2026-12-10 15:24:54 UTC. The follow-up change removes this upload from future runs. Main corrected-PDF artifact [15104820560] remains downloadable until 2026-12-10 09:46:04 UTC.
-- Main workflow #356 succeeded for exact SHA `d146196...` and confirms Pages deployment. Its Pages artifact [15104822142] contains 122 entries / 68 HTML files, no source PDFs/DOCX/Pine files and no internal reports. Independent live-site HTTP verification is still unconfirmed.
-- Critical existing artifact: [15103848500](https://github.com/piyushimself/files/actions/runs/45794785456) contains 49 extracted source-text files, manifest, summary and README (5,457,766 characters / 915,683 words). All 49 manifest `redactions` maps are empty. The artifact remains downloadable until 27 November 09:46:13 UTC (15:16:13 IST). Old browser QA artifact [15105410621] includes generated `PUBLISHING-REVIEW.md` and expires 10 December 09:56:13 UTC (15:26:13 IST).
-- The current GitHub integration exposes no workflow-artifact deletion action. Existing artifacts cannot be revoked through the available tools; they remain until GitHub expiry unless the repository owner deletes them through the Actions UI. `PUBLISHING-REVIEW.md` is not a tracked root file (contents lookup returned 404); it was generated during the old build and included in the old browser QA ZIP.
-- PR #28's latest workflow edit removes future uploads of extracted text, PR-only source PDFs, generated publishing inventory and corrected source-derived PDF preview. It keeps the extraction/correction work on the ephemeral runner. The new revision must pass exact-head CI and have every resulting artifact inspected before merge.
+- PR [#28](https://github.com/piyushimself/files/pull/28) remains open at head `51e66759a535ac1df92b1b22c5c5abb76f968e7b`; no reviews or PR comments exist.
+- Exact-head workflow #358 / run [45879246095](https://github.com/piyushimself/files/actions/runs/45879246095) passed build and Chromium desktop/mobile QA. Deploy was skipped because it is a PR event.
+- Browser artifact [15145778767] reports 34 desktop pages, 68 mobile checks, 96 iframe loads, 204 mobile reader controls, zero automated issues and zero preliminary accessibility warnings. It has 528 files and no source PDFs, DOCX, Pine, TXT, extracted source text, manifest, README or internal publishing report. Pages preview [15145898662] has 122 archive entries / 68 HTML files and no source documents or internal reports.
+- I downloaded both artifacts and inspected their inventories. I visually inspected homepage desktop/mobile and 300 Animated Films middle desktop/mobile screenshots. The homepage is readable and ranks 10–16 stay on one line on mobile. This is sampled visual QA, not full manual acceptance.
+- **New finding:** run #358's public job log still printed a 49-file source-review inventory (filenames, page/line counts, word counts, OCR counts, rights-marker categories and redaction counts). No source document body text appeared in the inspected log excerpt. This metadata should not be emitted publicly; the next follow-up removes the extraction step from public Actions entirely.
+- Existing source-text artifact [15103848500] remains downloadable until 27 November 2026, 09:46:13 UTC (15:16:13 IST). It contains 49 extracted text files and empty redaction maps; it is not a verified sanitized copy. Old browser QA [15105410621] expires 10 December 09:56:13 UTC; main corrected-PDF preview [15104820560] expires 10 December 09:46:04 UTC; PR #28 corrected-PDF preview [15132451495] expires 10 December 15:24:54 UTC. The integration has no artifact-deletion operation; owner deletion through GitHub Actions or automatic expiry is required.
+- Main workflow #356 / run [45794785456] remains the latest successful production deployment for SHA `d146196...`. PR #28's #358 run did not deploy. Independent live-site HTTP reachability is not confirmed.
 - Remaining findings: Asian Books scope/placeholders; Cinema 900 300/900/835 discrepancy; Global Kids Books 317-versus-600+ count, ~55% overlap, developmental claims and age/metadata decisions; other count discrepancies; URLs, bibliographies, quotations, attribution, metadata, age suitability and rating provenance.
-- All 11 manual acceptance items remain unchecked/incomplete. The automated suite does not prove full keyboard/screen-reader acceptance, measured contrast, reduced-motion behavior or complete source-to-output review.
-- All 49 original source files remain withheld from Pages for lack of publication permission evidence, but remain accessible in the public GitHub repository. Do not change visibility or rewrite history without the user's specific informed confirmation.
-- The remediation remains **IN PROGRESS**, not a completion certificate. Never push directly to `main`; use the existing PR branch and inspect exact-head evidence before merging.
-
+- All 11 manual acceptance items remain unchecked/incomplete. Automated QA does not prove full keyboard/screen-reader acceptance, measured contrast, reduced-motion behavior, or complete source-to-output review.
+- All 49 original source files remain withheld from Pages for lack of publication-permission evidence, but remain accessible in the public repository. Do not change visibility or rewrite history without the user's specific informed confirmation.
+- **Status: IN PROGRESS — not a completion certificate.** Never push directly to `main`; continue on the existing PR branch and inspect exact-head evidence before merging.
 
 ## User's standing instruction
 
