@@ -1,22 +1,16 @@
 # Page-by-page editorial and publishing audit
 
-## Current checkpoint — 23 November 2026, 13:49 IST
-- Latest verified `main`: `386618942e54979ecf8cd389153f34e5ef4d3841`; main workflow [#348](https://github.com/piyushimself/files/actions/runs/45028369149) built and deployed that exact SHA successfully.
-- PR [#26](https://github.com/piyushimself/files/pull/26) remains open at head `35f11f2eb7a9fa47703f0ee787cbe08e09ca71bd`. Exact-head workflow [#351](https://github.com/piyushimself/files/actions/runs/45128647522) passed its build and Chromium QA; deployment was skipped as expected for a PR event.
-- Browser artifact [14797316190](https://github.com/piyushimself/files/actions/runs/45128647522) reports 34 desktop pages, 68 mobile checks, 96 iframe loads, 204 mobile reader-shell controls, zero automated issues and zero preliminary accessibility findings.
-- I opened the actual 300 Animated Films top/middle/bottom mobile screenshots and middle desktop screenshot. Two-digit ranks 10–16 now stay on one line in the PR preview; the previous mobile rank-wrap finding is corrected in this branch. Production acceptance still requires post-merge verification.
-- The #351 Pages preview artifact [14797710582](https://github.com/piyushimself/files/actions/runs/45128647522) contains 68 HTML files and no `review-report.html`. The previous #348 main Pages artifact contained that internal publishing record. Confirm the exclusion again in the post-merge production artifact.
-- Global Kids Books PDF layout correction is merged in PR #23 and validated by exact-head #347 plus main #348. The generated output is 29 pages, 743.2 pt wide, with 11 repaired rank cells and zero overflow/stacked-number pairs; the corrected PDF is not retained after temporary validation. Count/overlap/developmental-claim findings remain open.
-- The #351 source-document review artifact [14796513134](https://github.com/piyushimself/files/actions/runs/45128647522) processed 49 source artifacts with one duplicate group and zero extraction errors. This does not establish full editorial accuracy, rights or page-by-page visual acceptance.
-- All 11 manual acceptance items below remain unchecked. Keyboard-only, screen-reader, measured contrast, reduced-motion, per-control and full source-to-output checks remain outstanding.
-- Next: refresh documentation to this exact #351 evidence, rerun exact-head CI, merge only if it passes, then verify a fresh main deployment and continue the remaining source-document/manual acceptance.
-
-Historical regression snapshots below are retained as evidence from their original dates; they do not describe the current main checkpoint.
-
-
-Audit branch: `main`  
-Base reviewed: `main` at `b6d68eff58469c7adda14cc9edee3ed04ef01101` (latest documentation commit; workflow #315 passed)  
-Status: **in progress — not a 100% sign-off**
+## Current checkpoint — 26 November 2026, 20:47 IST (Asia/Kolkata)
+- Latest `main`: [`d146196bf3490ca4fff0a982dcd2ec6c669e0c0e`](https://github.com/piyushimself/files/commit/d146196bf3490ca4fff0a982dcd2ec6c669e0c0e). PRs #26 and #27 are merged; no open PRs or issues were returned by fresh searches.
+- Main workflow [#356 / run 45794785456](https://github.com/piyushimself/files/actions/runs/45794785456) passed both build and Pages deployment for that exact SHA.
+- Browser artifact [15105410621](https://github.com/piyushimself/files/actions/runs/45794785456) reports 34 desktop pages, 68 mobile checks, 96 iframe loads, 204 mobile reader controls, zero automated issues and zero preliminary accessibility warnings. The actual 300 Animated Films middle mobile and desktop screenshots were inspected; ranks 10–16 remain on one line on mobile.
+- Corrected Personal Reference PDF artifact [15104820560](https://github.com/piyushimself/files/actions/runs/45794785456) retains 20 pages and has zero ZapfDingbats spans. Rendered pages 3 and 14 were visually inspected; the vector stars/markers and numeric values are readable. The original upload is unchanged.
+- Pages artifact [15104822142](https://github.com/piyushimself/files/actions/runs/45794785456) was inspected: nested tar has 122 entries / 68 HTML files; no source PDF, DOCX or Pine files and no `PUBLISHING-REVIEW.md` or `review-report.html`. Deployment log confirms success for the exact SHA; independent live-site HTTP verification is not confirmed here.
+- **Artifact exposure finding:** run #356 also uploaded artifact [15103848500](https://github.com/piyushimself/files/actions/runs/45794785456), containing 49 extracted source-text files (about 5.46 million characters / 915,935 words), manifest, summary and README. All 49 manifest records have empty redaction maps (zero redaction events), so do not treat the artifact as a verified sanitized copy. It expires 27 November 2026 at 09:46:13 UTC. A follow-up branch `remediation/stop-public-source-review-artifacts-2026-11-26` removes both this upload and the PR-only source-PDF upload; it is not yet merged or validated.
+- The repository is public. The 49 original source files remain accessible in GitHub even though they are excluded from Pages. No publication permission evidence is recorded; do not change repository visibility or rewrite history without informed confirmation.
+- Remaining editorial findings: Asian Books placeholders/scope; Cinema 900's 300/900/835 discrepancy; Global Kids Books' 317-versus-600+ count, overlap and developmental claims; other catalogue-count issues; missing/unverified URLs, bibliographies, quotations, attribution, metadata, age suitability and rating provenance.
+- All 11 manual acceptance tasks remain open/incomplete. Automated Chromium checks do not prove keyboard-only/screen-reader acceptance, measured WCAG contrast, reduced-motion acceptance or complete editorial/source-to-output review.
+- **Status: IN PROGRESS.** Historical checkpoints below are retained; this checkpoint supersedes their repository and workflow state.
 
 
 ## Latest main-branch regression snapshot — 19 November 2026, 12:48 IST
@@ -125,7 +119,8 @@ The 43 PDFs, 3 DOCX files, 1 legacy TXT file and 2 Pine scripts (49 source artif
 - [ ] Inspect all PDF/DOCX pages (including image-only pages) and OCR output before any publication decision.
 - [ ] Confirm source-to-output text completeness for each converted document.
 - [ ] Check internal links, image paths, console errors and generated sitemap.
-- [ ] Reconcile the published catalogue against this source inventory.\n- [ ] Confirm that missing-title fallback uses visible H1 text and review remaining pages with no title/H1.
+- [ ] Reconcile the published catalogue against this source inventory.
+- [ ] Confirm that missing-title fallback uses visible H1 text and review remaining pages with no title/H1.
 
 **Do not mark the archive complete until all acceptance checks are either passed or explicitly recorded as not applicable.**
 
