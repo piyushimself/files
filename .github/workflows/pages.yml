@@ -75,7 +75,6 @@ jobs:
           path: |
             browser-qa-report/
             site/data/catalog.json
-            PUBLISHING-REVIEW.md
           if-no-files-found: warn
           retention-days: 14
       - name: Upload Pages artifact
