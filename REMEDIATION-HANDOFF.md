@@ -1,23 +1,23 @@
 # Reading Room remediation handoff
 
-Last updated: 2026-11-23 13:49 IST (Asia/Kolkata)
+Last updated: 2026-11-26 20:47 IST (Asia/Kolkata)
 
 This file is the durable continuation point for the ongoing Reading Room remediation. Read it before continuing, then inspect live GitHub state because PRs and workflow runs may have changed since this checkpoint.
 
-## Current verified continuation state — 23 November 2026, 13:49 IST
+## Current verified continuation state — 26 November 2026, 20:47 IST (Asia/Kolkata)
 
-- Repository: `piyushimself/files`; default branch `main`; latest verified main SHA `386618942e54979ecf8cd389153f34e5ef4d3841`.
-- Main workflow [#348](https://github.com/piyushimself/files/actions/runs/45028369149) succeeded for that exact SHA; build and Pages deployment both passed.
-- PRs #23, #24 and #25 are merged. PR [#26](https://github.com/piyushimself/files/pull/26) is open at exact head `35f11f2eb7a9fa47703f0ee787cbe08e09ca71bd`.
-- Exact-head workflow [#351](https://github.com/piyushimself/files/actions/runs/45128647522) passed the build and Chromium desktop/mobile suite. The deploy job was skipped because this is a PR event. Its browser artifact is [14797316190](https://github.com/piyushimself/files/actions/runs/45128647522); Pages preview artifact is [14797710582](https://github.com/piyushimself/files/actions/runs/45128647522).
-- I inspected the actual 300 Animated Films top/middle/bottom mobile screenshots and middle desktop screenshot from #351. Two-digit ranks 10–16 remain on one line in the PR preview. The previous vertical-digit defect is corrected in this branch; production still needs post-merge verification.
-- I extracted the #351 Pages preview. It contains 68 HTML files and no `review-report.html`; the internal withheld-file inventory is no longer generated into the Pages output. Verify the same after main deployment.
-- PR #26 also refreshes the four remediation documents. A documentation-only follow-up is being added so the report reflects exact head #351, artifact IDs, screenshot inspection and the fact that deployment is still pending.
-- PR #23's Global Kids Books generated correction is merged and validated: 29 pages, 743.2 pt width, 11 repaired row numbers, zero overflow/stacked pairs. The corrected PDF is temporary and not retained; the original source remains unchanged.
-- Remaining findings include Asian-books scope/placeholders; Cinema 900 and other catalogue-count reconciliations; Global Kids Books 317-vs-600+ count, overlap and developmental claims; Personal Reference rating glyphs; links, bibliographies, quotations, attribution, metadata and age suitability. All 11 manual acceptance items remain unchecked.
-- The source-document review artifact [14796513134](https://github.com/piyushimself/files/actions/runs/45128647522) processed 49 files with one duplicate group and no extraction errors. It is not full fact-checking or visual acceptance. Source files remain withheld; permission evidence is absent. Do not treat rights as a blocker for unrelated editorial/layout fixes.
-- Per the user's personal-use scope, external TradingView compilation and venue-specific Pine validation are not release gates for this Reading Room site.
-- Immediate sequence: finish the documentation refresh; inspect the new exact-head workflow; merge PR #26 only if it passes; verify a fresh main deployment and production artifacts; then continue remaining editorial/manual acceptance. Never push directly to `main`; preserve originals and use branches/PRs.
+- Repository: `piyushimself/files`; default branch `main`; latest main SHA [`d146196bf3490ca4fff0a982dcd2ec6c669e0c0e`](https://github.com/piyushimself/files/commit/d146196bf3490ca4fff0a982dcd2ec6c669e0c0e).
+- PR #26 and PR #27 are merged. Fresh open-PR and open-issue searches returned no results.
+- Main workflow [#356 / run 45794785456](https://github.com/piyushimself/files/actions/runs/45794785456) passed build and deployment for the exact main SHA. Deployment log records the same Pages build version and reports success.
+- Browser QA artifact [15105410621](https://github.com/piyushimself/files/actions/runs/45794785456): 34 desktop pages, 68 mobile checks, 96 iframe loads, 204 mobile reader controls, zero automated issues and zero preliminary accessibility warnings. Actual 300 Animated Films middle mobile/desktop screenshots were inspected; mobile ranks 10–16 remain on one line.
+- Corrected Personal Reference PDF artifact [15104820560](https://github.com/piyushimself/files/actions/runs/45794785456): 20 pages retained, zero ZapfDingbats spans; rendered pages 3 and 14 inspected. Original source remains unchanged. Rating source URLs/as-of dates and mature-content labelling remain open.
+- Pages artifact [15104822142](https://github.com/piyushimself/files/actions/runs/45794785456): nested tar has 122 entries / 68 HTML files, no source PDFs/DOCX/Pine files and no `PUBLISHING-REVIEW.md` or `review-report.html`. Independent live-site HTTP verification is not confirmed in this runtime.
+- **Critical follow-up:** main workflow #356 also uploaded artifact [15103848500](https://github.com/piyushimself/files/actions/runs/45794785456), containing 49 extracted source-text copies (about 5.46 million characters / 915,935 words), manifest, summary and README. Every record has an empty redaction map (zero redaction events); the artifact is not proven sanitized. It expires 2026-11-27 09:46:13 UTC. Branch `remediation/stop-public-source-review-artifacts-2026-11-26` removes the extracted-text upload and the PR-only source-PDF upload. This branch is not yet merged or validated; create/inspect its PR workflow before considering the exposure fixed.
+- The repository is public; withholding files from Pages does not make the 49 originals private. Publication permission evidence is absent. Do not change repository visibility or rewrite history without the user's informed confirmation.
+- Remaining findings: Asian Books scope/placeholders; Cinema 900 300/900/835 discrepancy; Global Kids Books 317-versus-600+ count, ~55% overlap, developmental claims and age/metadata decisions; other count discrepancies; resource URLs, bibliographies, quotations, attribution, metadata, age suitability and rating provenance.
+- All 11 manual acceptance tasks remain unchecked/incomplete. The latest automated browser run is not formal keyboard/screen-reader, WCAG contrast or reduced-motion acceptance.
+- Never push directly to `main`; preserve original uploads and use branches/PRs. The remediation remains **IN PROGRESS**, not a completion certificate.
+
 
 ## User's standing instruction
 
