@@ -44,37 +44,13 @@ jobs:
         run: python tools/validate_pine_static.py
       - name: Validate corrected source PDF findings
         run: python tools/validate_source_pdf_corrections.py
-      - name: Upload corrected source PDF preview
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: reading-room-corrected-source-pdf-previews
-          path: ${{ runner.temp }}/reading-room-corrected-source-pdfs/*.pdf
-          if-no-files-found: error
-          retention-days: 14
-      - name: Extract redacted source documents for review
-        continue-on-error: true
-        run: python tools/document_review_extract.py
-      - name: Upload temporary redacted document review material
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: reading-room-document-review-redacted
-          path: |
-            document-review-redacted/summary.md
-            document-review-redacted/manifest.json
-            document-review-redacted/README.txt
-            document-review-redacted/*.txt
-          if-no-files-found: warn
-          retention-days: 1
-      - name: Upload temporary source PDFs for visual review
-        if: always() && github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v4
-        with:
-          name: reading-room-source-pdfs-visual-review
-          path: "*.pdf"
-          if-no-files-found: error
-          retention-days: 1
+      # Do not extract source documents in public Actions: even an inventory
+      # printed to logs exposes internal review metadata. Run this tool only
+      # in a private/local review environment.
+      # Extracted source text stays on the ephemeral runner. Do not upload it:
+      # this repository is public and Actions artifacts are downloadable by readers.
+      # Original source PDFs are already tracked in the public repository.
+      # Do not create duplicate public workflow artifacts for internal review.
       - name: Install Chromium test runner
         run: |
           python -m pip install playwright==1.56.0
@@ -83,6 +59,7 @@ jobs:
         run: |
           python -m http.server 4173 --directory site > /tmp/reading-room-http.log 2>&1 &
           python tools/browser_qa.py
+      # Keep internal review inventories out of both public Actions logs and downloadable QA artifacts.
       - name: Upload browser QA report and screenshots
         if: always()
         uses: actions/upload-artifact@v4
@@ -91,7 +68,6 @@ jobs:
           path: |
             browser-qa-report/
             site/data/catalog.json
-            PUBLISHING-REVIEW.md
           if-no-files-found: warn
           retention-days: 14
       - name: Upload Pages artifact

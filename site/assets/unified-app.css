@@ -21,7 +21,7 @@ body button,body [role=button],body [role=tab]{background:var(--rr-raised)!impor
 body button:hover,body [role=button]:hover,body [role=tab]:hover{border-color:var(--rr-accent)!important;color:var(--rr-accent)!important}
 body :is([class*=card],[class*=tile],[class*=panel],[class*=modal],[class*=dialog],[class*=toolbar],[class*=filter],[class*=control],[class*=legend],[class*=category-section],.mc,.legend,.manga-card,.manga-grid,.category-section){background:var(--rr-surface)!important;border-color:var(--rr-line)!important}
 
-body :is(button,[role=button],[role=tab])[aria-pressed=true],body :is(button,[role=button],[role=tab])[aria-selected=true],body :is(button,[role=button],[role=tab]).active,body :is(button,[role=button],[role=tab]).selected{background:var(--rr-accent)!important;border-color:var(--rr-accent)!important;color:#fff!important}
+body :is(button,[role=button],[role=tab])[aria-pressed=true],body :is(button,[role=button],[role=tab])[aria-selected=true],body :is(button,[role=button],[role=tab]).active,body :is(button,[role=button],[role=tab]).selected{background:var(--rr-accent)!important;border-color:var(--rr-accent)!important;color:var(--rr-canvas)!important}
 body :focus-visible{outline:3px solid var(--rr-focus)!important;outline-offset:2px!important}
 body table{border-collapse:collapse}body th,body td{border-color:var(--rr-line)!important}
 body :is(header,nav,footer,aside,section,article,main){border-color:var(--rr-line)}
@@ -38,7 +38,7 @@ body :is(nav,.controls,.tabs-bar,.nav-bar){background:var(--rr-surface)!importan
 body nav :is(h1,h2,h3,p,a,span,strong,small){color:var(--rr-ink)!important}
 body :is(.sub,.hd-label,.hero-eyebrow,.stat-l,.count-label,.category-count,.filter-label){color:var(--rr-muted)!important}
 body :is(.fb,.filter-btn,.tab-btn,.f-btn,.nav-tab,.theme-chip){background:var(--rr-raised)!important;color:var(--rr-ink)!important;border-color:var(--rr-line)!important}
-body :is(.fb.active,.filter-btn.active,.tab-btn.active,.f-btn.on,.nav-tab.active,.theme-chip.active){background:var(--rr-accent)!important;color:#fff!important;border-color:var(--rr-accent)!important}
+body :is(.fb.active,.filter-btn.active,.tab-btn.active,.f-btn.on,.nav-tab.active,.theme-chip.active){background:var(--rr-accent)!important;color:var(--rr-canvas)!important;border-color:var(--rr-accent)!important}
 
 /* Page-specific contrast repairs confirmed from source markup. */
 body .manga-card,body .mc{background:var(--rr-surface)!important;color:var(--rr-ink)!important;border:1px solid var(--rr-line)!important}
@@ -176,7 +176,7 @@ body .sr-only,body .visually-hidden{position:absolute!important;width:1px!import
   body .tabs .tab-btn[aria-pressed=true]{
     background:var(--rr-accent)!important;
     border-color:var(--rr-accent)!important;
-    color:#fff!important;
+    color:var(--rr-canvas)!important;
   }
   body .toolbar{
     box-sizing:border-box!important;
@@ -495,7 +495,7 @@ body:has(.c-t) .ctrl .fb{
   min-height:40px;padding:9px 13px!important;font-size:11px!important;
 }
 body:has(.c-t) .ctrl .fb.on{
-  background:var(--rr-accent)!important;color:#fff!important;border-color:var(--rr-accent)!important;
+  background:var(--rr-accent)!important;color:var(--rr-canvas)!important;border-color:var(--rr-accent)!important;
 }
 body:has(.c-t) .ctrl .ubtn{
   background:var(--rr-raised)!important;color:var(--rr-ink)!important;
@@ -670,3 +670,141 @@ body:has(.arc-title) :is(.hero-eyebrow,.arc-label,.arc-step,.stat-lbl){color:#a0
 
 /* Keep Four Arcs section work counts legible; the source's decorative 15% opacity was too faint on mobile. */
 body:has(.arc-title) .arc-count{opacity:.72!important}
+
+
+/* Dark-mode contrast repairs from the exact-head #364 visual screenshot review.
+   These target legacy source palettes that mix foreground and background tokens. */
+:root[data-theme=dark] body:has(.curriculum-tags) header{
+  background:var(--rr-surface)!important;
+  color:var(--rr-ink)!important;
+}
+:root[data-theme=dark] body:has(.curriculum-tags) header :is(.header-eyebrow,.header-sub){
+  color:var(--rr-muted)!important;
+  opacity:1!important;
+}
+
+:root[data-theme=dark] body:has(.hero-stats) .hero{
+  background:var(--rr-surface)!important;
+  color:var(--rr-ink)!important;
+}
+:root[data-theme=dark] body:has(.hero-stats) .hero .hero-title{
+  color:var(--rr-ink)!important;
+}
+:root[data-theme=dark] body:has(.hero-stats) .hero :is(.hero-sub,.stat .lbl){
+  color:var(--rr-muted)!important;
+  opacity:1!important;
+}
+
+:root[data-theme=dark] body:has(.mandala) .intro-band{
+  background:var(--rr-surface)!important;
+  color:var(--rr-ink)!important;
+}
+:root[data-theme=dark] body:has(.mandala) .intro-band p{
+  color:var(--rr-muted)!important;
+}
+:root[data-theme=dark] body:has(.mandala) .intro-band p strong{
+  color:var(--rr-accent)!important;
+}
+
+/* Manga & Comics Archive: its source palette used paper/ink tokens for both
+   text and surfaces, and fixed brown metadata colors that became unreadable
+   after the shared dark theme was applied. */
+:root[data-theme=dark] body:has(#masthead){
+  --paper:var(--rr-ink);
+  --paper2:var(--rr-surface);
+  --paper3:var(--rr-raised);
+  --cream:var(--rr-surface);
+  --border:var(--rr-line);
+  --border2:var(--rr-line);
+}
+:root[data-theme=dark] body:has(#masthead) :is(.card-title,.lt-title,.ac-name,.modal-desc){
+  color:var(--rr-ink)!important;
+}
+:root[data-theme=dark] body:has(#masthead) :is(
+  .mh-edition,.mh-stat-l,.sb-header,.f-row span,.f-row em,
+  .tb-count,.tb-sort-label,.sort-btn,.view-btn,
+  .card-src,.card-sub,.card-author,.card-country,.card-desc,
+  .category-count,.tag,.ac-count,.ac-works,.ac-avg-l,
+  .lt-author,.lt-year,.empty-state p,.modal-author-line,.modal-section-label
+){
+  color:var(--rr-muted)!important;
+}
+:root[data-theme=dark] body:has(#masthead) .tag{
+  background:var(--rr-raised)!important;
+  border-color:var(--rr-line)!important;
+}
+:root[data-theme=dark] body:has(#masthead) :is(.sort-btn.on,.view-btn.on){
+  background:var(--rr-accent)!important;
+  border-color:var(--rr-accent)!important;
+  color:var(--rr-canvas)!important;
+}
+:root[data-theme=dark] body:has(#masthead) #searchInput::placeholder{
+  color:var(--rr-muted)!important;
+}
+:root[data-theme=dark] body:has(#masthead) footer{
+  color:var(--rr-muted)!important;
+}
+
+/* Top 500 Adult Manga: retain a dark hero surface and readable metadata
+   instead of leaving pale text over the shared light surface. */
+:root[data-theme=dark] body:has(.header-meta) header{
+  background:var(--rr-surface)!important;
+  color:var(--rr-ink)!important;
+}
+:root[data-theme=dark] body:has(.header-meta) header p{
+  color:var(--rr-muted)!important;
+  opacity:1!important;
+}
+:root[data-theme=dark] body:has(.header-meta) .meta-pill{
+  background:var(--rr-raised)!important;
+  border-color:var(--rr-line)!important;
+  color:var(--rr-muted)!important;
+}
+:root[data-theme=dark] body:has(.header-meta) .meta-pill b{
+  color:var(--rr-accent)!important;
+}
+
+
+/* Manga & Comics Archive dark sidebar: the source hard-codes muted brown text
+   and a brown panel, so token remapping alone cannot repair every control.
+   Use the shared dark surface and explicit readable foregrounds. */
+:root[data-theme=dark] body:has(#masthead) #sidebar{
+  background:var(--rr-surface)!important;
+  border-right-color:var(--rr-line)!important;
+}
+:root[data-theme=dark] body:has(#masthead) #sidebar .sb-section{
+  border-bottom-color:var(--rr-line)!important;
+}
+:root[data-theme=dark] body:has(#masthead) #sidebar :is(
+  .sb-header,.f-row span,.f-row em,.sb-range label,.sb-range-sep,.sb-clear
+){
+  color:var(--rr-muted)!important;
+  opacity:1!important;
+}
+:root[data-theme=dark] body:has(#masthead) #sidebar :is(.sb-header:hover,.sb-clear:hover){
+  color:var(--rr-ink)!important;
+}
+:root[data-theme=dark] body:has(#masthead) #sidebar .f-pill{
+  background:var(--rr-raised)!important;
+  border-color:var(--rr-line)!important;
+  color:var(--rr-muted)!important;
+}
+:root[data-theme=dark] body:has(#masthead) #sidebar .f-pill.on{
+  background:var(--rr-accent)!important;
+  border-color:var(--rr-accent)!important;
+  color:var(--rr-canvas)!important;
+}
+:root[data-theme=dark] body:has(#masthead) #sidebar .f-row:hover{
+  background:var(--rr-raised)!important;
+}
+:root[data-theme=dark] body:has(#masthead) #sidebar .f-row.on{
+  background:rgba(120,181,244,.14)!important;
+}
+:root[data-theme=dark] body:has(#masthead) #sidebar .f-row.on :is(span,em){
+  color:var(--rr-ink)!important;
+}
+:root[data-theme=dark] body:has(#masthead) #sidebar .sb-range input[type=number]{
+  background:var(--rr-canvas)!important;
+  color:var(--rr-ink)!important;
+  border-color:var(--rr-line)!important;
+}
