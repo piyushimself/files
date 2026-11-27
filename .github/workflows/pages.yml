@@ -59,7 +59,7 @@ jobs:
         run: |
           python -m http.server 4173 --directory site > /tmp/reading-room-http.log 2>&1 &
           python tools/browser_qa.py
-      # Keep the internal withheld-file inventory out of downloadable QA artifacts.
+      # Keep internal review inventories out of both public Actions logs and downloadable QA artifacts.
       - name: Upload browser QA report and screenshots
         if: always()
         uses: actions/upload-artifact@v4
