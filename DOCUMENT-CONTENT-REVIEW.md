@@ -1,5 +1,17 @@
 # Source-document content review
 
+## Current verified checkpoint — 27 November 2026, 09:40 IST (Asia/Kolkata)
+
+- Default branch `main` remains at [`d146196bf3490ca4fff0a982dcd2ec6c669e0c0e`](https://github.com/piyushimself/files/commit/d146196bf3490ca4fff0a982dcd2ec6c669e0c0e). Main workflow [#356](https://github.com/piyushimself/files/actions/runs/45794785456) completed successfully for that exact SHA; the deploy job created the Pages deployment for `d146196...` and reported success. No newer main commit or production deployment is present.
+- PR [#28](https://github.com/piyushimself/files/pull/28) remains open on `remediation/stop-public-source-review-artifacts-2026-11-26`, head [`3b5a65dd651163819b49e7961ce649bdb3e2fa7a`](https://github.com/piyushimself/files/commit/3b5a65dd651163819b49e7961ce649bdb3e2fa7a), based on current main. GitHub compare confirms 20 commits ahead and zero behind. No submitted reviews or inline review threads are recorded.
+- Exact-head workflow [#364](https://github.com/piyushimself/files/actions/runs/45919155862) completed successfully for the exact PR head `3b5a65dd651163819b49e7961ce649bdb3e2fa7a` (event: `pull_request`). Build, generated-app validation, Pine static checks, corrected-source-PDF validation and Chromium desktop/mobile QA passed. The deploy job was skipped as expected for a PR event.
+- The complete #364 build log contains no document-review extraction step, source-review inventory, source filenames, OCR counts, rights-marker categories or redaction-count output. The unsafe extraction step and associated uploads are absent from the current workflow.
+- Browser QA artifact [15163856937](https://github.com/piyushimself/files/actions/runs/45919155862) was generated for #364. The report records 34 desktop pages, 68 mobile checks, 96 iframe loads, 204 mobile reader controls, zero automated issues and zero preliminary accessibility warnings. This is automated regression evidence, not exhaustive human review, WCAG conformance, keyboard-only or screen-reader certification.
+- Pages preview artifact [15163807038](https://github.com/piyushimself/files/actions/runs/45919155862) was generated for #364. The inspected preview contains 122 archive entries / 68 HTML files and excludes source documents and internal review reports. The preview is not a production deployment.
+- The four remediation documents and PR description were stale at the prior 06:17 checkpoint; this 09:40 checkpoint supersedes that repository/workflow snapshot. Historical sections below are retained for traceability.
+- **Status: IN PROGRESS — not a completion certificate.** Passing exact-head CI and PR-preview regression does not close the manual, editorial, artifact-exposure or production acceptance gates below.
+
+
 ## Current audit and workflow-artifact note — 27 November 2026, 06:17 IST (Asia/Kolkata)
 
 - Latest main remains `d146196bf3490ca4fff0a982dcd2ec6c669e0c0e`; main workflow #356 / run [45794785456](https://github.com/piyushimself/files/actions/runs/45794785456) passed build and Pages deployment for that exact SHA. The deploy log records Pages build version `d146196...` and reports success.
