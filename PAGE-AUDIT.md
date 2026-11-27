@@ -1,3 +1,13 @@
+## Latest verified checkpoint — 27 November 2026, 23:17 IST (Asia/Kolkata)
+
+- Exact PR head [`6a05295abb4fe7b84a873e7e30fe0ecc3c4da8b6`](https://github.com/piyushimself/files/commit/6a05295abb4fe7b84a873e7e30fe0ecc3c4da8b6) passed exact-head workflow [#371](https://github.com/piyushimself/files/actions/runs/45983167157). Build, generated-app validation, Pine static checks, corrected-PDF validation and Chromium desktop/mobile automation passed; deploy was skipped correctly for a PR event.
+- Browser-QA artifact [15190741334](https://github.com/piyushimself/files/actions/runs/45983167157) contains 528 files, including 525 screenshots. It records 34 desktop pages, 68 mobile checks, 96 iframe loads, 204 mobile reader-shell controls, zero automated issues and zero preliminary accessibility warnings. It contains no dark-mobile screenshots.
+- Pages preview artifact [15190487267](https://github.com/piyushimself/files/actions/runs/45983167157) contains 122 tar entries and 68 HTML files, with no source PDFs, DOCX, Pine files or internal publishing-review inventory.
+- Visual inspection: homepage mobile is readable; 300 Animated Films mobile ranks 7–16 remain on one line; Manga & Comics Archive's dark-desktop filter/sidebar labels remain subdued. The archive mobile capture is light mode, so it does not close dark-mobile acceptance.
+- All 11 manual acceptance items below remain unchecked. Automated zero-issue/zero-warning output is not measured contrast, full keyboard/screen-reader/reduced-motion acceptance, or exhaustive human review. Keep every checkbox open until individually validated with evidence or explicitly blocked with a concrete dependency/permission reason.
+
+---
+
 ## Latest verified checkpoint — 27 November 2026, 16:00 IST (Asia/Kolkata)
 
 - Default branch `main` remains at [`d146196bf3490ca4fff0a982dcd2ec6c669e0c0e`](https://github.com/piyushimself/files/commit/d146196bf3490ca4fff0a982dcd2ec6c669e0c0e). Main workflow [#356](https://github.com/piyushimself/files/actions/runs/45794785456) is still the latest successful production Pages deployment for that exact SHA. PR #28 has not been merged and no post-merge production deployment exists.

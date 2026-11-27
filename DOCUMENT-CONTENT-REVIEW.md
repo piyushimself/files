@@ -1,3 +1,15 @@
+## Latest verified checkpoint — 27 November 2026, 23:17 IST (Asia/Kolkata)
+
+- Workflow #371 [run 45983167157](https://github.com/piyushimself/files/actions/runs/45983167157) passed for PR head `6a05295abb4fe7b84a873e7e30fe0ecc3c4da8b6`. Its log contains no source-document extraction or legacy source-review/PDF artifact upload. The workflow did not perform OCR/content review, bibliography verification, quotation/attribution review, licence verification or full editorial reconciliation.
+- Browser-QA artifact [15190741334](https://github.com/piyushimself/files/actions/runs/45983167157) reports 34 desktop pages, 68 mobile checks, 96 iframe loads, zero automated issues and zero preliminary accessibility warnings. These are automated site checks, not source-content acceptance.
+- The 49 original source artifacts remain excluded from Pages because publication-permission evidence is absent. They remain accessible in the public repository; this is a publication-permission limitation, not private storage. Do not publish source-derived content or change repository visibility without evidence and an informed owner decision.
+- Two older public Actions artifacts remain downloadable: [15105410621](https://github.com/piyushimself/files/actions/runs/45794785456) contains `PUBLISHING-REVIEW.md` listing 50 withheld filenames and reasons; [15104820560](https://github.com/piyushimself/files/actions/runs/45794785456) contains `Personal_Reference_Film_Books_Art_corrected.pdf`. Both remain unexpired until 10 December 2026. Historical artifacts 15103848500 and 15104822142 now return 404.
+- Editorial findings remain open: Asian Books scope/placeholders (25 placeholder markers and 40 “Not Asian” statements); Cinema 900's 300/900/835 count discrepancy; Global Kids Books' 317-versus-600+ count, roughly 55% overlap and uncited developmental claims; other catalogue-count conflicts; URL validity; bibliographies, quotations, attribution, author/edition metadata, age suitability and rating provenance. No finding in this list is closed by #371.
+- Pine static validation is not TradingView compilation/backtesting; venue-specific compilation and calibration remain external dependencies and are not website deployment gates.
+- **Status: IN PROGRESS.** Do not mark source content cleared or the Reading Room complete based on a passing build.
+
+---
+
 ## Latest verified checkpoint — 27 November 2026, 16:00 IST (Asia/Kolkata)
 
 - Default branch `main` remains at [`d146196bf3490ca4fff0a982dcd2ec6c669e0c0e`](https://github.com/piyushimself/files/commit/d146196bf3490ca4fff0a982dcd2ec6c669e0c0e). Main workflow [#356](https://github.com/piyushimself/files/actions/runs/45794785456) is still the latest successful production Pages deployment for that exact SHA. PR #28 has not been merged and no post-merge production deployment exists.
