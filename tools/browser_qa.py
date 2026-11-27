@@ -16,7 +16,7 @@ apps=sorted((SITE/"apps").glob("*.html"))
 wrappers=sorted((SITE/"collections").glob("*/index.html"))
 viewports=[("desktop",1440,1000),("tablet",768,1024),("mobile",390,844)]
 issues=[]; screenshots=[]; accessibility_findings=[]
-stats={"catalog_items":len(items),"apps":len(apps),"wrappers":len(wrappers),"desktop_pages":0,"mobile_pages":0,"iframes_loaded":0,"search_controls_tested":0,"select_controls_tested":0,"filter_controls_tested":0,"tabs_tested":0,"shell_controls_tested":0,"direct_mature_apps_tested":0,"mature_iframe_sync_tested":0,"theme_sync_tested":0,"font_sync_tested":0,"scale_sync_tested":0,"filter_disclosures_tested":0,"reader_shell_mobile_pages_tested":0,"reader_shell_mobile_controls_tested":0,"reader_nav_menu_tested":0,"dark_mobile_pages_tested":0,"archive_dark_contrast_samples":0}
+stats={"catalog_items":len(items),"apps":len(apps),"wrappers":len(wrappers),"desktop_pages":0,"mobile_pages":0,"iframes_loaded":0,"search_controls_tested":0,"select_controls_tested":0,"filter_controls_tested":0,"tabs_tested":0,"shell_controls_tested":0,"direct_mature_apps_tested":0,"mature_iframe_sync_tested":0,"theme_sync_tested":0,"font_sync_tested":0,"scale_sync_tested":0,"filter_disclosures_tested":0,"reader_shell_mobile_pages_tested":0,"reader_shell_mobile_controls_tested":0,"reader_nav_menu_tested":0,"dark_desktop_pages_tested":0,"dark_mobile_pages_tested":0,"archive_dark_contrast_samples":0}
 def issue(page,kind,detail): issues.append({"page":page,"kind":kind,"detail":str(detail)[:2000]})
 def watch(page,label):
     page.on("pageerror",lambda e:issue(label,"pageerror",e))
@@ -271,7 +271,7 @@ def main():
                 page=ctx.new_page(); page.set_default_timeout(8000); watch(page,qa_name+"-"+name)
                 # Each collection must start with the default collapsed state. The shared
                 # preference is intentionally persisted, so isolate QA pages from earlier tests.
-                page.add_init_script("try{localStorage.removeItem('rr-filters-open');localStorage.removeItem('rr-age-confirmed')}catch(e){}")
+                page.add_init_script("try{localStorage.removeItem('rr-filters-open');localStorage.removeItem('rr-age-confirmed');localStorage.setItem('rr-theme','light');localStorage.removeItem('rr-font-family');localStorage.setItem('rr-text-scale','1')}catch(e){}")
                 try:
                     r=page.goto(BASE+item.get("href",""),wait_until="domcontentloaded",timeout=30000)
                     if not r or r.status>=400: issue(qa_name,"http",r.status if r else "no response")
@@ -592,11 +592,12 @@ def main():
                                     toggle.click(); page.wait_for_timeout(120)
                                     pt=page.locator("html").get_attribute("data-theme")
                                     ct=frame_el.evaluate("(f)=>f.contentDocument?.documentElement?.dataset.theme")
-                                    if not ct or ct!=pt: issue(qa_name,"theme-sync",f"parent={pt}, iframe={ct}")
+                                    if pt!="dark" or not ct or ct!=pt: issue(qa_name,"theme-sync",f"expected dark; parent={pt}, iframe={ct}")
                                     else: stats["theme_sync_tested"]+=1
                                     page.wait_for_timeout(150)
                                     dark_fn=f"{page_slug}-dark-desktop.png"
                                     page.screenshot(path=str(OUT/dark_fn),full_page=False); screenshots.append(dark_fn)
+                                    stats["dark_desktop_pages_tested"]+=1
                                     if page_slug=="manga-archive-v4": audit_manga_archive_dark_contrast(frame,qa_name+"-dark-desktop")
                                 font=page.locator("#rr-font-family")
                                 if font.count():
@@ -635,6 +636,9 @@ def main():
             else: stats["mobile_pages"]+=len(items)
             home.close(); ctx.close()
         browser.close()
+    if stats["dark_desktop_pages_tested"]!=len(apps): issue("inventory","dark-desktop-coverage",f"expected {len(apps)}; captured {stats['dark_desktop_pages_tested']}")
+    if stats["dark_mobile_pages_tested"]!=len(apps): issue("inventory","dark-mobile-coverage",f"expected {len(apps)}; captured {stats['dark_mobile_pages_tested']}")
+    if stats["archive_dark_contrast_samples"]==0: issue("manga-archive-v4","dark-contrast-coverage","no dark sidebar contrast samples were measured")
     report={"stats":stats,"issue_count":len(issues),"issues":issues,"accessibility_findings_count":len(accessibility_findings),"accessibility_findings":accessibility_findings,"screenshots":screenshots}
     (OUT/"report.json").write_text(json.dumps(report,indent=2),encoding="utf-8")
     lines=["# Chromium browser QA report",""]+[f"- {k.replace('_',' ').title()}: {v}" for k,v in stats.items()]+[f"- Issues: {len(issues)}",""]
