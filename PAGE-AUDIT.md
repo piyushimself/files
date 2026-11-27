@@ -1,3 +1,15 @@
+## Latest verified checkpoint — 28 November 2026, 03:23 IST (Asia/Kolkata)
+
+- Exact-head workflow #376 passed for `31725b634604203b4d092bd8e57ca4a8bc7bccfe`; it does not validate the later CSS/QA changes now on the PR branch. Browser artifact [15232863237](https://github.com/piyushimself/files/actions/runs/46070313232) reports 34 desktop pages, 68 mobile checks, 96 iframe loads, 204 mobile reader controls, zero automated issues and zero preliminary accessibility warnings. Pages artifact [15233226546](https://github.com/piyushimself/files/actions/runs/46070313232) contains 68 HTML files and no PDF/DOCX/Pine or internal publishing-review inventory.
+- I inspected the full screenshot contact-sheet sets for wrapper desktop/mobile, app-initial desktop/mobile, app visual top/middle/bottom desktop/mobile and dark desktop. The Manga & Comics Archive dark sidebar still shows hard-coded brown filter/range/clear-label colors. A targeted dark-theme override is now in `site/assets/unified-app.css` on the PR branch.
+- `tools/browser_qa.py` now resets theme/font/scale to a known light/default state per page, requires the dark toggle to result in a genuinely dark parent and iframe, captures dark-mobile screenshots for all 32 apps, and measures the archive sidebar's small-text contrast against the 4.5:1 threshold. It also fails if dark desktop/mobile coverage or the contrast audit is missing. These changes are not validated until an exact-head workflow passes.
+- The current code head is `ebb8201c894e4f6818410b89631a81f0edc1e43c`; workflow #377 was created for the intermediate `66f9ace` commit and is not current-head evidence. The latest head still needs exact-head CI and artifact inspection.
+- All 11 manual acceptance items remain unchecked. Automated checks and contact sheets do not establish full keyboard-only, screen-reader, reduced-motion or formal WCAG acceptance. Content/OCR/source-to-output and catalogue reconciliation also remain incomplete.
+
+**Status: IN PROGRESS.** Keep the 11 manual checklist items open until individually evidenced. Do not treat the screenshot sweep, automated zero-issue result or CSS patch as final acceptance.
+
+---
+
 ## Latest verified checkpoint — 28 November 2026, 02:53 IST (Asia/Kolkata)
 
 - PR [#28](https://github.com/piyushimself/files/pull/28) remains open and unmerged on `remediation/stop-public-source-review-artifacts-2026-11-26`. The code head validated immediately before this documentation-only refresh was [`c2a9c2899a89a383af743ceec4dee412868e3970`](https://github.com/piyushimself/files/commit/c2a9c2899a89a383af743ceec4dee412868e3970); it was 38 commits ahead of `main` and zero behind. No submitted PR reviews, inline review threads or PR conversation comments exist.

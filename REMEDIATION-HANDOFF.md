@@ -1,3 +1,26 @@
+## Latest verified handoff — 28 November 2026, 03:23 IST (Asia/Kolkata)
+
+- Continue only on `remediation/stop-public-source-review-artifacts-2026-11-26`; never push directly to `main` and do not modify/delete original uploaded source files.
+- PR [#28](https://github.com/piyushimself/files/pull/28) is open. Current code head before this documentation refresh: `ebb8201c894e4f6818410b89631a81f0edc1e43c` (41 ahead, zero behind). Main remains `d146196bf3490ca4fff0a982dcd2ec6c669e0c0e`.
+- Workflow #376 passed for parent `31725b634604203b4d092bd8e57ca4a8bc7bccfe`, not the current code head. Its QA/Pages artifacts were downloaded and inspected. Workflow #377 belongs to the intermediate `66f9ace` head; it is not evidence for `ebb8201`.
+- New PR-branch changes: dark-sidebar CSS correction for Manga & Comics Archive; deterministic browser-QA state reset; explicit dark-desktop and dark-mobile coverage for all 32 apps; measured 4.5:1 small-text contrast assertions for the archive sidebar. The next exact-head workflow must pass and its artifacts must be inspected before accepting these changes.
+- Historical artifacts 15105410621 and 15104820560 still download; GitHub reports 10 December expiry. No artifact-delete operation is exposed by the connected GitHub interface. Obtain owner deletion or verify expiry.
+- Main's workflow #356 remains the latest successful production deployment and still contains source-extraction/review-artifact steps. Do not merge until the branch workflow and all acceptance gates pass.
+- All 11 manual acceptance items and editorial findings remain open. PR has no independent reviews, review threads or comments. Source publication remains blocked by missing rights evidence; Asian Books and Cinema 900 require owner/editorial evidence; TradingView/venue tests are external dependencies.
+
+### Required next sequence
+
+1. Inspect the exact-head workflow for the current branch head; verify build/static validators, desktop/mobile Chromium QA, dark screenshot counts, contrast sample count and issue list.
+2. Download and inspect both artifacts; visually inspect Manga & Comics Archive dark desktop/mobile screenshots. Do not accept a test that reports success but omits expected screenshots or contrast samples.
+3. Finish or individually disposition the 11 manual checks and all per-file editorial findings. Do not label open content-quality issues as rights-blocked without the actual evidence dependency.
+4. Resolve the two historical artifact exposures by owner deletion or verified expiry.
+5. Obtain independent PR review, then merge only after acceptance.
+6. Run fresh main build/deployment; inspect artifacts; verify desktop/mobile on production and record the deployed SHA in the final status report.
+
+**Do not certify completion while any item above remains open.**
+
+---
+
 ## Latest verified checkpoint — 28 November 2026, 02:53 IST (Asia/Kolkata)
 
 - PR [#28](https://github.com/piyushimself/files/pull/28) remains open and unmerged on `remediation/stop-public-source-review-artifacts-2026-11-26`. The code head validated immediately before this documentation-only refresh was [`c2a9c2899a89a383af743ceec4dee412868e3970`](https://github.com/piyushimself/files/commit/c2a9c2899a89a383af743ceec4dee412868e3970); it was 38 commits ahead of `main` and zero behind. No submitted PR reviews, inline review threads or PR conversation comments exist.

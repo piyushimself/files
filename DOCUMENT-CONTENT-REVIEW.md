@@ -1,3 +1,16 @@
+## Latest content-review checkpoint — 28 November 2026, 03:23 IST (Asia/Kolkata)
+
+- Workflow #376 and its Pages/browser artifacts were inspected. The Pages preview has 68 HTML files and no PDF, DOCX, Pine source or `PUBLISHING-REVIEW.md`. This confirms source exclusion from the generated site, not publication rights or repository privacy.
+- No source-document content finding was closed during this run. The 49 original source artifacts remain in the public repository and excluded from Pages because ownership/licence evidence is absent. The old public browser-QA artifact 15105410621 still exposes `PUBLISHING-REVIEW.md` with 50 withheld filenames/reasons; artifact 15104820560 still contains a corrected source-derived PDF. Both remain downloadable until their reported 10 December expiries unless the owner deletes them.
+- Existing high-priority findings remain: Asian Books has 25 placeholder markers and 40 “Not Asian” statements and needs an owner scope decision; Cinema 900 cover/body/library counts remain 300/900/835 without a canonical deduplication rule; Global Kids Books layout is corrected, but the eight age-band counts total 317 rather than 600+, overlap with the FINAL guide is roughly 55%, and developmental claims remain uncited.
+- Other source-level findings remain open: catalogue-count discrepancies, missing/unverified resource URLs and licence claims, bibliographies, quotations, attribution, author/edition metadata, age suitability, mature-content handling and ratings source URLs/as-of dates. These require record-level source evidence and/or editorial/rights decisions; no unsupported correction has been invented.
+- Pine Script static checks pass, but TradingView compilation/backtesting, Bar Magnifier/order sequencing and venue-specific fee/spread/slippage/funding calibration remain external dependencies. They are not a Reading Room site-deployment gate.
+- The Manga & Comics Archive dark-sidebar CSS/QA changes do not alter source-document content. The current PR code head still needs exact-head workflow validation.
+
+**Content status: IN PROGRESS.** Keep source documents excluded from Pages until rights and editorial checks are complete. Do not mark any content finding resolved based solely on a successful build or a source-exclusion check.
+
+---
+
 ## Latest verified checkpoint — 28 November 2026, 02:53 IST (Asia/Kolkata)
 
 - PR [#28](https://github.com/piyushimself/files/pull/28) remains open and unmerged on `remediation/stop-public-source-review-artifacts-2026-11-26`. The code head validated immediately before this documentation-only refresh was [`c2a9c2899a89a383af743ceec4dee412868e3970`](https://github.com/piyushimself/files/commit/c2a9c2899a89a383af743ceec4dee412868e3970); it was 38 commits ahead of `main` and zero behind. No submitted PR reviews, inline review threads or PR conversation comments exist.
