@@ -1,3 +1,21 @@
+## Latest content-review checkpoint — 28 November 2026, 05:00 IST
+
+No source-document editorial finding was closed by workflow #379. The run validates the site build and browser behavior, not the truth, rights, attribution or completeness of source-derived catalogue content.
+
+- The 49 original source artifacts remain excluded from the generated Pages site because ownership/licence evidence is absent; they remain publicly accessible in the repository. This is a republication permission block, not private storage.
+- Asian Books still requires an owner scope decision for its comparative Asian/world framing, 25 placeholder markers and 40 “Not Asian” statements.
+- Cinema 900 still has unresolved 300/900/835 cover/body/combined-library counts without an authoritative deduplication rule.
+- Global Kids Books still has 317 entries versus the 600+ claim, approximately 55% overlap with the FINAL guide, and uncited developmental claims.
+- Other catalogue-count, URL/licence, bibliography, quotation, attribution, author/edition metadata, age-suitability and rating-provenance findings remain open pending source-level evidence or editorial/rights decisions.
+- Historical public artifacts 15105410621 and 15104820560 remain downloadable and continue to expose a publishing-review inventory and a corrected source-derived PDF, respectively. They require owner deletion or verified expiry.
+- Pine static validation passed in workflow #379. TradingView compilation/backtesting and venue-specific fee/spread/slippage/funding calibration remain external dependencies, not Reading Room website deployment gates.
+
+The #379 Pages preview contains 68 HTML files and no PDF, DOCX, Pine source or internal publishing-review inventory. That proves source exclusion from the generated site only; it does not close the content findings or remove the original public repository copies.
+
+**Content status: IN PROGRESS.** Do not mark any source-content finding resolved based on a successful build or artifact-exclusion check.
+
+---
+
 ## Latest content-review checkpoint — 28 November 2026, 03:23 IST (Asia/Kolkata)
 
 - Workflow #376 and its Pages/browser artifacts were inspected. The Pages preview has 68 HTML files and no PDF, DOCX, Pine source or `PUBLISHING-REVIEW.md`. This confirms source exclusion from the generated site, not publication rights or repository privacy.

@@ -1,3 +1,24 @@
+## Handoff checkpoint — 28 November 2026, 05:00 IST
+
+- Current PR code head: `9bf7fd466671cf6d9319570f89ec13fda5d00470` (43 commits ahead, zero behind main).
+- Exact-head workflow #379 passed for this SHA. Browser artifact 15234098830 confirms 34 desktop pages, 68 mobile checks, 32 dark-desktop and 32 dark-mobile captures, 220 archive dark-sidebar contrast samples, zero automated issues and zero preliminary accessibility warnings. The 4.5:1 sampled contrast assertion passed.
+- Pages artifact 15234069037 contains 68 HTML files and no PDF/DOCX/Pine sources or internal review inventory.
+- The latest documentation refresh must receive a separate exact-head workflow; do not cite #379 as validation of the documentation-only commit that follows it.
+- PR #28 has no independent review submissions, review threads or conversation comments. Keep it open until manual/editorial acceptance and historical artifact exposure are resolved.
+- Historical artifacts 15105410621 and 15104820560 remain downloadable; connected GitHub actions tools expose no delete operation. Obtain owner deletion or verify expiry.
+- All 11 manual acceptance items and editorial findings remain open. Source rights for the 49 original files are not established; they remain excluded from Pages but public in the repository.
+- Main remains at `d146196bf3490ca4fff0a982dcd2ec6c669e0c0e`; workflow #356 is the latest successful production deployment and still has legacy source-extraction/review-artifact steps.
+
+### Next sequence
+
+1. Validate the new documentation head after this checkpoint is committed.
+2. Resolve the historical artifact exposure through owner deletion or verified expiry.
+3. Complete or individually evidence-disposition all 11 manual items and each editorial finding.
+4. Obtain independent PR review. Do not merge based on CI alone.
+5. After merge, run and inspect a fresh main deployment; verify production desktop/mobile behavior and record the deployed SHA in the final status report on main.
+
+---
+
 ## Latest verified handoff — 28 November 2026, 03:23 IST (Asia/Kolkata)
 
 - Continue only on `remediation/stop-public-source-review-artifacts-2026-11-26`; never push directly to `main` and do not modify/delete original uploaded source files.

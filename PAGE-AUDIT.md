@@ -1,3 +1,13 @@
+## Latest automated regression checkpoint — 28 November 2026, 05:00 IST
+
+Exact code head `9bf7fd466671cf6d9319570f89ec13fda5d00470` passed PR workflow #379 (run 46074115194). Browser QA artifact 15234098830 reports 34 desktop pages, 68 mobile checks, 32 dark-desktop pages, 32 dark-mobile pages, 220 Manga & Comics Archive dark-sidebar contrast samples, zero automated issues and zero preliminary accessibility warnings. The 4.5:1 small-text contrast assertion produced no failing samples. Pages preview 15234069037 contains 68 HTML files and no PDF, DOCX, Pine source or internal review inventory.
+
+This closes the targeted automated contrast check for the tested selectors and the PR-preview automated desktop/mobile smoke checks only. It does **not** close any of the 11 manual acceptance items below. Keyboard-only operation, real screen-reader behavior, reduced-motion review, complete page-by-page interaction acceptance, full source/OCR reconciliation and production desktop/mobile regression remain open. The deploy job was skipped because the run was triggered by a pull request.
+
+Main is still `d146196bf3490ca4fff0a982dcd2ec6c669e0c0e`; production workflow #356 remains the last verified Pages deployment. Do not mark production acceptance complete until a post-merge main deployment is inspected and the deployed SHA is verified.
+
+---
+
 ## Latest verified checkpoint — 28 November 2026, 03:23 IST (Asia/Kolkata)
 
 - Exact-head workflow #376 passed for `31725b634604203b4d092bd8e57ca4a8bc7bccfe`; it does not validate the later CSS/QA changes now on the PR branch. Browser artifact [15232863237](https://github.com/piyushimself/files/actions/runs/46070313232) reports 34 desktop pages, 68 mobile checks, 96 iframe loads, 204 mobile reader controls, zero automated issues and zero preliminary accessibility warnings. Pages artifact [15233226546](https://github.com/piyushimself/files/actions/runs/46070313232) contains 68 HTML files and no PDF/DOCX/Pine or internal publishing-review inventory.
