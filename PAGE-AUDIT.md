@@ -1,5 +1,22 @@
 # Page-by-page editorial and publishing audit
 
+## Dark-mode visual regression findings — 27 November 2026, 09:46 IST
+
+The #364 browser-QA ZIP was downloaded and inspected locally. Its report records 34 desktop pages, 68 mobile checks, 96 iframe loads, 204 mobile reader controls and zero automated issues. A contact-sheet sweep covered all 34 wrapper desktop screenshots and all 34 wrapper mobile screenshots, plus 32 app-content top screenshots and 31 middle / 31 bottom screenshots in both desktop and mobile layouts. No general mobile overflow or clipping pattern was visible in this screenshot sweep. This does not replace interaction testing, measured contrast, keyboard-only testing or screen-reader acceptance.
+
+The dark-desktop screenshot sweep exposed five actionable contrast defects that the automated smoke report did not flag:
+
+1. **Asian Cinema Curriculum:** the dark theme made the hero surface pale while the eyebrow and subtitle remained translucent white.
+2. **The Cinematic Canon:** the dark theme made the hero surface pale while the title, subtitle and statistic labels remained white.
+3. **The Fiction of Living:** the introduction band became pale while its paragraph remained pale.
+4. **Manga & Comics Archive:** dark-mode card descriptions and metadata used fixed dark-brown text on dark surfaces; its paper/ink token mapping also left the sort strip and some text colors inconsistent.
+5. **Top 500 Adult Manga:** the dark-mode hero became pale while its small metadata pills retained low-contrast light text.
+
+A page-scoped dark-mode repair was added to `site/assets/unified-app.css`. It changes only the generated shared CSS; original uploaded HTML/PDF/DOCX/source documents were not modified. These five repairs are **not yet validated**: the next exact-head PR workflow must pass, and its new dark-mode screenshots must be inspected before marking them corrected.
+
+The 11 manual acceptance items remain open. The screenshot sweep is supporting visual evidence only, not a substitute for measured contrast or assistive-technology testing.
+
+
 ## Current verified checkpoint — 27 November 2026, 09:40 IST (Asia/Kolkata)
 
 - Default branch `main` remains at [`d146196bf3490ca4fff0a982dcd2ec6c669e0c0e`](https://github.com/piyushimself/files/commit/d146196bf3490ca4fff0a982dcd2ec6c669e0c0e). Main workflow [#356](https://github.com/piyushimself/files/actions/runs/45794785456) completed successfully for that exact SHA; the deploy job created the Pages deployment for `d146196...` and reported success. No newer main commit or production deployment is present.
