@@ -17,7 +17,7 @@ This file is the durable continuation point for the ongoing Reading Room remedia
 - Remaining editorial findings: Asian Books scope/placeholders; Cinema 900 300/900/835 discrepancy; Global Kids Books 317-versus-600+ count, ~55% overlap, developmental claims, age/metadata decisions; other count discrepancies; URLs, bibliographies, quotations, attribution, metadata, age suitability and rating provenance.
 - All 11 manual acceptance items in `PAGE-AUDIT.md` remain unchecked/incomplete. Automated QA does not prove full keyboard/screen-reader acceptance, measured contrast, reduced-motion behavior, or complete source-to-output review.
 - All 49 original source files remain withheld from Pages for lack of publication-permission evidence, but remain accessible in the public repository. Do not change visibility or rewrite history without the user's specific informed confirmation.
-- The four remediation documents were refreshed on this branch to record workflow #359 and the actual current artifact/deployment state. The PR description still needs its matching refresh. **Status: IN PROGRESS — not a completion certificate.** Never push directly to `main`; continue on the existing PR branch and inspect exact-head evidence before merging.
+- The four remediation documents were refreshed on this branch to record workflow #359 and the actual current artifact/deployment state. The PR description was also refreshed at 06:17 IST; the latest documentation-only head still requires exact-head workflow validation. **Status: IN PROGRESS — not a completion certificate.** Never push directly to `main`; continue on the existing PR branch and inspect exact-head evidence before merging.
 
 
 
