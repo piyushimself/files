@@ -1,25 +1,25 @@
 # Reading Room remediation handoff
 
-Last updated: 2026-11-27 00:45 IST (Asia/Kolkata)
+Last updated: 2026-11-27 06:17 IST (Asia/Kolkata)
 
 This file is the durable continuation point for the ongoing Reading Room remediation. Read it before continuing, then inspect live GitHub state because PRs and workflow runs may have changed since this checkpoint.
 
-## Current verified continuation state — 27 November 2026, 00:45 IST (Asia/Kolkata)
+## Current verified continuation state — 27 November 2026, 06:17 IST (Asia/Kolkata)
 
 - Repository: `piyushimself/files`; default branch `main`; latest main SHA [`d146196bf3490ca4fff0a982dcd2ec6c669e0c0e`](https://github.com/piyushimself/files/commit/d146196bf3490ca4fff0a982dcd2ec6c669e0c0e).
-- PR [#28](https://github.com/piyushimself/files/pull/28) remains open at head `51e66759a535ac1df92b1b22c5c5abb76f968e7b`; no reviews or PR comments exist.
-- Exact-head workflow #358 / run [45879246095](https://github.com/piyushimself/files/actions/runs/45879246095) passed build and Chromium desktop/mobile QA. Deploy was skipped because it is a PR event.
-- Browser artifact [15145778767] reports 34 desktop pages, 68 mobile checks, 96 iframe loads, 204 mobile reader controls, zero automated issues and zero preliminary accessibility warnings. It has 528 files and no source PDFs, DOCX, Pine, TXT, extracted source text, manifest, README or internal publishing report. Pages preview [15145898662] has 122 archive entries / 68 HTML files and no source documents or internal reports.
-- I downloaded both artifacts and inspected their inventories. I visually inspected homepage desktop/mobile and 300 Animated Films middle desktop/mobile screenshots. The homepage is readable and ranks 10–16 stay on one line on mobile. This is sampled visual QA, not full manual acceptance.
-- **New finding:** run #358's public job log still printed a 49-file source-review inventory (filenames, page/line counts, word counts, OCR counts, rights-marker categories and redaction counts). No source document body text appeared in the inspected log excerpt. This metadata should not be emitted publicly; the next follow-up removes the extraction step from public Actions entirely.
-- Existing source-text artifact [15103848500] remains downloadable until 27 November 2026, 09:46:13 UTC (15:16:13 IST). It contains 49 extracted text files and empty redaction maps; it is not a verified sanitized copy. Old browser QA [15105410621] expires 10 December 09:56:13 UTC; main corrected-PDF preview [15104820560] expires 10 December 09:46:04 UTC; PR #28 corrected-PDF preview [15132451495] expires 10 December 15:24:54 UTC. The integration has no artifact-deletion operation; owner deletion through GitHub Actions or automatic expiry is required.
-- Main workflow #356 / run [45794785456] remains the latest successful production deployment for SHA `d146196...`. PR #28's #358 run did not deploy. Independent live-site HTTP reachability is not confirmed.
-- Remaining findings: Asian Books scope/placeholders; Cinema 900 300/900/835 discrepancy; Global Kids Books 317-versus-600+ count, ~55% overlap, developmental claims and age/metadata decisions; other count discrepancies; URLs, bibliographies, quotations, attribution, metadata, age suitability and rating provenance.
-- All 11 manual acceptance items remain unchecked/incomplete. Automated QA does not prove full keyboard/screen-reader acceptance, measured contrast, reduced-motion behavior, or complete source-to-output review.
+- PR [#28](https://github.com/piyushimself/files/pull/28) remains open at head `1e6fab3cd995bf61b6c5cbca1d3a235cb81257ce`; it has 13 commits, no submitted reviews or inline review threads, and no open repository issues.
+- Exact-head workflow #359 / run [45882706873](https://github.com/piyushimself/files/actions/runs/45882706873) passed build and Chromium desktop/mobile QA. Deploy was skipped because this is a PR event. The full build log contains no document-review extraction step or source-review inventory output.
+- Browser artifact [15148637645](https://github.com/piyushimself/files/actions/runs/45882706873) has 528 files and reports 34 desktop pages, 68 mobile checks, 96 iframe loads, 204 mobile reader controls, zero automated issues and zero preliminary accessibility warnings. Pages preview [15147284705] has 122 archive entries / 68 HTML files and no source documents or internal reports.
+- I downloaded both #359 artifacts, inspected the report and Pages archive, and visually inspected homepage desktop/mobile plus 300 Animated Films middle desktop/mobile screenshots. The homepage is readable and ranks 10–16 stay on one line on mobile. This is sampled visual QA, not full manual acceptance.
+- Main workflow #356 / run [45794785456](https://github.com/piyushimself/files/actions/runs/45794785456) remains the latest successful production deployment for SHA `d146196...`. Its deploy log created the Pages deployment for that exact SHA and reported success. #359 did not deploy. Independent live-site HTTP reachability is not confirmed through the external browser.
+- Existing main source-review artifact [15103848500] is still downloadable (`expired: false`), contains 49 extracted text files and empty redaction maps, and expires **27 November 2026, 09:46:13 UTC (15:16:13 IST)**. Old browser QA [15105410621] contains the generated `PUBLISHING-REVIEW.md`; main and PR corrected-PDF previews remain downloadable until December. The connected GitHub integration exposes no artifact-deletion operation; owner deletion through GitHub Actions or automatic expiry is required.
+- New #359 browser QA artifact expires 10 December 19:27:55 UTC; its Pages preview expires 27 November 19:27:58 UTC (28 November 00:57:58 IST). Earlier PR browser QA [15134060952] expires 10 December 15:32:58 UTC and its Pages preview [15134215945] expires 27 November 15:33:02 UTC.
+- Remaining editorial findings: Asian Books scope/placeholders; Cinema 900 300/900/835 discrepancy; Global Kids Books 317-versus-600+ count, ~55% overlap, developmental claims, age/metadata decisions; other count discrepancies; URLs, bibliographies, quotations, attribution, metadata, age suitability and rating provenance.
+- All 11 manual acceptance items in `PAGE-AUDIT.md` remain unchecked/incomplete. Automated QA does not prove full keyboard/screen-reader acceptance, measured contrast, reduced-motion behavior, or complete source-to-output review.
 - All 49 original source files remain withheld from Pages for lack of publication-permission evidence, but remain accessible in the public repository. Do not change visibility or rewrite history without the user's specific informed confirmation.
-- **Status: IN PROGRESS — not a completion certificate.** Never push directly to `main`; continue on the existing PR branch and inspect exact-head evidence before merging.
+- The four remediation documents were refreshed on this branch to record workflow #359 and the actual current artifact/deployment state. The PR description still needs its matching refresh. **Status: IN PROGRESS — not a completion certificate.** Never push directly to `main`; continue on the existing PR branch and inspect exact-head evidence before merging.
 
-## User's standing instruction
+
 
 The user explicitly authorized autonomous repository work: make necessary changes, test, create PRs, and merge safe fixes. Continue until every actionable finding is corrected and validated or clearly recorded as blocked by evidence, permissions, or an external dependency. Do not ask the user to restate context. Do not claim completion from a successful build alone.
 
