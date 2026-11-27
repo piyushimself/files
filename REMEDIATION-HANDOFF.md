@@ -1,20 +1,21 @@
-## Latest verified checkpoint — 27 November 2026, 23:17 IST (Asia/Kolkata)
+## Latest verified checkpoint — 28 November 2026, 00:13 IST (Asia/Kolkata)
 
-- PR #28 is open on `remediation/stop-public-source-review-artifacts-2026-11-26`, head [`6a05295abb4fe7b84a873e7e30fe0ecc3c4da8b6`](https://github.com/piyushimself/files/commit/6a05295abb4fe7b84a873e7e30fe0ecc3c4da8b6), 29 commits ahead of main and zero behind. Exact-head workflow [#371](https://github.com/piyushimself/files/actions/runs/45983167157) passed; deploy was skipped because this is a PR.
-- The #371 browser-QA artifact [15190741334](https://github.com/piyushimself/files/actions/runs/45983167157) and Pages preview [15190487267](https://github.com/piyushimself/files/actions/runs/45983167157) were downloaded and inspected. Automated checks passed (34 desktop pages, 68 mobile checks, 96 iframe loads, 204 mobile shell controls, zero automated issues); the preview has 68 HTML files and no source/PDF/DOCX/Pine files or internal publishing report. There are no dark-mobile screenshots, and the Manga & Comics Archive dark-desktop sidebar/filter labels remain subdued.
-- Main remains at `d146196bf3490ca4fff0a982dcd2ec6c669e0c0e`; successful deployment #356 is still the latest production deployment. Main's workflow still performs source extraction and uploads temporary review/PDF artifacts. The PR branch removes these public workflow outputs.
-- Historical artifacts 15103848500 and 15104822142 return 404. Artifacts 15105410621 (contains `PUBLISHING-REVIEW.md` with 50 withheld filenames/reasons) and 15104820560 (corrected source-derived PDF) remain downloadable and unexpired until 10 December. The connected GitHub integration cannot delete them.
-- All 11 manual acceptance items and the editorial findings remain open. The 49 original source artifacts are excluded from Pages for lack of publication-permission evidence but remain accessible in the public repository. PR #28 has no reviews, review threads or comments.
+- PR #28 remains open on `remediation/stop-public-source-review-artifacts-2026-11-26`, exact head [`f8df4ba2f07b8f9896856f41df8c0271371c5e20`](https://github.com/piyushimself/files/commit/f8df4ba2f07b8f9896856f41df8c0271371c5e20), 30 commits ahead of main and zero behind. Exact-head workflow [#372](https://github.com/piyushimself/files/actions/runs/46045016330) passed; deploy was skipped because this is a PR.
+- Downloaded and inspected #372 browser-QA artifact [15221928089](https://github.com/piyushimself/files/actions/runs/46045016330) and Pages preview [15221698024](https://github.com/piyushimself/files/actions/runs/46045016330). Browser QA records 34 desktop pages, 68 mobile checks, 96 iframe loads, 204 mobile shell controls, zero automated issues and zero preliminary accessibility warnings. The Pages preview contains 68 HTML files and no PDF/DOCX/Pine source or internal publishing report.
+- The #372 build log contains no source-document extraction or legacy source-review/PDF artifact upload. Main remains at `d146196bf3490ca4fff0a982dcd2ec6c669e0c0e`; workflow #356 remains the latest verified production deployment. Main's workflow still performs source extraction and uploads temporary review/PDF artifacts; the PR branch removes these public workflow outputs.
+- Historical artifacts 15103848500 and 15104822142 return 404. Artifacts 15105410621 (contains `PUBLISHING-REVIEW.md` with 50 withheld filenames/reasons) and 15104820560 (corrected source-derived PDF) remain marked unexpired until 10 December. The connected GitHub integration has no artifact-deletion action.
+- All 11 manual acceptance items and editorial findings remain open. The 49 original source artifacts are excluded from Pages for lack of publication-permission evidence but remain accessible in the public repository. PR #28 has no submitted reviews, review threads or comments.
 
 ### Next actions
 
-1. Request owner deletion of artifacts 15105410621 and 15104820560, or re-check after their 10 December expiries and confirm download failure.
-2. Finish or individually disposition the 11 manual acceptance items with evidence. Prioritize measured contrast, dark-mobile screenshots, keyboard/screen-reader/reduced-motion checks and exhaustive page-by-page interaction review.
-3. Reconcile Asian Books, Cinema 900 and Global Kids Books findings; continue all catalogue, URL, bibliography, quotation, attribution, metadata, age-suitability and rating-provenance checks.
+1. Obtain owner deletion of artifacts 15105410621 and 15104820560, or re-check after their 10 December expiries and confirm download failure.
+2. Finish or individually disposition all 11 manual acceptance items with evidence. Prioritize measured contrast, dark-mobile screenshots, keyboard/screen-reader/reduced-motion checks and exhaustive page-by-page interaction review.
+3. Reconcile Asian Books, Cinema 900 and Global Kids Books findings; continue catalogue, URL, bibliography, quotation, attribution, metadata, age-suitability and rating-provenance checks.
 4. Obtain independent review of PR #28; do not merge on the strength of CI alone.
 5. After acceptance, merge through the PR process, run a fresh main workflow, inspect logs/artifacts, verify production desktop/mobile behavior and confirm the Pages deployment SHA.
 6. Update the final status report on main against the deployed commit.
 
+---
 ---
 
 ## Latest verified checkpoint — 27 November 2026, 16:00 IST (Asia/Kolkata)
