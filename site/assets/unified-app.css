@@ -21,7 +21,7 @@ body button,body [role=button],body [role=tab]{background:var(--rr-raised)!impor
 body button:hover,body [role=button]:hover,body [role=tab]:hover{border-color:var(--rr-accent)!important;color:var(--rr-accent)!important}
 body :is([class*=card],[class*=tile],[class*=panel],[class*=modal],[class*=dialog],[class*=toolbar],[class*=filter],[class*=control],[class*=legend],[class*=category-section],.mc,.legend,.manga-card,.manga-grid,.category-section){background:var(--rr-surface)!important;border-color:var(--rr-line)!important}
 
-body :is(button,[role=button],[role=tab])[aria-pressed=true],body :is(button,[role=button],[role=tab])[aria-selected=true],body :is(button,[role=button],[role=tab]).active,body :is(button,[role=button],[role=tab]).selected{background:var(--rr-accent)!important;border-color:var(--rr-accent)!important;color:#fff!important}
+body :is(button,[role=button],[role=tab])[aria-pressed=true],body :is(button,[role=button],[role=tab])[aria-selected=true],body :is(button,[role=button],[role=tab]).active,body :is(button,[role=button],[role=tab]).selected{background:var(--rr-accent)!important;border-color:var(--rr-accent)!important;color:var(--rr-canvas)!important}
 body :focus-visible{outline:3px solid var(--rr-focus)!important;outline-offset:2px!important}
 body table{border-collapse:collapse}body th,body td{border-color:var(--rr-line)!important}
 body :is(header,nav,footer,aside,section,article,main){border-color:var(--rr-line)}
@@ -38,7 +38,7 @@ body :is(nav,.controls,.tabs-bar,.nav-bar){background:var(--rr-surface)!importan
 body nav :is(h1,h2,h3,p,a,span,strong,small){color:var(--rr-ink)!important}
 body :is(.sub,.hd-label,.hero-eyebrow,.stat-l,.count-label,.category-count,.filter-label){color:var(--rr-muted)!important}
 body :is(.fb,.filter-btn,.tab-btn,.f-btn,.nav-tab,.theme-chip){background:var(--rr-raised)!important;color:var(--rr-ink)!important;border-color:var(--rr-line)!important}
-body :is(.fb.active,.filter-btn.active,.tab-btn.active,.f-btn.on,.nav-tab.active,.theme-chip.active){background:var(--rr-accent)!important;color:#fff!important;border-color:var(--rr-accent)!important}
+body :is(.fb.active,.filter-btn.active,.tab-btn.active,.f-btn.on,.nav-tab.active,.theme-chip.active){background:var(--rr-accent)!important;color:var(--rr-canvas)!important;border-color:var(--rr-accent)!important}
 
 /* Page-specific contrast repairs confirmed from source markup. */
 body .manga-card,body .mc{background:var(--rr-surface)!important;color:var(--rr-ink)!important;border:1px solid var(--rr-line)!important}
@@ -176,7 +176,7 @@ body .sr-only,body .visually-hidden{position:absolute!important;width:1px!import
   body .tabs .tab-btn[aria-pressed=true]{
     background:var(--rr-accent)!important;
     border-color:var(--rr-accent)!important;
-    color:#fff!important;
+    color:var(--rr-canvas)!important;
   }
   body .toolbar{
     box-sizing:border-box!important;
@@ -495,7 +495,7 @@ body:has(.c-t) .ctrl .fb{
   min-height:40px;padding:9px 13px!important;font-size:11px!important;
 }
 body:has(.c-t) .ctrl .fb.on{
-  background:var(--rr-accent)!important;color:#fff!important;border-color:var(--rr-accent)!important;
+  background:var(--rr-accent)!important;color:var(--rr-canvas)!important;border-color:var(--rr-accent)!important;
 }
 body:has(.c-t) .ctrl .ubtn{
   background:var(--rr-raised)!important;color:var(--rr-ink)!important;
@@ -736,7 +736,7 @@ body:has(.arc-title) .arc-count{opacity:.72!important}
 :root[data-theme=dark] body:has(#masthead) :is(.sort-btn.on,.view-btn.on){
   background:var(--rr-accent)!important;
   border-color:var(--rr-accent)!important;
-  color:#fff!important;
+  color:var(--rr-canvas)!important;
 }
 :root[data-theme=dark] body:has(#masthead) #searchInput::placeholder{
   color:var(--rr-muted)!important;
@@ -792,7 +792,7 @@ body:has(.arc-title) .arc-count{opacity:.72!important}
 :root[data-theme=dark] body:has(#masthead) #sidebar .f-pill.on{
   background:var(--rr-accent)!important;
   border-color:var(--rr-accent)!important;
-  color:#fff!important;
+  color:var(--rr-canvas)!important;
 }
 :root[data-theme=dark] body:has(#masthead) #sidebar .f-row:hover{
   background:var(--rr-raised)!important;
