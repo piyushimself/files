@@ -16,7 +16,7 @@ apps=sorted((SITE/"apps").glob("*.html"))
 wrappers=sorted((SITE/"collections").glob("*/index.html"))
 viewports=[("desktop",1440,1000),("tablet",768,1024),("mobile",390,844)]
 issues=[]; screenshots=[]; accessibility_findings=[]
-stats={"catalog_items":len(items),"apps":len(apps),"wrappers":len(wrappers),"desktop_pages":0,"mobile_pages":0,"iframes_loaded":0,"search_controls_tested":0,"select_controls_tested":0,"filter_controls_tested":0,"tabs_tested":0,"shell_controls_tested":0,"direct_mature_apps_tested":0,"mature_iframe_sync_tested":0,"theme_sync_tested":0,"font_sync_tested":0,"scale_sync_tested":0,"filter_disclosures_tested":0,"reader_shell_mobile_pages_tested":0,"reader_shell_mobile_controls_tested":0,"reader_nav_menu_tested":0}
+stats={"catalog_items":len(items),"apps":len(apps),"wrappers":len(wrappers),"desktop_pages":0,"mobile_pages":0,"iframes_loaded":0,"search_controls_tested":0,"select_controls_tested":0,"filter_controls_tested":0,"tabs_tested":0,"shell_controls_tested":0,"direct_mature_apps_tested":0,"mature_iframe_sync_tested":0,"theme_sync_tested":0,"font_sync_tested":0,"scale_sync_tested":0,"filter_disclosures_tested":0,"reader_shell_mobile_pages_tested":0,"reader_shell_mobile_controls_tested":0,"reader_nav_menu_tested":0,"dark_mobile_pages_tested":0,"archive_dark_contrast_samples":0}
 def issue(page,kind,detail): issues.append({"page":page,"kind":kind,"detail":str(detail)[:2000]})
 def watch(page,label):
     page.on("pageerror",lambda e:issue(label,"pageerror",e))
@@ -148,6 +148,65 @@ def audit_accessibility(target,label,findings):
                 findings.append({"page":label,"kind":kind,"detail":entry})
     except Exception as e:
         findings.append({"page":label,"kind":"accessibility-audit-error","detail":str(e)[:500]})
+
+def audit_manga_archive_dark_contrast(frame,label):
+    """Measure the dark sidebar's small-text contrast; target WCAG AA's 4.5:1 threshold."""
+    try:
+        samples=frame.evaluate("""() => {
+          if(document.documentElement.dataset.theme!=="dark") return {error:"iframe root is not in dark theme"};
+          const sidebar=document.querySelector("#sidebar");
+          if(!sidebar) return {error:"archive sidebar is missing"};
+          const parse=c=>{
+            const m=String(c||"").match(/[\\d.]+/g);
+            return m?{rgb:m.slice(0,3).map(Number),a:m.length>3?Number(m[3]):1}:null;
+          };
+          const base=parse(getComputedStyle(sidebar).backgroundColor)?.rgb||[18,35,58];
+          const visible=e=>{const r=e.getBoundingClientRect(),s=getComputedStyle(e);return r.width>0&&r.height>0&&s.display!=="none"&&s.visibility!=="hidden"};
+          const background=e=>{
+            const own=parse(getComputedStyle(e).backgroundColor);
+            if(own&&own.a>=.999) return own.rgb;
+            let out=base.slice(),node=e.parentElement;
+            while(node&&node!==sidebar){
+              const p=parse(getComputedStyle(node).backgroundColor);
+              if(p&&p.a>0) out=p.rgb.map((v,i)=>Math.round(v*p.a+out[i]*(1-p.a)));
+              node=node.parentElement;
+            }
+            if(own&&own.a>0) out=own.rgb.map((v,i)=>Math.round(v*own.a+out[i]*(1-own.a)));
+            return out;
+          };
+          const luminance=rgb=>{
+            const v=rgb.map(x=>x/255).map(x=>x<=.04045?x/12.92:Math.pow((x+.055)/1.055,2.4));
+            return .2126*v[0]+.7152*v[1]+.0722*v[2];
+          };
+          const ratio=(a,b)=>{const x=luminance(a),y=luminance(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)};
+          const selectors=[".sb-header",".f-row span",".f-row em",".sb-range label",".sb-range-sep",".sb-clear",".f-pill",".f-pill.on",".f-row.on span",".f-row.on em"];
+          const results=[];
+          for(const selector of selectors){
+            const nodes=[...sidebar.querySelectorAll(selector)].filter(visible);
+            if(!nodes.length){
+              if([".sb-header",".f-row span",".f-row em",".sb-range label",".sb-clear",".f-pill"].includes(selector)) results.push({selector,missing:true});
+              continue;
+            }
+            for(const e of nodes){
+              const color=parse(getComputedStyle(e).color)?.rgb;
+              const bg=background(e);
+              results.push({selector,color:getComputedStyle(e).color,background:bg,ratio:color?ratio(color,bg):0});
+            }
+          }
+          return results;
+        }""")
+        if isinstance(samples,dict) and samples.get("error"):
+            issue(label,"manga-archive-dark-contrast-context",samples["error"])
+            return
+        for sample in samples:
+            if sample.get("missing"):
+                issue(label,"manga-archive-dark-contrast-target-missing",sample)
+            elif sample.get("ratio",0)<4.5:
+                issue(label,"manga-archive-dark-contrast",sample)
+        stats["archive_dark_contrast_samples"]+=len(samples)
+    except Exception as e:
+        issue(label,"manga-archive-dark-contrast-audit",e)
+
 
 def main():
     if (len(items),len(wrappers),len(apps))!=(34,34,32):
@@ -533,11 +592,12 @@ def main():
                                     toggle.click(); page.wait_for_timeout(120)
                                     pt=page.locator("html").get_attribute("data-theme")
                                     ct=frame_el.evaluate("(f)=>f.contentDocument?.documentElement?.dataset.theme")
-                                    if ct and ct!=pt: issue(qa_name,"theme-sync",f"parent={pt}, iframe={ct}")
+                                    if not ct or ct!=pt: issue(qa_name,"theme-sync",f"parent={pt}, iframe={ct}")
                                     else: stats["theme_sync_tested"]+=1
                                     page.wait_for_timeout(150)
                                     dark_fn=f"{page_slug}-dark-desktop.png"
                                     page.screenshot(path=str(OUT/dark_fn),full_page=False); screenshots.append(dark_fn)
+                                    if page_slug=="manga-archive-v4": audit_manga_archive_dark_contrast(frame,qa_name+"-dark-desktop")
                                 font=page.locator("#rr-font-family")
                                 if font.count():
                                     font.select_option("serif"); page.wait_for_timeout(80)
@@ -550,6 +610,20 @@ def main():
                                     cs=frame_el.evaluate("(f)=>f.contentDocument?.documentElement?.style.getPropertyValue('--rr-scale')")
                                     if not cs: issue(qa_name,"scale-sync","no scale value on iframe")
                                     else: stats["scale_sync_tested"]+=1
+                            if name=="mobile":
+                                toggle=page.locator("#rr-theme-toggle")
+                                if toggle.count():
+                                    toggle.click(); page.wait_for_timeout(180)
+                                    pt=page.locator("html").get_attribute("data-theme")
+                                    ct=frame_el.evaluate("(f)=>f.contentDocument?.documentElement?.dataset.theme")
+                                    if pt!="dark" or ct!=pt: issue(qa_name,"dark-mobile-theme-sync",f"parent={pt}, iframe={ct}")
+                                    else: stats["theme_sync_tested"]+=1
+                                    page.wait_for_timeout(180)
+                                    page.evaluate("window.scrollTo(0,0)")
+                                    dark_fn=f"{page_slug}-dark-mobile.png"
+                                    page.screenshot(path=str(OUT/dark_fn),full_page=False); screenshots.append(dark_fn)
+                                    stats["dark_mobile_pages_tested"]+=1
+                                    if page_slug=="manga-archive-v4": audit_manga_archive_dark_contrast(frame,qa_name+"-dark-mobile")
                         except PlaywrightTimeout as timeout_error:
                             issue(qa_name,"iframe-inspection-timeout",f"stage={frame_stage}; src={frame_src}; {timeout_error}")
                     else:

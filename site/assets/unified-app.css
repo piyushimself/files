@@ -763,3 +763,48 @@ body:has(.arc-title) .arc-count{opacity:.72!important}
 :root[data-theme=dark] body:has(.header-meta) .meta-pill b{
   color:var(--rr-accent)!important;
 }
+
+
+/* Manga & Comics Archive dark sidebar: the source hard-codes muted brown text
+   and a brown panel, so token remapping alone cannot repair every control.
+   Use the shared dark surface and explicit readable foregrounds. */
+:root[data-theme=dark] body:has(#masthead) #sidebar{
+  background:var(--rr-surface)!important;
+  border-right-color:var(--rr-line)!important;
+}
+:root[data-theme=dark] body:has(#masthead) #sidebar .sb-section{
+  border-bottom-color:var(--rr-line)!important;
+}
+:root[data-theme=dark] body:has(#masthead) #sidebar :is(
+  .sb-header,.f-row span,.f-row em,.sb-range label,.sb-range-sep,.sb-clear
+){
+  color:var(--rr-muted)!important;
+  opacity:1!important;
+}
+:root[data-theme=dark] body:has(#masthead) #sidebar :is(.sb-header:hover,.sb-clear:hover){
+  color:var(--rr-ink)!important;
+}
+:root[data-theme=dark] body:has(#masthead) #sidebar .f-pill{
+  background:var(--rr-raised)!important;
+  border-color:var(--rr-line)!important;
+  color:var(--rr-muted)!important;
+}
+:root[data-theme=dark] body:has(#masthead) #sidebar .f-pill.on{
+  background:var(--rr-accent)!important;
+  border-color:var(--rr-accent)!important;
+  color:#fff!important;
+}
+:root[data-theme=dark] body:has(#masthead) #sidebar .f-row:hover{
+  background:var(--rr-raised)!important;
+}
+:root[data-theme=dark] body:has(#masthead) #sidebar .f-row.on{
+  background:rgba(120,181,244,.14)!important;
+}
+:root[data-theme=dark] body:has(#masthead) #sidebar .f-row.on :is(span,em){
+  color:var(--rr-ink)!important;
+}
+:root[data-theme=dark] body:has(#masthead) #sidebar .sb-range input[type=number]{
+  background:var(--rr-canvas)!important;
+  color:var(--rr-ink)!important;
+  border-color:var(--rr-line)!important;
+}
